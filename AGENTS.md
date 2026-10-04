@@ -19,7 +19,17 @@ Accepted ADR не переписывай задним числом. Расхож
 <!-- PROJECT-CONTEXT:START -->
 ## Project context
 
-Проект ещё не инициализирован. До успешного `PROJECT INIT` не создавай production-код и не придумывай product-specific архитектуру. Сырой вход находится по configured `.harness/manifest.yaml → sources.localBrief`.
+Проект — **Yandex Music Downloader**: кроссплатформенный загрузчик Яндекс Музыки (TypeScript monorepo). Этап 1 — headless downloader core + CLI `music-downloader`; этап 2 — Electron + React + MUI UI, который начинается только после gate STEP-027. Проект инициализирован; production-код создаётся только в рамках STEP.
+
+Ключевые документы: `docs/PROJECT.md`, `docs/architecture.md`, `docs/requirements/SPEC.md`, `docs/adr/README.md`, `docs/OPEN_QUESTIONS.md`, `planning/PLAN.md`. Брендбук и макеты UI: `docs/brand/`.
+
+Неснимаемые границы проекта (Project Principles):
+
+- `PRN-001` — UI/Electron/CLI ничего не знают о Yandex API; `@dvxch/yandex-music` и Yandex-код только в `packages/providers/yandex-music`; зависимости по ADR-001.
+- `PRN-002` — токены, cookies, Authorization, credentials и signed URL не хранятся и не логируются открытым текстом.
+- `PRN-003` — загружается только контент, который provider сообщает доступным текущему аккаунту; без обхода DRM/ограничений.
+
+Не закрывай OQ предположениями: ответы фиксируй только с evidence (spike/ADR) или решением владельца продукта.
 <!-- PROJECT-CONTEXT:END -->
 
 ## 2. Bootstrap любой canonical command
