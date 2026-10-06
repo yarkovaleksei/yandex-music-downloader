@@ -1,7 +1,7 @@
 ---
 schema: 1
 id: STEP-001
-status: blocked
+status: completed
 type: implementation
 priority: critical
 phase: foundation
@@ -271,81 +271,100 @@ plan:
 ## Evidence
 
 
+
+
+
 <!-- VERIFICATION-EVIDENCE:START -->
-- Verification run: 2026-10-06T15:34:03Z
-- Status: MANUAL_REQUIRED
-- Git head: 984253235b7b72b6ae404375a4aed5470d15eda7
-- Worktree hash: sha256:344faa9639d61d2fbd092c6e0d35ea8461c05e62f2a2db1bc7c95e9cd27ca6c6
-- Verification contract basis: sha256:25b50c3cbfb0b4e444ea62af998d37a30c0177be16e0b18cf0881e3e855527ed
-- Subject git head: 984253235b7b72b6ae404375a4aed5470d15eda7
-- Subject worktree hash: sha256:eecf8fccde67ff171a7b837c0868dfebe6390ae5d9acae0a4cf4ff7070b81bca
+- Verification run: 2026-10-06T19:58:22Z
+- Status: PASS
+- Git head: f85c44b62b92f8bb5b6c52de7f396be4c6dacaeb
+- Worktree hash: sha256:05c27daa0c314d7d1047fb38d464fc4d16664df4ad8a9fe7aa2fe3c89b0a44c1
+- Verification contract basis: sha256:b4e8442c0ea7dc742a3a9d0b44da75d16a7fad612413261f34dd86524c9942ae
+- Subject git head: f85c44b62b92f8bb5b6c52de7f396be4c6dacaeb
+- Subject worktree hash: sha256:779de134fd26a27eff2f1c15ec45dc0673a2f8d03fea88b5c04a75d811cc553f
 
 ### Automated verification
-- Command: npm ci
+- Command: node packages/testing/scripts/verify-toolchain.mjs
   - Status: PASS
   - Exit code: 0
-  - Duration ms: 1416
-  - stdout sha256: 9226db264cce9916e19970f80ebdfd7d6506d5d85a5299222867d46de44d446f
-  - stderr sha256: 6f675f950749ebdd688a1a4e1900dba52ae340b19015be8b046df5a45757c447
-  - stdout bytes: 274
-  - stderr bytes: 522
-- Command: npm run lint
-  - Status: PASS
-  - Exit code: 0
-  - Duration ms: 1516
-  - stdout sha256: a9abc4bc51d6729860fb000bf87c02e5a80cc830999d05e640c5651c7e3daa6a
+  - Duration ms: 264
+  - stdout sha256: 5fbbcb318f407f3e5f388f8e34677c0db76e49dd8998da69cd5d48af3e707c67
   - stderr sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-  - stdout bytes: 147
+  - stdout bytes: 53
   - stderr bytes: 0
-- Command: npm test
+- Command: node packages/testing/scripts/run-yarn.mjs install --immutable
   - Status: PASS
   - Exit code: 0
-  - Duration ms: 1419
-  - stdout sha256: 696e0f837f5e53ba292248cbf14f0a507480a1284ccf50d7684db0aa39ce2767
-  - stderr sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-  - stdout bytes: 1311
-  - stderr bytes: 0
-- Command: npm run typecheck
+  - Duration ms: 614
+  - stdout sha256: 108a29eba0de2e39394d348ed29c40f9ac94ec00ab7acb6014280c25fc84a20d
+  - stderr sha256: bfec6f0b0ed4e98041896996f31540ead1369fc6f4fe067199120753dc1e5ab2
+  - stdout bytes: 222
+  - stderr bytes: 36
+- Command: node packages/testing/scripts/run-yarn.mjs run lint
   - Status: PASS
   - Exit code: 0
-  - Duration ms: 815
-  - stdout sha256: 73ad7967b0b62b903e0e14e90a6a3971d720cb1ab6b744714e6d2ef05dd89743
-  - stderr sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-  - stdout bytes: 83
-  - stderr bytes: 0
-- Command: npm run format:check
+  - Duration ms: 3619
+  - stdout sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  - stderr sha256: f59ba696a15507a8febe0f9ea94ac75ccc5411952df61ee4cb3c971b47b6bc12
+  - stdout bytes: 0
+  - stderr bytes: 25
+- Command: node packages/testing/scripts/run-yarn.mjs test
   - Status: PASS
   - Exit code: 0
-  - Duration ms: 564
-  - stdout sha256: 98901b276ac1a3b1fdb8e365f969b8e012e9fb8c9895eb38aecf82be76e2474b
-  - stderr sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-  - stdout bytes: 242
-  - stderr bytes: 0
-- Command: npm run build
+  - Duration ms: 3020
+  - stdout sha256: fea9f4c7b2dd25ef99f0df27e15a65311d30bbd898a8a6b4d3212ac03c44ec4a
+  - stderr sha256: f969fafb7bc32ecc492c8343f56269c9c47161d893e83a0d8b9b27fcf57b9aee
+  - stdout bytes: 2126
+  - stderr bytes: 21
+- Command: node packages/testing/scripts/run-yarn.mjs run typecheck
   - Status: PASS
   - Exit code: 0
-  - Duration ms: 214
-  - stdout sha256: 674152d2abeff6b4ca1368dcc45ed832cbb733e0e405892d05433600c3dc7658
+  - Duration ms: 1215
+  - stdout sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  - stderr sha256: ffbfd8ec2bfcf3e8f0e99a93f081f695da2de832eba56c5ae6943a4052680411
+  - stdout bytes: 0
+  - stderr bytes: 30
+- Command: node packages/testing/scripts/run-yarn.mjs run format:check
+  - Status: PASS
+  - Exit code: 0
+  - Duration ms: 965
+  - stdout sha256: 17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20
+  - stderr sha256: 25e162fe1196016bd51a2c9644b6820f880082561abce757f808502fb7895ebb
+  - stdout bytes: 66
+  - stderr bytes: 33
+- Command: node packages/testing/scripts/run-yarn.mjs run build
+  - Status: PASS
+  - Exit code: 0
+  - Duration ms: 414
+  - stdout sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  - stderr sha256: a0b5ebe8b7786637f56a665a03d6d27f3d6a927d0669b1870beb1307702b651a
+  - stdout bytes: 0
+  - stderr bytes: 26
+- Command: node packages/testing/scripts/verify-step-001.mjs
+  - Status: PASS
+  - Exit code: 0
+  - Duration ms: 130089
+  - stdout sha256: 2fb4499a4d59156e3676ba071acc6c2ef0347824be0da129a90c83e49b1098b9
   - stderr sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-  - stdout bytes: 49
+  - stdout bytes: 14329
   - stderr bytes: 0
 - Command: python3 .harness/tools/validate.py --mode manual
   - Status: PASS
   - Exit code: 0
-  - Duration ms: 1566
-  - stdout sha256: 4723a5c0272a45e8f2a1aee25aa42abc1449f81ba2edb534a667c4574a77384b
+  - Duration ms: 1616
+  - stdout sha256: dba86e25546d0eb6c14ba03e56ae65f056c6d6afc7c4a7c2ed14477d3ce56860
   - stderr sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
   - stdout bytes: 66
   - stderr bytes: 0
 
 ### Manual verification
-- Check: Чистый клон: скопировать git ls-files -co --exclude-standard в пустой каталог, npm install (exit 0), package-lock.json не изменился, npm ci без EBADENGINE; прогон на нижней границе engines и на Node 24; зафиксировать command, exit code и observed facts в Evidence.
-  - Status: PENDING
-- Check: Негативная lint-проверка boundary rules: по одному временному файлу за прогон (импорт @dvxch/yandex-music вне provider; core/retry -> core/downloader; value-import shared в apps/cli/src) npm run lint даёт exit code != 0 и ожидаемый boundary ruleId; для случая с eslint-disable-next-line основной проход падает на неиспользованной директиве, boundary ruleId показать прямым вызовом boundary-прохода с --no-inline-config; затем удалить файлы и убедиться в exit 0 для npm run lint; зафиксировать command, exit code и observed facts в Evidence.
-  - Status: PENDING
+- none
 <!-- VERIFICATION-EVIDENCE:END -->
 
 Generated verification block записывает deterministic runner. Дополнительные semantic observations можно хранить вне generated markers.
+
+
+
 
 
 ## Blocker / Failure reason

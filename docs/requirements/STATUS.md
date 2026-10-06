@@ -43,7 +43,7 @@
 | [REQ-037](REQ-037-diag-errors.md) | [DIAGNOSTICS] Иерархия доменных ошибок | planned | STEP-003, STEP-019 | — |
 | [REQ-038](REQ-038-sec-no-circumvention.md) | [SECURITY] Работа только с доступным аккаунту контентом | planned | STEP-005, STEP-010 | — |
 | [REQ-039](REQ-039-sec-redaction.md) | [SECURITY] Запрет утечки секретов в логи и артефакты | planned | STEP-004, STEP-008 | — |
-| [REQ-040](REQ-040-tool-ts-quality.md) | [TOOLING] Строгий TypeScript и контроль качества кода | partial | STEP-001, STEP-037 | sha256:45829ee630d29877d114cca2f4777b31ddac10529a23cfb3a82f468e7316abf6 |
+| [REQ-040](REQ-040-tool-ts-quality.md) | [TOOLING] Строгий TypeScript и контроль качества кода | completed | STEP-001, STEP-037 | sha256:7b4e802b915feb1f9c06c7f35392a394273cecd480e08371b1d10eb53bde7253, sha256:45829ee630d29877d114cca2f4777b31ddac10529a23cfb3a82f468e7316abf6 |
 | [REQ-041](REQ-041-tool-ci.md) | [TOOLING] CI на pull request | planned | STEP-002, STEP-035 | — |
 | [REQ-042](REQ-042-tool-tests.md) | [TOOLING] Обязательные unit и integration тесты | planned | STEP-003, STEP-026 | — |
 | [REQ-043](REQ-043-tool-headless-gate.md) | [TOOLING] Критерий готовности headless MVP и перехода к UI | planned | STEP-027 | — |

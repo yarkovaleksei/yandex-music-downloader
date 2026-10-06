@@ -1,0 +1,15 @@
+{
+  "name": "@music-downloader/core-retry",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "@music-downloader/source": "./src/index.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "dependencies": {
+    "@music-downloader/shared": "workspace:*"
+  }
+}

@@ -4,7 +4,7 @@
 
 | STEP | Название | Type | Priority | Status | Depends on | REQ |
 |---|---|---|---|---|---|---|
-| STEP-001 | Monorepo и toolchain контроля качества | implementation | critical | blocked | — | REQ-040 |
+| STEP-001 | Monorepo и toolchain контроля качества | implementation | critical | completed | — | REQ-040 |
 | STEP-002 | CI workflow для TypeScript monorepo | implementation | high | planned | STEP-001 | REQ-041 |
 | STEP-003 | Доменная модель, ошибки и контракт MusicProvider | implementation | critical | planned | STEP-001 | REQ-004, REQ-037, REQ-042 |
 | STEP-004 | Структурированное логирование и редакция секретов | implementation | high | planned | STEP-003 | REQ-035, REQ-039, REQ-036 |
