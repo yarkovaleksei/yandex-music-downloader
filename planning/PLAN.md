@@ -4,7 +4,7 @@
 
 | STEP | Название | Type | Priority | Status | Depends on | REQ |
 |---|---|---|---|---|---|---|
-| STEP-001 | Monorepo и toolchain контроля качества | implementation | critical | planned | — | REQ-040 |
+| STEP-001 | Monorepo и toolchain контроля качества | implementation | critical | blocked | — | REQ-040 |
 | STEP-002 | CI workflow для TypeScript monorepo | implementation | high | planned | STEP-001 | REQ-041 |
 | STEP-003 | Доменная модель, ошибки и контракт MusicProvider | implementation | critical | planned | STEP-001 | REQ-004, REQ-037, REQ-042 |
 | STEP-004 | Структурированное логирование и редакция секретов | implementation | high | planned | STEP-003 | REQ-035, REQ-039, REQ-036 |
@@ -40,3 +40,4 @@
 | STEP-034 | ADR: кроссплатформенная упаковка | adr | low | planned | STEP-033 | REQ-054, REQ-055 |
 | STEP-035 | Дистрибутивы и release CI | implementation | low | planned | STEP-034 | REQ-054, REQ-045, REQ-041 |
 | STEP-036 | Подписание, notarization и автообновление | implementation | low | planned | STEP-035 | REQ-055 |
+| STEP-037 | ADR: Yarn workspaces вместо npm workspaces | adr | critical | completed | — | REQ-040 |

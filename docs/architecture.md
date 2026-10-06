@@ -85,7 +85,7 @@ packages/testing                  ← mock provider и тестовые утил
 
 ## Deployment / runtime assumptions
 
-- Node.js ≥ 20 (конкретная поддерживаемая LTS выбирается в STEP-001), TypeScript `strict`, npm workspaces.
+- Node.js `>=22.13.0 <25`, TypeScript `strict`, Yarn 4 workspaces с `nodeLinker: node-modules` (ADR-008).
 - CLI запускается локально; desktop — Electron для Windows x64, macOS arm64/x64, Linux x64; дистрибутивы, подписание и автообновление — этап packaging (ADR STEP-034).
 - Остальной toolchain (тестовый раннер, сборка, формат модулей) выбирается в STEP-001 и фиксируется в `docs/development.md`.
 
