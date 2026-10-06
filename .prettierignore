@@ -1,0 +1,9 @@
+# Prettier проверяет только allowlist из скриптов format/format:check;
+# здесь — исключения внутри разрешённых каталогов.
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
+.cache/
+.yarn/
+yarn.lock

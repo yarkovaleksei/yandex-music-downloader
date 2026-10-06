@@ -1,0 +1,55 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist"
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": [
+    "src/**/*.test.ts",
+    "src/**/*.spec.ts",
+    "src/**/test/**",
+    "src/**/tests/**",
+    "src/**/__tests__/**",
+    "src/**/e2e/**",
+    "src/**/fixtures/**"
+  ],
+  "references": [
+    {
+      "path": "../shared"
+    },
+    {
+      "path": "../core/downloader"
+    },
+    {
+      "path": "../core/planner"
+    },
+    {
+      "path": "../core/queue"
+    },
+    {
+      "path": "../core/retry"
+    },
+    {
+      "path": "../core/manifest"
+    },
+    {
+      "path": "../core/filesystem"
+    },
+    {
+      "path": "../core/validation"
+    },
+    {
+      "path": "../providers/yandex-music"
+    },
+    {
+      "path": "../metadata"
+    },
+    {
+      "path": "../persistence"
+    },
+    {
+      "path": "../logging"
+    }
+  ]
+}
