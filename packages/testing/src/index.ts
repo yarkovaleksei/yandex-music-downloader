@@ -1,2 +1,4 @@
-/** Каркас test utilities; mock-реализации появятся в профильных STEP. */
 export const testingPackage = '@music-downloader/testing';
+
+export * from './fixtures.js';
+export * from './mock-provider.js';

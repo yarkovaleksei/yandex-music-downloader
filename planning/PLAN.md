@@ -6,7 +6,7 @@
 |---|---|---|---|---|---|---|
 | STEP-001 | Monorepo и toolchain контроля качества | implementation | critical | completed | — | REQ-040 |
 | STEP-002 | CI workflow для TypeScript monorepo | implementation | high | planned | STEP-001 | REQ-041 |
-| STEP-003 | Доменная модель, ошибки и контракт MusicProvider | implementation | critical | planned | STEP-001 | REQ-004, REQ-037, REQ-042 |
+| STEP-003 | Доменная модель, ошибки и контракт MusicProvider | implementation | critical | completed | STEP-001 | REQ-004, REQ-037, REQ-042 |
 | STEP-004 | Структурированное логирование и редакция секретов | implementation | high | planned | STEP-003 | REQ-035, REQ-039, REQ-036 |
 | STEP-005 | Spike: проверка API Яндекс Музыки | research | critical | planned | STEP-001 | REQ-001, REQ-038 |
 | STEP-006 | ADR: стратегия адаптера, авторизация и хранение токена | adr | critical | planned | STEP-005, STEP-003 | REQ-002, REQ-007 |

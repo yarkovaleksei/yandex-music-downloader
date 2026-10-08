@@ -1,2 +1,5 @@
-/** Базовый экспорт пакета; доменные контракты появятся в следующих STEP. */
 export const sharedPackage = '@music-downloader/shared';
+
+export * from './domain.js';
+export * from './errors.js';
+export * from './provider.js';
