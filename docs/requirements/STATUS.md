@@ -7,7 +7,7 @@
 | [REQ-001](REQ-001-auth-flow.md) | [AUTH] Авторизация без передачи пароля | planned | STEP-005, STEP-008, STEP-019 | — |
 | [REQ-002](REQ-002-auth-token-storage.md) | [AUTH] Безопасное хранение токена в CLI | planned | STEP-006, STEP-008, STEP-018, STEP-019, STEP-025 | — |
 | [REQ-003](REQ-003-auth-session.md) | [AUTH] Определение аккаунта и истёкший токен | planned | STEP-008, STEP-017, STEP-019 | — |
-| [REQ-004](REQ-004-provider-abstraction.md) | [PROVIDER] Абстракция MusicProvider | planned | STEP-003 | — |
+| [REQ-004](REQ-004-provider-abstraction.md) | [PROVIDER] Абстракция MusicProvider | completed | STEP-003 | sha256:bfce0c7d4101696c7098994ea3e1022d71fc0992b5082d5e4a2abc73720977f1 |
 | [REQ-005](REQ-005-provider-isolation.md) | [PROVIDER] Изоляция Yandex-specific кода | planned | STEP-009, STEP-026 | — |
 | [REQ-006](REQ-006-provider-metadata.md) | [PROVIDER] Получение метаданных track, album, playlist | planned | STEP-009 | — |
 | [REQ-007](REQ-007-provider-schema.md) | [PROVIDER] Runtime-валидация ответов и версия совместимости | planned | STEP-006, STEP-009, STEP-025 | — |
@@ -40,12 +40,12 @@
 | [REQ-034](REQ-034-diag-doctor.md) | [DIAGNOSTICS] Команда doctor | planned | STEP-025 | — |
 | [REQ-035](REQ-035-diag-logging.md) | [DIAGNOSTICS] Структурированное логирование | planned | STEP-004 | — |
 | [REQ-036](REQ-036-diag-observability.md) | [DIAGNOSTICS] Трассируемость операции загрузки | planned | STEP-004, STEP-017, STEP-021, STEP-023 | — |
-| [REQ-037](REQ-037-diag-errors.md) | [DIAGNOSTICS] Иерархия доменных ошибок | planned | STEP-003, STEP-019 | — |
+| [REQ-037](REQ-037-diag-errors.md) | [DIAGNOSTICS] Иерархия доменных ошибок | partial | STEP-003, STEP-019 | sha256:bfce0c7d4101696c7098994ea3e1022d71fc0992b5082d5e4a2abc73720977f1 |
 | [REQ-038](REQ-038-sec-no-circumvention.md) | [SECURITY] Работа только с доступным аккаунту контентом | planned | STEP-005, STEP-010 | — |
 | [REQ-039](REQ-039-sec-redaction.md) | [SECURITY] Запрет утечки секретов в логи и артефакты | planned | STEP-004, STEP-008 | — |
 | [REQ-040](REQ-040-tool-ts-quality.md) | [TOOLING] Строгий TypeScript и контроль качества кода | completed | STEP-001, STEP-037 | sha256:7b4e802b915feb1f9c06c7f35392a394273cecd480e08371b1d10eb53bde7253, sha256:45829ee630d29877d114cca2f4777b31ddac10529a23cfb3a82f468e7316abf6 |
 | [REQ-041](REQ-041-tool-ci.md) | [TOOLING] CI на pull request | planned | STEP-002, STEP-035 | — |
-| [REQ-042](REQ-042-tool-tests.md) | [TOOLING] Обязательные unit и integration тесты | planned | STEP-003, STEP-026 | — |
+| [REQ-042](REQ-042-tool-tests.md) | [TOOLING] Обязательные unit и integration тесты | partial | STEP-003, STEP-026 | sha256:bfce0c7d4101696c7098994ea3e1022d71fc0992b5082d5e4a2abc73720977f1 |
 | [REQ-043](REQ-043-tool-headless-gate.md) | [TOOLING] Критерий готовности headless MVP и перехода к UI | planned | STEP-027 | — |
 | [REQ-044](REQ-044-desk-application-api.md) | [DESKTOP] Application API как единая граница для клиентов | planned | STEP-018 | — |
 | [REQ-045](REQ-045-desk-platforms.md) | [DESKTOP] Целевые платформы и независимость core | planned | STEP-030, STEP-035 | — |
