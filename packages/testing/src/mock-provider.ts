@@ -21,6 +21,8 @@ import {
   mockArtwork,
   mockArtworkData,
   mockAudioBytes,
+  mockMetadataAlbum,
+  mockMetadataPlaylist,
   mockPlaylist,
   mockProviderId,
   mockTrack,
@@ -94,26 +96,41 @@ export class MockMusicProvider implements MusicProvider {
   public async getTrack(id: string): Promise<Track> {
     await this.before('getTrack');
     this.assertAvailable(id);
-    if (id !== mockTrack.id) throw new TrackUnavailableError();
-    return cloneTrack(mockTrack);
+    const track = [mockTrack, ...mockMetadataAlbum.tracks].find(
+      (candidate) => candidate.id === id,
+    );
+    // ADR-011 различает standalone отказ и marker в составе коллекции.
+    if (track === undefined || track.availability === 'unavailable')
+      throw new TrackUnavailableError();
+    return cloneTrack(track);
   }
 
   public async getAlbum(id: string): Promise<Album> {
     await this.before('getAlbum');
-    if (id !== mockAlbum.id) throw new TrackUnavailableError();
+    const album = [mockAlbum, mockMetadataAlbum].find(
+      (candidate) => candidate.id === id,
+    );
+    if (album === undefined) throw new TrackUnavailableError();
     return {
-      ...mockAlbum,
-      artists: [...mockAlbum.artists],
-      tracks: mockAlbum.tracks.map(cloneTrack),
+      ...album,
+      artists: [...album.artists],
+      tracks: album.tracks.map((track) =>
+        cloneCollectionTrack(track, this.unavailableTrackIds),
+      ),
     };
   }
 
   public async getPlaylist(id: string): Promise<Playlist> {
     await this.before('getPlaylist');
-    if (id !== mockPlaylist.id) throw new TrackUnavailableError();
+    const playlist = [mockPlaylist, mockMetadataPlaylist].find(
+      (candidate) => candidate.id === id,
+    );
+    if (playlist === undefined) throw new TrackUnavailableError();
     return {
-      ...mockPlaylist,
-      tracks: mockPlaylist.tracks.map(clonePlaylistTrack),
+      ...playlist,
+      tracks: playlist.tracks.map((item) =>
+        clonePlaylistTrack(item, this.unavailableTrackIds),
+      ),
     };
   }
 
@@ -196,18 +213,42 @@ function toMediaKind(value: string): MediaReference['kind'] {
 }
 
 function cloneTrack(track: Track): Track {
+  const album = track.album === undefined ? {} : { album: { ...track.album } };
+  if (track.availability === 'available')
+    return { ...track, ...album, artists: [...track.artists] };
+  // Минимальный record сохраняет отсутствие optional полей без подстановок.
   return {
     ...track,
-    artists: [...track.artists],
-    album: track.album === undefined ? undefined : { ...track.album },
+    ...album,
+    ...(track.artists === undefined ? {} : { artists: [...track.artists] }),
   };
 }
 
-function clonePlaylistTrack(item: {
+/** Отказ текущему аккаунту помечает каждое вхождение, не прерывая коллекцию. */
+function cloneCollectionTrack(
+  track: Track,
+  unavailableTrackIds: ReadonlySet<string>,
+): Track {
+  const cloned = cloneTrack(track);
+  return unavailableTrackIds.has(track.id)
+    ? { ...cloned, availability: 'unavailable' }
+    : cloned;
+}
+
+function clonePlaylistTrack(
+  item: {
+    readonly position: number;
+    readonly track: Track;
+  },
+  unavailableTrackIds: ReadonlySet<string>,
+): {
   readonly position: number;
   readonly track: Track;
-}): { readonly position: number; readonly track: Track } {
-  return { position: item.position, track: cloneTrack(item.track) };
+} {
+  return {
+    position: item.position,
+    track: cloneCollectionTrack(item.track, unavailableTrackIds),
+  };
 }
 
 function delay(milliseconds: number, signal?: AbortSignal): Promise<void> {

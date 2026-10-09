@@ -15,12 +15,7 @@ requirements:
   - REQ-031
   - REQ-037
   - REQ-044
-steps:
-  - STEP-004
-  - STEP-017
-  - STEP-018
-  - STEP-019
-  - STEP-030
+steps: []
 ---
 
 # ADR-005 — Контракт application API и событий

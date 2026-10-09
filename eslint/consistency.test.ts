@@ -76,6 +76,7 @@ describe('workspace', () => {
       const m = manifest(pkg.dir);
       const allowed = allowedEdges(pkg.group);
       for (const [name, range] of Object.entries(m.dependencies ?? {})) {
+        if (!name.startsWith('@music-downloader/')) continue;
         expect(range, `${pkg.dir}: ${name}`).toBe('workspace:*');
         const target = byName.get(name);
         expect(target, `${pkg.dir}: неизвестная ${name}`).toBeDefined();
@@ -97,7 +98,10 @@ describe('workspace', () => {
   it('project references совпадают с workspace-зависимостями', () => {
     const byName = new Map(workspacePackages.map((p) => [p.name, p]));
     for (const pkg of workspacePackages) {
+      // TypeScript references связывают только внутренние пакеты workspace.
+      // Внешние зависимости не являются project references и не входят в ожидаемый список.
       const expected = Object.keys(manifest(pkg.dir).dependencies ?? {})
+        .filter((name) => name.startsWith('@music-downloader/'))
         .map((name) =>
           path.posix.relative(pkg.dir, byName.get(name)?.dir ?? ''),
         )

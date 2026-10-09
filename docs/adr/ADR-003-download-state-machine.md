@@ -15,11 +15,7 @@ requirements:
   - REQ-018
   - REQ-020
   - REQ-024
-steps:
-  - STEP-014
-  - STEP-016
-  - STEP-017
-  - STEP-019
+steps: []
 ---
 
 # ADR-003 — State machine задания загрузки

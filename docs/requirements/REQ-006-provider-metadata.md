@@ -5,8 +5,11 @@ priority: critical
 source: brief
 steps:
   - STEP-009
+  - STEP-038
+  - STEP-039
 adrs:
   - ADR-002
+  - ADR-011
 ---
 
 # REQ-006 — [PROVIDER] Получение метаданных track, album, playlist

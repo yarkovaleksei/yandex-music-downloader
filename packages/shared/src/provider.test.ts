@@ -32,6 +32,7 @@ describe('MusicProvider contract', () => {
   it('экспортирует метаданные brief и точный статус job', () => {
     const track: Track = {
       id: 'track',
+      availability: 'available',
       title: 'Трек',
       artists: [],
       trackNumber: 1,

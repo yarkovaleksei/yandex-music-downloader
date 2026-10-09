@@ -16,27 +16,53 @@ export interface ArtworkRef {
 export interface AlbumReference {
   readonly id: string;
   readonly title: string;
+  readonly genre?: string;
   readonly artwork?: ArtworkRef;
 }
 
-export interface Track {
+/** Снимок доступа provider для текущего аккаунта; unknown не разрешает чтение аудио.
+ * @link ../../../docs/adr/ADR-011-shared-metadata-contract.md
+ */
+export type TrackAvailability = 'available' | 'unavailable' | 'unknown';
+
+/** Общие metadata сохраняют реально сообщённые поля даже при отсутствии доступа. */
+export interface TrackMetadata {
   readonly id: string;
-  readonly title: string;
-  readonly artists: readonly Artist[];
+  readonly title?: string;
+  readonly artists?: readonly Artist[];
   readonly album?: AlbumReference;
   readonly durationMs?: number;
   /** F-001: метаданные brief §8; @link ../../../planning/reviews/STEP-003/REVIEW-20261008T181759Z.md */
   readonly trackNumber?: number;
   readonly discNumber?: number;
   readonly year?: number;
+  readonly genre?: string;
   readonly artwork?: ArtworkRef;
 }
+
+export interface AvailableTrack extends TrackMetadata {
+  readonly availability: 'available';
+  readonly title: string;
+  readonly artists: readonly Artist[];
+}
+
+export interface UnavailableTrack extends TrackMetadata {
+  readonly availability: 'unavailable';
+}
+
+export interface UnknownTrack extends TrackMetadata {
+  readonly availability: 'unknown';
+}
+
+/** Минимальная запись с ID сохраняет место в коллекции без выдуманных title/artists. */
+export type Track = AvailableTrack | UnavailableTrack | UnknownTrack;
 
 export interface Album {
   readonly id: string;
   readonly title: string;
   readonly artists: readonly Artist[];
   readonly year?: number;
+  readonly genre?: string;
   readonly artwork?: ArtworkRef;
   readonly tracks: readonly Track[];
 }

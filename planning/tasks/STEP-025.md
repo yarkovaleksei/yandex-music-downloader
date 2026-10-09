@@ -18,6 +18,8 @@ requirements:
   - REQ-029
   - REQ-031
 adrs:
+  - ADR-009
+  - ADR-010
   - ADR-002
   - ADR-007
 architecture_refs:

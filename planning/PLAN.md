@@ -7,14 +7,14 @@
 | STEP-001 | Monorepo и toolchain контроля качества | implementation | critical | completed | — | REQ-040 |
 | STEP-002 | CI workflow для TypeScript monorepo | implementation | high | planned | STEP-001 | REQ-041 |
 | STEP-003 | Доменная модель, ошибки и контракт MusicProvider | implementation | critical | completed | STEP-001 | REQ-004, REQ-037, REQ-042 |
-| STEP-004 | Структурированное логирование и редакция секретов | implementation | high | planned | STEP-003 | REQ-035, REQ-039, REQ-036 |
-| STEP-005 | Spike: проверка API Яндекс Музыки | research | critical | planned | STEP-001 | REQ-001, REQ-038 |
-| STEP-006 | ADR: стратегия адаптера, авторизация и хранение токена | adr | critical | planned | STEP-005, STEP-003 | REQ-002, REQ-007 |
-| STEP-007 | Resolver ссылок Яндекс Музыки | implementation | critical | planned | STEP-003 | REQ-009 |
-| STEP-008 | Provider: авторизация, аккаунт и хранилище токена CLI | implementation | critical | planned | STEP-006, STEP-003, STEP-004 | REQ-001, REQ-002, REQ-003, REQ-039 |
-| STEP-009 | Provider: метаданные, runtime-схемы и provider health | implementation | critical | planned | STEP-008, STEP-007, STEP-006 | REQ-006, REQ-007, REQ-005 |
-| STEP-010 | Provider: audio variants и поток | implementation | critical | planned | STEP-009, STEP-005 | REQ-010, REQ-038, REQ-015 |
-| STEP-011 | Provider contract tests на реальном API | implementation | high | planned | STEP-010 | REQ-008 |
+| STEP-004 | Структурированное логирование и редакция секретов | implementation | high | completed | STEP-003 | REQ-035, REQ-039, REQ-036 |
+| STEP-005 | Spike: проверка API Яндекс Музыки | research | critical | completed | STEP-001 | REQ-001, REQ-038 |
+| STEP-006 | ADR: стратегия адаптера, авторизация и хранение токена | adr | critical | completed | STEP-005, STEP-003 | REQ-002, REQ-007 |
+| STEP-007 | Resolver ссылок Яндекс Музыки | implementation | critical | completed | STEP-003 | REQ-009 |
+| STEP-008 | Provider: авторизация, аккаунт и хранилище токена CLI | implementation | critical | completed | STEP-006, STEP-003, STEP-004 | REQ-001, REQ-002, REQ-003, REQ-039 |
+| STEP-009 | Provider: метаданные, runtime-схемы и provider health | implementation | critical | completed | STEP-008, STEP-007, STEP-006, STEP-039 | REQ-006, REQ-007, REQ-005 |
+| STEP-010 | Provider: audio variants и поток | implementation | critical | completed | STEP-009, STEP-005 | REQ-010, REQ-038, REQ-015 |
+| STEP-011 | Provider contract tests на реальном API | implementation | high | completed | STEP-010 | REQ-008 |
 | STEP-012 | Filename sanitizer и генерация путей | implementation | critical | planned | STEP-003 | REQ-022, REQ-023 |
 | STEP-013 | Download Planner и quality resolver | implementation | critical | planned | STEP-003, STEP-005 | REQ-011, REQ-010 |
 | STEP-014 | State machine задания и retry policy | implementation | critical | planned | STEP-003, STEP-005 | REQ-013, REQ-014 |
@@ -41,3 +41,6 @@
 | STEP-035 | Дистрибутивы и release CI | implementation | low | planned | STEP-034 | REQ-054, REQ-045, REQ-041 |
 | STEP-036 | Подписание, notarization и автообновление | implementation | low | planned | STEP-035 | REQ-055 |
 | STEP-037 | ADR: Yarn workspaces вместо npm workspaces | adr | critical | completed | — | REQ-040 |
+| STEP-038 | ADR: жанр и доступность в shared metadata contract | adr | critical | completed | STEP-003, STEP-006 | REQ-006 |
+| STEP-039 | Shared metadata: жанр, доступность и контрактные тесты | implementation | critical | completed | STEP-003, STEP-038 | REQ-006 |
+| STEP-040 | Синхронизировать описание реализованной foundation и provider | documentation | medium | planned | STEP-004, STEP-007, STEP-008, STEP-009, STEP-010, STEP-011, STEP-039 | — |

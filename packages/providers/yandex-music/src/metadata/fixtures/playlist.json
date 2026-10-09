@@ -1,0 +1,1005 @@
+{
+  "result": {
+    "title": "Тестовый плейлист",
+    "owner": {
+      "uid": 501,
+      "login": "fixture-owner",
+      "name": "Тестовый владелец"
+    },
+    "uid": 501,
+    "kind": 1000,
+    "playlistUuid": "00000000-0000-4000-8000-000000000001",
+    "trackCount": 33,
+    "tracks": [
+      {
+        "id": 3679782,
+        "track": {
+          "id": "3679782",
+          "available": true,
+          "title": "Like Boom",
+          "artists": [
+            {
+              "id": 670589,
+              "name": "Nick Thayer"
+            }
+          ],
+          "albums": [
+            {
+              "id": 2576597,
+              "title": "Like Boom EP",
+              "genre": "dance",
+              "year": 2015,
+              "coverUri": "avatars.yandex.net/get-music-content/28589/39d8cd7f.a.2576597-1/%%",
+              "trackPosition": {
+                "volume": 1,
+                "index": 1
+              }
+            }
+          ],
+          "durationMs": 210990,
+          "coverUri": "avatars.yandex.net/get-music-content/28589/39d8cd7f.a.2576597-1/%%"
+        }
+      },
+      {
+        "id": 34942409,
+        "track": {
+          "id": "34942409",
+          "available": true,
+          "title": "Где нас нет",
+          "artists": [
+            {
+              "id": 249991,
+              "name": "Oxxxymiron"
+            }
+          ],
+          "albums": [
+            {
+              "id": 3087311,
+              "title": "Горгород",
+              "genre": "rusrap",
+              "year": 2015,
+              "coverUri": "avatars.yandex.net/get-music-content/38044/cd8c7557.a.3087311-1/%%",
+              "trackPosition": {
+                "volume": 1,
+                "index": 11
+              }
+            }
+          ],
+          "durationMs": 265960,
+          "coverUri": "avatars.yandex.net/get-music-content/38044/cd8c7557.a.3087311-1/%%"
+        }
+      },
+      {
+        "id": 117576669,
+        "track": {
+          "id": "117576669",
+          "available": true,
+          "title": "Железный человек",
+          "artists": [
+            {
+              "id": 41191,
+              "name": "Баста"
+            }
+          ],
+          "albums": [
+            {
+              "id": 27466405,
+              "title": "Железный человек",
+              "genre": "rusrap",
+              "year": 2023,
+              "coverUri": "avatars.yandex.net/get-music-content/20113429/e9f52811.a.27466405-1/%%",
+              "trackPosition": {
+                "volume": 1,
+                "index": 1
+              }
+            }
+          ],
+          "durationMs": 222040,
+          "coverUri": "avatars.yandex.net/get-music-content/20113429/e9f52811.a.27466405-1/%%"
+        }
+      },
+      {
+        "id": 120049734,
+        "track": {
+          "id": "120049734",
+          "available": true,
+          "title": "Иду к цели",
+          "artists": [
+            {
+              "id": 7023637,
+              "name": "SKG Records"
+            }
+          ],
+          "albums": [
+            {
+              "id": 28553215,
+              "title": "Иду к цели",
+              "genre": "rap",
+              "year": 2023,
+              "coverUri": "avatars.yandex.net/get-music-content/16406615/a28540a8.a.28553215-2/%%",
+              "trackPosition": {
+                "volume": 1,
+                "index": 1
+              }
+            }
+          ],
+          "durationMs": 164140,
+          "coverUri": "avatars.yandex.net/get-music-content/16406615/a28540a8.a.28553215-2/%%"
+        }
+      },
+      {
+        "id": 178529,
+        "track": {
+          "id": "178529",
+          "available": true,
+          "title": "Numb",
+          "artists": [
+            {
+              "id": 36800,
+              "name": "Linkin Park"
+            }
+          ],
+          "albums": [
+            {
+              "id": 21940,
+              "title": "Meteora",
+              "genre": "numetal",
+              "year": 2003,
+              "coverUri": "avatars.yandex.net/get-music-content/142001/a92a262f.a.21940-7/%%",
+              "trackPosition": {
+                "volume": 1,
+                "index": 13
+              }
+            }
+          ],
+          "durationMs": 187520,
+          "coverUri": "avatars.yandex.net/get-music-content/142001/a92a262f.a.21940-7/%%"
+        }
+      },
+      {
+        "id": 18873,
+        "track": {
+          "id": "18873",
+          "available": true,
+          "title": "My Name Is",
+          "artists": [
+            {
+              "id": 1053,
+              "name": "Eminem"
+            }
+          ],
+          "albums": [
+            {
+              "id": 4418447,
+              "title": "The Slim Shady LP",
+              "genre": "foreignrap",
+              "year": 1999,
+              "coverUri": "avatars.yandex.net/get-music-content/193823/cb76710c.a.4418447-1/%%",
+              "trackPosition": {
+                "volume": 1,
+                "index": 2
+              }
+            }
+          ],
+          "durationMs": 268400,
+          "coverUri": "avatars.yandex.net/get-music-content/193823/cb76710c.a.4418447-1/%%"
+        }
+      },
+      {
+        "id": 65393,
+        "track": {
+          "id": "65393",
+          "available": true,
+          "title": "X Gon' Give It To Ya",
+          "artists": [
+            {
+              "id": 4118,
+              "name": "DMX"
+            }
+          ],
+          "albums": [
+            {
+              "id": 5712410,
+              "title": "The Definition Of X: Pick Of The Litter",
+              "genre": "rap",
+              "year": 2007,
+              "coverUri": "avatars.yandex.net/get-music-content/192707/6fb29e4a.a.5712410-1/%%",
+              "trackPosition": {
+                "volume": 1,
+                "index": 11
+              }
+            }
+          ],
+          "durationMs": 217580,
+          "coverUri": "avatars.yandex.net/get-music-content/192707/6fb29e4a.a.5712410-1/%%"
+        }
+      },
+      {
+        "id": 40053591,
+        "track": {
+          "id": "40053591",
+          "available": true,
+          "title": "Не надо было",
+          "artists": [
+            {
+              "id": 160970,
+              "name": "Noize MC"
+            }
+          ],
+          "albums": [
+            {
+              "id": 25433338,
+              "title": "Неразбериха",
+              "genre": "rusrap",
+              "year": 2013,
+              "coverUri": "avatars.yandex.net/get-music-content/8316823/f58c37c0.a.25433338-1/%%",
+              "trackPosition": {
+                "volume": 1,
+                "index": 9
+              }
+            }
+          ],
+          "durationMs": 198360,
+          "coverUri": "avatars.yandex.net/get-music-content/8316823/f58c37c0.a.25433338-1/%%"
+        }
+      },
+      {
+        "id": 18857,
+        "track": {
+          "id": "18857",
+          "available": true,
+          "title": "The Real Slim Shady",
+          "artists": [
+            {
+              "id": 1053,
+              "name": "Eminem"
+            }
+          ],
+          "albums": [
+            {
+              "id": 6980309,
+              "title": "The Marshall Mathers LP",
+              "genre": "foreignrap",
+              "year": 2000,
+              "coverUri": "avatars.yandex.net/get-music-content/99892/51a4ba4a.a.6980309-1/%%",
+              "trackPosition": {
+                "volume": 2,
+                "index": 8
+              }
+            }
+          ],
+          "durationMs": 284180,
+          "coverUri": "avatars.yandex.net/get-music-content/99892/51a4ba4a.a.6980309-1/%%"
+        }
+      },
+      {
+        "id": 41274692,
+        "track": {
+          "id": "41274692",
+          "available": true,
+          "title": "Fired up",
+          "artists": [
+            {
+              "id": 20817,
+              "name": "Hush"
+            }
+          ],
+          "albums": [
+            {
+              "id": 13279641,
+              "title": "Fired up",
+              "genre": "rap",
+              "year": 2020,
+              "coverUri": "avatars.yandex.net/get-music-content/1781407/cced3fe1.a.13279641-1/%%",
+              "trackPosition": {
+                "volume": 1,
+                "index": 1
+              }
+            }
+          ],
+          "durationMs": 216000,
+          "coverUri": "avatars.yandex.net/get-music-content/1781407/cced3fe1.a.13279641-1/%%"
+        }
+      },
+      {
+        "id": 80078454,
+        "track": {
+          "id": "80078454",
+          "available": false,
+          "title": "Valhalla Calling",
+          "artists": [
+            {
+              "id": 3145037,
+              "name": "Peyton Parrish"
+            }
+          ],
+          "albums": []
+        }
+      },
+      {
+        "id": 31156067,
+        "track": {
+          "id": "31156067",
+          "available": false,
+          "title": "Boom",
+          "artists": [
+            {
+              "id": 733165,
+              "name": "iBenji"
+            },
+            {
+              "id": 1447252,
+              "name": "Talabun"
+            }
+          ],
+          "albums": []
+        }
+      },
+      {
+        "id": 771960,
+        "track": {
+          "id": "771960",
+          "available": true,
+          "title": "Party Starter",
+          "artists": [
+            {
+              "id": 13500,
+              "name": "Will Smith"
+            }
+          ],
+          "albums": [
+            {
+              "id": 86073,
+              "title": "Party Starter",
+              "genre": "rap",
+              "year": 2005,
+              "coverUri": "avatars.yandex.net/get-music-content/34131/f93acc9d.a.86073-1/%%",
+              "trackPosition": {
+                "volume": 1,
+                "index": 1
+              }
+            }
+          ],
+          "durationMs": 262400,
+          "coverUri": "avatars.yandex.net/get-music-content/34131/f93acc9d.a.86073-1/%%"
+        }
+      },
+      {
+        "id": 92319939,
+        "track": {
+          "id": "92319939",
+          "available": true,
+          "title": "2 FAST 2 FURIOUS",
+          "artists": [
+            {
+              "id": 594722,
+              "name": "Shogun"
+            },
+            {
+              "id": 6661272,
+              "name": "SLVG"
+            }
+          ],
+          "albums": [
+            {
+              "id": 18483448,
+              "title": "2 FAST 2 FURIOUS",
+              "genre": "rap",
+              "year": 2021,
+              "coverUri": "avatars.yandex.net/get-music-content/5457712/5579806c.a.18483448-1/%%",
+              "trackPosition": {
+                "volume": 1,
+                "index": 1
+              }
+            }
+          ],
+          "durationMs": 118310,
+          "coverUri": "avatars.yandex.net/get-music-content/5457712/5579806c.a.18483448-1/%%"
+        }
+      },
+      {
+        "id": 108474030,
+        "track": {
+          "id": "108474030",
+          "available": true,
+          "title": "Gimme That Boom",
+          "artists": [
+            {
+              "id": 45203,
+              "name": "Skindred"
+            }
+          ],
+          "albums": [
+            {
+              "id": 23932529,
+              "title": "Smile",
+              "genre": "numetal",
+              "year": 2023,
+              "coverUri": "avatars.yandex.net/get-music-content/7548376/af2c625f.a.23932529-1/%%",
+              "trackPosition": {
+                "volume": 1,
+                "index": 2
+              }
+            }
+          ],
+          "durationMs": 193850,
+          "coverUri": "avatars.yandex.net/get-music-content/7548376/af2c625f.a.23932529-1/%%"
+        }
+      },
+      {
+        "id": 783129,
+        "track": {
+          "id": "783129",
+          "available": true,
+          "title": "Undead",
+          "artists": [
+            {
+              "id": 42004,
+              "name": "Hollywood Undead"
+            }
+          ],
+          "albums": [
+            {
+              "id": 2012938,
+              "title": "Swan Songs",
+              "genre": "alternativemetal",
+              "year": 2008,
+              "coverUri": "avatars.yandex.net/get-music-content/193823/97cae1dc.a.2012938-3/%%",
+              "trackPosition": {
+                "volume": 1,
+                "index": 1
+              }
+            }
+          ],
+          "durationMs": 265050,
+          "coverUri": "avatars.yandex.net/get-music-content/193823/97cae1dc.a.2012938-3/%%"
+        }
+      },
+      {
+        "id": 18134831,
+        "track": {
+          "id": "18134831",
+          "available": true,
+          "title": "Party Up (Up in Here) [Re-Recorded]",
+          "artists": [
+            {
+              "id": 4118,
+              "name": "DMX"
+            }
+          ],
+          "albums": [
+            {
+              "id": 2010585,
+              "title": "Summertime Hip Hop",
+              "genre": "rap",
+              "year": 2014,
+              "coverUri": "avatars.yandex.net/get-music-content/41288/ffe7a114.a.2010585-1/%%",
+              "trackPosition": {
+                "volume": 1,
+                "index": 7
+              }
+            }
+          ],
+          "durationMs": 297040,
+          "coverUri": "avatars.yandex.net/get-music-content/41288/ffe7a114.a.2010585-1/%%"
+        }
+      },
+      {
+        "id": 19722187,
+        "track": {
+          "id": "19722187",
+          "available": true,
+          "title": "Body Head Anthem",
+          "artists": [
+            {
+              "id": 1768515,
+              "name": "Body Head Bangerz"
+            },
+            {
+              "id": 613725,
+              "name": "Roy Jones Jr."
+            },
+            {
+              "id": 682005,
+              "name": "Mr. Magic"
+            },
+            {
+              "id": 227932,
+              "name": "Choppa"
+            }
+          ],
+          "albums": [
+            {
+              "id": 2221331,
+              "title": "Body Head Bangerz, Vol. 1",
+              "genre": "rap",
+              "year": 2004,
+              "coverUri": "avatars.yandex.net/get-music-content/17659240/b85797c4.a.2221331-2/%%",
+              "trackPosition": {
+                "volume": 1,
+                "index": 12
+              }
+            }
+          ],
+          "durationMs": 231570,
+          "coverUri": "avatars.yandex.net/get-music-content/17659240/b85797c4.a.2221331-2/%%"
+        }
+      },
+      {
+        "id": 18574,
+        "track": {
+          "id": "18574",
+          "available": true,
+          "title": "Ridin'",
+          "artists": [
+            {
+              "id": 10113,
+              "name": "Chamillionaire"
+            },
+            {
+              "id": 11250,
+              "name": "Sway"
+            }
+          ],
+          "albums": [
+            {
+              "id": 1616,
+              "title": "Ridin'",
+              "genre": "rap",
+              "year": 2006,
+              "coverUri": "avatars.yandex.net/get-music-content/3318009/a7b49594.a.1616-2/%%",
+              "trackPosition": {
+                "volume": 1,
+                "index": 2
+              }
+            }
+          ],
+          "durationMs": 272200,
+          "coverUri": "avatars.yandex.net/get-music-content/3318009/a7b49594.a.1616-2/%%"
+        }
+      },
+      {
+        "id": 21698384,
+        "track": {
+          "id": "21698384",
+          "available": true,
+          "title": "Act A Fool",
+          "artists": [
+            {
+              "id": 5639,
+              "name": "Ludacris"
+            }
+          ],
+          "albums": [
+            {
+              "id": 2490267,
+              "title": "2 Fast 2 Furious",
+              "genre": "rap",
+              "year": 2003,
+              "coverUri": "avatars.yandex.net/get-music-content/34131/c68f30ff.a.2490267-1/%%",
+              "trackPosition": {
+                "volume": 1,
+                "index": 2
+              }
+            }
+          ],
+          "durationMs": 272320,
+          "coverUri": "avatars.yandex.net/get-music-content/34131/c68f30ff.a.2490267-1/%%"
+        }
+      },
+      {
+        "id": 66421113,
+        "track": {
+          "id": "66421113",
+          "available": true,
+          "title": "Make Me Shoot",
+          "artists": [
+            {
+              "id": 95546,
+              "name": "Vinter"
+            },
+            {
+              "id": 8799967,
+              "name": "MXRGX"
+            }
+          ],
+          "albums": [
+            {
+              "id": 10828357,
+              "title": "Make Me Shoot",
+              "genre": "rap",
+              "year": 2020,
+              "coverUri": "avatars.yandex.net/get-music-content/3334966/25971bc0.a.10828357-1/%%",
+              "trackPosition": {
+                "volume": 1,
+                "index": 1
+              }
+            }
+          ],
+          "durationMs": 135520,
+          "coverUri": "avatars.yandex.net/get-music-content/3334966/25971bc0.a.10828357-1/%%"
+        }
+      },
+      {
+        "id": 69534,
+        "track": {
+          "id": "69534",
+          "available": true,
+          "title": "Lean Back",
+          "artists": [
+            {
+              "id": 22334,
+              "name": "Terror Squad"
+            },
+            {
+              "id": 22734,
+              "name": "Fat Joe"
+            },
+            {
+              "id": 23966,
+              "name": "Remy Ma"
+            },
+            {
+              "id": 594633,
+              "name": "Remy"
+            }
+          ],
+          "albums": [
+            {
+              "id": 5887,
+              "title": "Ultimate R&B 2007",
+              "genre": "rnb",
+              "year": 2007,
+              "coverUri": "avatars.yandex.net/get-music-content/176019/03bdb48b.a.5887-2/%%",
+              "trackPosition": {
+                "volume": 1,
+                "index": 15
+              }
+            }
+          ],
+          "durationMs": 254080,
+          "coverUri": "avatars.yandex.net/get-music-content/176019/03bdb48b.a.5887-2/%%"
+        }
+      },
+      {
+        "id": 178495,
+        "track": {
+          "id": "178495",
+          "available": true,
+          "title": "In the End",
+          "artists": [
+            {
+              "id": 36800,
+              "name": "Linkin Park"
+            }
+          ],
+          "albums": [
+            {
+              "id": 12360955,
+              "title": "Hybrid Theory",
+              "genre": "numetal",
+              "year": 2000,
+              "coverUri": "avatars.yandex.net/get-music-content/2427101/13fb6a9b.a.12360955-1/%%",
+              "trackPosition": {
+                "volume": 1,
+                "index": 8
+              }
+            }
+          ],
+          "durationMs": 216800,
+          "coverUri": "avatars.yandex.net/get-music-content/2427101/13fb6a9b.a.12360955-1/%%"
+        }
+      },
+      {
+        "id": 98888131,
+        "track": {
+          "id": "98888131",
+          "available": true,
+          "title": "Ridin' Dirty",
+          "artists": [
+            {
+              "id": 312187,
+              "name": "Danny Dove"
+            },
+            {
+              "id": 1442322,
+              "name": "Telboy"
+            }
+          ],
+          "albums": [
+            {
+              "id": 20592369,
+              "title": "Ridin' Dirty",
+              "genre": "electronics",
+              "year": 2022,
+              "coverUri": "avatars.yandex.net/get-music-content/5631481/ace4d243.a.20592369-1/%%",
+              "trackPosition": {
+                "volume": 1,
+                "index": 1
+              }
+            }
+          ],
+          "durationMs": 129370,
+          "coverUri": "avatars.yandex.net/get-music-content/5631481/ace4d243.a.20592369-1/%%"
+        }
+      },
+      {
+        "id": 115094207,
+        "track": {
+          "id": "115094207",
+          "available": true,
+          "title": "Ass Like",
+          "artists": [
+            {
+              "id": 12003667,
+              "name": "Dj Kralicek"
+            }
+          ],
+          "albums": [
+            {
+              "id": 22116083,
+              "title": "Ass Like",
+              "genre": "electronics",
+              "year": 2022,
+              "coverUri": "avatars.yandex.net/get-music-content/6255016/f511a7a1.a.22116083-1/%%",
+              "trackPosition": {
+                "volume": 1,
+                "index": 1
+              }
+            }
+          ],
+          "durationMs": 262260,
+          "coverUri": "avatars.yandex.net/get-music-content/6255016/f511a7a1.a.22116083-1/%%"
+        }
+      },
+      {
+        "id": 149848,
+        "track": {
+          "id": "149848",
+          "available": true,
+          "title": "Remember the Name",
+          "artists": [
+            {
+              "id": 48742,
+              "name": "Fort Minor"
+            },
+            {
+              "id": 127209,
+              "name": "Styles of Beyond"
+            }
+          ],
+          "albums": [
+            {
+              "id": 14533,
+              "title": "The Rising Tied",
+              "genre": "foreignrap",
+              "year": 2005,
+              "coverUri": "avatars.yandex.net/get-music-content/114728/59ffb43f.a.14533-3/%%",
+              "trackPosition": {
+                "volume": 1,
+                "index": 2
+              }
+            }
+          ],
+          "durationMs": 230490,
+          "coverUri": "avatars.yandex.net/get-music-content/114728/59ffb43f.a.14533-3/%%"
+        }
+      },
+      {
+        "id": 41352312,
+        "track": {
+          "id": "41352312",
+          "available": true,
+          "title": "Deadpool - X Gon' Give It To Ya - Main Theme",
+          "artists": [
+            {
+              "id": 4683503,
+              "name": "Geek Music"
+            }
+          ],
+          "albums": [
+            {
+              "id": 5412449,
+              "title": "Deadpool - X Gon' Give It To Ya - Main Theme",
+              "genre": "soundtrack",
+              "year": 2018,
+              "coverUri": "avatars.yandex.net/get-music-content/97284/7642b107.a.5412449-1/%%",
+              "trackPosition": {
+                "volume": 1,
+                "index": 1
+              }
+            }
+          ],
+          "durationMs": 232490,
+          "coverUri": "avatars.yandex.net/get-music-content/97284/7642b107.a.5412449-1/%%"
+        }
+      },
+      {
+        "id": 22687,
+        "track": {
+          "id": "22687",
+          "available": true,
+          "title": "Ass Like That",
+          "artists": [
+            {
+              "id": 1053,
+              "name": "Eminem"
+            }
+          ],
+          "albums": [
+            {
+              "id": 4102,
+              "title": "Encore",
+              "genre": "foreignrap",
+              "year": 2004,
+              "coverUri": "avatars.yandex.net/get-music-content/2789402/ccd034c3.a.4102-2/%%",
+              "trackPosition": {
+                "volume": 1,
+                "index": 14
+              }
+            }
+          ],
+          "durationMs": 265480,
+          "coverUri": "avatars.yandex.net/get-music-content/2789402/ccd034c3.a.4102-2/%%"
+        }
+      },
+      {
+        "id": 809119,
+        "track": {
+          "id": "809119",
+          "available": true,
+          "title": "Dogs Out",
+          "artists": [
+            {
+              "id": 4118,
+              "name": "DMX"
+            }
+          ],
+          "albums": [
+            {
+              "id": 90336,
+              "title": "Grand Champ",
+              "genre": "rap",
+              "year": 2003,
+              "coverUri": "avatars.yandex.net/get-music-content/2359742/9f17fe89.a.90336-3/%%",
+              "trackPosition": {
+                "volume": 1,
+                "index": 4
+              }
+            }
+          ],
+          "durationMs": 243820,
+          "coverUri": "avatars.yandex.net/get-music-content/2359742/9f17fe89.a.90336-3/%%"
+        }
+      },
+      {
+        "id": 96064,
+        "track": {
+          "id": "96064",
+          "available": true,
+          "title": "Faint",
+          "artists": [
+            {
+              "id": 36800,
+              "name": "Linkin Park"
+            }
+          ],
+          "albums": [
+            {
+              "id": 21940,
+              "title": "Meteora",
+              "genre": "numetal",
+              "year": 2003,
+              "coverUri": "avatars.yandex.net/get-music-content/142001/a92a262f.a.21940-7/%%",
+              "trackPosition": {
+                "volume": 1,
+                "index": 7
+              }
+            }
+          ],
+          "durationMs": 162100,
+          "coverUri": "avatars.yandex.net/get-music-content/142001/a92a262f.a.21940-7/%%"
+        }
+      },
+      {
+        "id": 19722188,
+        "track": {
+          "id": "19722188",
+          "available": true,
+          "title": "Can't Be Touched",
+          "artists": [
+            {
+              "id": 1768515,
+              "name": "Body Head Bangerz"
+            },
+            {
+              "id": 613725,
+              "name": "Roy Jones Jr."
+            },
+            {
+              "id": 682005,
+              "name": "Mr. Magic"
+            },
+            {
+              "id": 142369,
+              "name": "Trouble"
+            }
+          ],
+          "albums": [
+            {
+              "id": 2221331,
+              "title": "Body Head Bangerz, Vol. 1",
+              "genre": "rap",
+              "year": 2004,
+              "coverUri": "avatars.yandex.net/get-music-content/17659240/b85797c4.a.2221331-2/%%",
+              "trackPosition": {
+                "volume": 1,
+                "index": 2
+              }
+            }
+          ],
+          "durationMs": 214400,
+          "coverUri": "avatars.yandex.net/get-music-content/17659240/b85797c4.a.2221331-2/%%"
+        }
+      },
+      {
+        "id": 12707,
+        "track": {
+          "id": "12707",
+          "available": true,
+          "title": "Where The Hood At",
+          "artists": [
+            {
+              "id": 4118,
+              "name": "DMX"
+            }
+          ],
+          "albums": [
+            {
+              "id": 90336,
+              "title": "Grand Champ",
+              "genre": "rap",
+              "year": 2003,
+              "coverUri": "avatars.yandex.net/get-music-content/2359742/9f17fe89.a.90336-3/%%",
+              "trackPosition": {
+                "volume": 1,
+                "index": 3
+              }
+            }
+          ],
+          "durationMs": 286690,
+          "coverUri": "avatars.yandex.net/get-music-content/2359742/9f17fe89.a.90336-3/%%"
+        }
+      },
+      {
+        "id": 69317,
+        "track": {
+          "id": "69317",
+          "available": true,
+          "title": "Somebody Gonna Get Hurt",
+          "artists": [
+            {
+              "id": 10113,
+              "name": "Chamillionaire"
+            }
+          ],
+          "albums": [
+            {
+              "id": 5865,
+              "title": "Hip Hop Police",
+              "genre": "rap",
+              "year": 2007,
+              "coverUri": "avatars.yandex.net/get-music-content/2357076/f0c79fda.a.5865-3/%%",
+              "trackPosition": {
+                "volume": 1,
+                "index": 2
+              }
+            }
+          ],
+          "durationMs": 203320,
+          "coverUri": "avatars.yandex.net/get-music-content/2357076/f0c79fda.a.5865-3/%%"
+        }
+      }
+    ]
+  }
+}

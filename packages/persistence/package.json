@@ -10,6 +10,7 @@
     }
   },
   "dependencies": {
-    "@music-downloader/shared": "workspace:*"
+    "@music-downloader/shared": "workspace:*",
+    "@napi-rs/keyring": "2.1.0"
   }
 }

@@ -36,12 +36,14 @@ packages/testing                  ← mock provider и тестовые утил
 - **Downloader core** — Download Planner (immutable `DownloadPlan`), quality resolver, Download Manager (очередь, concurrency, pause/resume/cancel/retry, прогресс), state machine (ADR-006), manifest/recovery, filesystem (sanitizer, генератор путей, `.part`-запись), validation.
 - **MusicProvider** — контракт источника (ADR-002); **YandexMusicProvider** — adapter с runtime-схемами, `PROVIDER_SCHEMA_VERSION` и нормализацией ошибок.
 - **Metadata** — запись тегов и обложек (библиотека — по ADR STEP-020).
-- **Persistence** — файловый `ManifestStore` в headless MVP; SQLite с миграциями на этапе desktop.
+- **Persistence** — файловый `ManifestStore` в headless MVP; CLI `CredentialStore` через native системный keyring (ADR-010), создаваемый application composition root и передаваемый provider через shared-порт; SQLite с миграциями на этапе desktop.
 - **Desktop (этап 2)** — Electron main/preload/renderer, typed IPC, React + MUI.
 
 ## Data / state model
 
 Доменные сущности: `Track`, `Album`, `Playlist`, `AudioVariant`, `DownloadRequest`, `DownloadJob`, `DownloadTrackJob`, `MediaReference` (brief §8).
+
+Metadata contract развивается [ADR-011](adr/ADR-011-shared-metadata-contract.md): Track — union available/unavailable/unknown, genre — optional строка в track/album/album reference. Полные title/artists обязательны только для available; минимальная недоступная/неподтверждённая запись сохраняет ID и место в коллекции без выдуманных metadata. Это документальная форма; shared/mock код вводит STEP-039, provider raw mapping — STEP-009 после этого prerequisite. PRN-003 сохраняется: unknown не разрешает чтение контента, а available metadata не заменяет проверку полного audio variant.
 
 - Единица работы — трек в составе job (ключ — позиция в плане); статусы и переходы описаны в ADR-006; статус job агрегируется детерминированно (`completed_with_errors`, `interrupted` и др.); job имеет control-состояние (`running`/`paused`/`cancelled`).
 - `DownloadPlan` формируется до загрузки и неизменяем для операции.
@@ -60,15 +62,16 @@ packages/testing                  ← mock provider и тестовые утил
 
 ## External dependencies / integrations
 
-- **API Яндекс Музыки** — неофициальный; доступ только через provider adapter; стабильность не гарантируется (дрейф схемы, rate limits, TTL signed URL — открытые вопросы).
-- **`@dvxch/yandex-music`** — начальная реализация adapter, деталь реализации (ADR-002).
+- **API Яндекс Музыки** — неофициальный; доступ только через provider adapter; стабильность не гарантируется. Стратегия schema drift принята ADR-009/OQ-007; наблюдения Range/signed URL ограничены STEP-005, числовой rate limit не установлен.
+- **`@dvxch/yandex-music@0.3.0`** — закреплённая библиотека внутри provider. Стратегия ADR-009 предписывает обёртку с проверкой raw JSON до моделей и доменной проекции после них через Zod 4, отключение library retries и допуск preview только при явном false; реализация — STEP-008/009/010, modern encraw и полный resume ещё требуют proof STEP-010. `PROVIDER_SCHEMA_VERSION` — отдельная SemVer версия проверяемых схем/маппинга, экспорт STEP-009 и diagnostics STEP-025.
+- **CLI native credential storage** — `@napi-rs/keyring`: Windows Credential Manager текущего пользователя, macOS Login Keychain, Linux защищённый GNOME Keyring через явно выбранный Secret Service, без keyutils/plaintext fallback (ADR-010). Реализация/платформенные проверки — STEP-008; отсутствие доступного backend даёт ошибку, не альтернативное сохранение.
 - **FFmpeg** — опциональная зависимость диагностики/валидации (решение об упаковке — OQ-005).
 - **Провайдер обложек** — только через `provider.fetchArtwork`; клиенты и core не обращаются к CDN обложек.
 - **SQLite-библиотека, библиотека тегов, Electron secure storage** — выбираются отдельными ADR (STEP-020, STEP-028).
 
 ## Security boundaries
 
-- Пароль пользователя не запрашивается и не хранится; токен — только в механизме, принятом ADR (CLI: защищённое локальное хранилище; desktop: системное secure storage) (PRN-002).
+- Пароль пользователя не запрашивается и не хранится; CLI использует Device Authorization с приватной browser-страницей provider и native CredentialStore (ADR-010). Challenge/credentials не проходят application API и AuthInteraction.notify; там только безопасное уведомление. Истёкший токен даёт AUTH_ERROR без автоматического refresh/replay; повторная авторизация явная. Desktop secure storage остаётся отдельным решением OQ-010 (PRN-002).
 - Секреты (токен, cookies, Authorization, credentials, signed URL с security-параметрами) не попадают в logs, events, manifest, cache, SQLite (централизованная редакция).
 - Работа только с контентом, доступным текущему аккаунту (PRN-003).
 - Ключи расшифровки потока (если применяются) остаются внутри provider и не попадают в `variantKey`, manifest, cache, логи и события.
@@ -95,4 +98,4 @@ packages/testing                  ← mock provider и тестовые утил
 
 ## Известный architecture debt / drift
 
-Нет (код ещё не создан). Нерешённые решения: OQ-001…OQ-005, OQ-007…OQ-011, OQ-013 (см. `docs/OPEN_QUESTIONS.md`); ADR по стратегии adapter и хранению токена, библиотеке метаданных/FFmpeg, SQLite/Electron/IPC и упаковке будут приняты соответствующими STEP.
+Слои monorepo/shared реализованы STEP-001/003, исследование API — STEP-005. ADR-009/010 фиксируют стратегию adapter/CLI auth, но production wrapper, схемы, native store и platform proof ещё принадлежат STEP-008/009/010/018/019/025. Открытые и отложенные решения, включая desktop storage OQ-010 и качество OQ-011, перечислены в `docs/OPEN_QUESTIONS.md`; решения по метаданным/FFmpeg, SQLite/Electron/IPC и упаковке принимаются соответствующими STEP. Известный architecture drift этим STEP не установлен.

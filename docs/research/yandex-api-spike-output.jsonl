@@ -1,0 +1,47 @@
+{"phase":"auth","status":"started"}
+{"phase":"auth","status":"confirmed","account":"A","accountConfirmed":true,"expiresIn":31536000,"refreshPresent":true}
+{"phase":"auth","status":"failed","errorType":"UnauthorizedError","reason":"request-failed","refreshSucceeded":false}
+{"phase":"catalog","status":"observed","trackId":"2224197","available":true,"premiumAvailable":true,"fullWithoutPermission":false,"durationMs":235440}
+{"phase":"catalog","status":"observed","trackId":"150217442","available":true,"premiumAvailable":true,"fullWithoutPermission":false,"durationMs":187820}
+{"phase":"catalog","status":"observed","trackId":"151910374","available":true,"premiumAvailable":true,"fullWithoutPermission":false,"durationMs":208530}
+{"phase":"catalog","status":"completed","albumId":"221173","count":1}
+{"phase":"catalog","status":"completed","playlistKind":"1000"}
+{"phase":"variants","status":"observed","trackId":"2224197","source":"legacy","codec":"mp3","bitrate":192,"transport":"raw","keyPresent":false,"preview":"no"}
+{"httpStatus":206,"elapsedMs":1008,"bytesRead":1048576,"contentRange":"bytes 0-1048575/5650599","rangeHonored":true,"phase":"range","status":"observed","trackId":"2224197","source":"legacy"}
+{"phase":"variants","status":"observed","trackId":"2224197","source":"legacy","container":"mp3","bytesRead":1048576}
+{"phase":"variants","status":"observed","trackId":"2224197","source":"legacy","codec":"mp3","bitrate":320,"transport":"raw","keyPresent":false,"preview":"no"}
+{"httpStatus":206,"elapsedMs":1059,"bytesRead":1048576,"contentRange":"bytes 0-1048575/9417665","rangeHonored":true,"phase":"range","status":"observed","trackId":"2224197","source":"legacy"}
+{"phase":"variants","status":"observed","trackId":"2224197","source":"legacy","container":"mp3","bytesRead":1048576}
+{"phase":"variants","status":"observed","trackId":"2224197","source":"file-info","codec":"aac-mp4","bitrate":256,"transport":"encraw","keyPresent":true,"lossless":false,"preview":"unknown"}
+{"phase":"variants","status":"skipped","trackId":"2224197","reason":"ambiguous"}
+{"phase":"variants","status":"observed","trackId":"150217442","source":"legacy","codec":"mp3","bitrate":320,"transport":"raw","keyPresent":false,"preview":"no"}
+{"httpStatus":206,"elapsedMs":1037,"bytesRead":1048576,"contentRange":"bytes 0-1048575/7514906","rangeHonored":true,"phase":"range","status":"observed","trackId":"150217442","source":"legacy"}
+{"phase":"variants","status":"observed","trackId":"150217442","source":"legacy","container":"mp3","bytesRead":1048576}
+{"phase":"variants","status":"observed","trackId":"150217442","source":"legacy","codec":"mp3","bitrate":192,"transport":"raw","keyPresent":false,"preview":"no"}
+{"httpStatus":206,"elapsedMs":997,"bytesRead":1048576,"contentRange":"bytes 0-1048575/4508943","rangeHonored":true,"phase":"range","status":"observed","trackId":"150217442","source":"legacy"}
+{"phase":"variants","status":"observed","trackId":"150217442","source":"legacy","container":"mp3","bytesRead":1048576}
+{"phase":"variants","status":"observed","trackId":"150217442","source":"file-info","codec":"flac-mp4","bitrate":0,"transport":"encraw","keyPresent":true,"lossless":true,"preview":"unknown"}
+{"phase":"variants","status":"skipped","trackId":"150217442","reason":"ambiguous"}
+{"phase":"variants","status":"observed","trackId":"151910374","source":"legacy","codec":"mp3","bitrate":192,"transport":"raw","keyPresent":false,"preview":"no"}
+{"httpStatus":206,"elapsedMs":958,"bytesRead":1048576,"contentRange":"bytes 0-1048575/5005479","rangeHonored":true,"phase":"range","status":"observed","trackId":"151910374","source":"legacy"}
+{"phase":"variants","status":"observed","trackId":"151910374","source":"legacy","container":"mp3","bytesRead":1048576}
+{"phase":"variants","status":"observed","trackId":"151910374","source":"legacy","codec":"mp3","bitrate":320,"transport":"raw","keyPresent":false,"preview":"no"}
+{"httpStatus":206,"elapsedMs":305,"bytesRead":1048576,"contentRange":"bytes 0-1048575/8342465","rangeHonored":true,"phase":"range","status":"observed","trackId":"151910374","source":"legacy"}
+{"phase":"variants","status":"observed","trackId":"151910374","source":"legacy","container":"mp3","bytesRead":1048576}
+{"phase":"variants","status":"observed","trackId":"151910374","source":"file-info","codec":"flac-mp4","bitrate":0,"transport":"encraw","keyPresent":true,"lossless":true,"preview":"unknown"}
+{"phase":"variants","status":"skipped","trackId":"151910374","reason":"ambiguous"}
+{"httpStatus":206,"elapsedMs":235,"bytesRead":4096,"contentRange":"bytes 0-4095/5650599","rangeHonored":true,"phase":"limits","status":"observed","concurrency":1}
+{"httpStatus":206,"elapsedMs":220,"bytesRead":4096,"contentRange":"bytes 0-4095/5650599","rangeHonored":true,"phase":"limits","status":"observed","concurrency":1}
+{"phase":"limits","status":"completed","concurrency":1,"apiRequests":2,"cdnRequests":2}
+{"httpStatus":206,"elapsedMs":224,"bytesRead":4096,"contentRange":"bytes 0-4095/5650599","rangeHonored":true,"phase":"limits","status":"observed","concurrency":4}
+{"httpStatus":206,"elapsedMs":426,"bytesRead":4096,"contentRange":"bytes 0-4095/5650599","rangeHonored":true,"phase":"limits","status":"observed","concurrency":4}
+{"httpStatus":206,"elapsedMs":427,"bytesRead":4096,"contentRange":"bytes 0-4095/5650599","rangeHonored":true,"phase":"limits","status":"observed","concurrency":4}
+{"httpStatus":206,"elapsedMs":463,"bytesRead":4096,"contentRange":"bytes 0-4095/5650599","rangeHonored":true,"phase":"limits","status":"observed","concurrency":4}
+{"phase":"limits","status":"completed","concurrency":4,"apiRequests":10,"cdnRequests":6}
+{"httpStatus":206,"elapsedMs":220,"bytesRead":4096,"contentRange":"bytes 0-4095/5650599","rangeHonored":true,"phase":"ttl","status":"observed","elapsedSeconds":1,"source":"legacy","urlChanged":true,"freshLinkWorks":true,"expiry":"not-observed"}
+{"httpStatus":206,"elapsedMs":742,"bytesRead":4096,"contentRange":"bytes 0-4095/5650599","rangeHonored":true,"phase":"ttl","status":"observed","elapsedSeconds":61,"source":"legacy","urlChanged":true,"freshLinkWorks":true,"expiry":"not-observed"}
+{"httpStatus":206,"elapsedMs":799,"bytesRead":4096,"contentRange":"bytes 0-4095/5650599","rangeHonored":true,"phase":"ttl","status":"observed","elapsedSeconds":301,"source":"legacy","urlChanged":true,"freshLinkWorks":true,"expiry":"not-observed"}
+{"httpStatus":206,"elapsedMs":885,"bytesRead":4096,"contentRange":"bytes 0-4095/5650599","rangeHonored":true,"phase":"ttl","status":"observed","elapsedSeconds":901,"source":"legacy","urlChanged":true,"freshLinkWorks":true,"expiry":"not-observed"}
+{"httpStatus":206,"elapsedMs":996,"bytesRead":4096,"contentRange":"bytes 0-4095/5650599","rangeHonored":true,"phase":"ttl","status":"observed","elapsedSeconds":1801,"source":"legacy","urlChanged":true,"freshLinkWorks":true,"expiry":"not-observed"}
+{"httpStatus":401,"elapsedMs":503,"bytesRead":0,"rangeHonored":false,"phase":"ttl","status":"observed","elapsedSeconds":3602,"source":"legacy","urlChanged":true,"freshLinkWorks":true,"expiry":"rejected-old-link"}
+{"phase":"run","status":"completed","count":6}

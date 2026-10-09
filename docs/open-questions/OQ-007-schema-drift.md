@@ -1,12 +1,12 @@
 ---
 schema: 1
 id: OQ-007
-status: open
+status: resolved
 affects:
   - STEP-009
   - STEP-025
 created_at: 2026-10-04T17:57:04Z
-resolved_at: null
+resolved_at: 2026-10-08T20:41:59Z
 ---
 
 # OQ-007 — Как корректно определять API schema drift?
@@ -21,4 +21,6 @@ Brief §29, §45: drift не должен превращаться в generic ru
 
 ## Resolution
 
-—
+Стратегия определена [ADR-009](../adr/ADR-009-yandex-adapter-strategy.md): Zod 4 проверяет критичный исходный ответ до библиотечных моделей и доменную проекцию после них. Additive поля допускаются; отсутствие/неверный тип обязательного поля или некорректное используемое значение даёт PROVIDER_RESPONSE_INVALID; подтверждённая несовместимая версия/смена протокола — API_CHANGED. Network/auth/service/CDN отказы классифицируются по контексту отдельно. Неизвестный preview исключает вариант; hooks библиотеки не заменяют схемы. PROVIDER_SCHEMA_VERSION — SemVer проверяемого compatibility contract, независимо от npm-version.
+
+Основание: [STEP-005](../research/yandex-api-spike.md#варианты-аудио), в частности потеря preview в LosslessDownloadInfo, и REQ-007. Реализация metadata-схем/версии — STEP-009, audio/CDN — STEP-010, вывод doctor — STEP-025. Resolution принимает документальную стратегию, а не подтверждает runtime-поддержку будущего адаптера; ограничения encraw/Range/TTL сохраняются.

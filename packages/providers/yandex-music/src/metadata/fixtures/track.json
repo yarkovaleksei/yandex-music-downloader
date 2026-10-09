@@ -1,0 +1,30 @@
+{
+  "result": [
+    {
+      "id": "2224197",
+      "available": true,
+      "title": "Living Proof",
+      "artists": [
+        {
+          "id": 431626,
+          "name": "Bad Meets Evil"
+        }
+      ],
+      "albums": [
+        {
+          "id": 221173,
+          "title": "Hell: The Sequel",
+          "genre": "rap",
+          "year": 2011,
+          "coverUri": "avatars.yandex.net/get-music-content/49876/9fa4f1ac.a.221173-1/%%",
+          "trackPosition": {
+            "volume": 1,
+            "index": 10
+          }
+        }
+      ],
+      "durationMs": 235440,
+      "coverUri": "avatars.yandex.net/get-music-content/49876/9fa4f1ac.a.221173-1/%%"
+    }
+  ]
+}

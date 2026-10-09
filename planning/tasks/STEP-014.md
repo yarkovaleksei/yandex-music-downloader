@@ -12,7 +12,6 @@ requirements:
   - REQ-013
   - REQ-014
 adrs:
-  - ADR-003
   - ADR-006
 architecture_refs:
   - "docs/architecture.md#data-state-model"
