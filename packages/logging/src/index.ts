@@ -1,2 +1,5 @@
-/** Каркас logging; поведение будет добавлено профильным STEP. */
 export const loggingPackage = '@music-downloader/logging';
+
+export * from './logger.js';
+export * from './redactor.js';
+export * from './serializers.js';

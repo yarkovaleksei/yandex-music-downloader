@@ -1,0 +1,25 @@
+{
+  "capturedAt": "2026-10-09T15:29:06.612Z",
+  "sdkVersion": "0.3.0",
+  "schemaVersion": "1.1.0",
+  "variant": {
+    "codec": "mp3",
+    "container": "mp3",
+    "bitrate": 192,
+    "lossless": false
+  },
+  "variantsCount": 2,
+  "bytesRead": 5650599,
+  "contentLength": 5650599,
+  "range": {
+    "acceptsRanges": true,
+    "startOffset": 8,
+    "matchedBytes": 56
+  },
+  "modernPreview": [
+    "unknown"
+  ],
+  "limitations": "Один аккаунт и один full трек; modern preview observation не является чтением encraw. Отрицательные/encraw случаи в offline tests synthetic. URL/ключи/headers/credentials и аудиобайты не сохраняются.",
+  "nativeSessionCleanup": "PASS",
+  "source": "runLiveAudio: production facade/SDK/raw validation; Node composition с CliCredentialStore через DI; временная сессия очищена управляющей composition, backup credentials только в RAM."
+}

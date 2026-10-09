@@ -19,6 +19,7 @@
     "format": "prettier --write --ignore-path .prettierignore apps packages eslint \"*.{json,mjs,ts,mts}\" .yarnrc.yml docs/development.md",
     "format:check": "prettier --check --ignore-path .prettierignore apps packages eslint \"*.{json,mjs,ts,mts}\" .yarnrc.yml docs/development.md",
     "test": "vitest run",
+    "test:provider": "node packages/providers/yandex-music/test-live/run.mjs",
     "build": "tsc -b"
   },
   "devDependencies": {

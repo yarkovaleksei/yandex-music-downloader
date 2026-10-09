@@ -4,8 +4,10 @@ import type {
   ArtworkData,
   ArtworkRef,
   AudioVariant,
+  AvailableTrack,
   Playlist,
-  Track,
+  UnavailableTrack,
+  UnknownTrack,
 } from '@music-downloader/shared';
 
 export const mockProviderId = 'mock-music';
@@ -17,8 +19,9 @@ export const mockAccount: Account = {
   id: 'account:fixture',
   displayName: 'Тестовый аккаунт',
 };
-export const mockTrack: Track = {
+export const mockTrack: AvailableTrack = {
   id: 'track:fixture',
+  availability: 'available',
   title: 'Тестовый трек',
   artists: [{ id: 'artist:fixture', name: 'Тестовый артист' }],
   album: {
@@ -54,4 +57,67 @@ export const mockPlaylist: Playlist = {
 export const mockArtworkData: ArtworkData = {
   bytes: mockArtworkBytes,
   mimeType: 'image/png',
+};
+
+/** ADR-011: отдельные metadata-only ID не расширяют существующие audio stubs.
+ * @link ../../../docs/adr/ADR-011-shared-metadata-contract.md
+ */
+export const mockUnavailableTrack: UnavailableTrack = {
+  id: 'track:unavailable',
+  availability: 'unavailable',
+};
+export const mockUnknownTrack: UnknownTrack = {
+  id: 'track:unknown',
+  availability: 'unknown',
+};
+export const mockUnavailableMetadataTrack: UnavailableTrack = {
+  id: 'track:unavailable:metadata',
+  availability: 'unavailable',
+  title: 'Недоступный трек с метаданными',
+  artists: mockTrack.artists,
+  genre: 'rock',
+  album: { id: 'album:metadata', title: 'Альбом с жанром', genre: 'rock' },
+  durationMs: 2_000,
+  trackNumber: 2,
+  discNumber: 1,
+  year: 2026,
+  artwork: mockArtwork,
+};
+export const mockUnknownMetadataTrack: UnknownTrack = {
+  id: 'track:unknown:metadata',
+  availability: 'unknown',
+  title: 'Трек без подтверждения доступа',
+  artists: [],
+  genre: 'jazz',
+};
+export const mockGenreTrack: AvailableTrack = {
+  ...mockTrack,
+  id: 'track:genre',
+  genre: 'rock',
+  album: { id: 'album:metadata', title: 'Альбом с жанром', genre: 'rock' },
+};
+
+/** Смешанная коллекция сохраняет неполные записи и повтор доступного ID по позициям. */
+export const mockMetadataAlbum: Album = {
+  id: 'album:metadata',
+  title: 'Альбом с жанром',
+  artists: mockTrack.artists,
+  genre: 'rock',
+  tracks: [
+    mockTrack,
+    mockUnavailableTrack,
+    mockUnknownTrack,
+    mockUnavailableMetadataTrack,
+    mockUnknownMetadataTrack,
+    mockGenreTrack,
+    mockTrack,
+  ],
+};
+export const mockMetadataPlaylist: Playlist = {
+  id: 'playlist:metadata',
+  title: 'Плейлист с недоступными записями',
+  tracks: mockMetadataAlbum.tracks.map((track, index) => ({
+    position: index + 1,
+    track,
+  })),
 };

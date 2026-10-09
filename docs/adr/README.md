@@ -28,3 +28,7 @@ ADR фиксирует **устойчивое архитектурное реш�
 - [ADR-006](ADR-006-download-lifecycle-and-recovery.md) — Жизненный цикл загрузки, восстановление и artwork (accepted; supersedes ADR-003)
 - [ADR-007](ADR-007-application-api-events-and-command-results.md) — Application API, события и результаты команд (accepted; supersedes ADR-005)
 - [ADR-008](ADR-008-yarn-workspaces.md) — Yarn workspaces для monorepo (accepted; заменяет package-manager положение ADR-001)
+
+- [ADR-009](ADR-009-yandex-adapter-strategy.md) — Стратегия Yandex adapter и runtime-валидации (accepted)
+- [ADR-010](ADR-010-cli-auth-and-secure-storage.md) — Device Authorization и защищённое CLI credential storage (accepted)
+- [ADR-011](ADR-011-shared-metadata-contract.md) — Жанр и доступность в shared metadata contract (accepted; owning STEP-038/039)

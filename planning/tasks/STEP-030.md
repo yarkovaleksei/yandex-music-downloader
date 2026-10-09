@@ -16,7 +16,6 @@ requirements:
   - REQ-048
 adrs:
   - ADR-001
-  - ADR-005
   - ADR-007
 architecture_refs:
   - "docs/architecture.md#основные-компоненты-границы"

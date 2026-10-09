@@ -53,9 +53,17 @@ yarn run format
 - `yarn run build` — `tsc -b`; результат в `dist/` каждого пакета (игнорируется Git).
 - `yarn run format` / `yarn run format:check` — Prettier для `apps`, `packages`, `eslint`, корневых конфигураций, `.yarnrc.yml` и этого файла. Остальные документы, Harness и `planning/` не форматируются автоматически.
 
+### Проверка provider на реальном API
+
+Отдельный ручной suite проверяет публичный контракт Yandex provider. После `yarn install --immutable` и `yarn run build` задайте `PROVIDER_TEST_TOKEN` только в окружении текущего процесса и выполните `yarn run test:provider`. Имя script `test:provider` совместимо с npm; отдельная npm-установка для этого не требуется. Значение токена не записывайте в команды, файлы, fixtures или evidence.
+
+Без токена или с пустым токеном команда печатает `PROVIDER_TEST: SKIP TOKEN_MISSING`, завершается с кодом 0 и не загружает provider и не обращается к сети. С токеном она проверяет account, track, album, собственный playlist и audio variants; любая ошибка конфигурации или контракта завершается с ненулевым кодом и безопасными `stage` и `code`. По завершении provider очищает только test-only credentials в памяти.
+
+По умолчанию используются track `2224197`, album `221173` и playlist `users/<account>/playlists/1000`. Для разрешённых аккаунту ресурсов можно задать не секретные `PROVIDER_TEST_TRACK_ID`, `PROVIDER_TEST_ALBUM_ID` и `PROVIDER_TEST_PLAYLIST_ID`; допустимы числовые ID track/album и UUID или `users/<encoded-owner>/playlists/<number>` для playlist. `yarn test` остаётся offline, не требует токена и не запускает этот suite; PR CI также его не запускает.
+
 ## Workspace
 
-Пакеты скелета (все `private`, ESM): `@music-downloader/shared`, `@music-downloader/core-downloader`, `@music-downloader/core-planner`, `@music-downloader/core-queue`, `@music-downloader/core-retry`, `@music-downloader/core-manifest`, `@music-downloader/core-filesystem`, `@music-downloader/core-validation`, `@music-downloader/provider-yandex-music`, `@music-downloader/metadata`, `@music-downloader/persistence`, `@music-downloader/application`, `@music-downloader/logging`, `@music-downloader/testing`, `@music-downloader/cli`. Всего 15; каталоги — `packages/shared`, `packages/core/*`, `packages/providers/yandex-music`, `packages/metadata`, `packages/persistence`, `packages/application`, `packages/logging`, `packages/testing`, `apps/cli`. В `src` каждого пакета только маркер и smoke-тест; доменной логики, CLI-команд и desktop на этом этапе нет.
+Workspace-пакеты (все `private`, ESM): `@music-downloader/shared`, `@music-downloader/core-downloader`, `@music-downloader/core-planner`, `@music-downloader/core-queue`, `@music-downloader/core-retry`, `@music-downloader/core-manifest`, `@music-downloader/core-filesystem`, `@music-downloader/core-validation`, `@music-downloader/provider-yandex-music`, `@music-downloader/metadata`, `@music-downloader/persistence`, `@music-downloader/application`, `@music-downloader/logging`, `@music-downloader/testing`, `@music-downloader/cli`. Всего 15; каталоги — `packages/shared`, `packages/core/*`, `packages/providers/yandex-music`, `packages/metadata`, `packages/persistence`, `packages/application`, `packages/logging`, `packages/testing`, `apps/cli`. STEP-003 добавил доменные типы, безопасные ошибки и контракт `MusicProvider` в `shared`, а также mock provider и fixtures в `testing`. Остальные production-пакеты пока содержат каркасы; STEP-005/006 завершили исследования и архитектурные решения, а не реализацию provider или авторизации. CLI-команд и desktop на этом этапе нет.
 
 Каждый пакет экспортирует `src/index.ts` под условием `@music-downloader/source` и `dist/index.js` по умолчанию. TypeScript (`customConditions`) и Vitest (`resolve`/`ssr` conditions) используют условие `source`, поэтому тесты и typecheck не зависят от предварительной сборки `dist`.
 
@@ -95,7 +103,7 @@ Boundary-проход директивы не принимает вообще. E
 
 ## Testing
 
-Тесты лежат рядом с кодом (`src/*.test.ts`), по одному smoke-тесту на пакет; `eslint/*.test.ts` проверяют toolchain: границы (`boundaries.test.ts`, независимый oracle по ADR-001), strict-контракт (`strict.test.ts`), качество (`quality.test.ts`), согласованность конфигураций (`consistency.test.ts`).
+Тесты лежат рядом с кодом (`src/*.test.ts`): smoke-тесты проверяют каркасы пакетов, а тесты `shared` и `testing` — доменные ошибки, контракт `MusicProvider` и mock provider из STEP-003. `eslint/*.test.ts` проверяют toolchain: границы (`boundaries.test.ts`, независимый oracle по ADR-001), strict-контракт (`strict.test.ts`), качество (`quality.test.ts`), согласованность конфигураций (`consistency.test.ts`).
 
 ## Воспроизводимая проверка STEP-001
 

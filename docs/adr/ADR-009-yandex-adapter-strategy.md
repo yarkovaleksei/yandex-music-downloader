@@ -1,0 +1,106 @@
+---
+schema: 1
+id: ADR-009
+status: accepted
+date: 2026-10-08
+deciders:
+  - Codex (STEP RUN STEP-006)
+supersedes: []
+superseded_by: []
+requirements:
+  - REQ-007
+steps:
+  - STEP-006
+  - STEP-008
+  - STEP-009
+  - STEP-010
+  - STEP-025
+  - STEP-038
+  - STEP-039
+---
+
+# ADR-009 — Стратегия Yandex adapter и runtime-валидации
+
+## Context
+
+[ADR-002](ADR-002-music-provider-abstraction.md) изолирует неофициальный API, а REQ-007 требует runtime-схемы и собственную версию совместимости. [Исследование STEP-005](../research/yandex-api-spike.md#воспроизводимость) выполнено с `@dvxch/yandex-music@0.3.0`: Device Authorization и каталог подтверждены, шесть полных legacy MP3-вариантов проверены чтением префикса. Современные encraw-варианты проверены только по API; модель `LosslessDownloadInfo` теряет preview. Данные одного аккаунта с подпиской не дают гарантий для других аккаунтов и регионов.
+
+## Problem
+
+Библиотечные TypeScript-модели не проверяют фактическую структуру ответа и могут потерять поля до принятия решения о доступности. Требуется сохранить удобство библиотеки, но владеть проверкой исходного ответа, классификацией отказов и compatibility contract внутри provider.
+
+## Decision
+
+### Библиотека и границы проверки
+
+Выбрана тонкая обёртка над строго закреплённой `@dvxch/yandex-music@0.3.0` в `packages/providers/yandex-music`. Собственный полный HTTP-клиент сейчас не создаётся. Внутренний transport wrapper через поддерживаемый `ClientOptions.fetch` проверяет исходные bytes/HTTP status и JSON envelope **до** `Request.unwrap` и `deJson`; endpoint-specific Zod 4 схемы проверяют критичные поля исходного `result`. Только после успешной проверки библиотека может построить модель. Затем отдельная схема проверяет итоговую доменную проекцию. Zod и типы библиотеки не экспортируются в shared/application/core.
+
+Для OAuth ответы без `result` имеют отдельную схему; ожидаемые OAuth error responses проверяются и классифицируются отдельно от successful payload. Wrapper сохраняет проверенный HTTP status/тип операции до библиотечного исключения, которое может потерять эту информацию. Проверка bytes не дублирует запрос и не сохраняет body. Для JSON используется `safeParse`; ошибки парсинга, `deJson` и post-mapping проверки превращаются в безопасные доменные ошибки, без raw payload, Zod issues с полученными значениями и библиотечного message/cause в публичном DTO.
+
+Library `Request` имеет по умолчанию `retries=2`: provider всегда явно устанавливает `retries: 0`. `streamToFileFromUrls` и другие помощники с гонкой зеркал/повторными запросами не используются. Бюджет повторов остаётся у core. OAuth polling ожидающего подтверждения — протокол авторизации с интервалом и deadline, а не повтор отказавшей операции загрузки (ADR-010).
+
+### Критичные поля и допуск вариантов
+
+| Ответ / владелец | Критичная проверка до моделей | Допуск и ограничения |
+| --- | --- | --- |
+| Account, OAuth / STEP-008 | Валидный account ID; непустой access token, тип токена, положительные конечные lifetime/interval, device/user code и verification URI; необязательный refresh token при наличии — строка | Credentials и challenge остаются приватными; account маппится в shared `Account`; политика — ADR-010 |
+| Track / STEP-009 | ID, типы title/duration, использованных availability flags; структуры используемых artists/albums | Явный запрет доступа — `TRACK_UNAVAILABLE`; неизвестная доступность не считается разрешением; optional metadata отсутствует без падения, но неверный тип присутствующего используемого поля — ошибка |
+| Album, playlist / STEP-009 | ID/owner-kind по типу объекта, массивы volumes/tracks, идентичность каждой записи/track reference | Недоступные записи остаются недоступными; порядок/повторы playlist сохраняются; optional title/artwork не определяют доступность |
+| Legacy download-info / STEP-010 | Массив объектов, codec, конечный положительный bitrate, preview boolean, downloadInfoUrl; direct при наличии — boolean | Только явный `preview=false` и подтверждённая доступность трека; `true` исключается; отсутствие preview исключает кандидат, неверный тип boolean — ошибка структуры |
+| Modern get-file-info / STEP-010 | Исходный downloadInfo: codec, transport, urls, типы bitrate/isLossless; preview проверяется до `LosslessDownloadInfo`; ключ encraw — только внутри provider | Нет явного preview=false — вариант исключён. Неизвестный transport/codec не выдаётся как известный вариант. bitrate=0 у FLAC не трактуется как измеренное качество. Полный encraw/дешифрование требуют runtime proof STEP-010 |
+| Link XML, CDN, artwork / STEP-010, STEP-009 | Используемые XML host/path/ts/s до подписи; тип MIME/размер и согласованность фактических stream headers/container/startOffset | Signed URL и ключи остаются в памяти provider. Отдельные stream/container/Range проверки принадлежат owning STEP; общий JSON drift detector не разбирает аудиобайты |
+| Доменная проекция / соответствующий владелец | Shared ID, обязательные поля/enum, container, непрозрачный стабильный variantKey без секретов | Не экспортировать vendor-типы/URL/ключи. Не менять non-auth MusicProvider и формат manifest ADR-002 |
+
+Схемы допускают новые неиспользуемые поля; расширение ответа само по себе не является drift. Optional/additive поля не делают весь объект несовместимым. Отсутствие/неверный тип обязательного поля, неверный тип присутствующего используемого optional поля или невозможное значение — `PROVIDER_RESPONSE_INVALID`. Разрешённые исключения (например, неизвестный preview) явно перечислены выше: кандидат исключается без предположения о полноте. Unknown-field hooks библиотеки могут дать только безопасный диагностический сигнал, они не заменяют схемы и не получают raw значения в логах.
+
+### Классификация ошибок
+
+| Наблюдение | Код / поведение |
+| --- | --- |
+| DNS, разрыв соединения, timeout без успешного HTTP payload | `NETWORK_ERROR`, повторы только у core |
+| Подтверждённый auth отказ OAuth/API или известное истечение credentials | `AUTH_ERROR`, без refresh/replay |
+| HTTP 429/5xx, временная недоступность API | `SERVICE_UNAVAILABLE`; Retry-After учитывает core; не считать drift |
+| Успешный HTTP ответ с некорректным JSON/envelope/критичной структурой или значением | `PROVIDER_RESPONSE_INVALID`, без retry |
+| Явный ответ о неподдерживаемой версии/удалённом протоколе либо подтверждённое несовместимое изменение контрактных fixtures | `API_CHANGED`, без retry; отдельный 404/один malformed ответ не доказывает глобальную смену API |
+| Отказ ранее выданной CDN-ссылки при подтверждённой доступности того же варианта | `STREAM_EXPIRED` в контексте stream, core заново открывает поток в своём бюджете |
+| Явный отказ доступа к треку/варианту | Доменный отказ доступности; без обхода ограничения |
+
+Для `API_CHANGED` и `PROVIDER_RESPONSE_INVALID` обязательное сообщение: «API Яндекс Музыки изменился. Текущая версия приложения не поддерживает новый формат ответа.» HTTP 401/403 CDN не передаётся вслепую в shared `normalizeDomainError`, где он стал бы `AUTH_ERROR`. HTTP-кода без endpoint/availability context недостаточно: неизвестная причина CDN отказа остаётся безопасной ошибкой загрузки, network/5xx — соответствующим transport отказом. Отказ старой ссылки и успех свежей в STEP-005 не устанавливают универсальную причину каждого 401.
+
+### Версия совместимости и путь реализации
+
+`PROVIDER_SCHEMA_VERSION` экспортируется provider package как строка SemVer, начальное значение `1.0.0` вводит STEP-009; STEP-025 выводит его через application diagnostics. Это версия проверяемого набора схем/правил маппинга, отдельно от версии npm-пакета и приложения. Major — несовместимое изменение обязательных полей/семантики или ранее поддержанного формата; minor — новый совместимый endpoint/вариант/optional schema; patch — исправление проверки без изменения допустимого контрактного формата. Изменение library version само по себе не повышает эту версию; сначала сверяются raw fixtures/проекции и правила допуска. Новые неиспользуемые поля API не требуют bump.
+
+STEP-009 реализует metadata-схемы/версию; STEP-008 — auth-схемы по ADR-010; STEP-010 — audio/XML/stream проверки и runtime proof; STEP-025 — doctor. Этот ADR закрывает стратегический вопрос [OQ-007](../open-questions/OQ-007-schema-drift.md), но не заявляет runtime-поддержку будущего provider.
+
+## Alternatives considered
+
+### Собственный полный HTTP-клиент
+
+Даёт полный контроль transport/схем, но дублирует подпись, OAuth и модели до доказательства необходимости. Сохраняется как возможная замена внутренней интеграции при несовместимости библиотеки; внешние shared-контракты остаются прежними.
+
+### Только библиотечные модели и unknown-field hooks
+
+Отвергнуто: типы не доказывают корректность ответа, а потеря preview наблюдается в модели современной ветки.
+
+### Ручные type guards вместо Zod
+
+Возможны, но дают больше повторяющейся схемной логики и затрудняют единообразную проверку вложенных metadata. Выбран Zod 4; конкретная версия закрепляется владельцем реализации в Yarn, зависимости здесь не меняются.
+
+## Consequences
+
+Добавляются raw transport wrapper, схемы и post-mapping проверка. Возрастает стоимость сопровождения fixtures при обновлениях библиотеки, зато изменения API обнаруживаются до использования непроверенных данных. Неизвестные полные modern-варианты могут дать отсутствие доступного качества; это не основание ослабить preview gate.
+
+## Security implications
+
+PRN-001/002/003 сохраняются. Library debug/unknown-field вывод отключён либо проходит белый список безопасных полей. Credentials, cookies, Authorization, signed URL и encraw key не сериализуются и не логируются. Только контент с подтверждённым доступом текущему аккаунту и явным полным вариантом допускается к чтению.
+
+## Data / migration implications
+
+Manifest и variantKey не меняются. Signed URL не кешируется на диск и не входит в key; ссылка и ключ запрашиваются при открытии потока. Любое последующее несовместимое изменение доменных контрактов требует отдельного ADR/owning STEP.
+
+## Compatibility / operational implications
+
+[STEP-005: Range](../research/yandex-api-spike.md#range) доказывает только префикс MP3 с началом 0, а [signed URL](../research/yandex-api-spike.md#signed-url) — отказ между пробами 1801/3602 секунд и успешное обновление. Постоянный TTL, ненулевой Range, encraw resume и безопасный числовой rate limit не установлены. [OQ-011](../open-questions/OQ-011-quality-policy.md) остаётся за владельцем продукта; подписка и запрос lossless не гарантируют FLAC.
+
+Первичные источники сверены при RUN: [репозиторий библиотеки](https://github.com/thedvxch/yandex-music), установленный опубликованный `0.3.0` (`src/request.ts`, `src/clientBase.ts`, `src/models/track/extras.ts`, `src/methods/deviceAuth.ts`); [Zod: схемы](https://zod.dev/api), [safeParse](https://zod.dev/basics). Возможность fetch injection/retries=0 установлена чтением исходников; работоспособность authored wrapper ещё должна быть доказана STEP-008/009/010.

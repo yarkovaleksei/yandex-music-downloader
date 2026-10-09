@@ -26,6 +26,8 @@ steps:
   - STEP-010
   - STEP-011
   - STEP-025
+  - STEP-038
+  - STEP-039
 ---
 
 # ADR-002 — Абстракция MusicProvider и изоляция Yandex adapter

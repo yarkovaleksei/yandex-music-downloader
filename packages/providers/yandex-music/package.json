@@ -10,6 +10,8 @@
     }
   },
   "dependencies": {
-    "@music-downloader/shared": "workspace:*"
+    "@dvxch/yandex-music": "0.3.0",
+    "@music-downloader/shared": "workspace:*",
+    "zod": "4.6.5"
   }
 }
