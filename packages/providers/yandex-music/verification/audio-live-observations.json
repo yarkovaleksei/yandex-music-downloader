@@ -16,9 +16,7 @@
     "startOffset": 8,
     "matchedBytes": 56
   },
-  "modernPreview": [
-    "unknown"
-  ],
+  "modernPreview": ["unknown"],
   "limitations": "Один аккаунт и один full трек; modern preview observation не является чтением encraw. Отрицательные/encraw случаи в offline tests synthetic. URL/ключи/headers/credentials и аудиобайты не сохраняются.",
   "nativeSessionCleanup": "PASS",
   "source": "runLiveAudio: production facade/SDK/raw validation; Node composition с CliCredentialStore через DI; временная сессия очищена управляющей composition, backup credentials только в RAM."
