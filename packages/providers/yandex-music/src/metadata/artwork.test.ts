@@ -8,13 +8,11 @@ import { artworkReference } from './artwork.js';
  */
 describe('provider artwork', () => {
   it('возвращает точные bytes/MIME и размер без Authorization', async () => {
-    const fetch = vi
-      .fn<AuthFetch>()
-      .mockResolvedValue({
-        status: 200,
-        headers: { get: () => 'image/jpeg; charset=binary' },
-        arrayBuffer: async () => Uint8Array.from([255, 216, 255]).buffer,
-      });
+    const fetch = vi.fn<AuthFetch>().mockResolvedValue({
+      status: 200,
+      headers: { get: () => 'image/jpeg; charset=binary' },
+      arrayBuffer: async () => Uint8Array.from([255, 216, 255]).buffer,
+    });
     const provider = new YandexMusicProvider({
       credentialStore: {
         read: async () => null,
@@ -69,12 +67,10 @@ describe('provider artwork', () => {
   it.each([401, 403, 503])(
     'не классифицирует CDN %s как OAuth expiry',
     async (status) => {
-      const fetch = vi
-        .fn<AuthFetch>()
-        .mockResolvedValue({
-          status,
-          arrayBuffer: async () => new ArrayBuffer(0),
-        });
+      const fetch = vi.fn<AuthFetch>().mockResolvedValue({
+        status,
+        arrayBuffer: async () => new ArrayBuffer(0),
+      });
       const provider = new YandexMusicProvider({
         credentialStore: {
           read: async () => null,

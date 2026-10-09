@@ -25,8 +25,8 @@
 | [REQ-019](REQ-019-queue-progress.md) | [QUEUE] События прогресса и ограничение достоверности скорости/ETA | planned | STEP-017 | — |
 | [REQ-020](REQ-020-resume-manifest.md) | [RESUME] Manifest и восстановление после прерывания | planned | STEP-016, STEP-017, STEP-026 | — |
 | [REQ-021](REQ-021-resume-range.md) | [RESUME] HTTP Range только при реальной поддержке | planned | STEP-016 | — |
-| [REQ-022](REQ-022-fs-sanitizer.md) | [FILESYSTEM] Кроссплатформенный filename sanitizer | planned | STEP-012 | — |
-| [REQ-023](REQ-023-fs-layout.md) | [FILESYSTEM] Структура каталогов для track, album, playlist | planned | STEP-012 | — |
+| [REQ-022](REQ-022-fs-sanitizer.md) | [FILESYSTEM] Кроссплатформенный filename sanitizer | completed | STEP-012 | sha256:ae2b80abc1d5c52c4370aa82e55831622f132ab4fac28532286bca6772cebca4 |
+| [REQ-023](REQ-023-fs-layout.md) | [FILESYSTEM] Структура каталогов для track, album, playlist | completed | STEP-012 | sha256:ae2b80abc1d5c52c4370aa82e55831622f132ab4fac28532286bca6772cebca4 |
 | [REQ-024](REQ-024-fs-existing-files.md) | [FILESYSTEM] Поведение при существующих файлах | planned | STEP-015, STEP-017 | — |
 | [REQ-025](REQ-025-meta-tags.md) | [METADATA] Запись тегов в аудиофайлы | planned | STEP-020, STEP-021 | — |
 | [REQ-026](REQ-026-meta-cover.md) | [METADATA] Встроенная обложка и cover.jpg | planned | STEP-017, STEP-021 | — |
