@@ -22,3 +22,32 @@ export {
   type LayoutTrackFile,
   type PlaylistLayout,
 } from './layout.js';
+export { buildPartPath, type PartPathOptions } from './part-path.js';
+export { fileErrorCode, mapFileError } from './file-errors.js';
+export {
+  defaultFsOps,
+  type FsFile,
+  type FsOps,
+  type FsStat,
+} from './fs-ops.js';
+export {
+  discardPart,
+  writeStreamToPart,
+  type PartReader,
+  type PartSource,
+  type WritePartOptions,
+  type WritePartResult,
+} from './writer.js';
+export {
+  finalizePart,
+  inspectExisting,
+  type ExistingState,
+  type FinalizeHooks,
+  type FinalizeOptions,
+  type FinalizeResult,
+  type InspectExistingOptions,
+  type OnExisting,
+  type PartHookInput,
+  type ValidateHookInput,
+  type ValidateStage,
+} from './finalize.js';

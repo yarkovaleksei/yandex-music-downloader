@@ -18,7 +18,7 @@
 | STEP-012 | Filename sanitizer и генерация путей | implementation | critical | completed | STEP-003 | REQ-022, REQ-023 |
 | STEP-013 | Download Planner и quality resolver | implementation | critical | completed | STEP-003, STEP-005 | REQ-011, REQ-010 |
 | STEP-014 | State machine задания и retry policy | implementation | critical | completed | STEP-003, STEP-005 | REQ-013, REQ-014 |
-| STEP-015 | Запись .part и атомарная финализация | implementation | critical | planned | STEP-012, STEP-003, STEP-002 | REQ-012, REQ-024 |
+| STEP-015 | Запись .part и атомарная финализация | implementation | critical | completed | STEP-012, STEP-003, STEP-002 | REQ-012, REQ-024 |
 | STEP-016 | Manifest store и восстановление | implementation | critical | planned | STEP-014, STEP-013, STEP-015, STEP-005 | REQ-020, REQ-021, REQ-032, REQ-011 |
 | STEP-017 | Download Manager: очередь, concurrency и управление | implementation | critical | planned | STEP-016, STEP-010, STEP-004, STEP-014, STEP-013, STEP-015 | REQ-017, REQ-018, REQ-019, REQ-015, REQ-036, REQ-020, REQ-024, REQ-026, REQ-014, REQ-003 |
 | STEP-018 | Application layer API и composition root | implementation | high | planned | STEP-017, STEP-009 | REQ-002, REQ-044, REQ-032 |

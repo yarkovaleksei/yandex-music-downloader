@@ -15,7 +15,7 @@
 | [REQ-009](REQ-009-url-resolver.md) | [URL] Распознавание и нормализация URL | partial | STEP-007, STEP-019 | sha256:87fa392591a6c635fb740956bec005af657195438dffa57818ffe6abada9f5a8 |
 | [REQ-010](REQ-010-quality-selection.md) | [QUALITY] Выбор качества по фактически доступным вариантам | completed | STEP-010, STEP-013 | sha256:d2a69e8167bbb967a40bde6ae54251aaf4188ee99f3fc1b31cbce29522148891, sha256:def4481f4c9ae0edb17d714a7238ee90267a18508712f400e9258a31fc4e21eb |
 | [REQ-011](REQ-011-download-plan.md) | [DOWNLOAD] Immutable DownloadPlan | partial | STEP-013, STEP-016 | sha256:def4481f4c9ae0edb17d714a7238ee90267a18508712f400e9258a31fc4e21eb |
-| [REQ-012](REQ-012-download-file-safety.md) | [DOWNLOAD] Запись через .part и атомарная финализация | planned | STEP-015 | — |
+| [REQ-012](REQ-012-download-file-safety.md) | [DOWNLOAD] Запись через .part и атомарная финализация | completed | STEP-015 | sha256:43315d91a4fe577189f02f4a998f1dab45c657b42a57721434b552858ae332f8 |
 | [REQ-013](REQ-013-download-state-machine.md) | [DOWNLOAD] Формальная state machine задания | partial | STEP-014, STEP-019 | sha256:03a7f4a71571504f74d00a9375f81b405bc7da52ae71e612af78274e59ac6230 |
 | [REQ-014](REQ-014-download-retry.md) | [DOWNLOAD] Повторные попытки только для transient-ошибок | partial | STEP-014, STEP-017 | sha256:03a7f4a71571504f74d00a9375f81b405bc7da52ae71e612af78274e59ac6230 |
 | [REQ-015](REQ-015-download-url-refresh.md) | [DOWNLOAD] Обработка устаревших signed URL | partial | STEP-010, STEP-017 | sha256:d2a69e8167bbb967a40bde6ae54251aaf4188ee99f3fc1b31cbce29522148891 |
@@ -27,7 +27,7 @@
 | [REQ-021](REQ-021-resume-range.md) | [RESUME] HTTP Range только при реальной поддержке | planned | STEP-016 | — |
 | [REQ-022](REQ-022-fs-sanitizer.md) | [FILESYSTEM] Кроссплатформенный filename sanitizer | completed | STEP-012 | sha256:ae2b80abc1d5c52c4370aa82e55831622f132ab4fac28532286bca6772cebca4 |
 | [REQ-023](REQ-023-fs-layout.md) | [FILESYSTEM] Структура каталогов для track, album, playlist | completed | STEP-012 | sha256:ae2b80abc1d5c52c4370aa82e55831622f132ab4fac28532286bca6772cebca4 |
-| [REQ-024](REQ-024-fs-existing-files.md) | [FILESYSTEM] Поведение при существующих файлах | planned | STEP-015, STEP-017 | — |
+| [REQ-024](REQ-024-fs-existing-files.md) | [FILESYSTEM] Поведение при существующих файлах | partial | STEP-015, STEP-017 | sha256:43315d91a4fe577189f02f4a998f1dab45c657b42a57721434b552858ae332f8 |
 | [REQ-025](REQ-025-meta-tags.md) | [METADATA] Запись тегов в аудиофайлы | planned | STEP-020, STEP-021 | — |
 | [REQ-026](REQ-026-meta-cover.md) | [METADATA] Встроенная обложка и cover.jpg | planned | STEP-017, STEP-021 | — |
 | [REQ-027](REQ-027-meta-cache.md) | [METADATA] Локальный cache с TTL | planned | STEP-024 | — |
