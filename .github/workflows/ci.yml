@@ -33,7 +33,7 @@ concurrency:
   # PR группируются по номеру, push после merge — по ref основной ветки.
   # Пример: CI-pull_request-12 и CI-push-refs/heads/main.
   group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref }}
-  # Отменять устаревший запуск только для PR; проверка каждого merge commit в main доводится до конца.
+  # Отменять устаревший запуск только для PR; запуск для main новым push не отменяется (ожидающий в очереди запуск GitHub может заменить более новым).
   # Пример: true для pull_request, false для push в main.
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
@@ -41,7 +41,7 @@ concurrency:
 # Пример: quality (статические проверки и сборка) и test (матрица ОС × Node.js).
 jobs:
   # Стабильный machine-readable ID job для branch protection.
-  # Пример: `quality` используется в required checks.
+  # Пример: отображаемое имя `Quality` используется в required checks.
   quality:
     # Отображаемое имя job в GitHub UI.
     # Пример: "Quality".

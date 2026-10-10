@@ -44,7 +44,7 @@
 | [REQ-038](REQ-038-sec-no-circumvention.md) | [SECURITY] Работа только с доступным аккаунту контентом | completed | STEP-005, STEP-010 | sha256:3b571c238a4e4ba0e230d2cb6bf0bdd18e7ce659eb01d8e214551b2abe372016, sha256:d2a69e8167bbb967a40bde6ae54251aaf4188ee99f3fc1b31cbce29522148891 |
 | [REQ-039](REQ-039-sec-redaction.md) | [SECURITY] Запрет утечки секретов в логи и артефакты | completed | STEP-004, STEP-008 | sha256:bc40dd17c32479af131f868292e28dc2f8f1e96ff40940d0f6689dda84037d99, sha256:e0b2393178cfca0e45390c3e03393ff50233d9d425d08dbb4e85877b03e0f3e3 |
 | [REQ-040](REQ-040-tool-ts-quality.md) | [TOOLING] Строгий TypeScript и контроль качества кода | completed | STEP-001, STEP-037 | sha256:7b4e802b915feb1f9c06c7f35392a394273cecd480e08371b1d10eb53bde7253, sha256:45829ee630d29877d114cca2f4777b31ddac10529a23cfb3a82f468e7316abf6 |
-| [REQ-041](REQ-041-tool-ci.md) | [TOOLING] CI на pull request | planned | STEP-002, STEP-035 | — |
+| [REQ-041](REQ-041-tool-ci.md) | [TOOLING] CI на pull request | partial | STEP-002, STEP-035 | sha256:0ff62ac0c7180065f7c8bbb6fe556c9f0d13781793ebaae02bef4e5d68b1a203 |
 | [REQ-042](REQ-042-tool-tests.md) | [TOOLING] Обязательные unit и integration тесты | partial | STEP-003, STEP-026 | sha256:bfce0c7d4101696c7098994ea3e1022d71fc0992b5082d5e4a2abc73720977f1 |
 | [REQ-043](REQ-043-tool-headless-gate.md) | [TOOLING] Критерий готовности headless MVP и перехода к UI | planned | STEP-027 | — |
 | [REQ-044](REQ-044-desk-application-api.md) | [DESKTOP] Application API как единая граница для клиентов | planned | STEP-018 | — |
