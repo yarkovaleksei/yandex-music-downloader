@@ -1,7 +1,7 @@
 ---
 schema: 1
 id: STEP-002
-status: planned
+status: completed
 type: implementation
 priority: high
 phase: foundation
@@ -154,22 +154,23 @@ Toolchain появляется в STEP-001; AGENTS.md требует проек�
 
 ## Evidence
 
+
 <!-- VERIFICATION-EVIDENCE:START -->
-- Verification run: 2026-10-10T06:53:00Z
-- Status: MANUAL_REQUIRED
+- Verification run: 2026-10-10T07:03:26Z
+- Status: PASS
 - Automated resumed: false
-- Git head: 689573951a428231a7abc74aa19772d3f2688af3
-- Worktree hash: sha256:344d87fcf4f2d43ff6366f6815b3ea60639ebfcfdb5d6342a46773c3f3f41e36
+- Git head: 472d184175bda3c105b11a0ab3fa5113515d9c6e
+- Worktree hash: sha256:ed959d11ff39875037c3f10cf41a7745bc2dd591e31c67a6d1eb78967499d274
 - Verification contract basis: sha256:b313430eb047dcbbccd80542378e17bf40af20a6ac3152441f1ffeec6c401a77
-- Subject git head: 689573951a428231a7abc74aa19772d3f2688af3
-- Subject worktree hash: sha256:712a7405ca3b0061c4df8874b3912cffcee0f3073bdd8067d461e1893e1365e6
+- Subject git head: 472d184175bda3c105b11a0ab3fa5113515d9c6e
+- Subject worktree hash: sha256:ed959d11ff39875037c3f10cf41a7745bc2dd591e31c67a6d1eb78967499d274
 
 ### Automated verification
 - Command: python3 .harness/tools/validate.py --mode manual
   - Status: PASS
   - Exit code: 0
-  - Duration ms: 2968
-  - stdout sha256: 6071542c8e9d0783374057b32b1e7ec2b7454ada40f8efe7265ac43c7c1fc7b4
+  - Duration ms: 2768
+  - stdout sha256: c9aad5ab5fe4fd56bf0f20aad5a0c389d7e50fdef79803c7c174ae230ef3def8
   - stderr sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
   - stdout bytes: 366
   - stderr bytes: 0
@@ -195,10 +196,12 @@ Toolchain появляется в STEP-001; AGENTS.md требует проек�
 
 ### Manual verification
 - Check: Подтвердить успешный запуск workflow CI на PR (желательно draft): job quality и все 6 вариантов job test (ubuntu, windows, macos × Node 22.13.0 и 24) зелёные; приложить ссылку на запуск в Evidence и указать фактический тип PR.
-  - Status: PENDING
+  - Status: PASS
+  - Observed: "PR #9 (https://github.com/yarkovaleksei/yandex-music-downloader/pull/9), фактический тип: обычный PR, не draft. Запуск CI на коммите 472d184: https://github.com/yarkovaleksei/yandex-music-downloader/actions/runs/38032845161 — conclusion success. Quality: pass; Test ubuntu-24.04 Node 22.13.0/24: pass; macos-15 Node 22.13.0/24: pass; windows-2025 Node 22.13.0/24: pass. Первый запуск (коммит e87d631, run 38032594885) на Windows упал: 4 теста eslint/strict.test.ts из-за разделителей путей; исправлено PROJECT QUICK FIX (коммит 472d184), дефект был в тестах, не в workflow."
 <!-- VERIFICATION-EVIDENCE:END -->
 
 Generated verification block записывает deterministic runner. Дополнительные semantic observations можно хранить вне generated markers.
+
 
 ## Blocker / Failure reason
 
