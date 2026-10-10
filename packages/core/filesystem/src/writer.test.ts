@@ -126,6 +126,40 @@ describe('writeStreamToPart', () => {
     expect([...(await readFile(part))]).toEqual([1, 2]);
   });
 
+  it('F-001: отмена во время финального sync сохраняет .part и бросает AbortError', async () => {
+    const part = path.join(directory, 'a.part');
+    const controller = new AbortController();
+    let closed = 0;
+    const ops: FsOps = {
+      ...defaultFsOps,
+      async open(file) {
+        const handle = await defaultFsOps.open(file);
+        return {
+          write: (data, offset, length) => handle.write(data, offset, length),
+          // F-001: отмена после EOF не должна превращать завершённую запись в успех.
+          sync: async () => {
+            controller.abort();
+            await handle.sync();
+          },
+          close: () => {
+            closed += 1;
+            return handle.close();
+          },
+        };
+      },
+    };
+
+    await expect(
+      writeStreamToPart(streamOf([bytes(1, 2, 3)]), part, {
+        signal: controller.signal,
+        ops,
+      }),
+    ).rejects.toMatchObject({ name: 'AbortError' });
+    expect(closed).toBe(1);
+    expect(await readdir(directory)).toEqual(['a.part']);
+    expect([...(await readFile(part))]).toEqual([1, 2, 3]);
+  });
+
   it('fails with a retryable DownloadError when the size differs', async () => {
     const part = path.join(directory, 'a.part');
     const error = await writeStreamToPart(streamOf([bytes(1, 2)]), part, {

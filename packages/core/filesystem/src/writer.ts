@@ -91,15 +91,22 @@ export async function writeStreamToPart(
     for (;;) {
       throwIfAborted(signal);
       const result = await Promise.race([reader.read(), aborted]);
-      if (result.done) break;
+      if (result.done) {
+        // EOF не исключает отмену: сигнал мог сработать во время завершения read.
+        throwIfAborted(signal);
+        break;
+      }
       const chunk = result.value;
       if (chunk === undefined || chunk.length === 0) continue;
       await fileOp(() => writeChunk(file, chunk));
       bytesWritten += chunk.length;
     }
     await fileOp(() => file.sync());
+    // Abort во время fsync не должен возвращать успешную запись `.part`.
+    throwIfAborted(signal);
     closed = true;
     await fileOp(() => file.close());
+    throwIfAborted(signal);
     if (expectedSize !== undefined && bytesWritten !== expectedSize) {
       throw new DownloadError(true);
     }

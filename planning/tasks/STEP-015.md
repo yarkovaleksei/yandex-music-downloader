@@ -193,21 +193,23 @@ plan:
 
 ## Evidence
 
+
+
 <!-- VERIFICATION-EVIDENCE:START -->
-- Verification run: 2026-10-10T07:48:02Z
+- Verification run: 2026-10-10T08:18:16Z
 - Status: MANUAL_REQUIRED
 - Automated resumed: false
-- Git head: 8287373508ea719e69596642bcaa4fa3ae94e593
-- Worktree hash: sha256:4564cc24e70813654bafbacf47080d5c4157914c9a464f9b1b6e65baf56d0471
+- Git head: ce7713ddbb9a7e2dc2f3bdc74a1d0f86ab6b86f5
+- Worktree hash: sha256:231517b4d066f6ecccb8d116e788861d87915639ebb5892cb7eacd8312f42331
 - Verification contract basis: sha256:122d3301135dac257d598ea873d20eea41a1e649c5fab4182ba7274e9f240970
-- Subject git head: 8287373508ea719e69596642bcaa4fa3ae94e593
-- Subject worktree hash: sha256:4564cc24e70813654bafbacf47080d5c4157914c9a464f9b1b6e65baf56d0471
+- Subject git head: ce7713ddbb9a7e2dc2f3bdc74a1d0f86ab6b86f5
+- Subject worktree hash: sha256:b6d68511874ad918049552087f5951aec4df49bc89bfdcbcca4d6b26f95aef6a
 
 ### Automated verification
 - Command: node packages/testing/scripts/run-yarn.mjs run lint
   - Status: PASS
   - Exit code: 0
-  - Duration ms: 5972
+  - Duration ms: 5571
   - stdout sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
   - stderr sha256: f59ba696a15507a8febe0f9ea94ac75ccc5411952df61ee4cb3c971b47b6bc12
   - stdout bytes: 0
@@ -215,7 +217,7 @@ plan:
 - Command: node packages/testing/scripts/run-yarn.mjs run typecheck
   - Status: PASS
   - Exit code: 0
-  - Duration ms: 2417
+  - Duration ms: 2917
   - stdout sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
   - stderr sha256: ffbfd8ec2bfcf3e8f0e99a93f081f695da2de832eba56c5ae6943a4052680411
   - stdout bytes: 0
@@ -223,10 +225,10 @@ plan:
 - Command: node packages/testing/scripts/run-yarn.mjs test
   - Status: PASS
   - Exit code: 0
-  - Duration ms: 4231
-  - stdout sha256: 8de58a89a966630f9ce765a5ab8975d7d91f10f75f648fbf438b4a24684fb9b8
+  - Duration ms: 4229
+  - stdout sha256: a8df5240f6cc5615709ddbcaf4546e82b1016d03c4b285be860defb91d32bbbf
   - stderr sha256: f969fafb7bc32ecc492c8343f56269c9c47161d893e83a0d8b9b27fcf57b9aee
-  - stdout bytes: 5330
+  - stdout bytes: 5163
   - stderr bytes: 21
 - Command: node packages/testing/scripts/run-yarn.mjs run build
   - Status: PASS
@@ -239,7 +241,7 @@ plan:
 - Command: node packages/testing/scripts/run-yarn.mjs run format:check
   - Status: PASS
   - Exit code: 0
-  - Duration ms: 1866
+  - Duration ms: 1867
   - stdout sha256: 17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20
   - stderr sha256: 25e162fe1196016bd51a2c9644b6820f880082561abce757f808502fb7895ebb
   - stdout bytes: 66
@@ -247,8 +249,8 @@ plan:
 - Command: python3 .harness/tools/validate.py --mode manual
   - Status: PASS
   - Exit code: 0
-  - Duration ms: 2817
-  - stdout sha256: 5b27678fb5a659ad29cd46dc1083c1b7a669333084f7abfd09d4ae4688d7d416
+  - Duration ms: 2767
+  - stdout sha256: 2a6c500802370468bade0d293c7f1c3036724722ff56edb21af36732d91a799c
   - stderr sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
   - stdout bytes: 366
   - stderr bytes: 0
@@ -262,6 +264,8 @@ plan:
 <!-- VERIFICATION-EVIDENCE:END -->
 
 Generated verification block записывает deterministic runner. Дополнительные semantic observations можно хранить вне generated markers.
+
+
 
 ## Blocker / Failure reason
 
