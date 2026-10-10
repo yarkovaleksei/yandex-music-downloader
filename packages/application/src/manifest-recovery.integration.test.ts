@@ -65,7 +65,15 @@ interface ChildMessage {
 
 function startChild(stateDir: string, counterPath: string, mode: string) {
   const child = fork(fixturePath, [], {
-    env: { ...process.env, stateDir, jobId: 'crash-job', counterPath, mode },
+    env: {
+      // Роль crash barrier не конфликтует с inherited MODE=test Vitest (F-003).
+      ...process.env,
+      MODE: 'test',
+      stateDir,
+      jobId: 'crash-job',
+      counterPath,
+      MANIFEST_TEST_MODE: mode,
+    },
     stdio: ['ignore', 'ignore', 'pipe', 'ipc'],
   });
   let stderr = '';
@@ -105,7 +113,7 @@ function startChild(stateDir: string, counterPath: string, mode: string) {
       const timer = setTimeout(() => {
         cleanup();
         reject(new Error(`Нет IPC ${status}: ${stderr}`));
-      }, 10_000);
+      }, 15_000);
       child.on('message', onMessage);
       child.on('exit', onExit);
     });

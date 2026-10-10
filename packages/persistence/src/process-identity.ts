@@ -40,7 +40,8 @@ export async function processStartedAt(
           '-Command',
           `(Get-Process -Id ${pid} -ErrorAction Stop).StartTime.ToUniversalTime().ToString('O')`,
         ],
-        { timeout: 1000, shell: false },
+        // Windows CI startup требует bounded 10s budget (REVIEW-20261010T111927Z F-001).
+        { timeout: 10_000, shell: false },
       );
       const value = stdout.trim();
       return value === '' ? undefined : `win32:${value}`;
@@ -67,6 +68,16 @@ export async function probeLease(
 ): Promise<ProcessProbe> {
   if (identity.hostname !== os.hostname()) return 'unknown';
   const started = await processStartedAt(identity.pid);
-  if (started === undefined) return 'missing';
+  if (started === undefined) {
+    // Неизвестный birth живого PID не равен отсутствующему процессу (F-004).
+    try {
+      process.kill(identity.pid, 0);
+      return 'unknown';
+    } catch (error) {
+      return (error as NodeJS.ErrnoException).code === 'ESRCH'
+        ? 'missing'
+        : 'unknown';
+    }
+  }
   return started === identity.processStartedAt ? 'same' : 'different';
 }

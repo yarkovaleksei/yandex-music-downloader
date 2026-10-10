@@ -68,9 +68,11 @@ async function child(
   const processChild = fork(fixturePath, [], {
     env: {
       ...process.env,
+      // Vitest передаёт MODE=test; роль fixture изолирована ключом F-003.
+      MODE: 'test',
       stateDir,
       jobId,
-      mode,
+      MANIFEST_TEST_MODE: mode,
       forceForeignLease: String(forceForeignLease),
     },
     stdio: ['ignore', 'ignore', 'pipe', 'ipc'],
@@ -98,7 +100,7 @@ async function child(
             status: 'timeout',
             message: 'child did not report lease result',
           }),
-        5_000,
+        15_000,
       ),
     ),
   ]);

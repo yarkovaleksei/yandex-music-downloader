@@ -271,21 +271,25 @@ OQ-003 определяет возможность Range-resume; OQ-006 разр
 
 
 
+
+
+
+
 <!-- VERIFICATION-EVIDENCE:START -->
-- Verification run: 2026-10-10T10:57:42Z
+- Verification run: 2026-10-10T11:33:16Z
 - Status: PASS
 - Automated resumed: false
-- Git head: 422e1074ee9a90c43744d196bce5a22ead914bbc
-- Worktree hash: sha256:8e003619a91bc8f4899cd10826aba2e45652c797fb5ab7531ed748b3dadfdbb1
+- Git head: 33652d4b278f5d1899c00149271c8727f11c3c13
+- Worktree hash: sha256:6cf6f6c504ea0a2229464ff11579122cf99ba4e136b5f4f34875ca0262cd54df
 - Verification contract basis: sha256:120779b5e74f01e75927e4b8fbe4852a7e84afcca2927829e09a89ee4513840c
-- Subject git head: 422e1074ee9a90c43744d196bce5a22ead914bbc
-- Subject worktree hash: sha256:f2b8c057925d5becbb5d4e3a385d2f2955e69159a3173a888e97a7bdf54995e8
+- Subject git head: 33652d4b278f5d1899c00149271c8727f11c3c13
+- Subject worktree hash: sha256:fb0eec9bffaa201db9d6518dc96f8def6dad4628cd4bbbd1bd84039e65fc8656
 
 ### Automated verification
 - Command: node packages/testing/scripts/run-yarn.mjs lint
   - Status: PASS
   - Exit code: 0
-  - Duration ms: 6226
+  - Duration ms: 6375
   - stdout sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
   - stderr sha256: 20bd7fd9207bfc4c0d60b1a8788978a9aa579fe55a8b0343cc8412f7563f1258
   - stdout bytes: 0
@@ -293,7 +297,7 @@ OQ-003 определяет возможность Range-resume; OQ-006 разр
 - Command: node packages/testing/scripts/run-yarn.mjs typecheck
   - Status: PASS
   - Exit code: 0
-  - Duration ms: 2668
+  - Duration ms: 2567
   - stdout sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
   - stderr sha256: 85f09b8e5470c77109300fadf9946b344fe0c4156aaaea36df55d027341ee708
   - stdout bytes: 0
@@ -301,10 +305,10 @@ OQ-003 определяет возможность Range-resume; OQ-006 разр
 - Command: node packages/testing/scripts/run-yarn.mjs test
   - Status: PASS
   - Exit code: 0
-  - Duration ms: 4332
-  - stdout sha256: daa331aa7a580c8c2e7399d1d54271562877cc6c1400d50e9211ee89754d0bec
+  - Duration ms: 4327
+  - stdout sha256: b86c209e551bea1974bcca0090cbdd526ce754829c43e9b77e2d7231a3d3082b
   - stderr sha256: f969fafb7bc32ecc492c8343f56269c9c47161d893e83a0d8b9b27fcf57b9aee
-  - stdout bytes: 6135
+  - stdout bytes: 6299
   - stderr bytes: 21
 - Command: node packages/testing/scripts/run-yarn.mjs build
   - Status: PASS
@@ -317,7 +321,7 @@ OQ-003 определяет возможность Range-resume; OQ-006 разр
 - Command: node packages/testing/scripts/run-yarn.mjs format:check
   - Status: PASS
   - Exit code: 0
-  - Duration ms: 2016
+  - Duration ms: 1966
   - stdout sha256: 17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20
   - stderr sha256: bc7ff43979f728ea1bb7df02172de0e3cf57fcedb8eda66fe9d54d5198d0fa84
   - stdout bytes: 66
@@ -325,8 +329,8 @@ OQ-003 определяет возможность Range-resume; OQ-006 разр
 - Command: python3 .harness/tools/validate.py --mode manual
   - Status: PASS
   - Exit code: 0
-  - Duration ms: 2818
-  - stdout sha256: f80692f3fa283ff311fe39ac71c6d8ce5f65d4fd07027662972e291b98bd4cde
+  - Duration ms: 2917
+  - stdout sha256: 318ebfd082bbac2855852ed3e2f604ce6dd8bfc14ffec8a4affef2931d878f81
   - stderr sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
   - stdout bytes: 366
   - stderr bytes: 0
@@ -339,6 +343,10 @@ OQ-003 определяет возможность Range-resume; OQ-006 разр
 <!-- VERIFICATION-EVIDENCE:END -->
 
 Generated verification block записывает deterministic runner. Дополнительные semantic observations можно хранить вне generated markers.
+
+
+
+
 
 
 

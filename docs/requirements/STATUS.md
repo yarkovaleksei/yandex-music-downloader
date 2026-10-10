@@ -14,7 +14,7 @@
 | [REQ-008](REQ-008-provider-contract-tests.md) | [PROVIDER] Отдельный набор contract-тестов реального API | completed | STEP-011 | sha256:8e91cc7e70139f2f7dd0b060c35d1bbbb87bf187d59278aa0326a49e4cc78dbe |
 | [REQ-009](REQ-009-url-resolver.md) | [URL] Распознавание и нормализация URL | partial | STEP-007, STEP-019 | sha256:87fa392591a6c635fb740956bec005af657195438dffa57818ffe6abada9f5a8 |
 | [REQ-010](REQ-010-quality-selection.md) | [QUALITY] Выбор качества по фактически доступным вариантам | completed | STEP-010, STEP-013 | sha256:d2a69e8167bbb967a40bde6ae54251aaf4188ee99f3fc1b31cbce29522148891, sha256:def4481f4c9ae0edb17d714a7238ee90267a18508712f400e9258a31fc4e21eb |
-| [REQ-011](REQ-011-download-plan.md) | [DOWNLOAD] Immutable DownloadPlan | completed | STEP-013, STEP-016 | sha256:def4481f4c9ae0edb17d714a7238ee90267a18508712f400e9258a31fc4e21eb, sha256:80d8c86e01ed14e2921b64c7705f749c8d086649f5c5705f7d0bc4555ac5b71d |
+| [REQ-011](REQ-011-download-plan.md) | [DOWNLOAD] Immutable DownloadPlan | completed | STEP-013, STEP-016 | sha256:def4481f4c9ae0edb17d714a7238ee90267a18508712f400e9258a31fc4e21eb, sha256:39658852e8e833a3f121d60f1ffd65419836f2a911b812fdd922611f6391d231 |
 | [REQ-012](REQ-012-download-file-safety.md) | [DOWNLOAD] Запись через .part и атомарная финализация | completed | STEP-015 | sha256:43315d91a4fe577189f02f4a998f1dab45c657b42a57721434b552858ae332f8 |
 | [REQ-013](REQ-013-download-state-machine.md) | [DOWNLOAD] Формальная state machine задания | partial | STEP-014, STEP-019 | sha256:03a7f4a71571504f74d00a9375f81b405bc7da52ae71e612af78274e59ac6230 |
 | [REQ-014](REQ-014-download-retry.md) | [DOWNLOAD] Повторные попытки только для transient-ошибок | partial | STEP-014, STEP-017 | sha256:03a7f4a71571504f74d00a9375f81b405bc7da52ae71e612af78274e59ac6230 |
@@ -23,8 +23,8 @@
 | [REQ-017](REQ-017-queue-concurrency.md) | [QUEUE] Очередь загрузок и concurrency | planned | STEP-017, STEP-019 | — |
 | [REQ-018](REQ-018-queue-control.md) | [QUEUE] Управление заданием: pause, resume, cancel, retry | planned | STEP-017 | — |
 | [REQ-019](REQ-019-queue-progress.md) | [QUEUE] События прогресса и ограничение достоверности скорости/ETA | planned | STEP-017 | — |
-| [REQ-020](REQ-020-resume-manifest.md) | [RESUME] Manifest и восстановление после прерывания | partial | STEP-016, STEP-017, STEP-026 | sha256:80d8c86e01ed14e2921b64c7705f749c8d086649f5c5705f7d0bc4555ac5b71d |
-| [REQ-021](REQ-021-resume-range.md) | [RESUME] HTTP Range только при реальной поддержке | completed | STEP-016 | sha256:80d8c86e01ed14e2921b64c7705f749c8d086649f5c5705f7d0bc4555ac5b71d |
+| [REQ-020](REQ-020-resume-manifest.md) | [RESUME] Manifest и восстановление после прерывания | partial | STEP-016, STEP-017, STEP-026 | sha256:39658852e8e833a3f121d60f1ffd65419836f2a911b812fdd922611f6391d231 |
+| [REQ-021](REQ-021-resume-range.md) | [RESUME] HTTP Range только при реальной поддержке | completed | STEP-016 | sha256:39658852e8e833a3f121d60f1ffd65419836f2a911b812fdd922611f6391d231 |
 | [REQ-022](REQ-022-fs-sanitizer.md) | [FILESYSTEM] Кроссплатформенный filename sanitizer | completed | STEP-012 | sha256:ae2b80abc1d5c52c4370aa82e55831622f132ab4fac28532286bca6772cebca4 |
 | [REQ-023](REQ-023-fs-layout.md) | [FILESYSTEM] Структура каталогов для track, album, playlist | completed | STEP-012 | sha256:ae2b80abc1d5c52c4370aa82e55831622f132ab4fac28532286bca6772cebca4 |
 | [REQ-024](REQ-024-fs-existing-files.md) | [FILESYSTEM] Поведение при существующих файлах | partial | STEP-015, STEP-017 | sha256:43315d91a4fe577189f02f4a998f1dab45c657b42a57721434b552858ae332f8 |
@@ -35,7 +35,7 @@
 | [REQ-029](REQ-029-cli-commands.md) | [CLI] Команды CLI | planned | STEP-019, STEP-025 | — |
 | [REQ-030](REQ-030-cli-options.md) | [CLI] Опции CLI и коды завершения | planned | STEP-019 | — |
 | [REQ-031](REQ-031-cli-json.md) | [CLI] Машиночитаемый режим --json | planned | STEP-019, STEP-025 | — |
-| [REQ-032](REQ-032-persist-manifest-store.md) | [PERSISTENCE] Файловое хранилище состояния в headless MVP | partial | STEP-016, STEP-018 | sha256:80d8c86e01ed14e2921b64c7705f749c8d086649f5c5705f7d0bc4555ac5b71d |
+| [REQ-032](REQ-032-persist-manifest-store.md) | [PERSISTENCE] Файловое хранилище состояния в headless MVP | partial | STEP-016, STEP-018 | sha256:39658852e8e833a3f121d60f1ffd65419836f2a911b812fdd922611f6391d231 |
 | [REQ-033](REQ-033-persist-sqlite.md) | [PERSISTENCE] SQLite и миграции для desktop | planned | STEP-028, STEP-029 | — |
 | [REQ-034](REQ-034-diag-doctor.md) | [DIAGNOSTICS] Команда doctor | planned | STEP-025 | — |
 | [REQ-035](REQ-035-diag-logging.md) | [DIAGNOSTICS] Структурированное логирование | completed | STEP-004 | sha256:bc40dd17c32479af131f868292e28dc2f8f1e96ff40940d0f6689dda84037d99 |

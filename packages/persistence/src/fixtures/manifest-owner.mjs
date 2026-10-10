@@ -1,5 +1,5 @@
 // Fixture запускает built persistence export: integration proof не подменяет native lock.
-const { stateDir, jobId, mode } = process.env;
+const { stateDir, jobId, MANIFEST_TEST_MODE: mode } = process.env;
 const forceForeignLease = process.env.forceForeignLease === 'true';
 
 function report(message) {

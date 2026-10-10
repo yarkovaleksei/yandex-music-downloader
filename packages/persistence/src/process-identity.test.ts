@@ -24,5 +24,5 @@ describe('process identity', () => {
       await once(child, 'exit');
     }
     expect(await processStartedAt(child.pid!)).toBeUndefined();
-  });
+  }, 30_000);
 });

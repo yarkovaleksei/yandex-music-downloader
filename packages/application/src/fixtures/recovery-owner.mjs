@@ -7,7 +7,7 @@ import {
 } from '@music-downloader/core-manifest';
 import { writeStreamToPart } from '@music-downloader/core-filesystem';
 
-const { stateDir, jobId, counterPath, mode } = process.env;
+const { stateDir, jobId, counterPath, MANIFEST_TEST_MODE: mode } = process.env;
 const size = async (target) => {
   try {
     return (await stat(target)).size;
