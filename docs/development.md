@@ -1,6 +1,6 @@
 # Разработка
 
-Документ описывает фактический toolchain, созданный STEP-001 по ADR-001 (слои и границы) и ADR-008 (Yarn workspaces). CI относится к STEP-002; подключение Electron preload потребует отдельного bundler-решения в последующем STEP.
+Документ описывает фактический toolchain, созданный STEP-001 по ADR-001 (слои и границы) и ADR-008 (Yarn workspaces). CI описан в разделе «CI/CD» (STEP-002); подключение Electron preload потребует отдельного bundler-решения в последующем STEP.
 
 ## Prerequisites
 
@@ -114,7 +114,7 @@ Boundary-проход директивы не принимает вообще. E
 - `verify-step-001.mjs` — чистые копии для Node.js 22.13.0 и 24: `corepack enable --install-directory <tmp-bin>`, immutable install, lint/test/typecheck/format:check/build, негативные boundary-проверки, mismatch `yarn.lock` и недоступный workspace;
 - `verify-step-001-manual.sh` — обёртка для ручного запуска.
 
-Требования и ограничения: нужны `nvm` с уже установленными Node.js 22.13.0 и 24 (`nvm install` скрипты не вызывают; при отсутствии версии результат FAIL с причиной) и доступ к npm registry. Проверка выполнена на Linux; Windows (запуск Corepack как `corepack.cmd` через shell) и macOS не проверялись — платформенную матрицу ведёт STEP-002.
+Требования и ограничения: нужны `nvm` с уже установленными Node.js 22.13.0 и 24 (`nvm install` скрипты не вызывают; при отсутствии версии результат FAIL с причиной) и доступ к npm registry. Проверка выполнена на Linux; Windows (запуск Corepack как `corepack.cmd` через shell) и macOS не проверялись локально; платформенную матрицу выполняет CI (STEP-002), и пока её первый успешный запуск не зафиксирован в Evidence STEP-002, Windows и macOS остаются непроверенными.
 
 ## Environment / configuration
 
@@ -126,8 +126,19 @@ Boundary-проход директивы не принимает вообще. E
 
 ## CI/CD
 
-Не вводится STEP-001: workflow, платформенная матрица и публикация относятся к STEP-002 и последующим STEP.
+Workflow `.github/workflows/ci.yml` (STEP-002) запускается на `pull_request` в `main` и на `push` в `main`. Права — только `contents: read`, secrets не используются. Устаревшие запуски PR отменяются, проверка каждого merge commit в `main` доводится до конца. Все actions закреплены полными SHA, runner images — конкретными версиями (`ubuntu-24.04`, `windows-2025`, `macos-15`).
+
+- Job `quality` (Ubuntu, Node.js 24): `install --immutable`, `lint`, `typecheck`, `format:check`, `build`. Провал любого шага роняет job.
+- Job `test` — матрица ОС (`ubuntu-24.04`, `windows-2025`, `macos-15`) × Node.js (`22.13.0` — нижняя граница `engines`, и `24`), `fail-fast: false`. Каждый вариант выполняет `install --immutable` и `test`; один и тот же набор Vitest (unit и integration) идёт на всех ОС, чтобы особенности файловой системы выявлялись рано. Сборка выполняется один раз в `quality`: тесты не требуют `dist`.
+- Установка и запуск везде идут через `node packages/testing/scripts/run-yarn.mjs`, без зависимости от глобальных shims Corepack.
+- Кэш (`actions/cache`): `.yarn/cache` и `.cache/corepack`, ключ из ОС, версии Node.js и хеша `yarn.lock`. Встроенный кэш `setup-node` не используется, потому что он требует Yarn в `PATH` до установки.
+- Live-тесты provider в CI не запускаются и токены не передаются: они выполняются вручную (см. «Проверка provider на реальном API»).
+- Harness Integrity workflow остаётся отдельным и этим STEP не изменяется.
+
+Локальное воспроизведение: `yarn install --immutable`, `yarn run lint`, `yarn run typecheck`, `yarn run format:check`, `yarn run build`, `yarn test`.
+
+Имена jobs (`quality`, `test`) стабильны для branch protection; сама защита ветки настраивается вне репозитория. Release CI, сборки desktop и публикация артефактов относятся к последующим STEP.
 
 ## Git и CI
 
-Repository Git workflow задаётся `.harness/docs/GIT_WORKFLOW.md` и `.harness/git-policy.toml`. Harness Integrity CI является baseline; project-specific CI добавляется после определения фактического stack/tooling.
+Repository Git workflow задаётся `.harness/docs/GIT_WORKFLOW.md` и `.harness/git-policy.toml`. Harness Integrity CI является baseline; product CI (`ci.yml`) описан в разделе «CI/CD».
