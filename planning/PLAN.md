@@ -5,7 +5,7 @@
 | STEP | Название | Type | Priority | Status | Depends on | REQ |
 |---|---|---|---|---|---|---|
 | STEP-001 | Monorepo и toolchain контроля качества | implementation | critical | completed | — | REQ-040 |
-| STEP-002 | CI workflow для TypeScript monorepo | implementation | high | planned | STEP-001 | REQ-041 |
+| STEP-002 | CI workflow для TypeScript monorepo | implementation | high | completed | STEP-001 | REQ-041 |
 | STEP-003 | Доменная модель, ошибки и контракт MusicProvider | implementation | critical | completed | STEP-001 | REQ-004, REQ-037, REQ-042 |
 | STEP-004 | Структурированное логирование и редакция секретов | implementation | high | completed | STEP-003 | REQ-035, REQ-039, REQ-036 |
 | STEP-005 | Spike: проверка API Яндекс Музыки | research | critical | completed | STEP-001 | REQ-001, REQ-038 |
@@ -16,7 +16,7 @@
 | STEP-010 | Provider: audio variants и поток | implementation | critical | completed | STEP-009, STEP-005 | REQ-010, REQ-038, REQ-015 |
 | STEP-011 | Provider contract tests на реальном API | implementation | high | completed | STEP-010 | REQ-008 |
 | STEP-012 | Filename sanitizer и генерация путей | implementation | critical | completed | STEP-003 | REQ-022, REQ-023 |
-| STEP-013 | Download Planner и quality resolver | implementation | critical | planned | STEP-003, STEP-005 | REQ-011, REQ-010 |
+| STEP-013 | Download Planner и quality resolver | implementation | critical | completed | STEP-003, STEP-005 | REQ-011, REQ-010 |
 | STEP-014 | State machine задания и retry policy | implementation | critical | completed | STEP-003, STEP-005 | REQ-013, REQ-014 |
 | STEP-015 | Запись .part и атомарная финализация | implementation | critical | planned | STEP-012, STEP-003, STEP-002 | REQ-012, REQ-024 |
 | STEP-016 | Manifest store и восстановление | implementation | critical | planned | STEP-014, STEP-013, STEP-015, STEP-005 | REQ-020, REQ-021, REQ-032, REQ-011 |

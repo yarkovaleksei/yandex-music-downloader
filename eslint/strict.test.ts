@@ -6,6 +6,10 @@ import { workspacePackages } from './boundaries.config.mjs';
 
 const root = path.resolve(import.meta.dirname, '..');
 
+// TypeScript всегда оперирует путями с `/` (в том числе на Windows).
+const tsPath = (...segments: string[]) =>
+  path.join(...segments).replaceAll('\\', '/');
+
 const strictFamily = [
   'strict',
   'noImplicitAny',
@@ -70,7 +74,7 @@ describe('strict-контракт всех tsconfig', () => {
       const production = parse(path.join(root, dir, 'tsconfig.json')).options;
       expect(production.composite, dir).toBe(true);
       expect(production.declaration, dir).toBe(true);
-      expect(production.outDir, dir).toBe(path.join(root, dir, 'dist'));
+      expect(production.outDir, dir).toBe(tsPath(root, dir, 'dist'));
       const tests = parse(path.join(root, dir, 'tsconfig.test.json')).options;
       expect(tests.noEmit, dir).toBe(true);
       expect(tests.composite, dir).toBe(false);
@@ -130,7 +134,7 @@ describe('root solution и тестовая программа', () => {
     const { fileNames, options } = parse(
       path.join(root, 'tsconfig.tests.json'),
     );
-    const virtual = path.join(root, 'packages/shared/src/__injected.test.ts');
+    const virtual = tsPath(root, 'packages/shared/src/__injected.test.ts');
     const host = ts.createCompilerHost(options);
     const original = host.getSourceFile.bind(host);
     host.getSourceFile = (name, ...rest) =>
@@ -158,7 +162,7 @@ describe('packages/shared: изолированная production-програм�
 
   function diagnosticsFor(code: string): string[] {
     const { fileNames, options } = parse(sharedConfig);
-    const virtual = path.join(root, 'packages/shared/src/__probe.ts');
+    const virtual = tsPath(root, 'packages/shared/src/__probe.ts');
     const host = ts.createCompilerHost(options);
     const original = host.getSourceFile.bind(host);
     host.getSourceFile = (name, ...rest) =>

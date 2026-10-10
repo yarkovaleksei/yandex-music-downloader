@@ -1,0 +1,239 @@
+# Человекочитаемое имя workflow в GitHub Actions UI.
+# Пример: "CI".
+name: CI
+
+# GitHub Actions events, на которых выполняется product CI.
+# Пример: pull_request в main и push в main после merge.
+on:
+  # Проверять Pull Request, направленный в main.
+  # Пример: feature/queue → main запускает CI.
+  pull_request:
+    # Ограничить base branch основной веткой проекта.
+    # Пример: main.
+    branches:
+      - main
+  # После merge PR GitHub создаёт push в main — это отдельная финальная проверка.
+  # Пример: squash merge PR → push нового commit в main → CI.
+  push:
+    # Не запускать CI для обычных push в feature-ветки.
+    # Пример: только main.
+    branches:
+      - main
+
+# Минимальные GitHub token permissions всего workflow.
+# Пример: только `contents: read`, потому что CI ничего не публикует.
+permissions:
+  # Только чтение repository contents; CI ничего не коммитит и не пушит.
+  # Пример: `read` достаточно для checkout и локальных проверок.
+  contents: read
+
+# Не выполнять одновременно устаревшие проверки одного PR или устаревшие push-проверки main.
+# Пример: второй commit в PR отменяет только предыдущую проверку того же PR.
+concurrency:
+  # PR группируются по номеру, push после merge — по ref основной ветки.
+  # Пример: CI-pull_request-12 и CI-push-refs/heads/main.
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref }}
+  # Отменять устаревший запуск только для PR; запуск для main новым push не отменяется (ожидающий в очереди запуск GitHub может заменить более новым).
+  # Пример: true для pull_request, false для push в main.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+# Набор jobs workflow. Live-тесты provider в CI не запускаются: они выполняются вручную (docs/development.md).
+# Пример: quality (статические проверки и сборка) и test (матрица ОС × Node.js).
+jobs:
+  # Стабильный machine-readable ID job для branch protection.
+  # Пример: отображаемое имя `Quality` используется в required checks.
+  quality:
+    # Отображаемое имя job в GitHub UI.
+    # Пример: "Quality".
+    name: Quality
+    # Закреплённый runner image, чтобы смена `latest` не меняла CI молча.
+    # Пример: ubuntu-24.04.
+    runs-on: ubuntu-24.04
+    # Максимальное время job до принудительной остановки.
+    # Пример: 15 минут с запасом для установки зависимостей и сборки.
+    timeout-minutes: 15
+
+    # Последовательность шагов job; ни один шаг не использует continue-on-error.
+    # Пример: checkout → Node.js → кэш → install → lint → typecheck → format:check → build.
+    steps:
+      # Отображаемое имя checkout step.
+      # Пример: "Checkout repository".
+      - name: Checkout repository
+        # Официальный action для получения contents текущего commit/PR.
+        # Пример: actions/checkout@v7, закреплён полным SHA.
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        # Параметры checkout action.
+        # Пример: отключить сохранение credentials, так как CI только читает repository.
+        with:
+          # Не оставлять GitHub token в локальном git config runner после checkout.
+          # Пример: false.
+          persist-credentials: false
+
+      # Отображаемое имя шага установки Node.js.
+      # Пример: "Setup Node.js".
+      - name: Setup Node.js
+        # Официальный action устанавливает нужную версию Node.js.
+        # Пример: actions/setup-node@v6, закреплён полным SHA; встроенный cache: yarn не используется, так как требует Yarn в PATH.
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
+        # Параметры Node.js runtime.
+        # Пример: рекомендуемая для разработки версия из .nvmrc.
+        with:
+          # Рекомендуемая версия Node.js для разработки (верхняя поддерживаемая LTS).
+          # Пример: "24".
+          node-version: "24"
+
+      # Отображаемое имя шага кэша зависимостей.
+      # Пример: "Cache Yarn and Corepack".
+      - name: Cache Yarn and Corepack
+        # Официальный action кэша, закреплён полным SHA.
+        # Пример: actions/cache@v5.
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        # Параметры кэша.
+        # Пример: всё состояние Yarn находится внутри рабочей копии (.yarnrc.yml).
+        with:
+          # Каталоги, сохраняемые между запусками.
+          # Пример: кэш пакетов Yarn и скачанный Corepack-архив Yarn.
+          path: |
+            .yarn/cache
+            .cache/corepack
+          # Ключ кэша: ОС, версия Node.js и хеш lockfile.
+          # Пример: Linux-node24-yarn-<hash>.
+          key: ${{ runner.os }}-node24-yarn-${{ hashFiles('yarn.lock') }}
+          # Частичное восстановление при изменении lockfile.
+          # Пример: Linux-node24-yarn-.
+          restore-keys: |
+            ${{ runner.os }}-node24-yarn-
+
+      # Отображаемое имя шага установки зависимостей.
+      # Пример: "Install dependencies".
+      - name: Install dependencies
+        # Единая обёртка вокруг Corepack без зависимости от глобальных shims; --immutable запрещает менять yarn.lock.
+        # Пример: node packages/testing/scripts/run-yarn.mjs install --immutable.
+        run: node packages/testing/scripts/run-yarn.mjs install --immutable
+
+      # Отображаемое имя шага lint.
+      # Пример: "Lint".
+      - name: Lint
+        # Два прохода ESLint: качество кода и архитектурные границы.
+        # Пример: yarn run lint.
+        run: node packages/testing/scripts/run-yarn.mjs run lint
+
+      # Отображаемое имя шага typecheck.
+      # Пример: "Typecheck".
+      - name: Typecheck
+        # tsc -b по root solution и отдельная программа для тестов.
+        # Пример: yarn run typecheck.
+        run: node packages/testing/scripts/run-yarn.mjs run typecheck
+
+      # Отображаемое имя шага проверки форматирования.
+      # Пример: "Check formatting".
+      - name: Check formatting
+        # Prettier в режиме проверки без изменения файлов.
+        # Пример: yarn run format:check.
+        run: node packages/testing/scripts/run-yarn.mjs run format:check
+
+      # Отображаемое имя шага сборки.
+      # Пример: "Build".
+      - name: Build
+        # Сборка CLI и core; выполняется один раз здесь, а не в каждом варианте матрицы.
+        # Пример: yarn run build.
+        run: node packages/testing/scripts/run-yarn.mjs run build
+
+  # Стабильный machine-readable ID job с матрицей.
+  # Пример: `test` используется в required checks (6 вариантов).
+  test:
+    # Отображаемое имя варианта матрицы в GitHub UI.
+    # Пример: "Test (ubuntu-24.04, Node.js 22.13.0)".
+    name: Test (${{ matrix.os }}, Node.js ${{ matrix.node }})
+    # Runner берётся из матрицы.
+    # Пример: ubuntu-24.04, windows-2025 или macos-15.
+    runs-on: ${{ matrix.os }}
+    # Максимальное время одного варианта; Windows и macOS медленнее Linux.
+    # Пример: 20 минут.
+    timeout-minutes: 20
+
+    # Стратегия матрицы.
+    # Пример: 3 ОС × 2 версии Node.js = 6 вариантов.
+    strategy:
+      # Не отменять остальные варианты при падении одного, чтобы видеть все платформы сразу.
+      # Пример: падение Windows не скрывает результат macOS.
+      fail-fast: false
+      # Оси матрицы.
+      # Пример: os × node.
+      matrix:
+        # Закреплённые runner images для проверки кросс-ОС особенностей файловой системы.
+        # Пример: Linux, Windows, macOS.
+        os:
+          - ubuntu-24.04
+          - windows-2025
+          - macos-15
+        # Поддерживаемые версии Node.js: нижняя граница engines и верхняя LTS.
+        # Пример: 22.13.0 и 24.
+        node:
+          - "22.13.0"
+          - "24"
+
+    # Последовательность шагов job; ни один шаг не использует continue-on-error.
+    # Пример: checkout → Node.js → кэш → install → test.
+    steps:
+      # Отображаемое имя checkout step.
+      # Пример: "Checkout repository".
+      - name: Checkout repository
+        # Официальный action для получения contents текущего commit/PR.
+        # Пример: actions/checkout@v7, закреплён полным SHA.
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        # Параметры checkout action.
+        # Пример: отключить сохранение credentials.
+        with:
+          # Не оставлять GitHub token в локальном git config runner после checkout.
+          # Пример: false.
+          persist-credentials: false
+
+      # Отображаемое имя шага установки Node.js.
+      # Пример: "Setup Node.js".
+      - name: Setup Node.js
+        # Официальный action устанавливает версию Node.js из матрицы.
+        # Пример: actions/setup-node@v6, закреплён полным SHA.
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
+        # Параметры Node.js runtime.
+        # Пример: версия из матрицы.
+        with:
+          # Версия Node.js текущего варианта матрицы.
+          # Пример: "22.13.0".
+          node-version: ${{ matrix.node }}
+
+      # Отображаемое имя шага кэша зависимостей.
+      # Пример: "Cache Yarn and Corepack".
+      - name: Cache Yarn and Corepack
+        # Официальный action кэша, закреплён полным SHA.
+        # Пример: actions/cache@v5.
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        # Параметры кэша.
+        # Пример: те же каталоги, что в job quality.
+        with:
+          # Каталоги, сохраняемые между запусками.
+          # Пример: кэш пакетов Yarn и Corepack-архив Yarn.
+          path: |
+            .yarn/cache
+            .cache/corepack
+          # Ключ кэша: ОС, версия Node.js и хеш lockfile.
+          # Пример: Windows-node22.13.0-yarn-<hash>.
+          key: ${{ runner.os }}-node${{ matrix.node }}-yarn-${{ hashFiles('yarn.lock') }}
+          # Частичное восстановление при изменении lockfile.
+          # Пример: Windows-node22.13.0-yarn-.
+          restore-keys: |
+            ${{ runner.os }}-node${{ matrix.node }}-yarn-
+
+      # Отображаемое имя шага установки зависимостей.
+      # Пример: "Install dependencies".
+      - name: Install dependencies
+        # Единая обёртка вокруг Corepack, одинаково работающая на Windows; --immutable запрещает менять yarn.lock.
+        # Пример: node packages/testing/scripts/run-yarn.mjs install --immutable.
+        run: node packages/testing/scripts/run-yarn.mjs install --immutable
+
+      # Отображаемое имя шага тестов.
+      # Пример: "Test".
+      - name: Test
+        # Offline unit/integration тесты Vitest; live-тесты provider сюда не входят.
+        # Пример: yarn test.
+        run: node packages/testing/scripts/run-yarn.mjs test

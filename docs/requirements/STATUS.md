@@ -13,8 +13,8 @@
 | [REQ-007](REQ-007-provider-schema.md) | [PROVIDER] Runtime-валидация ответов и версия совместимости | partial | STEP-006, STEP-009, STEP-025 | sha256:2148d7fdfa0cbdbb210f706b4a5cb59d7ed5af5330ca0f4ab4c4c9fa03f35689, sha256:0b2d72a8658737eb75b4f9f801391b11fcc5307210bc5f1e2a1b7b87b1c74c53 |
 | [REQ-008](REQ-008-provider-contract-tests.md) | [PROVIDER] Отдельный набор contract-тестов реального API | completed | STEP-011 | sha256:8e91cc7e70139f2f7dd0b060c35d1bbbb87bf187d59278aa0326a49e4cc78dbe |
 | [REQ-009](REQ-009-url-resolver.md) | [URL] Распознавание и нормализация URL | partial | STEP-007, STEP-019 | sha256:87fa392591a6c635fb740956bec005af657195438dffa57818ffe6abada9f5a8 |
-| [REQ-010](REQ-010-quality-selection.md) | [QUALITY] Выбор качества по фактически доступным вариантам | partial | STEP-010, STEP-013 | sha256:d2a69e8167bbb967a40bde6ae54251aaf4188ee99f3fc1b31cbce29522148891 |
-| [REQ-011](REQ-011-download-plan.md) | [DOWNLOAD] Immutable DownloadPlan | planned | STEP-013, STEP-016 | — |
+| [REQ-010](REQ-010-quality-selection.md) | [QUALITY] Выбор качества по фактически доступным вариантам | completed | STEP-010, STEP-013 | sha256:d2a69e8167bbb967a40bde6ae54251aaf4188ee99f3fc1b31cbce29522148891, sha256:def4481f4c9ae0edb17d714a7238ee90267a18508712f400e9258a31fc4e21eb |
+| [REQ-011](REQ-011-download-plan.md) | [DOWNLOAD] Immutable DownloadPlan | partial | STEP-013, STEP-016 | sha256:def4481f4c9ae0edb17d714a7238ee90267a18508712f400e9258a31fc4e21eb |
 | [REQ-012](REQ-012-download-file-safety.md) | [DOWNLOAD] Запись через .part и атомарная финализация | planned | STEP-015 | — |
 | [REQ-013](REQ-013-download-state-machine.md) | [DOWNLOAD] Формальная state machine задания | partial | STEP-014, STEP-019 | sha256:03a7f4a71571504f74d00a9375f81b405bc7da52ae71e612af78274e59ac6230 |
 | [REQ-014](REQ-014-download-retry.md) | [DOWNLOAD] Повторные попытки только для transient-ошибок | partial | STEP-014, STEP-017 | sha256:03a7f4a71571504f74d00a9375f81b405bc7da52ae71e612af78274e59ac6230 |
@@ -44,7 +44,7 @@
 | [REQ-038](REQ-038-sec-no-circumvention.md) | [SECURITY] Работа только с доступным аккаунту контентом | completed | STEP-005, STEP-010 | sha256:3b571c238a4e4ba0e230d2cb6bf0bdd18e7ce659eb01d8e214551b2abe372016, sha256:d2a69e8167bbb967a40bde6ae54251aaf4188ee99f3fc1b31cbce29522148891 |
 | [REQ-039](REQ-039-sec-redaction.md) | [SECURITY] Запрет утечки секретов в логи и артефакты | completed | STEP-004, STEP-008 | sha256:bc40dd17c32479af131f868292e28dc2f8f1e96ff40940d0f6689dda84037d99, sha256:e0b2393178cfca0e45390c3e03393ff50233d9d425d08dbb4e85877b03e0f3e3 |
 | [REQ-040](REQ-040-tool-ts-quality.md) | [TOOLING] Строгий TypeScript и контроль качества кода | completed | STEP-001, STEP-037 | sha256:7b4e802b915feb1f9c06c7f35392a394273cecd480e08371b1d10eb53bde7253, sha256:45829ee630d29877d114cca2f4777b31ddac10529a23cfb3a82f468e7316abf6 |
-| [REQ-041](REQ-041-tool-ci.md) | [TOOLING] CI на pull request | planned | STEP-002, STEP-035 | — |
+| [REQ-041](REQ-041-tool-ci.md) | [TOOLING] CI на pull request | partial | STEP-002, STEP-035 | sha256:0ff62ac0c7180065f7c8bbb6fe556c9f0d13781793ebaae02bef4e5d68b1a203 |
 | [REQ-042](REQ-042-tool-tests.md) | [TOOLING] Обязательные unit и integration тесты | partial | STEP-003, STEP-026 | sha256:bfce0c7d4101696c7098994ea3e1022d71fc0992b5082d5e4a2abc73720977f1 |
 | [REQ-043](REQ-043-tool-headless-gate.md) | [TOOLING] Критерий готовности headless MVP и перехода к UI | planned | STEP-027 | — |
 | [REQ-044](REQ-044-desk-application-api.md) | [DESKTOP] Application API как единая граница для клиентов | planned | STEP-018 | — |
