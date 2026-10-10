@@ -461,6 +461,7 @@ __metadata:
   dependencies:
     "@music-downloader/shared": "workspace:*"
     "@napi-rs/keyring": "npm:2.1.0"
+    fs-native-extensions: "npm:1.5.1"
   languageName: unknown
   linkType: soft
 
@@ -1131,6 +1132,42 @@ __metadata:
   languageName: node
   linkType: hard
 
+"bare-addon-resolve@npm:^1.3.0":
+  version: 1.11.0
+  resolution: "bare-addon-resolve@npm:1.11.0"
+  dependencies:
+    bare-module-resolve: "npm:^1.10.0"
+    bare-semver: "npm:^1.0.0"
+  peerDependencies:
+    bare-url: "*"
+  peerDependenciesMeta:
+    bare-url:
+      optional: true
+  checksum: 10c0/f0aa6c754e8c3e29de13bb23408c8c2a6ad6ee55b7d08d4d8e1fa92a94954ce3795a03fd0b10ae14c495656b55b2909ea58b30ca58f39fdce7e17b897fa29e79
+  languageName: node
+  linkType: hard
+
+"bare-module-resolve@npm:^1.10.0":
+  version: 1.12.6
+  resolution: "bare-module-resolve@npm:1.12.6"
+  dependencies:
+    bare-semver: "npm:^1.0.0"
+  peerDependencies:
+    bare-url: "*"
+  peerDependenciesMeta:
+    bare-url:
+      optional: true
+  checksum: 10c0/17b3ade713b97987706084e5db5fb29d552f98db10774541878bc31955d38642f66e880b7281f72f8567f12d82d9a9f5240e3fb6937c0450d6d565723da58fb2
+  languageName: node
+  linkType: hard
+
+"bare-semver@npm:^1.0.0":
+  version: 1.1.0
+  resolution: "bare-semver@npm:1.1.0"
+  checksum: 10c0/43f2dff50757d4d8018344d212d30449ea6511f190e5886135ce972c0018602a602fbb78658ae55471d7036b3d97db4b62ee23168ed4a218c2bf33e609d0cf9f
+  languageName: node
+  linkType: hard
+
 "brace-expansion@npm:^1.1.7":
   version: 1.1.21
   resolution: "brace-expansion@npm:1.1.21"
@@ -1586,6 +1623,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"fs-native-extensions@npm:1.5.1":
+  version: 1.5.1
+  resolution: "fs-native-extensions@npm:1.5.1"
+  dependencies:
+    require-addon: "npm:^1.1.0"
+    which-runtime: "npm:^1.2.0"
+  checksum: 10c0/b0eabfc882f32583a2019b798bbd3ab4b2bebb4cc9548fafabdd60890b1f5d45500caf38cb6bac1c19e38724af4df30847d9b21363ec90841872ad221c24ec84
+  languageName: node
+  linkType: hard
+
 "fsevents@npm:~2.3.2, fsevents@npm:~2.3.3":
   version: 2.3.3
   resolution: "fsevents@npm:2.3.3"
@@ -2002,6 +2049,15 @@ __metadata:
   version: 2.3.1
   resolution: "punycode@npm:2.3.1"
   checksum: 10c0/14f76a8206bc3464f794fb2e3d3cc665ae416c01893ad7a02b23766eb07159144ee612ad67af5e84fa4479ccfe67678c4feb126b0485651b302babf66f04f9e9
+  languageName: node
+  linkType: hard
+
+"require-addon@npm:^1.1.0":
+  version: 1.3.0
+  resolution: "require-addon@npm:1.3.0"
+  dependencies:
+    bare-addon-resolve: "npm:^1.3.0"
+  checksum: 10c0/30b85f36420ccee2657c42779c2662411a93d3a9ff29f02def69e4bca148c58fb9e8ad56fa4c2502ec18c5786429a9f9acfd5e47457dbd96820b89afa58bd54a
   languageName: node
   linkType: hard
 
@@ -2440,6 +2496,13 @@ __metadata:
   bin:
     vitest: ./vitest.mjs
   checksum: 10c0/4eb7a63a1d62b88c425bcbc609835055a5644a1994d6f47605fe396dddf732e3c0277c9ec89a028fe81557dc4051dd15fc15b9eba6a51d1466cd5c682ddc1261
+  languageName: node
+  linkType: hard
+
+"which-runtime@npm:^1.2.0":
+  version: 1.4.0
+  resolution: "which-runtime@npm:1.4.0"
+  checksum: 10c0/9aef432fc2eaa5c6c12f315d15e363ec9ef1e44db2b949f063a0b6f7b5a4442b23a292715ca1d14bc6c8d6953a38d7cde775b80c2ba151f3c112da2fc81b01e9
   languageName: node
   linkType: hard
 
