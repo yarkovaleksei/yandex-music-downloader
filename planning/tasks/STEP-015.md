@@ -193,6 +193,74 @@ plan:
 
 ## Evidence
 
+<!-- VERIFICATION-EVIDENCE:START -->
+- Verification run: 2026-10-10T07:48:02Z
+- Status: MANUAL_REQUIRED
+- Automated resumed: false
+- Git head: 8287373508ea719e69596642bcaa4fa3ae94e593
+- Worktree hash: sha256:4564cc24e70813654bafbacf47080d5c4157914c9a464f9b1b6e65baf56d0471
+- Verification contract basis: sha256:122d3301135dac257d598ea873d20eea41a1e649c5fab4182ba7274e9f240970
+- Subject git head: 8287373508ea719e69596642bcaa4fa3ae94e593
+- Subject worktree hash: sha256:4564cc24e70813654bafbacf47080d5c4157914c9a464f9b1b6e65baf56d0471
+
+### Automated verification
+- Command: node packages/testing/scripts/run-yarn.mjs run lint
+  - Status: PASS
+  - Exit code: 0
+  - Duration ms: 5972
+  - stdout sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  - stderr sha256: f59ba696a15507a8febe0f9ea94ac75ccc5411952df61ee4cb3c971b47b6bc12
+  - stdout bytes: 0
+  - stderr bytes: 25
+- Command: node packages/testing/scripts/run-yarn.mjs run typecheck
+  - Status: PASS
+  - Exit code: 0
+  - Duration ms: 2417
+  - stdout sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  - stderr sha256: ffbfd8ec2bfcf3e8f0e99a93f081f695da2de832eba56c5ae6943a4052680411
+  - stdout bytes: 0
+  - stderr bytes: 30
+- Command: node packages/testing/scripts/run-yarn.mjs test
+  - Status: PASS
+  - Exit code: 0
+  - Duration ms: 4231
+  - stdout sha256: 8de58a89a966630f9ce765a5ab8975d7d91f10f75f648fbf438b4a24684fb9b8
+  - stderr sha256: f969fafb7bc32ecc492c8343f56269c9c47161d893e83a0d8b9b27fcf57b9aee
+  - stdout bytes: 5330
+  - stderr bytes: 21
+- Command: node packages/testing/scripts/run-yarn.mjs run build
+  - Status: PASS
+  - Exit code: 0
+  - Duration ms: 414
+  - stdout sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  - stderr sha256: a0b5ebe8b7786637f56a665a03d6d27f3d6a927d0669b1870beb1307702b651a
+  - stdout bytes: 0
+  - stderr bytes: 26
+- Command: node packages/testing/scripts/run-yarn.mjs run format:check
+  - Status: PASS
+  - Exit code: 0
+  - Duration ms: 1866
+  - stdout sha256: 17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20
+  - stderr sha256: 25e162fe1196016bd51a2c9644b6820f880082561abce757f808502fb7895ebb
+  - stdout bytes: 66
+  - stderr bytes: 33
+- Command: python3 .harness/tools/validate.py --mode manual
+  - Status: PASS
+  - Exit code: 0
+  - Duration ms: 2817
+  - stdout sha256: 5b27678fb5a659ad29cd46dc1083c1b7a669333084f7abfd09d4ae4688d7d416
+  - stderr sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  - stdout bytes: 366
+  - stderr bytes: 0
+
+### Product verification
+- none
+
+### Manual verification
+- Check: Подтвердить зелёный запуск CI matrix (STEP-002) на PR с этим STEP на Linux, Windows и macOS, включая кросс-ОС тесты finalize; приложить ссылку на запуск в Evidence.
+  - Status: PENDING
+<!-- VERIFICATION-EVIDENCE:END -->
+
 Generated verification block записывает deterministic runner. Дополнительные semantic observations можно хранить вне generated markers.
 
 ## Blocker / Failure reason
