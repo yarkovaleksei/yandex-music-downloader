@@ -1,2 +1,25 @@
-/** Каркас downloader; поведение будет добавлено профильным STEP. */
+/** Состояния заданий: переходы, control и агрегация статуса job (ADR-003/ADR-006). */
 export const downloaderCorePackage = '@music-downloader/core-downloader';
+
+export { aggregateJobStatus, type AggregateInput } from './state/aggregate.js';
+export {
+  pauseJobOnFatalError,
+  resumeJob,
+  transitionJobControl,
+  type JobControlCommand,
+  type JobControlState,
+  type JobPauseReason,
+  type ResumeResult,
+} from './state/control.js';
+export {
+  recoverTrack,
+  trackEvents,
+  transitionRules,
+  transitionTrack,
+  type RetryPhase,
+  type TrackEvent,
+  type TrackState,
+  type TransitionContext,
+  type TransitionResult,
+  type TransitionRule,
+} from './state/transitions.js';
