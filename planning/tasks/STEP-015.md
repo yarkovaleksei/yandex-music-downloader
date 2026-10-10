@@ -1,7 +1,7 @@
 ---
 schema: 1
 id: STEP-015
-status: planned
+status: completed
 type: implementation
 priority: critical
 phase: core
@@ -195,21 +195,22 @@ plan:
 
 
 
+
 <!-- VERIFICATION-EVIDENCE:START -->
-- Verification run: 2026-10-10T08:18:16Z
-- Status: MANUAL_REQUIRED
+- Verification run: 2026-10-10T08:23:48Z
+- Status: PASS
 - Automated resumed: false
-- Git head: ce7713ddbb9a7e2dc2f3bdc74a1d0f86ab6b86f5
-- Worktree hash: sha256:231517b4d066f6ecccb8d116e788861d87915639ebb5892cb7eacd8312f42331
+- Git head: 6c64220fa253555202264ea91889d19df4654dec
+- Worktree hash: clean
 - Verification contract basis: sha256:122d3301135dac257d598ea873d20eea41a1e649c5fab4182ba7274e9f240970
-- Subject git head: ce7713ddbb9a7e2dc2f3bdc74a1d0f86ab6b86f5
-- Subject worktree hash: sha256:b6d68511874ad918049552087f5951aec4df49bc89bfdcbcca4d6b26f95aef6a
+- Subject git head: 6c64220fa253555202264ea91889d19df4654dec
+- Subject worktree hash: clean
 
 ### Automated verification
 - Command: node packages/testing/scripts/run-yarn.mjs run lint
   - Status: PASS
   - Exit code: 0
-  - Duration ms: 5571
+  - Duration ms: 5622
   - stdout sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
   - stderr sha256: f59ba696a15507a8febe0f9ea94ac75ccc5411952df61ee4cb3c971b47b6bc12
   - stdout bytes: 0
@@ -217,7 +218,7 @@ plan:
 - Command: node packages/testing/scripts/run-yarn.mjs run typecheck
   - Status: PASS
   - Exit code: 0
-  - Duration ms: 2917
+  - Duration ms: 2317
   - stdout sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
   - stderr sha256: ffbfd8ec2bfcf3e8f0e99a93f081f695da2de832eba56c5ae6943a4052680411
   - stdout bytes: 0
@@ -225,10 +226,10 @@ plan:
 - Command: node packages/testing/scripts/run-yarn.mjs test
   - Status: PASS
   - Exit code: 0
-  - Duration ms: 4229
-  - stdout sha256: a8df5240f6cc5615709ddbcaf4546e82b1016d03c4b285be860defb91d32bbbf
+  - Duration ms: 4125
+  - stdout sha256: 83c73285a71c37d042a44892e603a632395cbed2b0c3aac2d3473b8688ac92a0
   - stderr sha256: f969fafb7bc32ecc492c8343f56269c9c47161d893e83a0d8b9b27fcf57b9aee
-  - stdout bytes: 5163
+  - stdout bytes: 5035
   - stderr bytes: 21
 - Command: node packages/testing/scripts/run-yarn.mjs run build
   - Status: PASS
@@ -249,8 +250,8 @@ plan:
 - Command: python3 .harness/tools/validate.py --mode manual
   - Status: PASS
   - Exit code: 0
-  - Duration ms: 2767
-  - stdout sha256: 2a6c500802370468bade0d293c7f1c3036724722ff56edb21af36732d91a799c
+  - Duration ms: 2817
+  - stdout sha256: 91f5464dc4321092876a3ad6da4b88657189c6402f255d1678d04d4345659450
   - stderr sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
   - stdout bytes: 366
   - stderr bytes: 0
@@ -260,10 +261,12 @@ plan:
 
 ### Manual verification
 - Check: Подтвердить зелёный запуск CI matrix (STEP-002) на PR с этим STEP на Linux, Windows и macOS, включая кросс-ОС тесты finalize; приложить ссылку на запуск в Evidence.
-  - Status: PENDING
+  - Status: PASS
+  - Observed: "PR #10 (https://github.com/yarkovaleksei/yandex-music-downloader/pull/10), обычный PR, не draft. Head 6c64220fa253555202264ea91889d19df4654dec. CI: https://github.com/yarkovaleksei/yandex-music-downloader/actions/runs/38037552207. По live provider snapshot от 2026-10-10T08:22:44Z Quality и все 6 jobs ubuntu-24.04/windows-2025/macos-15 × Node.js 22.13.0/24: COMPLETED/SUCCESS. Кросс-ОС finalize и F-001 regression входят в yarn test. Snapshot basis: sha256:1665b757d55e00a576d57278c85870a111f0a70cbd6888afa4c5cba070accea4."
 <!-- VERIFICATION-EVIDENCE:END -->
 
 Generated verification block записывает deterministic runner. Дополнительные semantic observations можно хранить вне generated markers.
+
 
 
 
