@@ -16,8 +16,8 @@
 | [REQ-010](REQ-010-quality-selection.md) | [QUALITY] Выбор качества по фактически доступным вариантам | partial | STEP-010, STEP-013 | sha256:d2a69e8167bbb967a40bde6ae54251aaf4188ee99f3fc1b31cbce29522148891 |
 | [REQ-011](REQ-011-download-plan.md) | [DOWNLOAD] Immutable DownloadPlan | planned | STEP-013, STEP-016 | — |
 | [REQ-012](REQ-012-download-file-safety.md) | [DOWNLOAD] Запись через .part и атомарная финализация | planned | STEP-015 | — |
-| [REQ-013](REQ-013-download-state-machine.md) | [DOWNLOAD] Формальная state machine задания | planned | STEP-014, STEP-019 | — |
-| [REQ-014](REQ-014-download-retry.md) | [DOWNLOAD] Повторные попытки только для transient-ошибок | planned | STEP-014, STEP-017 | — |
+| [REQ-013](REQ-013-download-state-machine.md) | [DOWNLOAD] Формальная state machine задания | partial | STEP-014, STEP-019 | sha256:03a7f4a71571504f74d00a9375f81b405bc7da52ae71e612af78274e59ac6230 |
+| [REQ-014](REQ-014-download-retry.md) | [DOWNLOAD] Повторные попытки только для transient-ошибок | partial | STEP-014, STEP-017 | sha256:03a7f4a71571504f74d00a9375f81b405bc7da52ae71e612af78274e59ac6230 |
 | [REQ-015](REQ-015-download-url-refresh.md) | [DOWNLOAD] Обработка устаревших signed URL | partial | STEP-010, STEP-017 | sha256:d2a69e8167bbb967a40bde6ae54251aaf4188ee99f3fc1b31cbce29522148891 |
 | [REQ-016](REQ-016-download-validation.md) | [DOWNLOAD] Валидация скачанного файла | planned | STEP-020, STEP-023, STEP-025 | — |
 | [REQ-017](REQ-017-queue-concurrency.md) | [QUEUE] Очередь загрузок и concurrency | planned | STEP-017, STEP-019 | — |
