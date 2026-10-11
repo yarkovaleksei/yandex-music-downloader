@@ -261,6 +261,8 @@ export function managerFixture(count = 20, concurrency = 3) {
       }),
     prepareRange: prepareRangeCandidate,
     checkpoint: finalizeWithManifestCheckpoint,
+    // Unit fixture изолирует orchestration; production adapter обязан использовать реальный parser.
+    validator: { validate: async () => ({ durationMs: 1 }) },
     processing: { validate: async () => {}, metadata: async () => {} },
     events: {
       publish: (event) => {

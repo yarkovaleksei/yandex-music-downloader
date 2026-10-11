@@ -26,7 +26,7 @@
 | STEP-020 | ADR: библиотека метаданных и использование FFmpeg | adr | high | completed | STEP-005 | REQ-025, REQ-016 |
 | STEP-021 | Теги, встроенная обложка и cover.jpg | implementation | high | planned | STEP-020, STEP-017 | REQ-025, REQ-026, REQ-036 |
 | STEP-022 | Каталог playlist и .m3u8 | implementation | high | planned | STEP-017, STEP-012 | REQ-028 |
-| STEP-023 | Валидация файлов и опциональный FFmpeg | implementation | high | planned | STEP-020, STEP-015, STEP-017 | REQ-016, REQ-036 |
+| STEP-023 | Валидация файлов и опциональный FFmpeg | implementation | high | completed | STEP-020, STEP-015, STEP-017 | REQ-016, REQ-036 |
 | STEP-024 | Локальный cache метаданных и обложек с TTL | implementation | medium | planned | STEP-009, STEP-018 | REQ-027 |
 | STEP-025 | Doctor и provider health | hardening | high | planned | STEP-019, STEP-009, STEP-023, STEP-006 | REQ-034, REQ-007, REQ-002, REQ-016, REQ-029, REQ-031 |
 | STEP-026 | Интеграционный набор headless-сценариев | hardening | high | planned | STEP-019, STEP-022, STEP-021, STEP-023, STEP-025 | REQ-042, REQ-005, REQ-020 |

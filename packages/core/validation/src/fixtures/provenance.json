@@ -1,0 +1,107 @@
+{
+  "ffmpegVersion": "ffmpeg version 6.1.1-3ubuntu5+esm13 Copyright (c) 2000-2023 the FFmpeg developers",
+  "samples": [
+    {
+      "id": "mp3",
+      "origin": "Локальная синусоида 440 Hz, 2 s, 44100 Hz; полные файлы",
+      "providerTransportEvidence": false,
+      "sha256": "f5483c1347ab0500f36985bf9b9c068332ed5de22f31e17c5337a9cf5b11216a",
+      "bytes": 49755,
+      "generationArgs": [
+        "-v",
+        "error",
+        "-y",
+        "-f",
+        "lavfi",
+        "-i",
+        "sine=frequency=440:sample_rate=44100:duration=2",
+        "-threads",
+        "1",
+        "-c:a",
+        "libmp3lame",
+        "-b:a",
+        "192k",
+        "-f",
+        "mp3"
+      ],
+      "codec": "mp3",
+      "format": "mp3",
+      "durationSeconds": 2.037551
+    },
+    {
+      "id": "aac-mp4",
+      "origin": "Локальная синусоида 440 Hz, 2 s, 44100 Hz; полные файлы",
+      "providerTransportEvidence": false,
+      "sha256": "a2f6034288da4107bd90b5b55c12ae6312d5f1831316c85762ee3fc5b0e8526c",
+      "bytes": 32432,
+      "generationArgs": [
+        "-v",
+        "error",
+        "-y",
+        "-f",
+        "lavfi",
+        "-i",
+        "sine=frequency=440:sample_rate=44100:duration=2",
+        "-threads",
+        "1",
+        "-c:a",
+        "aac",
+        "-b:a",
+        "128k",
+        "-f",
+        "mp4"
+      ],
+      "codec": "aac",
+      "format": "mov,mp4,m4a,3gp,3g2,mj2",
+      "durationSeconds": 2
+    },
+    {
+      "id": "aac-mp4-title-flac",
+      "origin": "Регрессия F-002: копия AAC-MP4 с title=fLaC, codec сохранён",
+      "providerTransportEvidence": false,
+      "sha256": "37271d64cf2c087dbfbe9c511e39b2ddb04e2df93ec0178aa44c4416a8acbe31",
+      "bytes": 32440,
+      "generationArgs": [
+        "-v",
+        "error",
+        "-y",
+        "-i",
+        "sample-aac.m4a",
+        "-c",
+        "copy",
+        "-metadata",
+        "title=fLaC"
+      ],
+      "codec": "aac",
+      "format": "mov,mp4,m4a,3gp,3g2,mj2",
+      "durationSeconds": 2
+    },
+    {
+      "id": "flac-mp4",
+      "origin": "Локальная синусоида 440 Hz, 2 s, 44100 Hz; полные файлы",
+      "providerTransportEvidence": false,
+      "sha256": "8690feaf44ad6b2d6ffc916bbc208b79b6fde487d7251cc13c18852f8056b803",
+      "bytes": 25244,
+      "generationArgs": [
+        "-v",
+        "error",
+        "-y",
+        "-f",
+        "lavfi",
+        "-i",
+        "sine=frequency=440:sample_rate=44100:duration=2",
+        "-threads",
+        "1",
+        "-c:a",
+        "flac",
+        "-strict",
+        "experimental",
+        "-f",
+        "mp4"
+      ],
+      "codec": "flac",
+      "format": "mov,mp4,m4a,3gp,3g2,mj2",
+      "durationSeconds": 2
+    }
+  ]
+}

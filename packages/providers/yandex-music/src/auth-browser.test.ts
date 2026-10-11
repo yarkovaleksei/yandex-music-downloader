@@ -2,6 +2,10 @@ import { describe, expect, it } from 'vitest';
 import { readFile } from 'node:fs/promises';
 import { openPrivateChallenge } from './auth-browser.js';
 
+// Node 22 CI иногда повторно использует закрытый idle socket между запросами.
+// @link https://github.com/nodejs/undici/issues/3141
+const requestOptions = { headers: { connection: 'close' } };
+
 describe('приватная browser-страница', () => {
   it('слушает loopback, не кешируется и не раскрывается по неизвестному пути', async () => {
     let address = '';
@@ -16,14 +20,14 @@ describe('приватная browser-страница', () => {
       },
     );
     try {
-      const page = await fetch(address);
+      const page = await fetch(address, requestOptions);
       expect(page.url.startsWith('http://127.0.0.1:')).toBe(true);
       expect(page.headers.get('cache-control')).toBe('no-store');
       expect(page.headers.get('referrer-policy')).toBe('no-referrer');
       const html = await page.text();
       expect(html).toContain('canary-user-code');
       expect(html).toContain('action="/');
-      const icon = await fetch(`${address}/icon.png`);
+      const icon = await fetch(`${address}/icon.png`, requestOptions);
       expect(icon.headers.get('content-type')).toBe('image/png');
       expect(icon.headers.get('cache-control')).toBe('no-store');
       expect(icon.headers.get('referrer-policy')).toBe('no-referrer');
@@ -35,12 +39,19 @@ describe('приватная browser-страница', () => {
       );
       expect(html).toContain(`href="${new URL(address).pathname}/icon.png"`);
       expect(html).toContain(`src="${new URL(address).pathname}/icon.png"`);
-      const unknown = await fetch(`${address}-unknown`);
+      const unknown = await fetch(`${address}-unknown`, requestOptions);
       expect(unknown.status).toBe(404);
       expect(await unknown.text()).not.toContain('canary-user-code');
-      expect((await fetch(new URL('/icon.png', address))).status).toBe(404);
-      expect((await fetch(`${address}-unknown/icon.png`)).status).toBe(404);
-      const cancelled = await fetch(`${address}/cancel`, { method: 'POST' });
+      expect(
+        (await fetch(new URL('/icon.png', address), requestOptions)).status,
+      ).toBe(404);
+      expect(
+        (await fetch(`${address}-unknown/icon.png`, requestOptions)).status,
+      ).toBe(404);
+      const cancelled = await fetch(`${address}/cancel`, {
+        ...requestOptions,
+        method: 'POST',
+      });
       expect(cancelled.status).toBe(204);
       await expect(challenge.cancel).resolves.toBeUndefined();
     } finally {
@@ -62,8 +73,8 @@ describe('приватная browser-страница', () => {
       },
     );
     try {
-      const first = await (await fetch(address)).text();
-      const reload = await (await fetch(address)).text();
+      const first = await (await fetch(address, requestOptions)).text();
+      const reload = await (await fetch(address, requestOptions)).text();
       expect(first).toBe(reload);
       expect(first).toContain(`data-deadline="${deadline}"`);
       expect(first).toContain('data-duration="60000"');

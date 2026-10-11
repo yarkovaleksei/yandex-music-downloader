@@ -169,6 +169,33 @@ describe('Download Manager', () => {
     expect(fixture.files.get('skip-1.mp3')).toEqual(new Uint8Array([9]));
   });
 
+  it('не делает rename и сохраняет прежний result при final validation failure', async () => {
+    const fixture = managerFixture(1);
+    await fixture.create('validation-final');
+    fixture.files.set('validation-final-1.mp3', new Uint8Array([9]));
+    let calls = 0;
+    fixture.deps.validator = {
+      validate: async () => {
+        calls += 1;
+        if (calls === 1 || calls === 3) throw new ValidationError();
+        return { durationMs: 1 };
+      },
+    };
+    fixture.deps.processing!.metadata = async (part) => {
+      fixture.files.set(part, new Uint8Array([0]));
+    };
+    const result = await createDownloadManager(fixture.deps).run(
+      'validation-final',
+    );
+    expect(result.tracks[0]?.status).toBe('failed');
+    expect(fixture.files.get('validation-final-1.mp3')).toEqual(
+      new Uint8Array([9]),
+    );
+    expect(
+      fixture.events.some((event) => event.event === 'validation.completed'),
+    ).toBe(false);
+  });
+
   it('недопустимый concurrency отвергается', () => {
     const fixture = managerFixture(1);
     const bad = {
@@ -364,6 +391,50 @@ describe('Download Manager', () => {
     expect(pending.tracks[0]?.status).toBe('failed');
     expect(pending.tracks[0]?.error?.code).toBe('PERMISSION_DENIED');
     expect(fixture.opened()).toBe(0);
+  });
+
+  it('F-001: PermissionError после paused resume закрывает lease', async () => {
+    const fixture = managerFixture(1);
+    fixture.slow(30);
+    await fixture.create('resume-permission');
+    const first = createDownloadManager(fixture.deps, pauseOptions);
+    const running = first.run('resume-permission');
+    await expect
+      .poll(() => fixture.opened(), { timeout: 1000, interval: 10 })
+      .toBe(1);
+    await first.command('resume-permission', 'pause');
+    await running;
+    await first.shutdown('resume-permission');
+    expect(await fixture.deps.store.readLeaseState('resume-permission')).toBe(
+      'inactive',
+    );
+
+    fixture.deps.files.inspect = async () => {
+      throw new PermissionError();
+    };
+    const resumed = createDownloadManager(fixture.deps, pauseOptions);
+    await resumed.command('resume-permission', 'resume');
+    await expect
+      .poll(
+        async () =>
+          (await fixture.deps.store.read('resume-permission'))?.control,
+        { timeout: 1000, interval: 10 },
+      )
+      .toMatchObject({ state: 'paused', pauseReason: 'PERMISSION_DENIED' });
+    await expect
+      .poll(
+        async () =>
+          (await fixture.deps.store.read('resume-permission'))?.tracks[0]?.error
+            ?.code,
+        { timeout: 1000, interval: 10 },
+      )
+      .toBe('PERMISSION_DENIED');
+    await expect
+      .poll(() => fixture.deps.store.readLeaseState('resume-permission'), {
+        timeout: 1000,
+        interval: 10,
+      })
+      .toBe('inactive');
   });
 
   it('F-005: invalid existing файл заменяется только после успешной загрузки', async () => {

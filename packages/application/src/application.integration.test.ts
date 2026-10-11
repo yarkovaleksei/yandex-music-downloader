@@ -44,6 +44,11 @@ vi.mock('node:fs/promises', async (importOriginal) => {
 
 const delay = (milliseconds: number) =>
   new Promise<void>((resolve) => setTimeout(resolve, milliseconds));
+const validMp3 = new Uint8Array(
+  await readFile(
+    new URL('../../core/validation/src/fixtures/sample.mp3', import.meta.url),
+  ),
+);
 
 /**
  * Публичный providerOverride сохраняет проверку на границе createApplication:
@@ -98,11 +103,11 @@ function downloads(onOpen?: () => void): MusicProvider {
         stream: new ReadableStream<Uint8Array>({
           async start(controller) {
             await delay(15);
-            controller.enqueue(new Uint8Array([1, 2, 3]));
+            controller.enqueue(validMp3);
             controller.close();
           },
         }),
-        contentLength: 3,
+        contentLength: validMp3.byteLength,
         container: 'mp3',
         acceptsRanges: true,
         startOffset: 0,
@@ -172,11 +177,11 @@ describe('ApplicationApi: интеграция публичного фасада
             stream: new ReadableStream<Uint8Array>({
               start(c) {
                 opened.push(id);
-                c.enqueue(new Uint8Array([Number(id)]));
+                c.enqueue(validMp3);
                 c.close();
               },
             }),
-            contentLength: 1,
+            contentLength: validMp3.byteLength,
             container: 'mp3',
             acceptsRanges: true,
             startOffset: 0,
@@ -264,17 +269,17 @@ describe('ApplicationApi: интеграция публичного фасада
           openAudioStream: async () => ({
             stream: new ReadableStream<Uint8Array>({
               async start(controller) {
-                controller.enqueue(new Uint8Array([1, 2]));
+                controller.enqueue(validMp3.slice(0, 2));
                 started();
                 await thirdChunkGate;
-                controller.enqueue(new Uint8Array([3]));
+                controller.enqueue(validMp3.slice(2, 3));
                 await blockedStream;
               },
               cancel() {
                 releaseStream();
               },
             }),
-            contentLength: 4,
+            contentLength: validMp3.byteLength,
             container: 'mp3',
             acceptsRanges: true,
             startOffset: 0,
@@ -315,7 +320,7 @@ describe('ApplicationApi: интеграция публичного фасада
           },
           { timeout: 5_000, interval: 20 },
         )
-        .toEqual(Buffer.from([1, 2]));
+        .toEqual(Buffer.from(validMp3.slice(0, 2)));
       expect(await observer.readLeaseState(jobId!)).toBe('active');
       secondFacade = createApplication({
         stateDir: path.join(root, 'state'),
@@ -333,7 +338,7 @@ describe('ApplicationApi: интеграция публичного фасада
       releaseThirdChunk();
       await expect
         .poll(() => readFile(partPath), { timeout: 5_000, interval: 20 })
-        .toEqual(Buffer.from([1, 2, 3]));
+        .toEqual(Buffer.from(validMp3.slice(0, 3)));
       await expect(secondFacade.pause(jobId!)).resolves.toMatchObject({
         kind: 'result',
         data: { status: 'paused' },
@@ -348,13 +353,18 @@ describe('ApplicationApi: интеграция публичного фасада
       const paused = await observer.read(jobId!);
       expect(paused?.tracks[0]?.partPath).toBeDefined();
       expect(await readFile(paused!.tracks[0]!.partPath!)).toEqual(
-        Buffer.from([1, 2, 3]),
+        Buffer.from(validMp3.slice(0, 3)),
       );
       await expect(first.getJob(jobId!)).resolves.toMatchObject({
         kind: 'result',
         data: { status: 'paused' },
       });
       expect(await observer.readLeaseState(jobId!)).toBe('inactive');
+      // F-003: внешний повреждённый result появился до resumed finalization.
+      await writeFile(paused!.tracks[0]!.resultPath!, 'not audio');
+      await expect(readFile(paused!.tracks[0]!.resultPath!)).resolves.toEqual(
+        Buffer.from('not audio'),
+      );
 
       resumed = createApplication({
         stateDir: path.join(root, 'state'),
@@ -363,13 +373,11 @@ describe('ApplicationApi: интеграция публичного фасада
           openAudioStream: async (_id, _variant, options) => ({
             stream: new ReadableStream<Uint8Array>({
               start(controller) {
-                controller.enqueue(
-                  new Uint8Array([1, 2, 3, 4]).slice(options.offset ?? 0),
-                );
+                controller.enqueue(validMp3.slice(options.offset ?? 0));
                 controller.close();
               },
             }),
-            contentLength: 4,
+            contentLength: validMp3.byteLength,
             container: 'mp3',
             acceptsRanges: true,
             startOffset: options.offset ?? 0,
@@ -383,6 +391,9 @@ describe('ApplicationApi: интеграция публичного фасада
       await expect
         .poll(() => resumed!.getJob(jobId!), { timeout: 5_000, interval: 20 })
         .toMatchObject({ kind: 'result', data: { status: 'completed' } });
+      await expect(
+        readFile(paused!.tracks[0]!.resultPath!),
+      ).resolves.not.toEqual(Buffer.from('not audio'));
     } finally {
       releaseThirdChunk?.();
       releaseStream?.();
@@ -496,6 +507,103 @@ describe('ApplicationApi: интеграция публичного фасада
       await rm(root, { recursive: true, force: true });
     }
   }, 20_000);
+
+  it('не запускает metadata и не создаёт result, когда initial baseline отвергает реальные bytes', async () => {
+    const root = await mkdtemp(
+      path.join(os.tmpdir(), 'application-validation-initial-'),
+    );
+    let api: ReturnType<typeof createApplication> | undefined;
+    const metadata = vi.fn();
+    try {
+      api = createApplication({
+        stateDir: path.join(root, 'state'),
+        providerOverride: {
+          ...downloads(),
+          openAudioStream: async () => ({
+            stream: new ReadableStream<Uint8Array>({
+              start(controller) {
+                controller.enqueue(new Uint8Array([0, 1, 2]));
+                controller.close();
+              },
+            }),
+            contentLength: 3,
+            container: 'mp3',
+            acceptsRanges: true,
+            startOffset: 0,
+          }),
+        },
+        processing: { metadata },
+      });
+      await expect(
+        api.createDownload({
+          source: { provider: 'mock', kind: 'track', id: 'initial-invalid' },
+          quality: 'best',
+          destination: path.join(root, 'music'),
+        }),
+      ).resolves.toMatchObject({
+        kind: 'result',
+        data: { status: 'failed', tracks: [{ status: 'failed' }] },
+      });
+      expect(metadata).not.toHaveBeenCalled();
+      expect(
+        (await readdir(root, { recursive: true })).filter((name) =>
+          name.endsWith('.mp3'),
+        ),
+      ).toEqual([]);
+    } finally {
+      await api?.shutdown();
+      await rm(root, { recursive: true, force: true });
+    }
+  }, 15_000);
+
+  it('сохраняет старый result, когда metadata портит part после initial baseline', async () => {
+    const root = await mkdtemp(
+      path.join(os.tmpdir(), 'application-validation-final-'),
+    );
+    const stateDir = path.join(root, 'state');
+    const request = {
+      source: { provider: 'mock', kind: 'track' as const, id: 'final-invalid' },
+      quality: 'best' as const,
+      destination: path.join(root, 'music'),
+    };
+    let seed: ReturnType<typeof createApplication> | undefined;
+    let api: ReturnType<typeof createApplication> | undefined;
+    try {
+      seed = createApplication({ stateDir, providerOverride: downloads() });
+      const completed = await seed.createDownload(request);
+      expect(completed).toMatchObject({
+        kind: 'result',
+        data: { status: 'completed' },
+      });
+      if (completed.kind !== 'result') throw new Error('Ожидался result.');
+      const resultPath = completed.data.tracks[0]?.resultPath;
+      if (resultPath === undefined) throw new Error('Отсутствует resultPath.');
+      const oldResult = await readFile(resultPath);
+      await seed.shutdown();
+      seed = undefined;
+
+      api = createApplication({
+        stateDir,
+        providerOverride: downloads(),
+        processing: {
+          // @link ../../../../planning/reviews/STEP-023/REVIEW-20261011T141250Z.md F-005
+          // Повреждение после initial baseline обязано остановить final validate до rename.
+          metadata: async (partPath) => writeFile(partPath, 'not audio'),
+        },
+      });
+      await expect(
+        api.createDownload({ ...request, overwrite: true }),
+      ).resolves.toMatchObject({
+        kind: 'result',
+        data: { status: 'failed', tracks: [{ status: 'failed' }] },
+      });
+      await expect(readFile(resultPath)).resolves.toEqual(oldResult);
+    } finally {
+      await seed?.shutdown();
+      await api?.shutdown();
+      await rm(root, { recursive: true, force: true });
+    }
+  }, 15_000);
 
   it('восстанавливает processing checkpoint только при точном final-файле', async () => {
     const root = await mkdtemp(
@@ -823,11 +931,11 @@ describe('ApplicationApi: интеграция публичного фасада
           openAudioStream: async () => ({
             stream: new ReadableStream<Uint8Array>({
               start(controller) {
-                controller.enqueue(new Uint8Array([4, 4, 0]));
+                controller.enqueue(validMp3);
                 controller.close();
               },
             }),
-            contentLength: 3,
+            contentLength: validMp3.byteLength,
             container: 'mp3',
             acceptsRanges: true,
             startOffset: 0,
@@ -848,7 +956,7 @@ describe('ApplicationApi: интеграция публичного фасада
         throw new Error('Ожидался результат загрузки.');
       const resultPath = result.data.tracks[0]?.resultPath;
       expect(resultPath).toBeTypeOf('string');
-      expect(await readFile(resultPath!)).toEqual(Buffer.from([4, 4, 0]));
+      expect(await readFile(resultPath!)).toEqual(Buffer.from(validMp3));
       const jobId = result.data.jobId;
       await expect(api.shutdown()).resolves.toMatchObject({ kind: 'result' });
       api = undefined;

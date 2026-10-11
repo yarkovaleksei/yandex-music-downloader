@@ -10,6 +10,7 @@ import type {
   MusicProvider,
   QualityPreference,
 } from '@music-downloader/shared';
+import type { AudioValidator } from '@music-downloader/core-validation';
 
 /** Очередь создаётся composition root и общая для всех job данного manager. */
 export interface SchedulerPort {
@@ -131,6 +132,8 @@ export interface DownloadManagerDependencies {
       rename(): Promise<void>;
     },
   ) => Promise<void>;
+  /** Baseline всегда проверяет локальный файл, hooks расширяют его, но не заменяют. */
+  readonly validator?: AudioValidator;
   readonly processing?: ProcessingHooks;
   readonly events?: EventPublisher;
   readonly now?: () => number;

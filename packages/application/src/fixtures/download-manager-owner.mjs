@@ -19,6 +19,14 @@ import {
 import { FileManifestStore } from '@music-downloader/persistence';
 
 const { stateDir, jobId, DOWNLOADER_TEST_MODE: mode } = process.env;
+const validMp3 = new Uint8Array(
+  await readFile(
+    new URL(
+      '../../../core/validation/src/fixtures/sample.mp3',
+      import.meta.url,
+    ),
+  ),
+);
 // F-001: безопасный cache содержит только готовые image bytes и MIME, без provider refs/URL.
 const cachePath = (job, key) =>
   path.join(stateDir, 'artwork', `${job}-${key}.json`);
@@ -134,7 +142,7 @@ const provider = {
       trackKey: id,
       offset: options.offset ?? 0,
     });
-    const total = id === '1' && mode !== 'single' ? 4096 : 262144;
+    const total = validMp3.byteLength;
     let cursor = options.offset ?? 0;
     let cancelled = false;
     return {
@@ -156,7 +164,7 @@ const provider = {
           }
           const size = Math.min(1024, total - cursor);
           cursor += size;
-          controller.enqueue(new Uint8Array(size).fill(Number(id)));
+          controller.enqueue(validMp3.slice(cursor - size, cursor));
         },
         cancel() {
           cancelled = true;

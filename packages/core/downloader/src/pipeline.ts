@@ -2,6 +2,7 @@ import {
   DomainError,
   DownloadError,
   TrackUnavailableError,
+  ValidationError,
   safeDomainError,
   type ArtworkData,
   type AudioStream,
@@ -9,6 +10,7 @@ import {
   type ManifestTrack,
   type QualityPreference,
 } from '@music-downloader/shared';
+import { createAudioValidator } from '@music-downloader/core-validation';
 import type {
   DownloadManagerDependencies,
   DownloadManagerOptions,
@@ -111,7 +113,7 @@ export class TrackPipeline {
           artwork,
         });
         // F-004: inspection относится к resolving; его ошибки имеют разрешённый fatal transition.
-        existing = await this.deps.files.inspect(paths.resultPath);
+        await this.deps.files.inspect(paths.resultPath);
         await owner.transition(key, 'variant_selected', {
           variant: selected.variant,
           variantKey: selected.variant.key,
@@ -128,8 +130,29 @@ export class TrackPipeline {
         track.resultPath === undefined
       )
         throw new DownloadError();
+      const inspectExistingAudio = async (): Promise<
+        'absent' | 'valid' | 'invalid'
+      > => {
+        const state = await this.deps.files.inspect(track.resultPath!);
+        if (state !== 'valid' || this.options.overwrite === true) return state;
+        const planned = owner.current.plan.tracks.find(
+          (item) => item.trackKey === key,
+        )!;
+        try {
+          await (this.deps.validator ?? createAudioValidator()).validate({
+            path: track.resultPath!,
+            variant,
+            expectedDurationMs: planned.track.durationMs,
+          });
+          return 'valid';
+        } catch (error) {
+          // @link ../../../../planning/reviews/STEP-023/REVIEW-20261011T141250Z.md F-003
+          if (error instanceof ValidationError) return 'invalid';
+          throw error;
+        }
+      };
       if (track.status === 'ready') {
-        existing ??= await this.deps.files.inspect(track.resultPath);
+        existing ??= await inspectExistingAudio();
         if (existing === 'valid' && this.options.overwrite !== true) {
           await owner.transition(key, 'skip_existing');
           await this.complete(context, key, 0);
@@ -138,12 +161,14 @@ export class TrackPipeline {
         if (existing === 'invalid') onExisting = 'replace';
         await owner.transition(key, 'start_download');
       } else if (track.status === 'paused') {
+        // @link ../../../../planning/reviews/STEP-023/REVIEW-20261011T143332Z.md F-001
+        // PermissionError допустимо обрабатывается только после paused→downloading.
         await owner.transition(key, 'resume');
       }
       if (context.control() !== 'running') return undefined;
       track = this.track(owner, key);
       if (existing === undefined) {
-        existing = await this.deps.files.inspect(track.resultPath!);
+        existing = await inspectExistingAudio();
         if (existing === 'invalid') onExisting = 'replace';
       }
       const cached = await this.deps.artworkCache.read(
@@ -153,13 +178,13 @@ export class TrackPipeline {
       if (cached === undefined) throw new DownloadError();
       artwork = cached.artwork;
       await context.emit('download.started', key);
-      const total = await this.download(context, track, variant, signal);
+      const downloaded = await this.download(context, track, variant, signal);
       if (context.control() !== 'running')
         throw new DOMException('Операция остановлена.', 'AbortError');
       await owner.transition(key, 'stream_complete', {
         partial: {
-          bytes: total,
-          expectedSize: total,
+          bytes: downloaded.bytes,
+          expectedSize: downloaded.expectedSize,
           variantKey: variant.key,
           tagged: false,
         },
@@ -171,6 +196,20 @@ export class TrackPipeline {
         await owner.exclusive(() =>
           this.deps.checkpoint(owner.session, key, {
             mutateAndValidate: async () => {
+              const planned = owner.current.plan.tracks.find(
+                (item) => item.trackKey === key,
+              )!;
+              const validator = this.deps.validator ?? createAudioValidator();
+              const initial = await validator.validate({
+                path: track.partPath!,
+                variant,
+                expectedDurationMs: planned.track.durationMs,
+                stream: {
+                  completed: true,
+                  bytes: downloaded.bytes,
+                  expectedSize: downloaded.expectedSize,
+                },
+              });
               await this.deps.processing?.validate?.(
                 track.partPath!,
                 variant,
@@ -190,8 +229,16 @@ export class TrackPipeline {
                   variant,
                   'final',
                 );
-                await context.emit('validation.completed', key);
               }
+              const final = await validator.validate({
+                path: track.partPath!,
+                variant,
+                expectedDurationMs: planned.track.durationMs,
+              });
+              // @link ../../../../docs/requirements/REQ-036-diag-observability.md
+              await context.emit('validation.completed', key, {
+                durationMs: final.durationMs || initial.durationMs,
+              });
             },
             size: async () => {
               const size = await this.deps.files.stat(track.partPath!);
@@ -201,6 +248,12 @@ export class TrackPipeline {
             rename: async () => {
               if (context.control() === 'cancelled')
                 throw new DOMException('Операция отменена.', 'AbortError');
+              // Late finalization rechecks the replace target after pause/resume or external mutation.
+              if (
+                onExisting === 'skip' &&
+                (await inspectExistingAudio()) === 'invalid'
+              )
+                onExisting = 'replace';
               const result = await this.deps.files.finalize(
                 track.partPath!,
                 track.resultPath!,
@@ -216,7 +269,7 @@ export class TrackPipeline {
         if (!(error instanceof SkippedFinalization)) throw error;
         await owner.transition(key, 'skip_existing', { partial: undefined });
       }
-      await this.complete(context, key, total);
+      await this.complete(context, key, downloaded.bytes);
       return undefined;
     } catch (error) {
       const track = this.track(owner, key);
@@ -285,7 +338,7 @@ export class TrackPipeline {
     track: ManifestTrack,
     variant: AudioVariant,
     signal: AbortSignal,
-  ): Promise<number> {
+  ): Promise<{ bytes: number; expectedSize?: number }> {
     const files = this.deps.files;
     const path = track.partPath!;
     const partial = track.partial;
@@ -307,7 +360,7 @@ export class TrackPipeline {
         { signal, offset: start },
       );
     let response = await open(offset);
-    const expected = response.contentLength;
+    let expected = response.contentLength;
     await context.owner.mutate((manifest) => ({
       ...manifest,
       tracks: manifest.tracks.map((item) =>
@@ -373,7 +426,7 @@ export class TrackPipeline {
     };
     try {
       if (offset > 0 && expected !== undefined) {
-        await this.deps.prepareRange(
+        const range = await this.deps.prepareRange(
           {
             stat: files.stat.bind(files),
             read: files.read.bind(files),
@@ -384,6 +437,7 @@ export class TrackPipeline {
             reopenAtZero: async () => {
               await response.stream.cancel().catch(() => undefined);
               response = await open(0);
+              expected = response.contentLength;
               return responseOf(response);
             },
           },
@@ -392,10 +446,13 @@ export class TrackPipeline {
           variant.key,
           responseOf(response),
         );
+        // Range определяет total prefix+suffix; stream_complete не заменяет его partial bytes.
+        expected = range.expectedSize;
       } else {
         if (response.startOffset !== 0) {
           await response.stream.cancel().catch(() => undefined);
           response = await open(0);
+          expected = response.contentLength;
         }
         await write(response.stream, path, response.contentLength);
       }
@@ -408,7 +465,7 @@ export class TrackPipeline {
         await files.promote(candidate, path);
       throw error;
     }
-    return (await files.stat(path)) ?? 0;
+    return { bytes: (await files.stat(path)) ?? 0, expectedSize: expected };
   }
 
   private async persistPartial(
