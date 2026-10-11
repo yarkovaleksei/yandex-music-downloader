@@ -30,6 +30,7 @@ export function managerFixture(count = 20, concurrency = 3) {
   let fail: (() => unknown) | undefined;
   let delay = 1;
   const releases: string[] = [];
+  const owners = new Set<string>();
   const at = new Date().toISOString();
   function manifest(jobId: string): JobManifestV1 {
     const source = {
@@ -74,12 +75,20 @@ export function managerFixture(count = 20, concurrency = 3) {
   }
   const store: ManifestStore = {
     read: async (id) => manifests.get(id),
+    // Fixture наблюдает существующий acquire/release без изменения production core (STEP-043).
+    readLeaseState: async (id) => (owners.has(id) ? 'active' : 'inactive'),
+    // Fixture соблюдает порядок публичной истории, не меняя production core (STEP-042).
+    list: async () =>
+      [...manifests.values()].sort((a, b) =>
+        a.jobId < b.jobId ? -1 : a.jobId > b.jobId ? 1 : 0,
+      ),
     create: async (value) => {
       manifests.set(value.jobId, value);
     },
     acquire: async (id, options) => {
       let current = await options.recover(manifests.get(id)!);
       manifests.set(id, current);
+      owners.add(id);
       const session: LeaseSession = {
         jobId: id,
         identity: { pid: 1, hostname: 'mock', processStartedAt: at },
@@ -95,6 +104,7 @@ export function managerFixture(count = 20, concurrency = 3) {
         acknowledge: async () => {},
         runOwned: (operation) => operation(),
         release: async () => {
+          owners.delete(id);
           releases.push(id);
         },
       };

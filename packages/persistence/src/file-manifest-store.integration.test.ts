@@ -5,8 +5,15 @@ import { once } from 'node:events';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { beforeAll, describe, expect, it } from 'vitest';
+import { beforeAll, describe, expect, it, vi } from 'vitest';
+import {
+  decodeManifest,
+  encodeManifest,
+  type JobManifestV1,
+  type LeaseSession,
+} from '@music-downloader/shared';
 import { FileManifestStore } from './file-manifest-store.js';
+import * as atomicJson from './atomic-json.js';
 
 const fixturePath = fileURLToPath(
   new URL('./fixtures/manifest-owner.mjs', import.meta.url),
@@ -117,6 +124,214 @@ async function stopChild(
 }
 
 describe('FileManifestStore child-process lease', () => {
+  it('STEP-043 H-002: наблюдает живой/завершившийся процесс при неизменном pending manifest', async () => {
+    const stateDir = await mkdtemp(
+      path.join(os.tmpdir(), 'lease-observer-child-'),
+    );
+    const jobId = 'observed-job';
+    let owner: Awaited<ReturnType<typeof child>> | undefined;
+    try {
+      const store = new FileManifestStore({ stateDir });
+      await store.create({
+        ...manifest(jobId),
+        control: { state: 'running' },
+        tracks: [{ ...manifest(jobId).tracks[0]!, status: 'downloading' }],
+      });
+      owner = await child(stateDir, jobId, 'hold');
+      expect(owner.message.status).toBe('acquired');
+      const directory = jobDirectory(stateDir, jobId);
+      const snapshot = await readFile(
+        path.join(directory, 'manifest.json'),
+        'utf8',
+      );
+      const leasePath = path.join(directory, 'lease.json');
+      const lease = JSON.parse(await readFile(leasePath, 'utf8')) as Record<
+        string,
+        unknown
+      >;
+      const observer = new FileManifestStore({ stateDir });
+      expect(await observer.readLeaseState(jobId)).toBe('active');
+      // Timeout сам по себе не делает живую аренду inactive (ADR-004).
+      await writeFile(
+        leasePath,
+        JSON.stringify({ ...lease, heartbeatAt: '2000-01-01T00:00:00.000Z' }),
+      );
+      expect(await observer.readLeaseState(jobId)).toBe('active');
+      owner.processChild.kill('SIGKILL');
+      await owner.exited;
+      // Сохраняем настоящий PID/birth умершего владельца, обновляя только freshness fixture.
+      await writeFile(
+        leasePath,
+        JSON.stringify({ ...lease, heartbeatAt: new Date().toISOString() }),
+      );
+      expect(await observer.readLeaseState(jobId)).toBe('active');
+      await writeFile(
+        leasePath,
+        JSON.stringify({ ...lease, heartbeatAt: '2000-01-01T00:00:00.000Z' }),
+      );
+      const restarted = new FileManifestStore({ stateDir });
+      expect(await restarted.readLeaseState(jobId)).toBe('inactive');
+      expect(
+        await readFile(path.join(directory, 'manifest.json'), 'utf8'),
+      ).toBe(snapshot);
+      const pending = decodeManifest(snapshot);
+      expect(pending.control.state).toBe('running');
+      expect(pending.tracks[0]?.status).toBe('downloading');
+      // Определённые active/inactive дают true/false агрегатору; его suite проверяет running/interrupted.
+      expect((await restarted.readLeaseState(jobId)) === 'active').toBe(false);
+    } finally {
+      if (owner !== undefined)
+        await stopChild(owner.processChild, owner.exited);
+      await rm(stateDir, { recursive: true, force: true });
+    }
+  }, 30_000);
+
+  it('STEP-043: heartbeat/release публикуют целые lease snapshots при наблюдении', async () => {
+    const stateDir = await mkdtemp(
+      path.join(os.tmpdir(), 'lease-observer-atomic-'),
+    );
+    const jobId = 'atomic-lease';
+    let owner: LeaseSession | undefined;
+    let unblock: (() => void) | undefined;
+    let pending: Promise<void> | undefined;
+    const write = atomicJson.writeAtomicJson;
+    vi.useFakeTimers({ toFake: ['setInterval', 'clearInterval'] });
+    try {
+      const store = new FileManifestStore({ stateDir });
+      const observer = new FileManifestStore({ stateDir });
+      await store.create(manifest(jobId));
+      owner = await store.acquire(jobId, { recover: async (item) => item });
+      const target = path.join(jobDirectory(stateDir, jobId), 'lease.json');
+      const snapshot = await readFile(
+        path.join(jobDirectory(stateDir, jobId), 'manifest.json'),
+        'utf8',
+      );
+      for (const operation of ['heartbeat', 'release'] as const) {
+        let reached!: () => void;
+        const barrier = new Promise<void>((resolve) => {
+          reached = resolve;
+        });
+        const resume = new Promise<void>((resolve) => {
+          unblock = resolve;
+        });
+        const writer = vi
+          .spyOn(atomicJson, 'writeAtomicJson')
+          .mockImplementation(async (destination, bytes) => {
+            if (destination === target) {
+              reached();
+              await resume;
+            }
+            await write(destination, bytes);
+          });
+        pending = owner[operation]();
+        await barrier;
+        const before = await readFile(target, 'utf8');
+        expect(await observer.readLeaseState(jobId)).toBe('active');
+        expect(await readFile(target, 'utf8')).toBe(before);
+        unblock?.();
+        await pending;
+        pending = undefined;
+        writer.mockRestore();
+        expect(await observer.readLeaseState(jobId)).toBe(
+          operation === 'release' ? 'inactive' : 'active',
+        );
+        expect(
+          await readFile(
+            path.join(jobDirectory(stateDir, jobId), 'manifest.json'),
+            'utf8',
+          ),
+        ).toBe(snapshot);
+      }
+    } finally {
+      unblock?.();
+      await pending;
+      vi.restoreAllMocks();
+      await owner?.release();
+      vi.useRealTimers();
+      await rm(stateDir, { recursive: true, force: true });
+    }
+  });
+
+  it('H-002: list одновременно с owner save видит только целый старый или новый snapshot', async () => {
+    const stateDir = await mkdtemp(
+      path.join(os.tmpdir(), 'manifest-list-atomic-'),
+    );
+    const jobId = 'atomic-job';
+    let owner: LeaseSession | undefined;
+    let continueSave: (() => void) | undefined;
+    let pendingSave: Promise<void> | undefined;
+    const writeAtomicJson = atomicJson.writeAtomicJson;
+    try {
+      const store = new FileManifestStore({ stateDir });
+      const reader = new FileManifestStore({ stateDir });
+      await store.create(manifest(jobId));
+      owner = await store.acquire(jobId, { recover: async (item) => item });
+      let previous = (await store.read(jobId))!;
+      for (let revision = 1; revision <= 6; revision += 1) {
+        const at = `2026-01-0${revision + 1}T00:00:00.000Z`;
+        const status = revision % 2 === 0 ? 'paused' : 'downloading';
+        const next: JobManifestV1 = {
+          ...previous,
+          updatedAt: at,
+          control: { state: revision % 2 === 0 ? 'paused' : 'running' },
+          tracks: [
+            {
+              ...previous.tracks[0]!,
+              status,
+              attempts: revision,
+              updatedAt: at,
+              history: [{ at, status }],
+            },
+          ],
+        };
+        let started!: () => void;
+        const writing = new Promise<void>((resolve) => {
+          started = resolve;
+        });
+        const barrier = new Promise<void>((resolve) => {
+          continueSave = resolve;
+        });
+        // Barrier удерживает принятый save до публикации; sleep и угадывание времени не нужны.
+        const write = vi
+          .spyOn(atomicJson, 'writeAtomicJson')
+          .mockImplementation(async (target, bytes) => {
+            if (
+              target ===
+              path.join(jobDirectory(stateDir, jobId), 'manifest.json')
+            ) {
+              started();
+              await barrier;
+            }
+            await writeAtomicJson(target, bytes);
+          });
+        try {
+          pendingSave = owner.save(next);
+          await writing;
+          expect(await reader.list()).toEqual([previous]);
+          continueSave!();
+          const [, during] = await Promise.all([pendingSave, reader.list()]);
+          pendingSave = undefined;
+          const canonicalNext = decodeManifest(encodeManifest(next));
+          expect([
+            JSON.stringify([previous]),
+            JSON.stringify([canonicalNext]),
+          ]).toContain(JSON.stringify(during));
+          expect(await reader.list()).toEqual([canonicalNext]);
+          previous = canonicalNext;
+        } finally {
+          continueSave?.();
+          await pendingSave;
+          write.mockRestore();
+        }
+      }
+    } finally {
+      continueSave?.();
+      vi.restoreAllMocks();
+      await owner?.release();
+      await rm(stateDir, { recursive: true, force: true });
+    }
+  });
+
   it('отклоняет второго живого owner и выбирает ровно одного stale contender', async () => {
     const stateDir = await mkdtemp(path.join(os.tmpdir(), 'manifest-child-'));
     const jobId = 'child-job';
@@ -211,6 +426,9 @@ describe('FileManifestStore child-process lease', () => {
           heartbeatAt: '2000-01-01T00:00:00.000Z',
         }),
       );
+      expect(
+        await new FileManifestStore({ stateDir }).readLeaseState(jobId),
+      ).toBe('inactive');
       contender = await child(stateDir, jobId, 'once');
       expect(contender.message.status).toBe('acquired');
       await contender.exited;

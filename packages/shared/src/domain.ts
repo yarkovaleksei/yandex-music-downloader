@@ -105,6 +105,8 @@ export interface DownloadRequest {
   readonly source: MediaReference;
   readonly quality: QualityPreference;
   readonly destination: string;
+  /** Явно заменяет существующий файл; по умолчанию core сохраняет skip policy. */
+  readonly overwrite?: boolean;
 }
 
 /** Перечисление данных состояния; переходы принадлежат будущему core. */

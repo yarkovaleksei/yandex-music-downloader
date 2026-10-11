@@ -1,2 +1,5 @@
-/** Будущий composition root; concrete adapters не подключаются в STEP-001. */
+/** Публичный Node composition root; переносимые DTO доступны через `./contracts`. */
 export const applicationPackage = '@music-downloader/application';
+export { createApplication } from './composition-root.js';
+export type { RuntimeAdapters } from './runtime-adapters.js';
+export type { ApplicationApi } from '@music-downloader/shared';

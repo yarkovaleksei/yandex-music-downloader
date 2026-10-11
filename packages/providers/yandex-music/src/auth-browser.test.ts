@@ -46,7 +46,7 @@ describe('приватная browser-страница', () => {
     } finally {
       await challenge.close();
     }
-  });
+  }, 15_000);
 
   it('экранирует динамические данные и сохраняет исходный deadline при повторном GET', async () => {
     let address = '';

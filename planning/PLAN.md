@@ -21,7 +21,7 @@
 | STEP-015 | Запись .part и атомарная финализация | implementation | critical | completed | STEP-012, STEP-003, STEP-002 | REQ-012, REQ-024 |
 | STEP-016 | Manifest store и восстановление | implementation | critical | completed | STEP-014, STEP-013, STEP-015, STEP-005 | REQ-020, REQ-021, REQ-032, REQ-011 |
 | STEP-017 | Download Manager: очередь, concurrency и управление | implementation | critical | completed | STEP-016, STEP-010, STEP-004, STEP-014, STEP-013, STEP-015 | REQ-017, REQ-018, REQ-019, REQ-015, REQ-036, REQ-020, REQ-024, REQ-026, REQ-014, REQ-003 |
-| STEP-018 | Application layer API и composition root | implementation | high | planned | STEP-017, STEP-009 | REQ-002, REQ-044, REQ-032 |
+| STEP-018 | Application layer API и composition root | implementation | high | completed | STEP-017, STEP-009, STEP-042, STEP-043 | REQ-002, REQ-044, REQ-032 |
 | STEP-019 | CLI: команды, опции и режим --json | implementation | critical | planned | STEP-018, STEP-004 | REQ-029, REQ-030, REQ-031, REQ-013, REQ-001, REQ-002, REQ-003, REQ-009, REQ-017, REQ-037 |
 | STEP-020 | ADR: библиотека метаданных и использование FFmpeg | adr | high | planned | STEP-005 | REQ-025, REQ-016 |
 | STEP-021 | Теги, встроенная обложка и cover.jpg | implementation | high | planned | STEP-020, STEP-017 | REQ-025, REQ-026, REQ-036 |
@@ -45,3 +45,6 @@
 | STEP-039 | Shared metadata: жанр, доступность и контрактные тесты | implementation | critical | completed | STEP-003, STEP-038 | REQ-006 |
 | STEP-040 | Синхронизировать описание реализованной foundation и provider | documentation | medium | planned | STEP-004, STEP-007, STEP-008, STEP-009, STEP-010, STEP-011, STEP-039 | — |
 | STEP-041 | Оформить приватную страницу авторизации по макету | implementation | medium | completed | STEP-008 | REQ-001, REQ-002, REQ-056 |
+| STEP-042 | Перечисление сохранённых заданий через ManifestStore | implementation | high | completed | STEP-016 | REQ-032, REQ-044 |
+| STEP-043 | Чтение состояния аренды через ManifestStore | implementation | high | completed | STEP-016, STEP-042 | REQ-020, REQ-032, REQ-044 |
+| STEP-044 | Временные Windows-блокировки записи состояния и CI | bugfix | high | completed | STEP-016, STEP-018, STEP-002 | REQ-032, REQ-044, REQ-041, REQ-042 |
