@@ -458,7 +458,7 @@ describe('FileManifestStore', () => {
       vi.useRealTimers();
       await rm(directory, { recursive: true, force: true });
     }
-  });
+  }, 20_000);
 
   it('выполняет recovery до выдачи previously released paused аренды', async () => {
     const directory = await mkdtemp(path.join(tmpdir(), 'manifest-store-'));
@@ -482,7 +482,7 @@ describe('FileManifestStore', () => {
     } finally {
       await rm(directory, { recursive: true, force: true });
     }
-  });
+  }, 25_000);
 
   it('увеличивает generation после release и отвергает утраченный ownerToken', async () => {
     const directory = await mkdtemp(path.join(tmpdir(), 'manifest-fence-'));

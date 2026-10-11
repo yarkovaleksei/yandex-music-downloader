@@ -47,3 +47,4 @@
 | STEP-041 | Оформить приватную страницу авторизации по макету | implementation | medium | completed | STEP-008 | REQ-001, REQ-002, REQ-056 |
 | STEP-042 | Перечисление сохранённых заданий через ManifestStore | implementation | high | completed | STEP-016 | REQ-032, REQ-044 |
 | STEP-043 | Чтение состояния аренды через ManifestStore | implementation | high | completed | STEP-016, STEP-042 | REQ-020, REQ-032, REQ-044 |
+| STEP-044 | Временные Windows-блокировки записи состояния и CI | bugfix | high | completed | STEP-016, STEP-018, STEP-002 | REQ-032, REQ-044, REQ-041, REQ-042 |

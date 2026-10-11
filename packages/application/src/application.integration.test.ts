@@ -1,12 +1,46 @@
 import { mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises';
+import type * as FsPromises from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import * as retryCore from '@music-downloader/core-retry';
 import type { DecideRetryInput } from '@music-downloader/core-retry';
 import { describe, expect, it, vi } from 'vitest';
-import { FileManifestStore } from '@music-downloader/persistence';
-import type { JobManifestV1, MusicProvider } from '@music-downloader/shared';
+import {
+  currentLeaseIdentity,
+  FileManifestStore,
+} from '@music-downloader/persistence';
+import type {
+  AcquireOptions,
+  JobManifestV1,
+  ManifestStore,
+  MusicProvider,
+} from '@music-downloader/shared';
 import { createApplication } from './index.js';
+
+const renameFixture = vi.hoisted(() => ({
+  armed: false,
+  injected: 0,
+}));
+
+vi.mock('node:fs/promises', async (importOriginal) => {
+  const actual = await importOriginal<typeof FsPromises>();
+  return {
+    ...actual,
+    async rename(temporary: string, target: string) {
+      if (
+        renameFixture.armed &&
+        renameFixture.injected === 0 &&
+        target.endsWith('manifest.json')
+      ) {
+        renameFixture.injected += 1;
+        throw Object.assign(new Error('Временная блокировка rename в тесте'), {
+          code: 'EPERM',
+        });
+      }
+      return actual.rename(temporary, target);
+    },
+  };
+});
 
 const delay = (milliseconds: number) =>
   new Promise<void>((resolve) => setTimeout(resolve, milliseconds));
@@ -740,6 +774,92 @@ describe('ApplicationApi: интеграция публичного фасада
     } finally {
       await api?.shutdown();
       await other?.shutdown();
+      await rm(root, { recursive: true, force: true });
+    }
+  }, 15_000);
+
+  it('STEP-044: завершает загрузку после одного Windows EPERM публикации manifest', async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), 'application-rename-'));
+    const stateDir = path.join(root, 'state');
+    let api: ReturnType<typeof createApplication> | undefined;
+    let restorePlatform: PropertyDescriptor | undefined;
+    renameFixture.armed = false;
+    renameFixture.injected = 0;
+    try {
+      // Native binding и host identity получены до win32 fixture; acquire остаётся настоящим.
+      const identity = await currentLeaseIdentity();
+      const store = new FileManifestStore({ stateDir });
+      const manifestStore: ManifestStore = {
+        read: store.read.bind(store),
+        readLeaseState: store.readLeaseState.bind(store),
+        list: store.list.bind(store),
+        create: store.create.bind(store),
+        acquire: (jobId: string, options: AcquireOptions) =>
+          store.acquire(jobId, { ...options, identity }),
+        sendControl: store.sendControl.bind(store),
+        waitControlAck: store.waitControlAck.bind(store),
+      };
+      restorePlatform = Object.getOwnPropertyDescriptor(process, 'platform');
+      Object.defineProperty(process, 'platform', {
+        value: 'win32',
+        configurable: true,
+      });
+      api = createApplication({
+        stateDir,
+        manifestStore,
+        providerOverride: {
+          ...downloads(),
+          getAudioVariants: async () => {
+            renameFixture.armed = true;
+            return [
+              {
+                key: 'mp3',
+                codec: 'mp3',
+                container: 'mp3',
+                lossless: false,
+              },
+            ];
+          },
+          openAudioStream: async () => ({
+            stream: new ReadableStream<Uint8Array>({
+              start(controller) {
+                controller.enqueue(new Uint8Array([4, 4, 0]));
+                controller.close();
+              },
+            }),
+            contentLength: 3,
+            container: 'mp3',
+            acceptsRanges: true,
+            startOffset: 0,
+          }),
+        },
+      });
+      const result = await api.createDownload({
+        source: { provider: 'mock', kind: 'track', id: 'rename' },
+        quality: 'best',
+        destination: path.join(root, 'music'),
+      });
+      expect(renameFixture.injected).toBe(1);
+      expect(result).toMatchObject({
+        kind: 'result',
+        data: { status: 'completed', tracks: [{ status: 'completed' }] },
+      });
+      if (result.kind !== 'result')
+        throw new Error('Ожидался результат загрузки.');
+      const resultPath = result.data.tracks[0]?.resultPath;
+      expect(resultPath).toBeTypeOf('string');
+      expect(await readFile(resultPath!)).toEqual(Buffer.from([4, 4, 0]));
+      const jobId = result.data.jobId;
+      await expect(api.shutdown()).resolves.toMatchObject({ kind: 'result' });
+      api = undefined;
+      expect(
+        await new FileManifestStore({ stateDir }).readLeaseState(jobId),
+      ).toBe('inactive');
+    } finally {
+      renameFixture.armed = false;
+      if (restorePlatform !== undefined)
+        Object.defineProperty(process, 'platform', restorePlatform);
+      await api?.shutdown();
       await rm(root, { recursive: true, force: true });
     }
   }, 15_000);
