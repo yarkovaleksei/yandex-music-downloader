@@ -1,0 +1,49 @@
+{
+  "status": "PASS",
+  "checks": [
+    "Countdown отражает абсолютный deadline: 04:32",
+    "Progress соответствует оставшемуся времени и исходной duration",
+    "Duration принадлежит исходному challenge",
+    "PNG сохраняет пропорции",
+    "Favicon из compiled provider доступен локально",
+    "1448 × 1086: нет горизонтальной прокрутки",
+    "Tab: доступна кнопка копирования",
+    "Клавиатурный focus видим",
+    "Clipboard содержит актуальный synthetic user code",
+    "Tab: доступен внешний переход",
+    "Tab: доступна отмена",
+    "Отказ clipboard отображает понятное сообщение",
+    "Код можно выделить вручную после отказа clipboard",
+    "Reload не продлевает deadline",
+    "Countdown продолжает прежний срок после reload",
+    "Внешний HTTPS переход соответствует challenge и не передаёт Referer",
+    "640 × 900: одна колонка, нет горизонтального overflow и обрезанных действий",
+    "Страница и assets не запрашивают внешние ресурсы",
+    "Browser JavaScript без ошибок",
+    "POST cancel отражает отмену",
+    "После deadline: 00:00, текст об истечении, действия кода недоступны; OAuth success не объявляется",
+    "При закрытом helper POST отображает прерванную связь, предлагает проверить приложение и не объявляет успех/подтверждённую отмену"
+  ],
+  "mobile": {
+    "width": 640,
+    "viewport": 640,
+    "cardBottom": 969,
+    "instructionsTop": 1001,
+    "actionsInside": true,
+    "columns": "592px"
+  },
+  "image": {
+    "width": 1254,
+    "height": 1254,
+    "renderedWidth": 64,
+    "renderedHeight": 64
+  },
+  "favicon": {
+    "status": 200,
+    "type": "image/png",
+    "bytes": 1348273
+  },
+  "pageErrors": 0,
+  "method": "Playwright CLI, Chrome; synthetic challenge; compiled provider скопирован в /tmp, cwd=/tmp. Clock зафиксирован для screenshots и сдвинут на 10 s/за deadline для timer checks; проверка hard timeout остаётся в auth lifecycle tests.",
+  "limitations": "Визуальный probe не выполняет live OAuth. Clipboard denial смоделирован NotAllowedError; реальный clipboard success выполнен. HTTPS переход перехвачен на уровне browser context для проверки URL/Referer без передачи кода внешнему сайту. При разрыве связи ожидается console network error, но не JavaScript exception/успех."
+}
