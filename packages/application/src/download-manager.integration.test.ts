@@ -267,9 +267,7 @@ describe('Download Manager: реальные файлы и два процесс
           .filter((message) => message.event === 'processing-artwork')
           .map((message) => message.bytes),
       ).toEqual([[1]]);
-      expect((await readFile(path.join(stateDir, '2.mp3'))).length).toBe(
-        262144,
-      );
+      expect((await readFile(path.join(stateDir, '2.mp3'))).length).toBe(49755);
     } finally {
       await stopOwner(owner.child, owner.exited);
       if (resumed !== undefined) await stopOwner(resumed.child, resumed.exited);

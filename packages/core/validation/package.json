@@ -10,6 +10,7 @@
     }
   },
   "dependencies": {
-    "@music-downloader/shared": "workspace:*"
+    "@music-downloader/shared": "workspace:*",
+    "music-metadata": "12.1.0"
   }
 }

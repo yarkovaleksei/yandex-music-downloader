@@ -1,0 +1,30 @@
+import { readFile } from 'node:fs/promises';
+import { describe, expect, it, vi } from 'vitest';
+
+vi.mock('node:child_process', () => ({
+  // @link ../../../../planning/reviews/STEP-023/REVIEW-20261011T141250Z.md F-005
+  // Базовый parser не имеет права запускать subprocess до opt-in FFmpeg проверки.
+  execFile: () => {
+    throw new Error('subprocess запрещён в baseline test');
+  },
+}));
+
+import { validateLocalAudio } from './index.js';
+
+describe('baseline validateLocalAudio без subprocess', () => {
+  it('принимает настоящий MP3 при запрещённом child_process', async () => {
+    const fixture = new URL('./fixtures/sample.mp3', import.meta.url);
+    expect((await readFile(fixture)).byteLength).toBeGreaterThan(0);
+    await expect(
+      validateLocalAudio({
+        path: fixture.pathname,
+        variant: {
+          key: 'mp3',
+          container: 'mp3',
+          codec: 'mp3',
+          lossless: false,
+        },
+      }),
+    ).resolves.toMatchObject({ durationMs: expect.any(Number) });
+  });
+});

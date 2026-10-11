@@ -1,4 +1,4 @@
-import { mkdtemp, rm } from 'node:fs/promises';
+import { mkdtemp, readFile, rm } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
@@ -9,6 +9,12 @@ import type {
 } from '@music-downloader/shared';
 import { createArtworkCache } from './adapters/artwork-cache.js';
 import { createApplication } from './index.js';
+
+const validMp3 = new Uint8Array(
+  await readFile(
+    new URL('../../core/validation/src/fixtures/sample.mp3', import.meta.url),
+  ),
+);
 
 function provider(): MusicProvider {
   return {
@@ -388,11 +394,11 @@ describe('публичный ApplicationApi', () => {
       openAudioStream: async () => ({
         stream: new ReadableStream<Uint8Array>({
           start(controller) {
-            controller.enqueue(new Uint8Array([10, 20, 30]));
+            controller.enqueue(validMp3);
             controller.close();
           },
         }),
-        contentLength: 3,
+        contentLength: validMp3.byteLength,
         container: 'mp3',
         acceptsRanges: true,
         startOffset: 0,
