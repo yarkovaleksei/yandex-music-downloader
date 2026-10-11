@@ -1,7 +1,9 @@
 import { mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
-import { describe, expect, it } from 'vitest';
+import * as retryCore from '@music-downloader/core-retry';
+import type { DecideRetryInput } from '@music-downloader/core-retry';
+import { describe, expect, it, vi } from 'vitest';
 import { FileManifestStore } from '@music-downloader/persistence';
 import type { JobManifestV1, MusicProvider } from '@music-downloader/shared';
 import { createApplication } from './index.js';
@@ -82,8 +84,9 @@ function downloads(onOpen?: () => void): MusicProvider {
 describe('ApplicationApi: интеграция публичного фасада', () => {
   it('загружает track, album и playlist в реальную файловую систему', async () => {
     const root = await mkdtemp(path.join(os.tmpdir(), 'application-facade-'));
+    let api: ReturnType<typeof createApplication> | undefined;
     try {
-      const api = createApplication({
+      api = createApplication({
         stateDir: path.join(root, 'state'),
         providerOverride: downloads(),
       });
@@ -102,6 +105,7 @@ describe('ApplicationApi: интеграция публичного фасада
         ).toEqual(expect.arrayContaining([expect.stringMatching(/\.mp3$/)]));
       }
     } finally {
+      await api?.shutdown();
       await rm(root, { recursive: true, force: true });
     }
   }, 15_000);
@@ -111,8 +115,9 @@ describe('ApplicationApi: интеграция публичного фасада
       path.join(os.tmpdir(), 'application-collision-'),
     );
     const opened: string[] = [];
+    let api: ReturnType<typeof createApplication> | undefined;
     try {
-      const api = createApplication({
+      api = createApplication({
         stateDir: path.join(root, 'state'),
         providerOverride: {
           ...downloads(),
@@ -160,6 +165,7 @@ describe('ApplicationApi: интеграция публичного фасада
       // Параллельные потоки могут открываться в любом порядке; каждый трек должен открыться ровно один раз.
       expect([...opened].sort()).toEqual(['1', '2']);
     } finally {
+      await api?.shutdown();
       await rm(root, { recursive: true, force: true });
     }
   });
@@ -168,8 +174,9 @@ describe('ApplicationApi: интеграция публичного фасада
     const root = await mkdtemp(
       path.join(os.tmpdir(), 'application-long-name-'),
     );
+    let api: ReturnType<typeof createApplication> | undefined;
     try {
-      const api = createApplication({
+      api = createApplication({
         stateDir: path.join(root, 'state'),
         providerOverride: {
           ...downloads(),
@@ -192,6 +199,7 @@ describe('ApplicationApi: интеграция публичного фасада
         data: { status: 'completed' },
       });
     } finally {
+      await api?.shutdown();
       await rm(root, { recursive: true, force: true });
     }
   });
@@ -199,16 +207,23 @@ describe('ApplicationApi: интеграция публичного фасада
   it('pause сохраняет part, а новый фасад продолжает job через реальный второй store', async () => {
     const root = await mkdtemp(path.join(os.tmpdir(), 'application-resume-'));
     let jobId: string | undefined;
+    let first: ReturnType<typeof createApplication> | undefined;
+    let secondFacade: ReturnType<typeof createApplication> | undefined;
+    let resumed: ReturnType<typeof createApplication> | undefined;
     let started!: () => void;
+    let releaseThirdChunk!: () => void;
     let releaseStream!: () => void;
     const startedStream = new Promise<void>((resolve) => {
       started = resolve;
+    });
+    const thirdChunkGate = new Promise<void>((resolve) => {
+      releaseThirdChunk = resolve;
     });
     const blockedStream = new Promise<void>((resolve) => {
       releaseStream = resolve;
     });
     try {
-      const first = createApplication({
+      first = createApplication({
         stateDir: path.join(root, 'state'),
         providerOverride: {
           ...downloads(),
@@ -217,7 +232,7 @@ describe('ApplicationApi: интеграция публичного фасада
               async start(controller) {
                 controller.enqueue(new Uint8Array([1, 2]));
                 started();
-                await delay(30);
+                await thirdChunkGate;
                 controller.enqueue(new Uint8Array([3]));
                 await blockedStream;
               },
@@ -245,22 +260,30 @@ describe('ApplicationApi: интеграция публичного фасада
       const observer = new FileManifestStore({
         stateDir: path.join(root, 'state'),
       });
-      let partPath: string | undefined;
-      for (let attempts = 0; attempts < 30; attempts += 1) {
-        partPath = (await observer.read(jobId!))?.tracks[0]?.partPath;
-        if (partPath !== undefined) {
-          try {
-            if ((await readFile(partPath)).length > 0) break;
-          } catch {
-            // Writer ещё не создал файл; pause проверяем только после checkpoint.
-          }
-        }
-        await delay(20);
-      }
-      expect(partPath).toBeDefined();
-      expect(await readFile(partPath!)).toEqual(Buffer.from([1, 2]));
+      await expect
+        .poll(async () => (await observer.read(jobId!))?.tracks[0]?.partPath, {
+          timeout: 5_000,
+          interval: 20,
+        })
+        .toBeTypeOf('string');
+      const partPath = (await observer.read(jobId!))!.tracks[0]!.partPath!;
+      // ENOENT допустим только до первого checkpoint; остальные ошибки чтения остаются видимыми.
+      await expect
+        .poll(
+          async () => {
+            try {
+              return await readFile(partPath);
+            } catch (error: unknown) {
+              if ((error as NodeJS.ErrnoException).code === 'ENOENT')
+                return undefined;
+              throw error;
+            }
+          },
+          { timeout: 5_000, interval: 20 },
+        )
+        .toEqual(Buffer.from([1, 2]));
       expect(await observer.readLeaseState(jobId!)).toBe('active');
-      const secondFacade = createApplication({
+      secondFacade = createApplication({
         stateDir: path.join(root, 'state'),
         providerOverride: downloads(),
       });
@@ -272,9 +295,11 @@ describe('ApplicationApi: интеграция публичного фасада
         kind: 'result',
         data: [{ jobId, status: 'running' }],
       });
-      // Owner продолжает checkpoint после read-only наблюдения другого facade.
-      await delay(50);
-      expect(await readFile(partPath!)).toEqual(Buffer.from([1, 2, 3]));
+      // Третий chunk разрешён только после read-only наблюдения другого facade.
+      releaseThirdChunk();
+      await expect
+        .poll(() => readFile(partPath), { timeout: 5_000, interval: 20 })
+        .toEqual(Buffer.from([1, 2, 3]));
       await expect(secondFacade.pause(jobId!)).resolves.toMatchObject({
         kind: 'result',
         data: { status: 'paused' },
@@ -297,7 +322,7 @@ describe('ApplicationApi: интеграция публичного фасада
       });
       expect(await observer.readLeaseState(jobId!)).toBe('inactive');
 
-      const resumed = createApplication({
+      resumed = createApplication({
         stateDir: path.join(root, 'state'),
         providerOverride: {
           ...downloads(),
@@ -321,20 +346,15 @@ describe('ApplicationApi: интеграция публичного фасада
         kind: 'result',
         data: { status: 'running' },
       });
-      for (let attempts = 0; attempts < 30; attempts += 1) {
-        const value = await resumed.getJob(jobId!);
-        if (value.kind === 'result' && value.data?.status === 'completed')
-          break;
-        await delay(20);
-      }
-      await expect(resumed.getJob(jobId!)).resolves.toMatchObject({
-        kind: 'result',
-        data: { status: 'completed' },
-      });
-      await first.shutdown();
-      await resumed.shutdown();
-      await secondFacade.shutdown();
+      await expect
+        .poll(() => resumed!.getJob(jobId!), { timeout: 5_000, interval: 20 })
+        .toMatchObject({ kind: 'result', data: { status: 'completed' } });
     } finally {
+      releaseThirdChunk?.();
+      releaseStream?.();
+      await first?.shutdown();
+      await resumed?.shutdown();
+      await secondFacade?.shutdown();
       await rm(root, { recursive: true, force: true });
     }
   }, 15_000);
@@ -343,8 +363,9 @@ describe('ApplicationApi: интеграция публичного фасада
     const root = await mkdtemp(
       path.join(os.tmpdir(), 'application-overwrite-'),
     );
+    let api: ReturnType<typeof createApplication> | undefined;
     try {
-      const api = createApplication({
+      api = createApplication({
         stateDir: path.join(root, 'state'),
         providerOverride: downloads(),
       });
@@ -367,8 +388,8 @@ describe('ApplicationApi: интеграция публичного фасада
         kind: 'result',
         data: { status: 'completed', tracks: [{ status: 'completed' }] },
       });
-      await api.shutdown();
     } finally {
+      await api?.shutdown();
       await rm(root, { recursive: true, force: true });
     }
   }, 15_000);
@@ -377,23 +398,46 @@ describe('ApplicationApi: интеграция публичного фасада
     const root = await mkdtemp(
       path.join(os.tmpdir(), 'application-truncated-'),
     );
+    let api: ReturnType<typeof createApplication> | undefined;
+    let streamOpens = 0;
+    // Проверяем EOF и все пять отказов, не длительность случайного backoff.
+    // Ускоряем только ожидания: классификация ошибок и файловая запись остаются настоящими.
+    const decideRetry = retryCore.decideRetry;
+    const retry = vi
+      .spyOn(retryCore, 'decideRetry')
+      .mockImplementation((input: DecideRetryInput) =>
+        decideRetry({
+          ...input,
+          config: {
+            ...input.config,
+            baseDelayMs: 1,
+            factor: 2,
+            maxDelayMs: 16,
+            maxAttempts: 5,
+          },
+          random: () => 0,
+        }),
+      );
     try {
-      const api = createApplication({
+      api = createApplication({
         stateDir: path.join(root, 'state'),
         providerOverride: {
           ...downloads(),
-          openAudioStream: async () => ({
-            stream: new ReadableStream<Uint8Array>({
-              start(controller) {
-                controller.enqueue(new Uint8Array([1, 2]));
-                controller.close();
-              },
-            }),
-            contentLength: 4,
-            container: 'mp3',
-            acceptsRanges: true,
-            startOffset: 0,
-          }),
+          openAudioStream: async () => {
+            streamOpens += 1;
+            return {
+              stream: new ReadableStream<Uint8Array>({
+                start(controller) {
+                  controller.enqueue(new Uint8Array([1, 2]));
+                  controller.close();
+                },
+              }),
+              contentLength: 4,
+              container: 'mp3',
+              acceptsRanges: true,
+              startOffset: 0,
+            };
+          },
         },
       });
       await expect(
@@ -406,8 +450,15 @@ describe('ApplicationApi: интеграция публичного фасада
         kind: 'result',
         data: { status: 'failed', tracks: [{ status: 'failed' }] },
       });
-      await api.shutdown();
+      expect(streamOpens).toBe(5);
+      expect(
+        (await readdir(root, { recursive: true })).filter((name) =>
+          name.endsWith('.mp3'),
+        ),
+      ).toEqual([]);
     } finally {
+      retry.mockRestore();
+      await api?.shutdown();
       await rm(root, { recursive: true, force: true });
     }
   }, 20_000);
@@ -418,6 +469,7 @@ describe('ApplicationApi: интеграция публичного фасада
     );
     const stateDir = path.join(root, 'state');
     const store = new FileManifestStore({ stateDir });
+    const facades: ReturnType<typeof createApplication>[] = [];
     const source = {
       provider: 'mock',
       kind: 'track' as const,
@@ -481,6 +533,7 @@ describe('ApplicationApi: интеграция публичного фасада
         stateDir,
         providerOverride: downloads(),
       });
+      facades.push(api);
       await expect(api.resume('valid')).resolves.toMatchObject({
         kind: 'result',
         data: { status: 'completed' },
@@ -502,14 +555,14 @@ describe('ApplicationApi: интеграция публичного фасада
             getAudioVariants: async () => [],
           },
         });
+        facades.push(negative);
         await expect(negative.resume(jobId)).resolves.toMatchObject({
           kind: 'result',
           data: { status: 'queued', tracks: [{ status: 'queued' }] },
         });
-        await negative.shutdown();
       }
-      await api.shutdown();
     } finally {
+      await Promise.all(facades.map((facade) => facade.shutdown()));
       await rm(root, { recursive: true, force: true });
     }
   }, 15_000);
@@ -521,9 +574,12 @@ describe('ApplicationApi: интеграция публичного фасада
       quality: 'best' as const,
       destination: path.join(root, id),
     });
+    let retryApi: ReturnType<typeof createApplication> | undefined;
+    let cancelApi: ReturnType<typeof createApplication> | undefined;
+    let authApi: ReturnType<typeof createApplication> | undefined;
     try {
       let retryMode: 'fail' | 'ready' = 'fail';
-      const retryApi = createApplication({
+      retryApi = createApplication({
         stateDir: path.join(root, 'retry-state'),
         providerOverride: {
           ...downloads(),
@@ -544,16 +600,12 @@ describe('ApplicationApi: интеграция публичного фасада
         kind: 'result',
         data: { status: 'queued' },
       });
-      for (let attempts = 0; attempts < 30; attempts += 1) {
-        const value = await retryApi.getJob(failedId);
-        if (value.kind === 'result' && value.data?.status === 'completed')
-          break;
-        await delay(20);
-      }
-      await expect(retryApi.getJob(failedId)).resolves.toMatchObject({
-        kind: 'result',
-        data: { status: 'completed' },
-      });
+      await expect
+        .poll(() => retryApi!.getJob(failedId), {
+          timeout: 5_000,
+          interval: 20,
+        })
+        .toMatchObject({ kind: 'result', data: { status: 'completed' } });
 
       let cancelId = '';
       // job.created предшествует захвату аренды: cancel проверяется на уже открытом потоке.
@@ -561,7 +613,7 @@ describe('ApplicationApi: интеграция публичного фасада
       const opened = new Promise<void>((resolve) => {
         streamReady = resolve;
       });
-      const cancelApi = createApplication({
+      cancelApi = createApplication({
         stateDir: path.join(root, 'cancel-state'),
         providerOverride: {
           ...downloads(),
@@ -594,7 +646,7 @@ describe('ApplicationApi: интеграция публичного фасада
       });
 
       let authenticated = false;
-      const authApi = createApplication({
+      authApi = createApplication({
         stateDir: path.join(root, 'auth-state'),
         providerOverride: {
           ...downloads(),
@@ -617,22 +669,15 @@ describe('ApplicationApi: интеграция публичного фасада
         kind: 'result',
         data: { status: 'queued' },
       });
-      for (let attempts = 0; attempts < 30; attempts += 1) {
-        const value = await authApi.getJob(authId);
-        if (value.kind === 'result' && value.data?.status === 'completed')
-          break;
-        await delay(20);
-      }
-      await expect(authApi.getJob(authId)).resolves.toMatchObject({
-        kind: 'result',
-        data: { status: 'completed' },
-      });
-      await Promise.all([
-        retryApi.shutdown(),
-        cancelApi.shutdown(),
-        authApi.shutdown(),
-      ]);
+      await expect
+        .poll(() => authApi!.getJob(authId), { timeout: 5_000, interval: 20 })
+        .toMatchObject({ kind: 'result', data: { status: 'completed' } });
     } finally {
+      await Promise.all([
+        retryApi?.shutdown(),
+        cancelApi?.shutdown(),
+        authApi?.shutdown(),
+      ]);
       await rm(root, { recursive: true, force: true });
     }
   }, 20_000);
@@ -642,8 +687,10 @@ describe('ApplicationApi: интеграция публичного фасада
       path.join(os.tmpdir(), 'application-scheduler-'),
     );
     let opened = 0;
+    let api: ReturnType<typeof createApplication> | undefined;
+    let other: ReturnType<typeof createApplication> | undefined;
     try {
-      const api = createApplication({
+      api = createApplication({
         stateDir: path.join(root, 'state'),
         providerOverride: downloads(() => {
           opened += 1;
@@ -679,7 +726,7 @@ describe('ApplicationApi: интеграция публичного фасада
         expect(values).toEqual([...values].sort((left, right) => left - right));
       expect([...received.values()].flat()).not.toContain(0);
       const isolated: number[] = [];
-      const other = createApplication({
+      other = createApplication({
         stateDir: path.join(root, 'other'),
         providerOverride: downloads(),
       });
@@ -690,9 +737,9 @@ describe('ApplicationApi: интеграция публичного фасада
         destination: path.join(root, 'other-music'),
       });
       expect(isolated[0]).toBe(1);
-      await api.shutdown();
-      await other.shutdown();
     } finally {
+      await api?.shutdown();
+      await other?.shutdown();
       await rm(root, { recursive: true, force: true });
     }
   }, 15_000);

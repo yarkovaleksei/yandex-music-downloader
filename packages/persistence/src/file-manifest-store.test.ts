@@ -406,9 +406,18 @@ describe('FileManifestStore', () => {
           await readdir(directory, { recursive: true })
         ).sort()) {
           const target = path.join(directory, name);
-          result[name] = (await stat(target)).isDirectory()
+          const metadata = await stat(target);
+          // Windows удерживает mutex.lock kernel-lock'ом: наблюдаем его метаданные,
+          // сохраняя проверку имени, размера, времени изменения и inode без read EBUSY.
+          result[name] = metadata.isDirectory()
             ? 'directory'
-            : (await readFile(target)).toString('hex');
+            : name.endsWith('mutex.lock')
+              ? JSON.stringify({
+                  size: metadata.size,
+                  mtimeMs: metadata.mtimeMs,
+                  ino: metadata.ino,
+                })
+              : (await readFile(target)).toString('hex');
         }
         return result;
       };
