@@ -6,7 +6,8 @@ source: brief
 steps:
   - STEP-020
   - STEP-021
-adrs: []
+adrs:
+  - ADR-012
 ---
 
 # REQ-025 — [METADATA] Запись тегов в аудиофайлы

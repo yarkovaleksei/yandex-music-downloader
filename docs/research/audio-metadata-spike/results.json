@@ -1,0 +1,381 @@
+{
+  "schemaVersion": 1,
+  "environment": {
+    "node": "v24.21.0",
+    "platform": "linux",
+    "arch": "x64"
+  },
+  "dependencies": {
+    "taglib-wasm": {
+      "version": "1.5.3",
+      "license": "MIT",
+      "engines": {
+        "node": ">=22.6.0"
+      }
+    },
+    "node-id3": {
+      "version": "0.2.9",
+      "license": "MIT",
+      "engines": null
+    },
+    "music-metadata": {
+      "version": "12.1.0",
+      "license": "MIT",
+      "engines": {
+        "node": ">=22"
+      }
+    }
+  },
+  "installedDependencyBytes": 4460631,
+  "provenance": {
+    "ffmpegVersion": "ffmpeg version 6.1.1-3ubuntu5+esm13 Copyright (c) 2000-2023 the FFmpeg developers",
+    "samples": [
+      {
+        "id": "mp3",
+        "origin": "Локальная синусоида 440 Hz, 2 s, 44100 Hz; полные файлы",
+        "providerTransportEvidence": false,
+        "sha256": "f5483c1347ab0500f36985bf9b9c068332ed5de22f31e17c5337a9cf5b11216a",
+        "bytes": 49755,
+        "generationArgs": [
+          "-v",
+          "error",
+          "-y",
+          "-f",
+          "lavfi",
+          "-i",
+          "sine=frequency=440:sample_rate=44100:duration=2",
+          "-threads",
+          "1",
+          "-c:a",
+          "libmp3lame",
+          "-b:a",
+          "192k",
+          "-f",
+          "mp3"
+        ],
+        "codec": "mp3",
+        "format": "mp3",
+        "durationSeconds": 2.037551
+      },
+      {
+        "id": "aac-mp4",
+        "origin": "Локальная синусоида 440 Hz, 2 s, 44100 Hz; полные файлы",
+        "providerTransportEvidence": false,
+        "sha256": "a2f6034288da4107bd90b5b55c12ae6312d5f1831316c85762ee3fc5b0e8526c",
+        "bytes": 32432,
+        "generationArgs": [
+          "-v",
+          "error",
+          "-y",
+          "-f",
+          "lavfi",
+          "-i",
+          "sine=frequency=440:sample_rate=44100:duration=2",
+          "-threads",
+          "1",
+          "-c:a",
+          "aac",
+          "-b:a",
+          "128k",
+          "-f",
+          "mp4"
+        ],
+        "codec": "aac",
+        "format": "mov,mp4,m4a,3gp,3g2,mj2",
+        "durationSeconds": 2
+      },
+      {
+        "id": "flac-mp4",
+        "origin": "Локальная синусоида 440 Hz, 2 s, 44100 Hz; полные файлы",
+        "providerTransportEvidence": false,
+        "sha256": "8690feaf44ad6b2d6ffc916bbc208b79b6fde487d7251cc13c18852f8056b803",
+        "bytes": 25244,
+        "generationArgs": [
+          "-v",
+          "error",
+          "-y",
+          "-f",
+          "lavfi",
+          "-i",
+          "sine=frequency=440:sample_rate=44100:duration=2",
+          "-threads",
+          "1",
+          "-c:a",
+          "flac",
+          "-strict",
+          "experimental",
+          "-f",
+          "mp4"
+        ],
+        "codec": "flac",
+        "format": "mov,mp4,m4a,3gp,3g2,mj2",
+        "durationSeconds": 2
+      }
+    ]
+  },
+  "rows": [
+    {
+      "candidate": "taglib-wasm",
+      "sample": "mp3",
+      "optionalGenre": "present",
+      "status": "PASS",
+      "tags": {
+        "title": "Песня — Ёж и море",
+        "artist": "Первый артист; Второй артист",
+        "album": "Исходный альбом",
+        "albumArtist": "Автор альбома",
+        "track": 3,
+        "disc": 2,
+        "year": 2024,
+        "genre": [
+          "Электроника"
+        ]
+      },
+      "artworkSha256": "d06b40259ba6bcfc5a85e6de0e1a8a142dcf461f26c99c3e19912ef7876265b4",
+      "audioSha256": "e60b4edbf72ddc1265bb65355104b42c04bcb099d5f8120d36d87938185d3cf8",
+      "container": "MPEG",
+      "codec": "MPEG 1 Layer 3",
+      "durationSeconds": 2.0375510204081633,
+      "bytesBefore": 49755,
+      "bytesAfter": 51096
+    },
+    {
+      "candidate": "taglib-wasm",
+      "sample": "mp3",
+      "optionalGenre": "absent",
+      "status": "PASS",
+      "tags": {
+        "title": "Песня — Ёж и море",
+        "artist": "Первый артист; Второй артист",
+        "album": "Исходный альбом",
+        "albumArtist": "Автор альбома",
+        "track": 3,
+        "disc": 2,
+        "year": 2024,
+        "genre": []
+      },
+      "artworkSha256": "d06b40259ba6bcfc5a85e6de0e1a8a142dcf461f26c99c3e19912ef7876265b4",
+      "audioSha256": "e60b4edbf72ddc1265bb65355104b42c04bcb099d5f8120d36d87938185d3cf8",
+      "container": "MPEG",
+      "codec": "MPEG 1 Layer 3",
+      "durationSeconds": 2.0375510204081633,
+      "bytesBefore": 49755,
+      "bytesAfter": 51063
+    },
+    {
+      "candidate": "taglib-wasm",
+      "sample": "aac-mp4",
+      "optionalGenre": "present",
+      "status": "PASS",
+      "tags": {
+        "title": "Песня — Ёж и море",
+        "artist": "Первый артист; Второй артист",
+        "album": "Исходный альбом",
+        "albumArtist": "Автор альбома",
+        "track": 3,
+        "disc": 2,
+        "year": 2024,
+        "genre": [
+          "Электроника"
+        ]
+      },
+      "artworkSha256": "d06b40259ba6bcfc5a85e6de0e1a8a142dcf461f26c99c3e19912ef7876265b4",
+      "audioSha256": "ce1049dbaecfb497670abd316b3ea53a00205ba17abfe5eb383fac4688f41cdc",
+      "container": "isom/iso2/mp41",
+      "codec": "MPEG-4/AAC",
+      "durationSeconds": 2.023219954648526,
+      "bytesBefore": 32432,
+      "bytesAfter": 33223
+    },
+    {
+      "candidate": "taglib-wasm",
+      "sample": "aac-mp4",
+      "optionalGenre": "absent",
+      "status": "PASS",
+      "tags": {
+        "title": "Песня — Ёж и море",
+        "artist": "Первый артист; Второй артист",
+        "album": "Исходный альбом",
+        "albumArtist": "Автор альбома",
+        "track": 3,
+        "disc": 2,
+        "year": 2024,
+        "genre": []
+      },
+      "artworkSha256": "d06b40259ba6bcfc5a85e6de0e1a8a142dcf461f26c99c3e19912ef7876265b4",
+      "audioSha256": "ce1049dbaecfb497670abd316b3ea53a00205ba17abfe5eb383fac4688f41cdc",
+      "container": "isom/iso2/mp41",
+      "codec": "MPEG-4/AAC",
+      "durationSeconds": 2.023219954648526,
+      "bytesBefore": 32432,
+      "bytesAfter": 33223
+    },
+    {
+      "candidate": "taglib-wasm",
+      "sample": "flac-mp4",
+      "optionalGenre": "present",
+      "status": "PASS",
+      "tags": {
+        "title": "Песня — Ёж и море",
+        "artist": "Первый артист; Второй артист",
+        "album": "Исходный альбом",
+        "albumArtist": "Автор альбома",
+        "track": 3,
+        "disc": 2,
+        "year": 2024,
+        "genre": [
+          "Электроника"
+        ]
+      },
+      "artworkSha256": "d06b40259ba6bcfc5a85e6de0e1a8a142dcf461f26c99c3e19912ef7876265b4",
+      "audioSha256": "dee33be29ea9df847148eb38b9b835bb214ee711aca64ebb75f7f78f97fececd",
+      "container": "isom/iso2/mp41",
+      "durationSeconds": 2,
+      "bytesBefore": 25244,
+      "bytesAfter": 26035
+    },
+    {
+      "candidate": "taglib-wasm",
+      "sample": "flac-mp4",
+      "optionalGenre": "absent",
+      "status": "PASS",
+      "tags": {
+        "title": "Песня — Ёж и море",
+        "artist": "Первый артист; Второй артист",
+        "album": "Исходный альбом",
+        "albumArtist": "Автор альбома",
+        "track": 3,
+        "disc": 2,
+        "year": 2024,
+        "genre": []
+      },
+      "artworkSha256": "d06b40259ba6bcfc5a85e6de0e1a8a142dcf461f26c99c3e19912ef7876265b4",
+      "audioSha256": "dee33be29ea9df847148eb38b9b835bb214ee711aca64ebb75f7f78f97fececd",
+      "container": "isom/iso2/mp41",
+      "durationSeconds": 2,
+      "bytesBefore": 25244,
+      "bytesAfter": 26035
+    },
+    {
+      "candidate": "node-id3",
+      "sample": "mp3",
+      "optionalGenre": "present",
+      "status": "PASS",
+      "tags": {
+        "title": "Песня — Ёж и море",
+        "artist": "Первый артист; Второй артист",
+        "album": "Исходный альбом",
+        "albumArtist": "Автор альбома",
+        "track": 3,
+        "disc": 2,
+        "year": 2024,
+        "genre": [
+          "Электроника"
+        ]
+      },
+      "artworkSha256": "d06b40259ba6bcfc5a85e6de0e1a8a142dcf461f26c99c3e19912ef7876265b4",
+      "audioSha256": "e60b4edbf72ddc1265bb65355104b42c04bcb099d5f8120d36d87938185d3cf8",
+      "container": "MPEG",
+      "codec": "MPEG 1 Layer 3",
+      "durationSeconds": 2.0375510204081633,
+      "bytesBefore": 49755,
+      "bytesAfter": 49978
+    },
+    {
+      "candidate": "node-id3",
+      "sample": "mp3",
+      "optionalGenre": "absent",
+      "status": "PASS",
+      "tags": {
+        "title": "Песня — Ёж и море",
+        "artist": "Первый артист; Второй артист",
+        "album": "Исходный альбом",
+        "albumArtist": "Автор альбома",
+        "track": 3,
+        "disc": 2,
+        "year": 2024,
+        "genre": []
+      },
+      "artworkSha256": "d06b40259ba6bcfc5a85e6de0e1a8a142dcf461f26c99c3e19912ef7876265b4",
+      "audioSha256": "e60b4edbf72ddc1265bb65355104b42c04bcb099d5f8120d36d87938185d3cf8",
+      "container": "MPEG",
+      "codec": "MPEG 1 Layer 3",
+      "durationSeconds": 2.0375510204081633,
+      "bytesBefore": 49755,
+      "bytesAfter": 49943
+    },
+    {
+      "candidate": "node-id3",
+      "sample": "aac-mp4",
+      "status": "UNSUPPORTED",
+      "reason": "Нет MP4 writer"
+    },
+    {
+      "candidate": "node-id3",
+      "sample": "flac-mp4",
+      "status": "UNSUPPORTED",
+      "reason": "Нет MP4 writer"
+    }
+  ],
+  "taglibVersion": "1.5.3 (TagLib 2.3.1)",
+  "noExternalProcesses": true,
+  "explicitContainerMismatchRejected": true,
+  "decoding": [
+    {
+      "candidate": "taglib-wasm",
+      "sample": "mp3",
+      "optionalGenre": "present",
+      "status": "PASS",
+      "decodedPcmSha256": "761a6b435bbc06e5c0650f589c46447a587668923c83f37a2b26a94bc6f3e668"
+    },
+    {
+      "candidate": "taglib-wasm",
+      "sample": "mp3",
+      "optionalGenre": "absent",
+      "status": "PASS",
+      "decodedPcmSha256": "761a6b435bbc06e5c0650f589c46447a587668923c83f37a2b26a94bc6f3e668"
+    },
+    {
+      "candidate": "taglib-wasm",
+      "sample": "aac-mp4",
+      "optionalGenre": "present",
+      "status": "PASS",
+      "decodedPcmSha256": "25315685cb224547a72ce2b48a963091b2403afbf263b0e5910473f8b4e4f064"
+    },
+    {
+      "candidate": "taglib-wasm",
+      "sample": "aac-mp4",
+      "optionalGenre": "absent",
+      "status": "PASS",
+      "decodedPcmSha256": "25315685cb224547a72ce2b48a963091b2403afbf263b0e5910473f8b4e4f064"
+    },
+    {
+      "candidate": "taglib-wasm",
+      "sample": "flac-mp4",
+      "optionalGenre": "present",
+      "status": "PASS",
+      "decodedPcmSha256": "e37c07a583c56243e2e23f1962bac8b95dccc0ad577c9fc533002a80cf257741"
+    },
+    {
+      "candidate": "taglib-wasm",
+      "sample": "flac-mp4",
+      "optionalGenre": "absent",
+      "status": "PASS",
+      "decodedPcmSha256": "e37c07a583c56243e2e23f1962bac8b95dccc0ad577c9fc533002a80cf257741"
+    },
+    {
+      "candidate": "node-id3",
+      "sample": "mp3",
+      "optionalGenre": "present",
+      "status": "PASS",
+      "decodedPcmSha256": "761a6b435bbc06e5c0650f589c46447a587668923c83f37a2b26a94bc6f3e668"
+    },
+    {
+      "candidate": "node-id3",
+      "sample": "mp3",
+      "optionalGenre": "absent",
+      "status": "PASS",
+      "decodedPcmSha256": "761a6b435bbc06e5c0650f589c46447a587668923c83f37a2b26a94bc6f3e668"
+    }
+  ]
+}

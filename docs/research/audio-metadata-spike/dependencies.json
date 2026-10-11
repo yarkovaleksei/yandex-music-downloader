@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "music-metadata": "12.1.0",
+    "node-id3": "0.2.9",
+    "taglib-wasm": "1.5.3"
+  }
+}
