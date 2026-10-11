@@ -18,11 +18,11 @@ risk_flags:
   - release-critical
 plan:
   status: ready
-  revision: 1
-  context_basis: sha256:5d60d51befd3c448ba814725605b789612c6c77124a72c5df94af59cc20bd8e1
+  revision: 2
+  context_basis: sha256:8b12ee1de9c3a798a11f0666c9fd03dc2693edc2fa5cf49450dec3680faad90a
   content_hash: sha256:fb9458d28f460e5774a4163fc5da4f6dbcc5eb2175fd0ae272b4502c4d044990
-  reviewed_report: planning/plan-reviews/STEP-027/PLAN-REVIEW-20261011T115546Z.md
-  planned_at: 2026-10-11T11:55:46+00:00
+  reviewed_report: planning/plan-reviews/STEP-027/PLAN-REVIEW-20261011T130310Z.md
+  planned_at: 2026-10-11T13:03:10+00:00
   execution_groups:
   context_components:
     - "ARCH@docs/architecture.md#reliability-observability=sha256:a9c337102c2ed62fdaca7173e8e2c05ffe6d68a1d99140fe986a552b3cc636d4"
@@ -32,7 +32,7 @@ plan:
     - "PRN@PRN-003=sha256:16516d7d302fecda5f7615f9d55e29e04b588d671f8660640e1f61d1619e4ef8"
     - "REQ@REQ-043=sha256:25b24d5d4547a9aa170d94bf0046a74a82ad5a817296f8d9f168295399286484"
     - "STEP@STEP-011=sha256:41c08ce3e6527815954bffc6b84f1a5583ce99716da76a1d531c8660a1a512f4"
-    - "STEP@STEP-026=sha256:a89a9fa593024c008be7354aea5e4aad92da1fd19322d0bd00075ec0f26acdef"
+    - "STEP@STEP-026=sha256:0c5cc608966d02e44fcfbdc70599b40eb4a676427ab51a168da389b559a4966f"
     - "STEP@STEP-027=sha256:1314cbedb634cb7a8f6034a9fd2309c1427c15a3d1c71b69f7efecf489b76831"
 ---
 
