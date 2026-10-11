@@ -1,6 +1,7 @@
 import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { describe, expect, it, vi } from 'vitest';
 import {
   isDurationWithinTolerance,
@@ -9,6 +10,8 @@ import {
   validateWithFfmpeg,
   type FfmpegExecutor,
 } from './index.js';
+
+// fileURLToPath сохраняет корректный абсолютный путь fixture на Windows.
 describe('validation core package', () => {
   it('exports its package marker', () => {
     expect(validationCorePackage).toBe('@music-downloader/core-validation');
@@ -111,8 +114,9 @@ describe('validation core package', () => {
   it('F-002: AAC-MP4 с title=fLaC не становится вариантом FLAC', async () => {
     await expect(
       validateLocalAudio({
-        path: new URL('./fixtures/sample-aac-title-flac.m4a', import.meta.url)
-          .pathname,
+        path: fileURLToPath(
+          new URL('./fixtures/sample-aac-title-flac.m4a', import.meta.url),
+        ),
         variant: {
           key: 'flac',
           container: 'm4a',
@@ -176,7 +180,9 @@ describe('validation core package', () => {
     ).rejects.toMatchObject({ code: 'VALIDATION_ERROR' });
   });
   it('требует stream completion и точный transport size только до metadata', async () => {
-    const path = new URL('./fixtures/sample.mp3', import.meta.url).pathname;
+    const path = fileURLToPath(
+      new URL('./fixtures/sample.mp3', import.meta.url),
+    );
     const variant = {
       key: 'mp3',
       container: 'mp3',
@@ -199,7 +205,9 @@ describe('validation core package', () => {
     const root = await mkdtemp(join(tmpdir(), 'step-023-negative-'));
     const empty = join(root, 'empty.mp3');
     const text = join(root, 'text.mp3');
-    const valid = new URL('./fixtures/sample.mp3', import.meta.url).pathname;
+    const valid = fileURLToPath(
+      new URL('./fixtures/sample.mp3', import.meta.url),
+    );
     const variant = {
       key: 'mp3',
       container: 'mp3',

@@ -1,16 +1,55 @@
 import { mkdtemp, readFile, readdir, rm } from 'node:fs/promises';
+import type * as ChildProcess from 'node:child_process';
 import os from 'node:os';
 import path from 'node:path';
+import { promisify } from 'node:util';
 import { describe, expect, it, vi } from 'vitest';
+import { processStartedAt } from '@music-downloader/persistence';
 import type { MusicProvider } from '@music-downloader/shared';
 
-vi.mock('node:child_process', () => ({
-  // @link ../../../../planning/reviews/STEP-023/REVIEW-20261011T141250Z.md F-005
-  // Реальная download-пайплайн baseline не должен обращаться к subprocess или FFmpeg.
-  execFile: () => {
-    throw new Error('subprocess запрещён в baseline download test');
-  },
-}));
+vi.mock('node:child_process', async (importOriginal) => {
+  const actual = await importOriginal<typeof ChildProcess>();
+  const guard = (file: string, args: readonly string[] | null | undefined) => {
+    const processId = args?.at(-1);
+    const isProcessIdentityProbe =
+      (file === 'ps' &&
+        args?.length === 4 &&
+        args[0] === '-o' &&
+        args[1] === 'lstart=' &&
+        args[2] === '-p' &&
+        typeof processId === 'string' &&
+        /^\d+$/.test(processId)) ||
+      (file === 'powershell.exe' &&
+        args?.length === 3 &&
+        args[0] === '-NoProfile' &&
+        args[1] === '-Command' &&
+        typeof processId === 'string' &&
+        /^\(Get-Process -Id \d+ -ErrorAction Stop\)\.StartTime\.ToUniversalTime\(\)\.ToString\('O'\)$/.test(
+          processId,
+        ));
+    if (!isProcessIdentityProbe)
+      throw new Error('subprocess запрещён в baseline download test');
+  };
+  const execFile = Object.assign(
+    ((...parameters: Parameters<typeof actual.execFile>) => {
+      const [file, args] = parameters;
+      guard(file, args);
+      return actual.execFile(...parameters);
+    }) as typeof actual.execFile,
+    {
+      [promisify.custom]: async (
+        file: string,
+        args: readonly string[],
+        options?: ChildProcess.ExecFileOptions,
+      ) => {
+        guard(file, args);
+        return promisify(actual.execFile)(file, args, options);
+      },
+    },
+  );
+  // Persistence законно запускает только системный probe identity, внешний decoder остаётся запрещён.
+  return { execFile };
+});
 
 import { createApplication } from './index.js';
 
@@ -61,8 +100,20 @@ function provider(): MusicProvider {
   };
 }
 
-describe('baseline download без subprocess', () => {
-  it('завершает реальную загрузку с default production validator', async () => {
+describe('baseline download без внешнего decoder', () => {
+  it('сохраняет guarded promise probe identity и запрещает decoder', async () => {
+    // На Linux ps проверяет macOS-ветку; Windows использует свой реальный PowerShell probe.
+    const platform = process.platform === 'linux' ? 'darwin' : process.platform;
+    await expect(processStartedAt(process.pid, platform)).resolves.toMatch(
+      new RegExp(`^${platform}:`),
+    );
+    const { execFile } = await import('node:child_process');
+    await expect(promisify(execFile)('ffmpeg', ['-version'])).rejects.toThrow(
+      'subprocess запрещён в baseline download test',
+    );
+  }, 15_000);
+
+  it('завершает реальную загрузку с default production validator без внешнего decoder', async () => {
     const root = await mkdtemp(path.join(os.tmpdir(), 'baseline-download-'));
     const api = createApplication({
       stateDir: path.join(root, 'state'),
@@ -86,5 +137,5 @@ describe('baseline download без subprocess', () => {
       await api.shutdown();
       await rm(root, { recursive: true, force: true });
     }
-  });
+  }, 15_000);
 });
