@@ -125,13 +125,19 @@ describe('Download Manager', () => {
     ]);
     expect(fixture.opened()).toBe(1);
     fixture.fail(() => undefined);
+    fixture.slow(20);
     await manager.command('auth', 'resume');
-    await new Promise((resolve) => setTimeout(resolve, 40));
-    expect(
-      (await fixture.deps.store.read('auth'))?.tracks.map(
-        (track) => track.status,
-      ),
-    ).toEqual(['completed', 'completed']);
+    // Resume возвращается до завершения owner-задачи, поэтому ждём фактическое terminal state.
+    // Это не связывает проверку AUTH_ERROR со скоростью CI или store-операций.
+    await expect
+      .poll(
+        async () =>
+          (await fixture.deps.store.read('auth'))?.tracks.map(
+            (track) => track.status,
+          ),
+        { timeout: 1000, interval: 10 },
+      )
+      .toEqual(['completed', 'completed']);
   });
 
   it('pause сохраняет part, не запускает ожидающие треки; cancel удаляет part', async () => {
@@ -190,14 +196,17 @@ describe('Download Manager', () => {
     ).toEqual(['completed', 'failed', 'completed']);
     const completed = fixture.files.get('retry-1.mp3');
     await manager.command('retry', 'retry');
-    await new Promise((resolve) => setTimeout(resolve, 30));
+    await expect
+      .poll(
+        async () =>
+          (await fixture.deps.store.read('retry'))?.tracks.map(
+            (track) => track.status,
+          ),
+        { timeout: 1000, interval: 10 },
+      )
+      .toEqual(['completed', 'completed', 'completed']);
     expect(fixture.opened()).toBe(4);
     expect(fixture.files.get('retry-1.mp3')).toBe(completed);
-    expect(
-      (await fixture.deps.store.read('retry'))?.tracks.map(
-        (track) => track.status,
-      ),
-    ).toEqual(['completed', 'completed', 'completed']);
   });
 
   it('paused retry_wait не возобновляется после backoff', async () => {
@@ -286,12 +295,15 @@ describe('Download Manager', () => {
     ).toHaveLength(1);
     fixture.deps.provider.getTrack = getTrack;
     await manager.command('parallel-auth', 'resume');
-    await new Promise((resolve) => setTimeout(resolve, 40));
-    expect(
-      (await fixture.deps.store.read('parallel-auth'))?.tracks.map(
-        (track) => track.status,
-      ),
-    ).toEqual(['completed', 'completed', 'completed', 'completed']);
+    await expect
+      .poll(
+        async () =>
+          (await fixture.deps.store.read('parallel-auth'))?.tracks.map(
+            (track) => track.status,
+          ),
+        { timeout: 1000, interval: 10 },
+      )
+      .toEqual(['completed', 'completed', 'completed', 'completed']);
     expect(fixture.opened()).toBe(4);
   });
 
@@ -326,10 +338,13 @@ describe('Download Manager', () => {
     expect(fixture.files.has('commit-save-1.mp3')).toBe(true);
     expect(fixture.files.has('commit-save-1.part')).toBe(false);
     await manager.command('commit-save', 'resume');
-    await new Promise((resolve) => setTimeout(resolve, 20));
-    expect(
-      (await fixture.deps.store.read('commit-save'))?.tracks[0]?.status,
-    ).toBe('completed');
+    await expect
+      .poll(
+        async () =>
+          (await fixture.deps.store.read('commit-save'))?.tracks[0]?.status,
+        { timeout: 1000, interval: 10 },
+      )
+      .toBe('completed');
     expect(fixture.opened()).toBe(1);
   });
 
