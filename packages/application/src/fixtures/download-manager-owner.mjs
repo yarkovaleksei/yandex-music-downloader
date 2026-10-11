@@ -204,11 +204,18 @@ const manager = createDownloadManager(
       },
     },
   },
-  { controlPollMs: 10, progressFlushMs: 10, stopTimeoutMs: 150 },
+  {
+    controlPollMs: 10,
+    progressFlushMs: 10,
+    // `hang` сохраняет короткий таймаут для проверки неосвобождённой аренды.
+    // Обычному fixture нужен CI-допуск на реальное завершение store-операций.
+    stopTimeoutMs: mode === 'hang' ? 150 : 5_000,
+  },
 );
 
-// Host-only SIGINT handler вызывает core seam; CLI production сюда не включён.
-process.on('SIGINT', () => {
+// SIGINT и тестовый IPC вызывают общий shutdown, чтобы Windows проверял тот же core seam.
+// CLI production этот transport не использует: он существует только в fixture integration-теста.
+const shutdown = () => {
   void manager.shutdown(jobId).then(
     () => {
       process.send?.({ event: 'stopped' });
@@ -216,8 +223,10 @@ process.on('SIGINT', () => {
     },
     () => process.send?.({ event: 'stop-timeout' }),
   );
-});
+};
+process.on('SIGINT', shutdown);
 process.on('message', (message) => {
+  if (message === 'shutdown') shutdown();
   if (message === 'release')
     void manager.shutdown(jobId).then(() => process.disconnect());
 });

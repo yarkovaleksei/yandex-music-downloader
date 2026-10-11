@@ -57,13 +57,49 @@ async function startOwner(stateDir: string, jobId: string, mode = 'download') {
           (trackKey === undefined || item.trackKey === trackKey),
       );
       if (message !== undefined) return message;
-      if (child.exitCode !== null)
+      if (child.exitCode !== null || child.signalCode !== null)
         throw new Error(`Owner завершился до ${event}: ${stderr}`);
       await new Promise((resolve) => setTimeout(resolve, 10));
     }
     throw new Error(`Owner не сообщил ${event}: ${stderr}`);
   };
   return { child, exited, messages, wait };
+}
+
+// Progress публикуется раньше записи pipeline в файл, поэтому ожидание проверяет bytes на диске.
+// Это сохраняет проверку resume prefix без завязки на скорость файловой системы CI.
+async function waitForPartBytes(
+  store: FileManifestStore,
+  jobId: string,
+  trackIndex: number,
+) {
+  const deadline = Date.now() + 10_000;
+  while (Date.now() < deadline) {
+    const partPath = (await store.read(jobId))?.tracks[trackIndex]?.partPath;
+    if (partPath !== undefined) {
+      try {
+        const bytes = await readFile(partPath);
+        if (bytes.length > 0) return { partPath, bytes };
+      } catch (error) {
+        if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error;
+      }
+    }
+    await new Promise((resolve) => setTimeout(resolve, 10));
+  }
+  throw new Error('Owner не записал непустой part-файл.');
+}
+
+// Windows не доставляет SIGINT дочернему Node-процессу fork так же, как POSIX.
+// IPC остаётся тестовым transport и направляет shutdown в тот же fixture handler.
+function requestShutdown(child: ChildProcess) {
+  if (
+    process.platform === 'win32' ||
+    process.env.DOWNLOADER_TEST_SHUTDOWN_TRANSPORT === 'ipc'
+  ) {
+    child.send('shutdown');
+    return;
+  }
+  child.kill('SIGINT');
 }
 
 async function stopOwner(child: ChildProcess, exited: Promise<unknown>) {
@@ -140,11 +176,11 @@ describe('Download Manager: реальные файлы и два процесс
     const owner = await startOwner(stateDir, jobId);
     try {
       await owner.wait('track.progress', '2');
-      const live = await store.read(jobId);
-      const partPath = live?.tracks[1]?.partPath;
-      expect(partPath).toBeDefined();
-      expect((await readFile(partPath!)).length).toBeGreaterThan(0);
-      const beforePrefix = await readFile(partPath!);
+      const { partPath, bytes: beforePrefix } = await waitForPartBytes(
+        store,
+        jobId,
+        1,
+      );
       const stable = (value: JobManifestV1 | undefined) => ({
         control: value?.control,
         tracks: value?.tracks.map((track) => ({
@@ -161,7 +197,7 @@ describe('Download Manager: реальные файлы и два процесс
       ).toBe(false);
       // F-009: законный progress может продолжиться; стабильные fields и старый prefix не меняются.
       expect(stable(await store.read(jobId))).toEqual(beforeResume);
-      const afterPrefix = await readFile(partPath!);
+      const afterPrefix = await readFile(partPath);
       expect(afterPrefix.subarray(0, beforePrefix.length)).toEqual(
         beforePrefix,
       );
@@ -178,7 +214,7 @@ describe('Download Manager: реальные файлы и два процесс
         'completed',
         'cancelled',
       ]);
-      await expect(readFile(partPath!)).rejects.toMatchObject({
+      await expect(readFile(partPath)).rejects.toMatchObject({
         code: 'ENOENT',
       });
     } finally {
@@ -196,7 +232,8 @@ describe('Download Manager: реальные файлы и два процесс
     let resumed: Awaited<ReturnType<typeof startOwner>> | undefined;
     try {
       await owner.wait('track.progress', '2');
-      owner.child.kill('SIGINT');
+      await waitForPartBytes(store, jobId, 1);
+      requestShutdown(owner.child);
       await owner.wait('stopped');
       await owner.exited;
       const paused = await store.read(jobId);
@@ -249,6 +286,7 @@ describe('Download Manager: реальные файлы и два процесс
     let resumed: Awaited<ReturnType<typeof startOwner>> | undefined;
     try {
       await owner.wait('track.progress', '2');
+      await waitForPartBytes(store, jobId, 1);
       owner.child.kill('SIGKILL');
       await owner.exited;
       await expireDeadLease(stateDir, jobId);
@@ -277,7 +315,7 @@ describe('Download Manager: реальные файлы и два процесс
     const owner = await startOwner(stateDir, jobId, 'hang');
     try {
       await owner.wait('processing');
-      owner.child.kill('SIGINT');
+      requestShutdown(owner.child);
       await owner.wait('stop-timeout');
       const directory = path.join(
         stateDir,
