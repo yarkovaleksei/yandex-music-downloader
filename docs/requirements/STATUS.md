@@ -4,8 +4,8 @@
 
 | REQ | Название | Статус | Реализующие STEP | Evidence |
 |---|---|---|---|---|
-| [REQ-001](REQ-001-auth-flow.md) | [AUTH] Авторизация без передачи пароля | partial | STEP-005, STEP-008, STEP-019 | sha256:3b571c238a4e4ba0e230d2cb6bf0bdd18e7ce659eb01d8e214551b2abe372016, sha256:e0b2393178cfca0e45390c3e03393ff50233d9d425d08dbb4e85877b03e0f3e3 |
-| [REQ-002](REQ-002-auth-token-storage.md) | [AUTH] Безопасное хранение токена в CLI | partial | STEP-006, STEP-008, STEP-018, STEP-019, STEP-025 | sha256:2148d7fdfa0cbdbb210f706b4a5cb59d7ed5af5330ca0f4ab4c4c9fa03f35689, sha256:e0b2393178cfca0e45390c3e03393ff50233d9d425d08dbb4e85877b03e0f3e3 |
+| [REQ-001](REQ-001-auth-flow.md) | [AUTH] Авторизация без передачи пароля | partial | STEP-005, STEP-008, STEP-019, STEP-041 | sha256:3b571c238a4e4ba0e230d2cb6bf0bdd18e7ce659eb01d8e214551b2abe372016, sha256:e0b2393178cfca0e45390c3e03393ff50233d9d425d08dbb4e85877b03e0f3e3, sha256:b72119e77e7455cbb6a3cbe10cab188e90c639e4136d98a92952b14eb823f011 |
+| [REQ-002](REQ-002-auth-token-storage.md) | [AUTH] Безопасное хранение токена в CLI | partial | STEP-006, STEP-008, STEP-018, STEP-019, STEP-025, STEP-041 | sha256:2148d7fdfa0cbdbb210f706b4a5cb59d7ed5af5330ca0f4ab4c4c9fa03f35689, sha256:e0b2393178cfca0e45390c3e03393ff50233d9d425d08dbb4e85877b03e0f3e3, sha256:b72119e77e7455cbb6a3cbe10cab188e90c639e4136d98a92952b14eb823f011 |
 | [REQ-003](REQ-003-auth-session.md) | [AUTH] Определение аккаунта и истёкший токен | partial | STEP-008, STEP-017, STEP-019 | sha256:e0b2393178cfca0e45390c3e03393ff50233d9d425d08dbb4e85877b03e0f3e3 |
 | [REQ-004](REQ-004-provider-abstraction.md) | [PROVIDER] Абстракция MusicProvider | completed | STEP-003 | sha256:bfce0c7d4101696c7098994ea3e1022d71fc0992b5082d5e4a2abc73720977f1 |
 | [REQ-005](REQ-005-provider-isolation.md) | [PROVIDER] Изоляция Yandex-specific кода | partial | STEP-009, STEP-026 | sha256:0b2d72a8658737eb75b4f9f801391b11fcc5307210bc5f1e2a1b7b87b1c74c53 |
@@ -59,3 +59,4 @@
 | [REQ-053](REQ-053-ui-e2e.md) | [UI] End-to-end сценарий desktop | planned | STEP-033 | — |
 | [REQ-054](REQ-054-pack-installers.md) | [PACKAGING] Дистрибутивы для всех целевых ОС | planned | STEP-034, STEP-035 | — |
 | [REQ-055](REQ-055-pack-update-signing.md) | [PACKAGING] Архитектура автообновления и подписания | planned | STEP-034, STEP-036 | — |
+| [REQ-056](REQ-056-auth-browser-page.md) | [AUTH] Оформление приватной страницы Device Authorization | completed | STEP-041 | sha256:b72119e77e7455cbb6a3cbe10cab188e90c639e4136d98a92952b14eb823f011 |

@@ -9,12 +9,14 @@ supersedes: []
 superseded_by: []
 requirements:
   - REQ-002
+  - REQ-056
 steps:
   - STEP-006
   - STEP-008
   - STEP-018
   - STEP-019
   - STEP-025
+  - STEP-041
 ---
 
 # ADR-010 — Авторизация CLI и системное хранилище credentials

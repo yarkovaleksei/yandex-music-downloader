@@ -104,13 +104,15 @@ export class YandexMusicProviderAuth {
         interval: issued.interval,
       });
       if (!code.success) throw invalidProviderResponse();
-      deadlineTimer = setTimeout(
-        () => controller.abort(),
-        code.data.expires_in * 1000,
-      );
+      // Browser countdown использует тот же срок, что и уже существующий hard timeout.
+      // Wall-clock deadline фиксируется до открытия браузера; polling не меняется.
+      const duration = code.data.expires_in * 1000;
+      const deadline = Date.now() + duration;
+      deadlineTimer = setTimeout(() => controller.abort(), duration);
       challenge = await openPrivateChallenge(
         code.data.user_code,
         code.data.verification_url,
+        { deadline, duration },
         this.options.browser,
       );
       await this.options.authInteraction.notify(

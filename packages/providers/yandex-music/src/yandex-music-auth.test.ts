@@ -192,6 +192,64 @@ describe('YandexMusicProviderAuth', () => {
     },
   );
 
+  it('передаёт deadline до открытия браузера и не продлевает его после reload', async () => {
+    // STEP-041: задержка launcher не должна начинать новый browser countdown.
+    vi.useFakeTimers({ toFake: ['Date'] });
+    vi.setSystemTime(100_000);
+    let address = '';
+    let tokenStarted!: () => void;
+    const started = new Promise<void>((resolve) => {
+      tokenStarted = resolve;
+    });
+    const credentials = store(null);
+    const provider = new YandexMusicProviderAuth({
+      credentialStore: credentials,
+      authInteraction: { notify: () => undefined },
+      browser: {
+        async open(url) {
+          address = url;
+          vi.setSystemTime(115_000);
+        },
+      },
+      sleep: async () => {},
+      fetch: async (url, init) => {
+        if (url.includes('/device/code'))
+          return response(200, {
+            device_code: 'deadline-private-device',
+            user_code: 'deadline-user-code',
+            verification_url: 'https://ya.ru/device',
+            expires_in: 60,
+            interval: 1,
+          });
+        return new Promise((_, reject) => {
+          tokenStarted();
+          init.signal.addEventListener(
+            'abort',
+            () => reject(new DOMException('aborted', 'AbortError')),
+            { once: true },
+          );
+        });
+      },
+    });
+    const failure = provider.authenticate().catch((error: unknown) => error);
+    try {
+      await started;
+      const html = await (await fetch(address)).text();
+      expect(html).toContain('data-deadline="160000"');
+      expect(html).toContain('data-duration="60000"');
+      expect(html).toContain('deadline-user-code');
+      expect(html).not.toContain('deadline-private-device');
+      vi.setSystemTime(130_000);
+      expect(await (await fetch(address)).text()).toBe(html);
+    } finally {
+      await fetch(`${address}/cancel`, { method: 'POST' });
+      await expect(failure).resolves.toBeInstanceOf(AuthenticationError);
+      vi.useRealTimers();
+    }
+    expect(credentials.value).toBeNull();
+    await expect(fetch(address)).rejects.toThrow();
+  });
+
   it('отменяет зависший token poll через private HTTP cancel', async () => {
     let privateUrl = '';
     let tokenStarted!: () => void;
