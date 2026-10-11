@@ -1,7 +1,8 @@
 import { createHash, randomUUID } from 'node:crypto';
 import { AsyncLocalStorage } from 'node:async_hooks';
-import { mkdir } from 'node:fs/promises';
+import { mkdir, readdir } from 'node:fs/promises';
 import path from 'node:path';
+import os from 'node:os';
 import {
   decodeManifest,
   encodeManifest,
@@ -11,9 +12,12 @@ import {
   type JobManifestV1,
   type LeaseIdentity,
   type LeaseRecord,
+  type LeaseState,
   type LeaseSession,
   type ManifestStore,
   ValidationError,
+  DomainError,
+  normalizeDomainError,
 } from '@music-downloader/shared';
 import { readJsonIfPresent, writeAtomicJson } from './atomic-json.js';
 import { ControlInbox } from './control-inbox.js';
@@ -33,6 +37,37 @@ function leaseFrom(value: string): LeaseRecord {
   return JSON.parse(value) as LeaseRecord;
 }
 
+/** Проверка только для наблюдения: повреждение не означает отсутствие аренды (STEP-043). */
+function observedLeaseFrom(value: string): LeaseRecord {
+  let record: unknown;
+  try {
+    record = JSON.parse(value);
+  } catch {
+    throw new ValidationError();
+  }
+  if (typeof record !== 'object' || record === null || Array.isArray(record))
+    throw new ValidationError();
+  const lease = record as Record<string, unknown>;
+  const text = (key: string) =>
+    typeof lease[key] === 'string' && lease[key].length > 0;
+  const timestamp = (key: string) =>
+    text(key) && Number.isFinite(Date.parse(lease[key] as string));
+  if (
+    !Number.isInteger(lease.pid) ||
+    (lease.pid as number) <= 0 ||
+    !Number.isInteger(lease.generation) ||
+    (lease.generation as number) <= 0 ||
+    !text('hostname') ||
+    !text('processStartedAt') ||
+    !text('ownerToken') ||
+    !timestamp('acquiredAt') ||
+    !timestamp('heartbeatAt') ||
+    (lease.releasedAt !== undefined && !timestamp('releasedAt'))
+  )
+    throw new ValidationError();
+  return record as LeaseRecord;
+}
+
 /** Файловый adapter хранит namespace каждого job отдельно и сериализует owner mutations. */
 export class FileManifestStore implements ManifestStore {
   private readonly root: string;
@@ -41,8 +76,70 @@ export class FileManifestStore implements ManifestStore {
   }
 
   public async read(jobId: string): Promise<JobManifestV1 | undefined> {
+    return this.readDirectory(jobDirectory(this.root, jobId));
+  }
+
+  /**
+   * Читает отдельный атомарный snapshot без lock, recovery и обновления heartbeat.
+   * Решение о следующем захвате остаётся у acquire; unknown не означает inactive.
+   * @link planning/tasks/STEP-043.md; docs/adr/ADR-004-atomic-finalization-and-manifest.md
+   */
+  public async readLeaseState(jobId: string): Promise<LeaseState> {
+    try {
+      const raw = await readJsonIfPresent(
+        path.join(jobDirectory(this.root, jobId), 'lease.json'),
+      );
+      if (raw === undefined) return 'inactive';
+      const lease = observedLeaseFrom(raw);
+      if (lease.releasedAt !== undefined) return 'inactive';
+      if (lease.hostname !== os.hostname()) return 'unknown';
+      if (Date.now() - Date.parse(lease.heartbeatAt) <= leaseTimeoutMs)
+        return 'active';
+      const probe = await probeLease(lease);
+      if (probe === 'same') return 'active';
+      return probe === 'unknown' ? 'unknown' : 'inactive';
+    } catch (error) {
+      // Внутренний cause может содержать OS paths/данные; публичный отказ их не переносит.
+      if (error instanceof ValidationError) throw new ValidationError();
+      const safe = normalizeDomainError(error);
+      throw new DomainError(safe.code, safe.retryable);
+    }
+  }
+
+  /**
+   * История доступна после перезапуска и при живом owner без захвата аренды.
+   * Атомарный writer даёт целый snapshot каждой job, но не общую транзакцию списка.
+   * @link planning/tasks/STEP-042.md; application интеграция — STEP-018.
+   */
+  public async list(): Promise<readonly JobManifestV1[]> {
+    let entries;
+    try {
+      entries = await readdir(this.root, { withFileTypes: true });
+    } catch (error) {
+      if ((error as NodeJS.ErrnoException).code === 'ENOENT') return [];
+      throw error;
+    }
+    const manifests = new Map<string, JobManifestV1>();
+    // Обходим только существующие SHA-256 namespace, не читая lease или inbox.
+    for (const entry of entries.sort((a, b) =>
+      a.name < b.name ? -1 : a.name > b.name ? 1 : 0,
+    )) {
+      if (!entry.isDirectory() || !/^[a-f0-9]{64}$/.test(entry.name)) continue;
+      const manifest = await this.readDirectory(
+        path.join(this.root, entry.name),
+      );
+      if (manifest !== undefined) manifests.set(manifest.jobId, manifest);
+    }
+    return [...manifests.values()].sort((a, b) =>
+      a.jobId < b.jobId ? -1 : a.jobId > b.jobId ? 1 : 0,
+    );
+  }
+
+  private async readDirectory(
+    directory: string,
+  ): Promise<JobManifestV1 | undefined> {
     const value = await readJsonIfPresent(
-      path.join(jobDirectory(this.root, jobId), 'manifest.json'),
+      path.join(directory, 'manifest.json'),
     );
     return value === undefined ? undefined : decodeManifest(value);
   }

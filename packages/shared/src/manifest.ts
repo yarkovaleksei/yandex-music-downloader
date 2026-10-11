@@ -115,9 +115,24 @@ export interface AcquireOptions {
   readonly recover: (manifest: JobManifestV1) => Promise<JobManifestV1>;
 }
 
+/** Неизвестное состояние аренды нельзя преобразовывать в leaseAlive=false. */
+export type LeaseState = 'active' | 'inactive' | 'unknown';
+
 /** Порт persistence: core зависит только от этого интерфейса, а не от файловой реализации. */
 export interface ManifestStore {
   read(jobId: string): Promise<JobManifestV1 | undefined>;
+  /**
+   * Снимок политики ADR-004: inactive — нет аренды, она освобождена или распознана устаревшей.
+   * Не доказывает существование job, не даёт права записи или общей транзакции с read/list.
+   * @link planning/tasks/STEP-043.md; обработка unknown в application — STEP-018.
+   */
+  readLeaseState(jobId: string): Promise<LeaseState>;
+  /**
+   * Все сохранённые задания без дубликатов, в строковом порядке jobId независимо от locale.
+   * Только чтение: без аренды, recovery и записи; общая транзакция всех job не обещается.
+   * @link planning/tasks/STEP-042.md; подключение application listJobs принадлежит STEP-018.
+   */
+  list(): Promise<readonly JobManifestV1[]>;
   create(manifest: JobManifestV1): Promise<void>;
   acquire(jobId: string, options: AcquireOptions): Promise<LeaseSession>;
   sendControl(

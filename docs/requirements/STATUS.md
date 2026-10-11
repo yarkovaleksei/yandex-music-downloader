@@ -5,7 +5,7 @@
 | REQ | Название | Статус | Реализующие STEP | Evidence |
 |---|---|---|---|---|
 | [REQ-001](REQ-001-auth-flow.md) | [AUTH] Авторизация без передачи пароля | partial | STEP-005, STEP-008, STEP-019, STEP-041 | sha256:3b571c238a4e4ba0e230d2cb6bf0bdd18e7ce659eb01d8e214551b2abe372016, sha256:e0b2393178cfca0e45390c3e03393ff50233d9d425d08dbb4e85877b03e0f3e3, sha256:b72119e77e7455cbb6a3cbe10cab188e90c639e4136d98a92952b14eb823f011 |
-| [REQ-002](REQ-002-auth-token-storage.md) | [AUTH] Безопасное хранение токена в CLI | partial | STEP-006, STEP-008, STEP-018, STEP-019, STEP-025, STEP-041 | sha256:2148d7fdfa0cbdbb210f706b4a5cb59d7ed5af5330ca0f4ab4c4c9fa03f35689, sha256:e0b2393178cfca0e45390c3e03393ff50233d9d425d08dbb4e85877b03e0f3e3, sha256:b72119e77e7455cbb6a3cbe10cab188e90c639e4136d98a92952b14eb823f011 |
+| [REQ-002](REQ-002-auth-token-storage.md) | [AUTH] Безопасное хранение токена в CLI | partial | STEP-006, STEP-008, STEP-018, STEP-019, STEP-025, STEP-041 | sha256:2148d7fdfa0cbdbb210f706b4a5cb59d7ed5af5330ca0f4ab4c4c9fa03f35689, sha256:e0b2393178cfca0e45390c3e03393ff50233d9d425d08dbb4e85877b03e0f3e3, sha256:500fb74316c439dfd4d3318de244f4963969706b0d0318ee243dc27bb98beceb, sha256:b72119e77e7455cbb6a3cbe10cab188e90c639e4136d98a92952b14eb823f011 |
 | [REQ-003](REQ-003-auth-session.md) | [AUTH] Определение аккаунта и истёкший токен | partial | STEP-008, STEP-017, STEP-019 | sha256:e0b2393178cfca0e45390c3e03393ff50233d9d425d08dbb4e85877b03e0f3e3, sha256:c7531a5934d60f0eda711aa4815b57baeb2d1e08e650ef167a9f840d37a9ac82 |
 | [REQ-004](REQ-004-provider-abstraction.md) | [PROVIDER] Абстракция MusicProvider | completed | STEP-003 | sha256:bfce0c7d4101696c7098994ea3e1022d71fc0992b5082d5e4a2abc73720977f1 |
 | [REQ-005](REQ-005-provider-isolation.md) | [PROVIDER] Изоляция Yandex-specific кода | partial | STEP-009, STEP-026 | sha256:0b2d72a8658737eb75b4f9f801391b11fcc5307210bc5f1e2a1b7b87b1c74c53 |
@@ -23,7 +23,7 @@
 | [REQ-017](REQ-017-queue-concurrency.md) | [QUEUE] Очередь загрузок и concurrency | partial | STEP-017, STEP-019 | sha256:c7531a5934d60f0eda711aa4815b57baeb2d1e08e650ef167a9f840d37a9ac82 |
 | [REQ-018](REQ-018-queue-control.md) | [QUEUE] Управление заданием: pause, resume, cancel, retry | completed | STEP-017 | sha256:c7531a5934d60f0eda711aa4815b57baeb2d1e08e650ef167a9f840d37a9ac82 |
 | [REQ-019](REQ-019-queue-progress.md) | [QUEUE] События прогресса и ограничение достоверности скорости/ETA | completed | STEP-017 | sha256:c7531a5934d60f0eda711aa4815b57baeb2d1e08e650ef167a9f840d37a9ac82 |
-| [REQ-020](REQ-020-resume-manifest.md) | [RESUME] Manifest и восстановление после прерывания | partial | STEP-016, STEP-017, STEP-026 | sha256:39658852e8e833a3f121d60f1ffd65419836f2a911b812fdd922611f6391d231, sha256:c7531a5934d60f0eda711aa4815b57baeb2d1e08e650ef167a9f840d37a9ac82 |
+| [REQ-020](REQ-020-resume-manifest.md) | [RESUME] Manifest и восстановление после прерывания | partial | STEP-016, STEP-017, STEP-026, STEP-043 | sha256:39658852e8e833a3f121d60f1ffd65419836f2a911b812fdd922611f6391d231, sha256:c7531a5934d60f0eda711aa4815b57baeb2d1e08e650ef167a9f840d37a9ac82, sha256:d59de97b20666962069ea887cf7d91006c572e7d1c7ab3081014cf980611a7a6 |
 | [REQ-021](REQ-021-resume-range.md) | [RESUME] HTTP Range только при реальной поддержке | completed | STEP-016 | sha256:39658852e8e833a3f121d60f1ffd65419836f2a911b812fdd922611f6391d231 |
 | [REQ-022](REQ-022-fs-sanitizer.md) | [FILESYSTEM] Кроссплатформенный filename sanitizer | completed | STEP-012 | sha256:ae2b80abc1d5c52c4370aa82e55831622f132ab4fac28532286bca6772cebca4 |
 | [REQ-023](REQ-023-fs-layout.md) | [FILESYSTEM] Структура каталогов для track, album, playlist | completed | STEP-012 | sha256:ae2b80abc1d5c52c4370aa82e55831622f132ab4fac28532286bca6772cebca4 |
@@ -35,7 +35,7 @@
 | [REQ-029](REQ-029-cli-commands.md) | [CLI] Команды CLI | planned | STEP-019, STEP-025 | — |
 | [REQ-030](REQ-030-cli-options.md) | [CLI] Опции CLI и коды завершения | planned | STEP-019 | — |
 | [REQ-031](REQ-031-cli-json.md) | [CLI] Машиночитаемый режим --json | planned | STEP-019, STEP-025 | — |
-| [REQ-032](REQ-032-persist-manifest-store.md) | [PERSISTENCE] Файловое хранилище состояния в headless MVP | partial | STEP-016, STEP-018 | sha256:39658852e8e833a3f121d60f1ffd65419836f2a911b812fdd922611f6391d231 |
+| [REQ-032](REQ-032-persist-manifest-store.md) | [PERSISTENCE] Файловое хранилище состояния в headless MVP | completed | STEP-016, STEP-018, STEP-042, STEP-043 | sha256:39658852e8e833a3f121d60f1ffd65419836f2a911b812fdd922611f6391d231, sha256:500fb74316c439dfd4d3318de244f4963969706b0d0318ee243dc27bb98beceb, sha256:836cb1809098b789fd8aff3c5788cf5d646dc2ea9769b275474ece1415d16c4d, sha256:d59de97b20666962069ea887cf7d91006c572e7d1c7ab3081014cf980611a7a6 |
 | [REQ-033](REQ-033-persist-sqlite.md) | [PERSISTENCE] SQLite и миграции для desktop | planned | STEP-028, STEP-029 | — |
 | [REQ-034](REQ-034-diag-doctor.md) | [DIAGNOSTICS] Команда doctor | planned | STEP-025 | — |
 | [REQ-035](REQ-035-diag-logging.md) | [DIAGNOSTICS] Структурированное логирование | completed | STEP-004 | sha256:bc40dd17c32479af131f868292e28dc2f8f1e96ff40940d0f6689dda84037d99 |
@@ -47,7 +47,7 @@
 | [REQ-041](REQ-041-tool-ci.md) | [TOOLING] CI на pull request | partial | STEP-002, STEP-035 | sha256:0ff62ac0c7180065f7c8bbb6fe556c9f0d13781793ebaae02bef4e5d68b1a203 |
 | [REQ-042](REQ-042-tool-tests.md) | [TOOLING] Обязательные unit и integration тесты | partial | STEP-003, STEP-026 | sha256:bfce0c7d4101696c7098994ea3e1022d71fc0992b5082d5e4a2abc73720977f1 |
 | [REQ-043](REQ-043-tool-headless-gate.md) | [TOOLING] Критерий готовности headless MVP и перехода к UI | planned | STEP-027 | — |
-| [REQ-044](REQ-044-desk-application-api.md) | [DESKTOP] Application API как единая граница для клиентов | planned | STEP-018 | — |
+| [REQ-044](REQ-044-desk-application-api.md) | [DESKTOP] Application API как единая граница для клиентов | completed | STEP-018, STEP-042, STEP-043 | sha256:500fb74316c439dfd4d3318de244f4963969706b0d0318ee243dc27bb98beceb, sha256:836cb1809098b789fd8aff3c5788cf5d646dc2ea9769b275474ece1415d16c4d, sha256:d59de97b20666962069ea887cf7d91006c572e7d1c7ab3081014cf980611a7a6 |
 | [REQ-045](REQ-045-desk-platforms.md) | [DESKTOP] Целевые платформы и независимость core | planned | STEP-030, STEP-035 | — |
 | [REQ-046](REQ-046-desk-security.md) | [DESKTOP] Модель безопасности Electron и typed IPC | planned | STEP-028, STEP-030 | — |
 | [REQ-047](REQ-047-desk-secure-storage.md) | [DESKTOP] Токен в системном secure storage | planned | STEP-028, STEP-030 | — |

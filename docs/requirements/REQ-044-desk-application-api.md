@@ -5,6 +5,8 @@ priority: high
 source: brief
 steps:
   - STEP-018
+  - STEP-042
+  - STEP-043
 adrs:
   - ADR-005
   - ADR-007

@@ -7,6 +7,10 @@
     ".": {
       "@music-downloader/source": "./src/index.ts",
       "default": "./dist/index.js"
+    },
+    "./contracts": {
+      "@music-downloader/source": "./src/contracts.ts",
+      "default": "./dist/contracts.js"
     }
   },
   "dependencies": {

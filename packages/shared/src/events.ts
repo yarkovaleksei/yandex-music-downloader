@@ -77,3 +77,71 @@ export type CommandResult =
 
 /** Строка будущего CLI stdout: job-событие или отдельный результат команды. */
 export type CliRecord = JobEvent | CommandResult;
+
+function record(value: unknown): Record<string, unknown> | undefined {
+  return typeof value === 'object' && value !== null && !Array.isArray(value)
+    ? (value as Record<string, unknown>)
+    : undefined;
+}
+
+/** Проверяет минимальный versioned envelope до передачи события transport-клиенту. */
+export function isJobEvent(value: unknown): value is JobEvent {
+  const item = record(value);
+  if (
+    item?.schemaVersion !== 1 ||
+    typeof item.event !== 'string' ||
+    !Number.isSafeInteger(item.seq) ||
+    (item.seq as number) < 1 ||
+    typeof item.jobId !== 'string' ||
+    item.jobId.length === 0
+  )
+    return false;
+  const event = item.event;
+  const trackEvents = new Set([
+    'track.started',
+    'variant.selected',
+    'download.started',
+    'download.completed',
+    'metadata.written',
+    'validation.completed',
+  ]);
+  const jobEvents = new Set([
+    'job.created',
+    'entity.resolved',
+    'plan.created',
+    'job.completed',
+  ]);
+  if (trackEvents.has(event))
+    return (
+      typeof item.trackKey === 'string' && typeof item.durationMs === 'number'
+    );
+  if (jobEvents.has(event)) return typeof item.durationMs === 'number';
+  if (event === 'job.progress')
+    return item.durationMs === undefined || typeof item.durationMs === 'number';
+  if (event === 'track.progress')
+    return (
+      typeof item.trackKey === 'string' &&
+      (item.durationMs === undefined || typeof item.durationMs === 'number')
+    );
+  return false;
+}
+
+/** Проверяет обе ветви CommandResult и обязательные поля публичной ошибки. */
+export function isCommandResult(value: unknown): value is CommandResult {
+  const item = record(value);
+  if (
+    item?.schemaVersion !== 1 ||
+    typeof item.command !== 'string' ||
+    item.command.length === 0
+  )
+    return false;
+  if (item.kind === 'result') return 'data' in item && !('error' in item);
+  const error = record(item.error);
+  return (
+    item.kind === 'error' &&
+    !('data' in item) &&
+    typeof error?.code === 'string' &&
+    typeof error.message === 'string' &&
+    typeof error.retryable === 'boolean'
+  );
+}
