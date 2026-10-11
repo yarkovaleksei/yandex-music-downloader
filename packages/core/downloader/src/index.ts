@@ -1,6 +1,24 @@
 /** Состояния заданий: переходы, control и агрегация статуса job (ADR-003/ADR-006). */
 export const downloaderCorePackage = '@music-downloader/core-downloader';
 
+export {
+  ProgressReporter,
+  type ProgressReporterOptions,
+  type ProgressSnapshot,
+} from './progress.js';
+
+export { createDownloadManager, DownloadManager } from './manager.js';
+export { JobOwner, requestJobControl } from './job-owner.js';
+export type {
+  DownloadManagerDependencies,
+  DownloadManagerOptions,
+  DownloadFiles,
+  EventPublisher,
+  SchedulerPort,
+  ProcessingHooks,
+  ArtworkCache,
+} from './ports.js';
+
 export { aggregateJobStatus, type AggregateInput } from './state/aggregate.js';
 export {
   pauseJobOnFatalError,
