@@ -9,6 +9,7 @@ steps:
   - STEP-042
   - STEP-043
   - STEP-044
+  - STEP-045
 adrs:
   - ADR-004
 ---

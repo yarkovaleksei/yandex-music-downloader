@@ -4,7 +4,7 @@ import os from 'node:os';
 import path from 'node:path';
 import * as retryCore from '@music-downloader/core-retry';
 import type { DecideRetryInput } from '@music-downloader/core-retry';
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import {
   currentLeaseIdentity,
   FileManifestStore,
@@ -40,6 +40,169 @@ vi.mock('node:fs/promises', async (importOriginal) => {
       return actual.rename(temporary, target);
     },
   };
+});
+
+describe('STEP-045: команды двух application с общим stateDir', () => {
+  let root: string;
+  let appA: ReturnType<typeof createApplication> | undefined;
+  let appB: ReturnType<typeof createApplication> | undefined;
+  let running:
+    | ReturnType<ReturnType<typeof createApplication>['createDownload']>
+    | undefined;
+
+  afterEach(async () => {
+    await appA?.shutdown();
+    await appB?.shutdown();
+    await running;
+    if (root !== undefined) await rm(root, { recursive: true, force: true });
+    appA = undefined;
+    appB = undefined;
+    running = undefined;
+  });
+
+  /** Готовность доказывают открытый поток и настоящая active lease, без фиксированного sleep. */
+  async function startOwner(timeoutAck = false) {
+    root = await mkdtemp(path.join(os.tmpdir(), 'application-refusal-'));
+    const stateDir = path.join(root, 'state');
+    const store = new FileManifestStore({ stateDir });
+    const provider: MusicProvider = {
+      ...downloads(),
+      openAudioStream: async () => ({
+        stream: new ReadableStream<Uint8Array>({
+          start(controller) {
+            controller.enqueue(new Uint8Array([1]));
+          },
+        }),
+        contentLength: 2,
+        container: 'mp3',
+        acceptsRanges: true,
+        startOffset: 0,
+      }),
+    };
+    appA = createApplication({ stateDir, providerOverride: provider });
+    appB = createApplication({
+      stateDir,
+      providerOverride: provider,
+      ...(timeoutAck
+        ? {
+            manifestStore: {
+              read: store.read.bind(store),
+              readLeaseState: store.readLeaseState.bind(store),
+              list: store.list.bind(store),
+              create: store.create.bind(store),
+              acquire: store.acquire.bind(store),
+              sendControl: store.sendControl.bind(store),
+              // STEP-045: только ожидание receipt заменено; inbox и живой owner остаются настоящими.
+              waitControlAck: async () => undefined,
+            },
+          }
+        : {}),
+    });
+    let jobId = '';
+    appA.subscribe((event) => {
+      if (event.event === 'job.created') jobId = event.jobId;
+    });
+    running = appA.createDownload({
+      source: { provider: 'mock', kind: 'track', id: 'blocked' },
+      quality: 'best',
+      destination: path.join(root, 'music'),
+    });
+    await expect
+      .poll(
+        async () => {
+          const result = await appB!.getJob(jobId);
+          return (
+            result.kind === 'result' &&
+            result.data?.tracks[0]?.status === 'downloading' &&
+            (await store.readLeaseState(jobId)) === 'active'
+          );
+        },
+        { timeout: 5000, interval: 10 },
+      )
+      .toBe(true);
+    return { jobId, store };
+  }
+
+  function safeRefusal(result: unknown) {
+    expect(JSON.stringify(result)).not.toMatch(
+      /ownerToken|pid|hostname|cause|stack/,
+    );
+    expect(JSON.stringify(result)).not.toContain(root);
+  }
+
+  it('различает чужую живую аренду и отсутствующий job без утечки данных владельца', async () => {
+    const { jobId } = await startOwner();
+    const refusal = await appB!.resume(jobId);
+    expect(refusal).toMatchObject({
+      schemaVersion: 1,
+      kind: 'error',
+      error: {
+        code: 'VALIDATION_ERROR',
+        details: { reason: 'LEASE_HELD_BY_OTHER_OWNER' },
+        retryable: false,
+      },
+    });
+    safeRefusal(refusal);
+    for (const command of ['resume', 'retry', 'cancel', 'pause'] as const) {
+      const result = await appB![command]('missing-job');
+      expect(result).toMatchObject({
+        kind: 'error',
+        error: {
+          code: 'VALIDATION_ERROR',
+          details: { reason: 'JOB_NOT_FOUND' },
+          retryable: false,
+        },
+      });
+      safeRefusal(result);
+    }
+    await expect(appB!.getJob('missing-job')).resolves.toMatchObject({
+      kind: 'result',
+      data: null,
+    });
+    expect(
+      (await readdir(path.join(root, 'state'), { recursive: true })).join('\n'),
+    ).not.toContain('missing-job');
+  });
+
+  it('различает отсутствие подтверждения cancel, сохраняя запрос в inbox', async () => {
+    const { jobId } = await startOwner(true);
+    const refusal = await appB!.cancel(jobId);
+    expect(refusal).toMatchObject({
+      schemaVersion: 1,
+      kind: 'error',
+      error: {
+        code: 'DOWNLOAD_ERROR',
+        details: { reason: 'OWNER_ACK_TIMEOUT' },
+        retryable: false,
+      },
+    });
+    safeRefusal(refusal);
+    // Таймаут отправителя не доказывает неприменение: живой owner продолжает обрабатывать inbox.
+    await expect
+      .poll(() => appA!.getJob(jobId), { timeout: 5000, interval: 10 })
+      .toMatchObject({ kind: 'result', data: { status: 'cancelled' } });
+  });
+
+  it('пересылает pause и resume paused job живому владельцу без lease-отказа', async () => {
+    const { jobId, store } = await startOwner();
+    const paused = await appB!.pause(jobId);
+    expect(paused).toMatchObject({
+      kind: 'result',
+      data: { status: 'paused' },
+    });
+    expect(paused).not.toHaveProperty('error');
+    expect(await store.readLeaseState(jobId)).toBe('active');
+    const resumed = await appB!.resume(jobId);
+    expect(resumed).toMatchObject({
+      kind: 'result',
+      data: { status: 'running' },
+    });
+    expect(resumed).not.toHaveProperty('error');
+    // Успешные snapshots содержат публичный resultPath; запрет путей относится к отказам.
+    expect(JSON.stringify([paused, resumed])).not.toMatch(
+      /ownerToken|pid|hostname|cause|stack/,
+    );
+  });
 });
 
 const delay = (milliseconds: number) =>

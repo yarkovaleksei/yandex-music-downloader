@@ -10,13 +10,30 @@ import { createRedactor, type Redactor } from './redactor.js';
 export function serializeError(
   error: unknown,
   redactor: Redactor = createRedactor(),
+  options: { readonly debug?: boolean } = {},
 ): CommandErrorDto {
-  const normalized = normalizeDomainError(error).toJSON();
-  const message = redactor.redact(normalized.message);
-  return {
+  const normalizedError = normalizeDomainError(error);
+  const normalized = normalizedError.toJSON();
+  const dto = {
     ...normalized,
-    message: typeof message === 'string' ? message : normalized.message,
+    ...(options.debug
+      ? {
+          details: {
+            debug: { stack: safeStack(normalizedError, normalized) },
+          },
+        }
+      : {}),
   };
+  return redactor.redact(dto) as unknown as CommandErrorDto;
+}
+
+/** Формирует stack только из нормализованной ошибки: cause и library stack не копируются. */
+function safeStack(error: Error, normalized: CommandErrorDto): string {
+  const frames = (error.stack ?? '')
+    .split('\n')
+    .filter((line) => /^\s*at\s/u.test(line))
+    .map((line) => line.trim());
+  return [`${normalized.code}: ${normalized.message}`, ...frames].join('\n');
 }
 
 /** @link docs/adr/ADR-007-application-api-events-and-command-results.md Общий сериализатор DTO без вывода CLI. */

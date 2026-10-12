@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   AuthenticationError,
   DiskFullError,
+  DownloadError,
   PermissionError,
   ProviderError,
   ValidationError,
@@ -12,6 +13,51 @@ import { managerFixture } from './fixtures/manager-fixture.js';
 const pauseOptions = { controlPollMs: 10, stopTimeoutMs: 1000 };
 
 describe('Download Manager', () => {
+  it('использует default artworkSize=400 и дедуплицирует общую обложку', async () => {
+    const fixture = managerFixture(3);
+    const fetchArtwork = fixture.deps.provider.fetchArtwork;
+    const requestedSizes: number[] = [];
+    fixture.deps.provider.fetchArtwork = async (reference, size) => {
+      requestedSizes.push(size);
+      if (size === 500) throw new DownloadError();
+      if (size !== 400) throw new Error('Ожидался размер обложки 400.');
+      return fetchArtwork(reference, size);
+    };
+    await fixture.create('default-artwork-size');
+
+    const result = await createDownloadManager(fixture.deps).run(
+      'default-artwork-size',
+    );
+
+    expect(result.tracks.every((track) => track.status === 'completed')).toBe(
+      true,
+    );
+    expect(requestedSizes).toEqual([400]);
+    expect(fixture.artworkRequests()).toBe(1);
+  });
+
+  it('передаёт явный artworkSize=600 без подмены и дедуплицирует обложку', async () => {
+    const fixture = managerFixture(3);
+    const fetchArtwork = fixture.deps.provider.fetchArtwork;
+    const requestedSizes: number[] = [];
+    fixture.deps.provider.fetchArtwork = async (reference, size) => {
+      requestedSizes.push(size);
+      if (size !== 600) throw new Error('Ожидался размер обложки 600.');
+      return fetchArtwork(reference, size);
+    };
+    await fixture.create('explicit-artwork-size');
+
+    const result = await createDownloadManager(fixture.deps, {
+      artworkSize: 600,
+    }).run('explicit-artwork-size');
+
+    expect(result.tracks.every((track) => track.status === 'completed')).toBe(
+      true,
+    );
+    expect(requestedSizes).toEqual([600]);
+    expect(fixture.artworkRequests()).toBe(1);
+  });
+
   it('завершает 20 треков при concurrency=3, дедуплицирует обложку и различает позиции', async () => {
     const fixture = managerFixture();
     await fixture.create('job');

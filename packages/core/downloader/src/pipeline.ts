@@ -77,9 +77,12 @@ export class TrackPipeline {
           owner.current.quality as QualityPreference,
         );
         if (!selected.ok) throw selected.error;
+        // @link planning/tasks/STEP-048.md
+        // Размер 500 воспроизводимо возвращает HTTP 404 для контрольной обложки, поэтому по умолчанию используется подтверждённый 400.
+        const artworkSize = this.options.artworkSize ?? 400;
         const reference = metadata.artwork ?? metadata.album?.artwork;
         if (reference !== undefined) {
-          const cacheKey = `${reference.key}:${String(this.options.artworkSize ?? 500)}`;
+          const cacheKey = `${reference.key}:${String(artworkSize)}`;
           const persisted = await this.deps.artworkCache.read(
             owner.current.jobId,
             key,
@@ -90,10 +93,7 @@ export class TrackPipeline {
             context.artwork.set(cacheKey, pending);
           }
           if (pending === undefined) {
-            pending = this.deps.provider.fetchArtwork(
-              reference,
-              this.options.artworkSize ?? 500,
-            );
+            pending = this.deps.provider.fetchArtwork(reference, artworkSize);
             context.artwork.set(cacheKey, pending);
             void pending.catch(() => {
               if (context.artwork.get(cacheKey) === pending)

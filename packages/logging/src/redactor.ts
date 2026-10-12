@@ -12,6 +12,11 @@ const defaultSecretFields = [
   'client_secret',
   'streamkey',
   'decryptionkey',
+  'challenge',
+  'authchallenge',
+  'devicecode',
+  'usercode',
+  'verificationuri',
 ];
 
 const redacted = '[REDACTED]';

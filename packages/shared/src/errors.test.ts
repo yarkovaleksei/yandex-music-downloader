@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import {
   AuthenticationError,
+  CommandRefusalError,
+  DomainError,
   DiskFullError,
   DownloadError,
   MetadataError,
@@ -14,6 +16,32 @@ import {
 } from './index.js';
 
 describe('DomainError', () => {
+  it.each([
+    ['JOB_NOT_FOUND', 'VALIDATION_ERROR'],
+    ['LEASE_HELD_BY_OTHER_OWNER', 'VALIDATION_ERROR'],
+    ['OWNER_ACK_TIMEOUT', 'DOWNLOAD_ERROR'],
+  ] as const)(
+    'сохраняет безопасный базовый JSON для причины %s',
+    (reason, code) => {
+      const error = new CommandRefusalError(reason);
+      expect(error).toBeInstanceOf(DomainError);
+      expect(error.reason).toBe(reason);
+      expect(error.code).toBe(code);
+      expect(error.retryable).toBe(false);
+      expect(error.toJSON()).toEqual({
+        code,
+        message: error.message,
+        retryable: false,
+      });
+      expect(error).not.toHaveProperty('cause');
+      expect(new CommandRefusalError(reason, 'DOWNLOAD_ERROR').code).toBe(
+        'DOWNLOAD_ERROR',
+      );
+      expect(
+        new CommandRefusalError(reason, 'VALIDATION_ERROR').retryable,
+      ).toBe(false);
+    },
+  );
   it.each([
     [new ProviderError('NETWORK_ERROR', true), 'NETWORK_ERROR', true],
     [new AuthenticationError(), 'AUTH_ERROR', false],

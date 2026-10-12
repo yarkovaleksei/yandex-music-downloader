@@ -200,6 +200,83 @@ describe('матрица границ ADR-001: group x group', () => {
   }
 });
 
+/** Формы импорта проверяют одну политику публичной точки входа (@link planning/tasks/STEP-047.md). */
+function applicationImports(specifier: string) {
+  return [
+    { code: `import { X } from '${specifier}';`, typeOnly: false },
+    { code: `import type { X } from '${specifier}';`, typeOnly: true },
+    { code: `export { X } from '${specifier}';`, typeOnly: false },
+    { code: `export type { X } from '${specifier}';`, typeOnly: true },
+    { code: `export * from '${specifier}';`, typeOnly: false },
+    { code: `export type * from '${specifier}';`, typeOnly: true },
+    { code: `const m = import('${specifier}');`, typeOnly: false },
+    { code: `const m = import(\`${specifier}\`);`, typeOnly: false },
+    { code: `const m = require('${specifier}');`, typeOnly: false },
+    { code: `type T = import('${specifier}').X;`, typeOnly: true },
+    { code: `import m = require('${specifier}');`, typeOnly: false },
+    { code: `import type m = require('${specifier}');`, typeOnly: true },
+  ];
+}
+
+describe('публичный application/contracts (STEP-047)', () => {
+  const application = actors.find((actor) => actor.kind === 'application');
+  if (application === undefined) throw new Error('Нет application в oracle');
+
+  for (const from of [...actors, ...virtualSources]) {
+    if (from.kind === 'application') continue;
+    for (const isTest of [false, true]) {
+      it(`${from.dir} (${isTest ? 'test' : 'src'}): root и contracts во всех формах`, async () => {
+        const filePath = `${from.dir}/src/probe${isTest ? '.test' : ''}.cts`;
+        for (const specifier of [
+          '@music-downloader/application',
+          '@music-downloader/application/contracts',
+        ]) {
+          for (const { code, typeOnly } of applicationImports(specifier)) {
+            if (oracleAllows(from, application, typeOnly, isTest)) {
+              await expectClean(code, filePath);
+            } else {
+              const result = await lint(code, filePath);
+              // Проверяем именно ребро: публичный export не открывает доступ нижним слоям.
+              expect(
+                result.messages.map((message) => message.messageId),
+              ).toContain('forbiddenEdge');
+              expect(ruleIds(result)).toContain('boundaries/dependency');
+            }
+          }
+        }
+      });
+    }
+  }
+
+  for (const dir of ['apps/cli', 'apps/desktop']) {
+    for (const suffix of ['', '.test']) {
+      it(`${dir} (${suffix ? 'test' : 'src'}): внутренние и относительные пути закрыты`, async () => {
+        const filePath = `${dir}/src/probe${suffix}.cts`;
+        const rejected = [
+          ['@music-downloader/application/src/contracts.js', 'deepImport'],
+          ['@music-downloader/application/dist/contracts.js', 'deepImport'],
+          ['@music-downloader/application/contracts/internal', 'deepImport'],
+          ['@music-downloader/application/unknown', 'deepImport'],
+          ['../../../packages/application/src/contracts.js', 'crossRelative'],
+          [
+            '../../../node_modules/@music-downloader/application/contracts',
+            'crossRelative',
+          ],
+        ] as const;
+        for (const [specifier, messageId] of rejected) {
+          for (const { code } of applicationImports(specifier)) {
+            const result = await lint(code, filePath);
+            expect(ruleIds(result)).toContain('boundaries/dependency');
+            expect(
+              result.messages.map((message) => message.messageId),
+            ).toContain(messageId);
+          }
+        }
+      });
+    }
+  }
+});
+
 describe('Yandex SDK (PRN-001)', () => {
   const sdkImports = [
     "import '@dvxch/yandex-music';",

@@ -12,7 +12,12 @@ import {
   finalizeWithManifestCheckpoint,
   prepareRangeCandidate,
 } from '@music-downloader/core-manifest';
-import { createLogger } from '@music-downloader/logging';
+import {
+  createFileSink,
+  createLogger,
+  type LogLevel,
+} from '@music-downloader/logging';
+import { ValidationError } from '@music-downloader/shared';
 import {
   CliCredentialStore,
   FileManifestStore,
@@ -25,8 +30,25 @@ import type { RuntimeAdapters } from './runtime-adapters.js';
 export function createApplication(
   adapters: RuntimeAdapters = {},
 ): ApplicationApi {
+  const logging = adapters.logging;
+  if (
+    adapters.logger !== undefined &&
+    (logging?.level !== undefined || logging?.filePath !== undefined)
+  ) {
+    throw new ValidationError();
+  }
+  if (logging?.level !== undefined && !isLogLevel(logging.level)) {
+    throw new ValidationError();
+  }
   const stateDir = resolveStateDirectory({ stateDir: adapters.stateDir });
-  const logger = adapters.logger ?? createLogger();
+  const logger =
+    adapters.logger ??
+    createLogger({
+      ...(logging?.level === undefined ? {} : { level: logging.level }),
+      ...(logging?.filePath === undefined
+        ? {}
+        : { sink: createFileSink(logging.filePath) }),
+    });
   const store = adapters.manifestStore ?? new FileManifestStore({ stateDir });
   // providerOverride полностью исключает native keyring и browser/device-auth bootstrap.
   const provider =
@@ -70,5 +92,16 @@ export function createApplication(
   const diagnostics =
     adapters.diagnostics ??
     (async () => ({ available: false, backend: 'file-manifest-store' }));
-  return new ApplicationFacade({ provider, jobs, events, logger, diagnostics });
+  return new ApplicationFacade({
+    provider,
+    jobs,
+    events,
+    logger,
+    diagnostics,
+    debug: logging?.debug === true,
+  });
+}
+
+function isLogLevel(value: string): value is LogLevel {
+  return ['error', 'warn', 'info', 'debug', 'trace'].includes(value);
 }

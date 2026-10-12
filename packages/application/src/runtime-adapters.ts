@@ -7,6 +7,7 @@ import type {
   ManifestStore,
   MusicProvider,
 } from '@music-downloader/shared';
+import type { RuntimeLoggingOptions } from './contracts.js';
 
 /** Host передаёт только порты; Electron/CLI не попадают в переносимые DTO. */
 export interface RuntimeAdapters {
@@ -16,6 +17,7 @@ export interface RuntimeAdapters {
   readonly authInteraction?: AuthInteraction;
   readonly providerOverride?: MusicProvider;
   readonly logger?: Logger;
+  readonly logging?: RuntimeLoggingOptions;
   readonly concurrency?: number;
   readonly diagnostics?: () => Promise<DiagnosticsDto>;
   readonly processing?: ProcessingHooks;

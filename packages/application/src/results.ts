@@ -1,5 +1,6 @@
 import {
   normalizeDomainError,
+  CommandRefusalError,
   type ApplicationResult,
   type CliRecord,
   type JsonValue,
@@ -29,6 +30,7 @@ export async function command<T>(
   name: string,
   logger: Logger,
   operation: () => Promise<T>,
+  debug = false,
 ): Promise<ApplicationResult<T>> {
   try {
     return {
@@ -39,15 +41,36 @@ export async function command<T>(
     };
   } catch (error) {
     const normalized = normalizeDomainError(error);
-    logger.warn('Команда application завершилась ошибкой.', {
-      command: name,
-      code: normalized.code,
-    });
+    // В публичный результат переносим только закрытую причину, без runtime-данных владельца.
+    const details =
+      normalized instanceof CommandRefusalError
+        ? { reason: normalized.reason }
+        : undefined;
+    const errorDto = serializeError(normalized, undefined, { debug });
+    const mergedDetails = {
+      ...(details ?? {}),
+      ...(errorDto.details ?? {}),
+    };
+    const publicError = {
+      ...errorDto,
+      ...(Object.keys(mergedDetails).length === 0
+        ? {}
+        : { details: mergedDetails }),
+    };
+    try {
+      logger.warn('Команда application завершилась ошибкой.', {
+        command: name,
+        code: normalized.code,
+        ...(debug ? { error: publicError } : mergedDetails),
+      });
+    } catch {
+      // Ошибка sink не должна заменить безопасный результат команды или вызвать рекурсию.
+    }
     return {
       schemaVersion: 1,
       kind: 'error',
       command: name,
-      error: serializeError(normalized),
+      error: publicError,
     };
   }
 }

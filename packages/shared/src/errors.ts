@@ -61,6 +61,25 @@ export class ProviderError extends DomainError {
   }
 }
 
+export type CommandRefusalReason =
+  'JOB_NOT_FOUND' | 'LEASE_HELD_BY_OTHER_OWNER' | 'OWNER_ACK_TIMEOUT';
+
+/**
+ * @link planning/tasks/STEP-045.md Причина дополняет существующий код только в DTO команды.
+ * Обычный DomainError JSON остаётся прежним; данные владельца и cause не принимаются.
+ */
+export class CommandRefusalError extends DomainError {
+  public constructor(
+    public readonly reason: CommandRefusalReason,
+    code: 'VALIDATION_ERROR' | 'DOWNLOAD_ERROR' = reason === 'OWNER_ACK_TIMEOUT'
+      ? 'DOWNLOAD_ERROR'
+      : 'VALIDATION_ERROR',
+  ) {
+    super(code, false);
+    this.name = 'CommandRefusalError';
+  }
+}
+
 export class AuthenticationError extends DomainError {
   public constructor(cause?: unknown) {
     super('AUTH_ERROR', false, { cause });

@@ -5,6 +5,7 @@ priority: critical
 source: brief
 steps:
   - STEP-003
+  - STEP-048
 adrs:
   - ADR-001
   - ADR-002

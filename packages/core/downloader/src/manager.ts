@@ -1,5 +1,6 @@
 import {
   AuthenticationError,
+  CommandRefusalError,
   DomainError,
   ValidationError,
   type ArtworkData,
@@ -92,11 +93,23 @@ export class DownloadManager {
       // Занятая lease не даёт writer capability; только её owner применяет inbox.
       const manifest = await this.deps.store.read(jobId);
       if (manifest === undefined) throw error;
+      // Только наблюдаемая active lease подтверждает чужого живого владельца (STEP-045).
+      // При недоступном наблюдении сохраняем прежний отказ без дополнительной причины.
+      const lease = await this.deps.store
+        .readLeaseState(jobId)
+        .catch(() => 'unknown');
+      if (
+        command === 'resume' &&
+        manifest.control.state === 'running' &&
+        lease === 'active'
+      )
+        throw new CommandRefusalError('LEASE_HELD_BY_OTHER_OWNER');
       const receipt = await requestJobControl(
         this.deps.store,
         jobId,
         command,
         this.options.stopTimeoutMs ?? 5000,
+        lease === 'active',
       );
       if (!receipt.accepted)
         throw new DomainError(receipt.error?.code ?? 'DOWNLOAD_ERROR', false);

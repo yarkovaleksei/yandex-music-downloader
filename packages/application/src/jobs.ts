@@ -12,6 +12,7 @@ import {
 } from '@music-downloader/core-planner';
 import {
   DownloadError,
+  CommandRefusalError,
   type DownloadRequest,
   type JobManifestV1,
   type JobSnapshot,
@@ -133,6 +134,9 @@ export class Jobs {
     jobId: string,
     value: 'pause' | 'resume' | 'retry' | 'cancel',
   ): Promise<JobSnapshot> {
+    // Проверка до manager.acquire не создаёт каталог отсутствующего job (STEP-045).
+    if ((await this.store.read(jobId)) === undefined)
+      throw new CommandRefusalError('JOB_NOT_FOUND');
     const ownedManager = this.managers.get(jobId);
     // Только собственный active manager останавливается shutdown; чужой owner
     // получает control через core inbox/receipt в manager.command.
