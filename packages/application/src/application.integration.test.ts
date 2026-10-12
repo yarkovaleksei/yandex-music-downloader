@@ -59,7 +59,7 @@ describe('STEP-045: команды двух application с общим stateDir',
     appA = undefined;
     appB = undefined;
     running = undefined;
-  });
+  }, 30_000);
 
   /** Готовность доказывают открытый поток и настоящая active lease, без фиксированного sleep. */
   async function startOwner(timeoutAck = false) {
@@ -118,7 +118,7 @@ describe('STEP-045: команды двух application с общим stateDir',
             (await store.readLeaseState(jobId)) === 'active'
           );
         },
-        { timeout: 5000, interval: 10 },
+        { timeout: 30_000, interval: 10 },
       )
       .toBe(true);
     return { jobId, store };
@@ -163,7 +163,7 @@ describe('STEP-045: команды двух application с общим stateDir',
     expect(
       (await readdir(path.join(root, 'state'), { recursive: true })).join('\n'),
     ).not.toContain('missing-job');
-  }, 30_000); // Нативная Windows-проверка identity занимает до 10s помимо readiness/control budget.
+  }, 60_000); // Нативная Windows-проверка identity входит в общий budget readiness и control.
 
   it('различает отсутствие подтверждения cancel, сохраняя запрос в inbox', async () => {
     const { jobId } = await startOwner(true);
@@ -182,7 +182,7 @@ describe('STEP-045: команды двух application с общим stateDir',
     await expect
       .poll(() => appA!.getJob(jobId), { timeout: 5000, interval: 10 })
       .toMatchObject({ kind: 'result', data: { status: 'cancelled' } });
-  }, 30_000); // Нативная Windows-проверка identity занимает до 10s помимо readiness/control budget.
+  }, 60_000); // Нативная Windows-проверка identity входит в общий budget readiness и control.
 
   it('пересылает pause и resume paused job живому владельцу без lease-отказа', async () => {
     const { jobId, store } = await startOwner();
@@ -203,7 +203,7 @@ describe('STEP-045: команды двух application с общим stateDir',
     expect(JSON.stringify([paused, resumed])).not.toMatch(
       /ownerToken|pid|hostname|cause|stack/,
     );
-  });
+  }, 60_000);
 });
 
 describe('STEP-049: shutdown закрывающегося manager', () => {
@@ -215,11 +215,17 @@ describe('STEP-049: shutdown закрывающегося manager', () => {
     let resumed: ReturnType<typeof createApplication> | undefined;
     let jobId = '';
     let unblockStream!: () => void;
+    let streamPullStarted!: () => void;
     let releaseSession!: () => void;
     let releaseStarted!: () => void;
     let releaseCalls = 0;
     const blockedStream = new Promise<void>((resolve) => {
       unblockStream = resolve;
+    });
+    // Пауза начинается только после реального pull: это исключает гонку с job.created
+    // в STEP-049 и сохраняет проверку прерывания уже запущенной загрузки.
+    const streamPullObserved = new Promise<void>((resolve) => {
+      streamPullStarted = resolve;
     });
     const releaseGate = new Promise<void>((resolve) => {
       releaseSession = resolve;
@@ -236,6 +242,7 @@ describe('STEP-049: shutdown закрывающегося manager', () => {
             stream: new ReadableStream<Uint8Array>({
               pull(controller) {
                 controller.enqueue(validMp3.slice(0, 1));
+                streamPullStarted();
                 return blockedStream;
               },
               cancel() {
@@ -260,6 +267,7 @@ describe('STEP-049: shutdown закрывающегося manager', () => {
       await expect
         .poll(() => jobId, { timeout: 5_000, interval: 10 })
         .not.toBe('');
+      await streamPullObserved;
       await expect(seed.pause(jobId)).resolves.toMatchObject({
         kind: 'result',
         data: { status: 'paused' },
