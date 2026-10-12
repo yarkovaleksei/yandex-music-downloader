@@ -1,7 +1,7 @@
 ---
 schema: 1
 id: STEP-050
-status: in_progress
+status: completed
 type: bugfix
 priority: critical
 phase: core
@@ -26,11 +26,11 @@ risk_flags:
   - release-critical
 plan:
   status: ready
-  revision: 1
-  context_basis: sha256:8dce1359b2cb776c7c02e39d7342489bdb84df3cdae15d0b31e5bc2eaac7a10d
-  content_hash: sha256:abd095e897a64afa97d9dd1c0579ce2f50caf263d06fd27aa1ad9d6f4ac3196e
-  reviewed_report: planning/plan-reviews/STEP-050/PLAN-REVIEW-20261012T060547Z.md
-  planned_at: 2026-10-12T06:05:47+00:00
+  revision: 2
+  context_basis: sha256:d2204bfd40883884bdcceb5003efb0066c5d6aef3af5bb66974168bfea065cae
+  content_hash: sha256:0f0d1dd6f47047836608c483c6ac16eeb9ce546bbb98446a6a264e4c30ec826a
+  reviewed_report: planning/plan-reviews/STEP-050/PLAN-REVIEW-20261012T064646Z.md
+  planned_at: 2026-10-12T06:46:46+00:00
   execution_groups:
   context_components:
     - "ADR@ADR-004=sha256:4ad987cbdefdf1409c52fd01994ccca0d6941fad8ae0126d435745f3e727ca08"
@@ -48,14 +48,14 @@ plan:
     - "STEP@STEP-044=sha256:6daf5224ca09eda42e0b5b57ae141cd8e928876b7cc4dee2f550f9b51a1ada38"
     - "STEP@STEP-045=sha256:33ef17464cb0c23a467f3704acd7c4604ead4e886391b265c86cba31e426c667"
     - "STEP@STEP-049=sha256:c85845562e8cdc9bdd379bb2a0a2aff8877c3d3d855f623f825fa3ff83186d90"
-    - "STEP@STEP-050=sha256:7c8039e6498ccd6622a491d9b781a492c5e15f8b155cfbee57548fc98f999e9b"
+    - "STEP@STEP-050=sha256:c4f21b35240fbd5f0549a4d21dbd96416fddaa9c6b5cbda50b7f48ad8a47cf94"
 ---
 
-# STEP-050 — Причина PERMISSION_DENIED в Windows CI PR #17
+# STEP-050 — Диагностика PERMISSION_DENIED в Windows CI PR #17
 
 ## Goal
 
-Установить и исправить конкретную причину преждевременной паузы PERMISSION_DENIED в Windows integration-сценарии STEP-045, сохранив безопасность файлов, владение job и явный отказ при настоящем запрете доступа.
+Завершить диагностический этап Windows CI: сохранить безопасную диагностику файлового отказа, проверить её совместимость с исходными integration-сценариями и зафиксировать успешный повтор CI. Причина прежнего PERMISSION_DENIED остаётся неизвестной и не объявляется исправленной.
 
 ## Context
 
@@ -65,46 +65,45 @@ Readiness poll истёк через 30 секунд. Последняя без�
 
 STEP-044 уже реализовал ограниченные Windows-повторы атомарного JSON rename. STEP-049 исправил отдельную гонку close/shutdown. Оба STEP завершены; их исторические plans/reviews не переписываются. Открытого дубликата этой диагностики нет; STEP-035 отвечает за дистрибутивы и release CI, а не текущий отказ загрузки.
 
+2026-10-12 владелец продукта выбрал цель нового плана: «Завершить диагностический этап: проверить диагностику и успешный CI, явно сохранив причину как неизвестную». Это пересмотр owning STEP после успешного run `38211933446` для `fcb938da46f5cd8ee557375a63f5f683637f102d`; owning REQ и Accepted ADR сохраняют свои требования. Получение исходного trace и исправление неизвестной операции больше не являются условием завершения этого диагностического этапа. При новом подтверждённом отказе он разбирается отдельным corrective STEP по фактическому trace.
+
 ## Scope
 
-- Безопасная локализация отказа: стадия, операция и errno, связь с текущим Windows-сценарием и минимальный воспроизводитель.
-- Узкое исправление только подтверждённой причины в существующей файловой операции или её тестовом адаптере.
-- Регрессия через реальный FileManifestStore и публичный createApplication; существующие lease/control/privacy assertions сохраняются.
-- Проверка успешного пути и настоящего постоянного запрета доступа без ложного completed или освобождения аренды.
+- Проверка уже добавленного test-only capture: исходный error/cause преобразуется только в разрешённые errno/syscall и фиксированную роль файла.
+- Scoped capture изолирован между STEP-045 fixtures; retry classification и реальные lease/control/inbox/privacy assertions сохраняются.
+- Сопоставление опубликованного diagnostic diff и реального успешного Windows CI; фактический статус отделён от утверждения о причине отказа.
+- Canonical Verification и независимый review диагностического изменения без поиска неподтверждённой production-причины.
 
 ## Mutation policy
 
 ### Allowed
 
-- `packages/application/src/application.integration.test.ts` — диагностика и регрессия подтверждённого Windows-отказа.
-- Тесты и узкие test fixtures в `packages/core/filesystem/src/`, `packages/persistence/src/`, `packages/core/downloader/src/` для локализации и воспроизведения конкретной операции.
-- STEP-050, его новые plan/review/evidence artifacts и обратные ссылки owning REQ/ADR; generated projections только через tool.
+- `packages/application/src/application.integration.test.ts` — только узкая коррекция диагностического capture и его проверок, если Verification или независимый review выявит подтверждённый дефект.
+- STEP-050, его новые plan/review/evidence artifacts; generated projections только через tool.
 
 ### Conditional
 
-- Production-файлы в `packages/core/filesystem/src/` и `packages/persistence/src/` — только после доказательства операции, errno и причины отказа; исправление ограничивается этим путём.
-- `packages/core/downloader/src/pipeline.ts`, `job-owner.ts`, `manager.ts` — только необходимая коррекция доказанной ошибки взаимодействия с этой операцией или безопасная внутренняя диагностика. Lifecycle, публичные DTO и правила владения сохраняются.
-- Новые диагностические данные — только безопасные названия стадий/операций и коды ошибок; без raw cause, абсолютных runtime paths, ownerToken, PID, hostname, credentials и signed URL.
-- Если требуется изменить Accepted ADR, публичный контракт или lease/recovery policy, сначала отдельный canonical prerequisite; текущий STEP такого изменения не разрешает.
+- Новые test-only диагностические данные — только allowlisted errno/syscall и фиксированные роли файлов. Неизвестные значения остаются unknown; содержимое error/cause не сериализуется.
+- Исправление замечаний review ограничено безопасностью и совместимостью текущей диагностики. Новый воспроизведённый production-отказ передаётся отдельному corrective STEP, а не скрыто расширяет этот этап.
 
 ### Forbidden
 
-- Retry всех файловых ошибок, бесконечный retry, игнорирование EACCES/EPERM, ложный success или удаление прежнего конечного файла ради обхода отказа.
-- Изменение API/schema, credentials/auth/provider, native ownership и lease/recovery policy.
-- Рост глобальных/production timeout, отключение Windows/Node 22, ослабление assertions, skip тестов или переписывание CI matrix ради зелёного результата.
-- Исправление неподтверждённых соседних сценариев и исторических reports завершённых STEP.
+- Production-изменения, новые FS retries и изменение lifecycle, аренды, восстановления, API/schema, auth/provider или зависимостей.
+- Raw paths, message, stack, cause, ownerToken, PID, hostname, credentials и signed URL в диагностических логах.
+- Рост timeout, skip тестов, ослабление исходных assertions, отключение Windows/Node 22 или изменение CI matrix ради успешного результата.
+- Поиск неподтверждённых соседних сценариев и изменение исторических reports завершённых STEP.
 
 ## Out of scope
 
-Новая FS retry-архитектура, общая оптимизация Windows, новые зависимости, будущие CLI/UI возможности и Git-публикация без отдельной команды пользователя.
+Исправление неизвестной причины исходного отказа, повторные CI-прогоны до получения ошибки, новая FS retry-архитектура, общая оптимизация Windows и Git-публикация без отдельной команды пользователя.
 
 ## Acceptance criteria
 
-- До production-исправления evidence устанавливает точную операцию, исходный код ошибки и необходимые условия отказа; минимальный воспроизводитель подтверждает связь с Windows-сценарием STEP-045. Один pauseReason PERMISSION_DENIED не считается достаточным доказательством причины.
-- После исправления тот же воспроизводитель достигает downloading при active lease и сценарий cancel сохраняет исходные control/inbox/privacy assertions без преждевременного PERMISSION_DENIED.
-- Настоящий постоянный запрет доступа сохраняет явный отказ; атомарность manifest и конечного файла, целостность прежнего результата и единственный владелец job не нарушены. Timeout или ошибка не подтверждают release.
-- Регрессия фиксирует подтверждённую причину, а не маскирует её задержкой или skip; существующие Windows retry-бюджеты и классификация других ошибок не расширены без прямого evidence необходимости.
-- Локальная Verification и независимый review проходят. Результат нового реального Windows CI после отдельно разрешённой публикации фиксируется отдельно; Linux/injected proof не объявляется Windows CI PASS.
+- Readiness failure JSON содержит только разрешённые errno/syscall и фиксированную роль файла; direct native error и DomainError.cause корректно различаются, отсутствующие или неподдерживаемые поля остаются unknown. Контрольные секретные значения, raw paths, message, stack и cause не попадают в JSON.
+- Capture сбрасывается до запуска пары application; собственный spy восстанавливается после shutdown/drain. Оригинальная decideRetry получает прежний input и возвращает прежнее решение; исходные STEP-045 lease/control/inbox/privacy assertions и проверки STEP-044/049 проходят без ослабления.
+- Сохранены точный опубликованный HEAD diagnostic diff и ссылки на фактический успешный Windows CI для Node 22.13.0 и 24. Локальные и injected проверки не подменяют реальный Windows PASS; при смене production/test revision требуется новая применимая Windows-проверка.
+- Evidence явно отделяет исходный PERMISSION_DENIED от успешного повтора: операция, исходный errno и причина отказа не установлены; production-исправление и устранение причины не заявляются. Решение владельца о завершении диагностического этапа записано в STEP.
+- Canonical Verification и независимый schema-valid review проходят; постоянный запрет доступа, атомарность, прежний результат, single writer и подтверждённый release сохраняются существующим production-кодом и его тестами. STEP не получает completed только по зелёному CI.
 
 ## Verification
 
@@ -115,58 +114,38 @@ STEP-044 уже реализовал ограниченные Windows-повто
 - command: `yarn test`
 - command: `yarn build`
 - command: `python3 .harness/tools/validate.py --mode manual`
-- manual: Сопоставить подтверждённую операцию/errno с текущим Windows CI и воспроизводителем; сохранить безопасное evidence причины, отличающее временную блокировку от настоящего отказа доступа.
+- manual: Сверить опубликованный diagnostic production/test revision с успешным Windows CI Node 22.13.0/24 и сохранить ссылки/HEAD; проверить, что evidence явно сохраняет неизвестную причину прежнего отказа и не объявляет её исправленной. Изменения только STEP/docs не требуют нового Windows CI для неизменённого кода.
 
 ## Deliverables
 
-- Безопасное evidence причины и минимальное исправление в доказанном scope.
-- Регрессионный proof, canonical Verification и независимый report; отдельный factual статус remote Windows CI.
+Безопасная test-only диагностика, проверка её изоляции и совместимости, factual evidence успешного Windows CI и неизвестной причины прежнего отказа, canonical Verification и независимый report.
 
 ## Implementation plan
 
-### 1. Собрать безопасный native trace первой ошибки
+### 1. Проверить существующую безопасную диагностику и изоляцию fixture
 
-- В application integration fixture STEP045 использовать существующий decideRetry spy seam: original error приходит без потери cause. До запуска каждой пары application сбрасывать scoped capture, после drain/shutdown восстанавливать только собственный spy. Решение retry возвращать через неизменённую оригинальную функцию.
-- Извлекать только allowlisted errno/syscall и фиксированный target role (manifest/lease/temp/other), включая native cause когда он есть. Не копировать message, stack, raw path/cause, job/owner identifiers. Неизвестное поле обозначать unknown; не восстанавливать отсутствующий errno догадкой. Добавить trace в существующее безопасное readiness failure message.
-- H-001: целевая проверка diagnostic capture на permission error с известными syscall/errno и canary raw fields; capture содержит только safe enums, исходная retry classification/проверки active lease и control остаются. Это проверка новой диагностики PRN002, а не production regression на ещё неизвестную файловую причину.
-- Получить trace оригинального Windows failure либо равноценный подтверждённый project-specific воспроизводитель. Если локальный runtime не воспроизводит исходный syscall/errno, подготовить reviewable diagnostic diff и factual handoff; STEP RUN не даёт самостоятельного разрешения на Git publication. До source proof никаких production retries/timeout изменений.
+- Использовать уже реализованный diagnostic diff fcb938d; не повторять готовую реализацию и не менять production-код. Сопоставить локальный diagnostic subject с опубликованным production/test revision.
+- H-001: проверить existing canary DomainError.cause trace test и structural allowlists: наружу только разрешённые errno/syscall/роль; direct native error и cause обрабатываются без raw сериализации, отсутствующие/неподдерживаемые поля остаются unknown. Обязательство закрывается fresh exact focused Verification command и independent review; новый узкий test только при подтверждённом gap в текущей диагностике.
+- H-002 revision2: проверить reset перед application pair, original decideRetry input/result и restore только собственного spy после shutdown/drain. Исходные STEP045 lease/control/inbox/privacy и STEP044/049 retry/release assertions не ослаблять; доказательство тем же fresh focused Verification command. Прежний H002 revision1 о fix неизвестной операции не объявлять proven.
+- Если проверки выявят подтверждённый diagnostic defect, исправить только integration fixture и его необходимые проверки. Новый production-отказ или architecture/public-contract вопрос передать отдельному corrective STEP; не добавить blanket retry, timeout, skip или поиск неподтверждённых причин.
 
 **Files:**
 - packages/application/src/application.integration.test.ts
+- planning/tasks/STEP-050.md
 
 **Tests:**
 - yarn test packages/core/filesystem packages/persistence packages/core/downloader packages/application apps/cli
-- Безопасный trace/неизменённая classification и существующие STEP045/049 integration assertions
+- Existing STEP050 H001 canary и STEP045/044/049 integration assertions
 
 **Risks:**
-- Native Windows отсутствует локально: может потребоваться отдельная разрешённая публикация диагностики; неизвестная причина не объявляется исправленной.
+- Scoped module spy способен нарушить соседний fixture: тесты и review проверяют forwarding/restore, а не считают их доказанными по зелёному предыдущему CI.
 
-### 2. Исправить только установленную файловую причину
+### 2. Получить полную Verification и связать её с реальным Windows evidence
 
-- Сопоставить trace с pipeline queued→resolving → JobOwner.save → session.assertOwner/saveSnapshot. До production patch установить operation/errno/target role и необходимые условия, воспроизвести именно этот отказ; источник может оказаться read или write, поэтому rename не предполагать.
-- Только после подтверждения выбрать минимальное исправление существующей операции/адаптера в разрешённом scope. Сохранить atomic snapshot/final rename, прежний результат, lane/native writer capability, lease/recovery/DTO и пять Windows EPERM/EBUSY rename attempts STEP044. Расширение поведения допускается только при прямом evidence и согласии Accepted contracts.
-- H-002: тот же confirmed reproducer должен стать downloading/active и пройти исходный cancel/inbox/privacy сценарий; постоянный отказ остаётся failure, без false completed/release. Добавить узкую regression для фактически установленной операции и провести исходный Windows scenario; не создавать production regression/hardening для неподтверждённого errno.
-- Если trace не получен, hypothesis invalidated или требуется новый public/architecture/lease contract, вернуть BLOCKED с конкретным owner/prerequisite, не выбирать подменяющий retry/skip/timeout.
-
-**Files:**
-- packages/core/filesystem/src/
-- packages/persistence/src/
-- packages/core/downloader/src/pipeline.ts
-- packages/core/downloader/src/job-owner.ts
-- packages/core/downloader/src/manager.ts
-- packages/application/src/application.integration.test.ts
-
-**Tests:**
-- yarn test packages/core/filesystem packages/persistence packages/core/downloader packages/application apps/cli
-- H002 same confirmed fault before/after и permanent access denial/atomic ownership assertions
-
-**Risks:**
-- Конкретный production файл выбирается только после operation proof; это conditional mutation текущего STEP, не предварительное разрешение на blanket retry.
-
-### 3. Подтвердить полный scope и передать независимому review
-
-- После выполнения всей Acceptance передать IMPLEMENT SUCCESS dispatcher для seven-command Verification и manual operation/errno сопоставления. Partial diagnostic tests не заменяют completion всего STEP.
-- Получить required exact revision independent reviews и REVIEW blast PASS, включая H001/H002 fresh exact focused command proof. Сохранить фактический Windows статус отдельно после явно разрешённой публикации; Linux/injected PASS не заменяет remote CI.
+- После проверки диагностического scope передать IMPLEMENT SUCCESS dispatcher для всех семи canonical Verification commands. Предыдущий локальный PASS не заменяет generated fresh evidence текущего subject.
+- В manual check сверить CI38211933446 и Windows22job114687825889/Windows24job114687825923 с fcb938da46f5cd8ee557375a63f5f683637f102d; сохранить фактические conclusion, ссылки и кодовую привязку. HarnessIntegrity38211933423 учитывать отдельно. Проверка CI logs/API не требует полного PR-file snapshot, который достиг provider limit.
+- Если production/test code не изменён после fcb938d, подтверждённый Windows PASS применим; изменения только canonical STEP/docs этого proof не отменяют. Если diagnostic code был исправлен, получить новый реальный Windows evidence после отдельной разрешённой Git-публикации; pending evidence возвращает BLOCKED, не false PASS.
+- Зафиксировать решение владельца и outcome: исходная операция/errno неизвестны, failure-only trace в успешном run отсутствует. Диагностический этап не утверждает root cause, production-fix или доказанную невозможность повторения.
 
 **Files:**
 - planning/tasks/STEP-050.md
@@ -179,21 +158,122 @@ STEP-044 уже реализовал ограниченные Windows-повто
 - yarn test
 - yarn build
 - python3 .harness/tools/validate.py --mode manual
+- Сверить опубликованный diagnostic production/test revision с успешным Windows CI Node 22.13.0/24 и сохранить ссылки/HEAD; проверить, что evidence явно сохраняет неизвестную причину прежнего отказа и не объявляет её исправленной. Изменения только STEP/docs не требуют нового Windows CI для неизменённого кода.
+
+**Risks:**
+- Успешный повтор CI не является доказательством причины; при повторном подтверждённом отказе новый corrective STEP использует фактический trace.
+
+### 3. Передать диагностический subject независимому review и завершить по новому контракту
+
+- Передать exact revision и generated Verification evidence независимому lead reviewer и required специализированным reviewers из deterministic review gates; production безопасность оценивается как сохранённый contract и существующие executable regression proofs.
+- Для required REVIEW blast выполнить fresh grounding и proof H001/H002 revision2 с exact focused command; current subject safety не выдавать за proof прежнего H002 production-fix.
+- Применить статус completed только после schema-valid independent PASS и completion proof новой Acceptance. Сохранить исторический failed Windows run и unknown cause; не переписывать прежние immutable plan/review reports.
+
+**Files:**
+- planning/tasks/STEP-050.md
+- planning/reviews/STEP-050/
+
+**Tests:**
+- Independent schema-valid review PASS
+- Fresh REVIEW blast H001/H002 proof
+
+**Risks:**
+- Новый контракт утверждает завершение диагностики; отчёты должны сохранять это ограничение без заявления об исправлении исходной причины.
 
 ## Evidence
+
+
+<!-- VERIFICATION-EVIDENCE:START -->
+- Verification run: 2026-10-12T06:51:29Z
+- Status: PASS
+- Automated resumed: false
+- Git head: fcb938da46f5cd8ee557375a63f5f683637f102d
+- Worktree hash: sha256:7e68156a8f22909a3f675754b679d5ea14bf76c9b03ac3adfbaf44581fc3d6e1
+- Verification contract basis: sha256:3ad08a0bf40dfe840e8d033739634fcbd365b77fd402cc055f9da1ecd19301e9
+- Subject git head: fcb938da46f5cd8ee557375a63f5f683637f102d
+- Subject worktree hash: sha256:92c04e5352b2a953563add2adedf2303317ff1287aa580104e81e8f0497876c4
+
+### Automated verification
+- Command: yarn test packages/core/filesystem packages/persistence packages/core/downloader packages/application apps/cli
+  - Status: PASS
+  - Exit code: 0
+  - Duration ms: 6580
+  - stdout sha256: 40ae017e0e42bd08e6bc895c23b861c4e672e3a7abb0754dfd672b5b0bc0f782
+  - stderr sha256: 234cf6319895c21eeed385e1ba147ee31916b4599cf996b90a0da6c022f74f06
+  - stdout bytes: 4931
+  - stderr bytes: 2506
+- Command: yarn format:check
+  - Status: PASS
+  - Exit code: 0
+  - Duration ms: 2667
+  - stdout sha256: 17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20
+  - stderr sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  - stdout bytes: 66
+  - stderr bytes: 0
+- Command: yarn lint
+  - Status: PASS
+  - Exit code: 0
+  - Duration ms: 7727
+  - stdout sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  - stderr sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  - stdout bytes: 0
+  - stderr bytes: 0
+- Command: yarn typecheck
+  - Status: PASS
+  - Exit code: 0
+  - Duration ms: 3068
+  - stdout sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  - stderr sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  - stdout bytes: 0
+  - stderr bytes: 0
+- Command: yarn test
+  - Status: PASS
+  - Exit code: 0
+  - Duration ms: 7439
+  - stdout sha256: ca3db844d53554938c79ce83894826abb543d182ef6ecbef96f594752ab9d678
+  - stderr sha256: 85fd6107b941f4049ed4f5213685c784e75bc1e8a478a12e6b75ef3a79429414
+  - stdout bytes: 10228
+  - stderr bytes: 2506
+- Command: yarn build
+  - Status: PASS
+  - Exit code: 0
+  - Duration ms: 414
+  - stdout sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  - stderr sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  - stdout bytes: 0
+  - stderr bytes: 0
+- Command: python3 .harness/tools/validate.py --mode manual
+  - Status: PASS
+  - Exit code: 0
+  - Duration ms: 4620
+  - stdout sha256: 5de798794afd5e637551e17623dbb63cd1c968d50843542d11c4810c790b3a2f
+  - stderr sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  - stdout bytes: 424
+  - stderr bytes: 0
+
+### Product verification
+- none
+
+### Manual verification
+- Check: Сверить опубликованный diagnostic production/test revision с успешным Windows CI Node 22.13.0/24 и сохранить ссылки/HEAD; проверить, что evidence явно сохраняет неизвестную причину прежнего отказа и не объявляет её исправленной. Изменения только STEP/docs не требуют нового Windows CI для неизменённого кода.
+  - Status: PASS
+  - Observed: "Read-only GitHub Actions API: CI run 38211933446 completed/success для HEAD fcb938da46f5cd8ee557375a63f5f683637f102d; Windows Node22.13.0 job114687825889 и Node24 job114687825923 success. URL https://github.com/yarkovaleksei/yandex-music-downloader/actions/runs/38211933446 . Snapshot .harness/local/step050-run2-ci.json. Локальный HEAD тот же; git diff --name-only -- apps packages пустой, текущие изменения только STEP/docs/plan-review. STEP Context содержит явное решение владельца завершить диагностику; Goal/Acceptance/Evidence сохраняют неизвестную операцию/errno/причину, production-fix не заявлен. Неизменённый код связывает реальный Windows PASS с диагностическим subject."
+<!-- VERIFICATION-EVIDENCE:END -->
 
 - [PR #17](https://github.com/yarkovaleksei/yandex-music-downloader/pull/17).
 - [Упавший Windows Node 22 job](https://github.com/yarkovaleksei/yandex-music-downloader/actions/runs/38208350373/job/114676742498): startOwner, readiness timeout 30_000ms; observed fields перечислены в Context.
 - Захваченный job log: `/tmp/pr17-ci/a2a32d0-windows22.log`. Свежий provider snapshot: `.harness/local/git/pr17-step050-snapshot.json`.
+- [Успешный GitHub Actions run](https://github.com/yarkovaleksei/yandex-music-downloader/actions/runs/38211933446) завершён со статусом `success`: Quality и Test на `ubuntu-24.04`, `macos-15` и `windows-2025` с Node `22.13.0` и `24`; все семь jobs успешны. Factual snapshot: `.harness/local/git/step050-ci-success.json`.
+- Harness Integrity run `38211933423` завершён со статусом `success`.
+- Windows Node 22 job `114687825889` завершён со статусом `success`; сохранённый лог `/tmp/step050-windows22-success.log` содержит `src/application.integration.test.ts`: 17 tests PASS и полный job: 85 test files passed. `NativeTrace` в успешном логе отсутствует, поскольку он печатается только при readiness failure.
 - Git HEAD и snapshots сверены при STEP ADD; production-код не изменялся.
 - При STEP RUN свежий snapshot `.harness/local/git/pr17-step050-run-snapshot.json` от 2026-10-12T06:04:49Z подтвердил тот же HEAD и единственный failed Windows Node 22 check. Ready plan revision 1 прошёл независимые architecture и planning review: [PLAN-REVIEW-20261012T060547Z](../plan-reviews/STEP-050/PLAN-REVIEW-20261012T060547Z.md).
 - Первый unit реализован только в `packages/application/src/application.integration.test.ts`: scoped spy сохраняет allowlisted `errno`, `syscall`, `targetRole` в readiness failure JSON; оригинальная `decideRetry` вызывается без изменения input или результата. После shutdown/drain восстанавливается только собственный spy. Paths, message, stack, cause и данные владельца не сериализуются.
 - H-001: synthetic DomainError.cause с контрольными секретными значениями даёт только `{errno: EPERM, syscall: rename, targetRole: temp}`; тест проверяет отсутствие контрольных данных и прежнюю retry classification. Этот synthetic пример не устанавливает причину исходного Windows failure.
 - Локальные проверки диагностического unit: `yarn test packages/application/src/application.integration.test.ts` — exit 0, 17/17 tests PASS; `yarn format:check`, `yarn typecheck`, `yarn lint` — exit 0. Здесь сохранены observed facts, а не восстановленная terminal quote.
-- Точная операция, исходный errno и условия исходного Windows отказа не получены. H-002 и полная Acceptance не выполнены; production-исправление, canonical completion Verification и implementation review PASS не заявлены.
+- По прежнему плану revision 1 точная операция, исходный `errno` и условия исходного Windows отказа не получены; прежний H-002 не доказан. Успешный повтор после диагностического diff не доказывает root cause или исправление. Производственное исправление не заявляется; новую Acceptance диагностического этапа определяет записанное решение владельца от 2026-10-12.
+
 
 ## Blocker / Failure reason
 
-STEP RUN остановлен после проверенного диагностического unit: необходим исходный Windows trace операции/errno. Native Windows runtime локально недоступен, а текущий опубликованный HEAD не содержит новой диагностики. Owning artifact — STEP-050; contract/ADR менять не требуется.
-
-Следующий prerequisite — отдельно разрешённая Git-публикация диагностического diff командой `GIT CHECK > COMMIT > PUSH`, затем фактический новый Windows CI trace и продолжение `STEP RUN STEP-050`. До trace production-исправление не разрешено. Status остаётся `in_progress`; execution result — BLOCKED, STEP не завершён.
+Решением владельца от 2026-10-12 прежнее требование установить и исправить неизвестную причину заменено завершением диагностического этапа. Новых contract/prerequisite blockers нет. Статус остаётся in_progress до canonical Verification и независимого review; неизвестная причина сохраняется в evidence, а повторный подтверждённый отказ требует отдельного corrective STEP.
