@@ -2,13 +2,16 @@
 
 CLI обращается только к публичному Application API. После `yarn build` запуск из репозитория: `node apps/cli/dist/index.js --help`. Поле `bin` пакета регистрирует имя `music-downloader` для установленного пакета.
 
-Команды: `auth`, `account`, `logout`, `jobs`, `download URL`, `track URL`, `album URL`, `playlist URL`, `resume JOB_ID`, `retry JOB_ID`, `cancel JOB_ID`. `download` определяет тип ссылки через application; остальные команды загрузки проверяют соответствие типа. `resume` и `retry` используют сохранённые параметры job и ждут конечного снимка. `doctor` принадлежит STEP-025.
+Команды: `auth`, `account`, `logout`, `jobs`, `doctor`, `download URL`, `track URL`, `album URL`, `playlist URL`, `resume JOB_ID`, `retry JOB_ID`, `cancel JOB_ID`. `download` определяет тип ссылки через application; остальные команды загрузки проверяют соответствие типа. `resume` и `retry` используют сохранённые параметры job и ждут конечного снимка.
+
+`doctor` проверяет Node runtime, secure storage, provider/account, metadata и варианты аудио canary `2224197`, read-only manifest store, каталог вывода и optional FFmpeg. `music-downloader doctor --json` пишет один `CommandResult` в stdout; human-отчёт и статусы идут в stderr. Версия provider schema выводится в отчёте. Отсутствующий FFmpeg не меняет exit code, а обязательный failed/skipped check даёт код `3`. Doctor не подтверждает конфигурацию только успешным чтением keyring и не проверяет права token-файла: native storage не использует такой файл.
 
 | Опции                                                                                       | Команды                                         |
 | ------------------------------------------------------------------------------------------- | ----------------------------------------------- |
 | `--json`, `--log-level error\|warn\|info\|debug\|trace`, `--log-file PATH`, `--debug`       | Все                                             |
 | `--output PATH`, `--quality best\|lossless\|high\|normal`, `--overwrite`, `--skip-existing` | download, track, album, playlist                |
 | `--concurrency 1..8`                                                                        | download, track, album, playlist, resume, retry |
+| `--output PATH`                                                                             | doctor                                          |
 
 Настройки выбираются в порядке **флаги → окружение → settings.json → defaults**. Файл необязателен: POSIX `$XDG_CONFIG_HOME/music-downloader/settings.json` или `~/.config/music-downloader/settings.json`; Windows `%APPDATA%/music-downloader/settings.json`, при отсутствии APPDATA — `~/AppData/Roaming/music-downloader/settings.json`. Некорректный JSON, значения и ошибки чтения дают безопасную ошибку использования без содержимого файла. Credentials в settings не сохраняются.
 

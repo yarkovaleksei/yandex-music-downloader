@@ -30,13 +30,14 @@ describe('собранный bin', () => {
       },
     );
   }, 35_000);
-  it('показывает help и usage без application bootstrap', async () => {
+  it('показывает help и распознаёт doctor', async () => {
     const bin = new URL('../dist/index.js', import.meta.url);
     const binPath = fileURLToPath(bin);
     const result = await execute(process.execPath, [binPath, '--help']);
     expect(result.stdout).toContain('music-downloader');
+    expect(result.stdout).toContain('doctor');
     await expect(
-      execute(process.execPath, [binPath, 'doctor']),
+      execute(process.execPath, [binPath, 'doctor', '--quality', 'best']),
     ).rejects.toMatchObject({ code: 2 });
   });
   it('не пишет human help в stdout при --help --json', async () => {

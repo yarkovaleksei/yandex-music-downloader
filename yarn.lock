@@ -363,6 +363,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@msgpack/msgpack@npm:^3.1.3":
+  version: 3.1.3
+  resolution: "@msgpack/msgpack@npm:3.1.3"
+  checksum: 10c0/1fa9a760a58e64e121561d17977b680198ff24d83e951df3896f8639d06824f2cba20af92a19940461e0d5d6dc696bd01222bd901164759432eadd0f482d0816
+  languageName: node
+  linkType: hard
+
 "@music-downloader/application@workspace:*, @music-downloader/application@workspace:packages/application":
   version: 0.0.0-use.local
   resolution: "@music-downloader/application@workspace:packages/application"
@@ -463,6 +470,8 @@ __metadata:
   resolution: "@music-downloader/metadata@workspace:packages/metadata"
   dependencies:
     "@music-downloader/shared": "workspace:*"
+    music-metadata: "npm:12.1.0"
+    taglib-wasm: "npm:1.5.3"
   languageName: unknown
   linkType: soft
 
@@ -2324,6 +2333,20 @@ __metadata:
   dependencies:
     has-flag: "npm:^4.0.0"
   checksum: 10c0/afb4c88521b8b136b5f5f95160c98dee7243dc79d5432db7efc27efb219385bbc7d9427398e43dd6cc730a0f87d5085ce1652af7efbe391327bc0a7d0f7fc124
+  languageName: node
+  linkType: hard
+
+"taglib-wasm@npm:1.5.3":
+  version: 1.5.3
+  resolution: "taglib-wasm@npm:1.5.3"
+  dependencies:
+    "@msgpack/msgpack": "npm:^3.1.3"
+  peerDependencies:
+    typescript: ">=4.5.0"
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: 10c0/49b5e2656d89f4e2f718b70e5dbb4d3fe3d3c89fbcbbe22cede5943cee24cab4ebd912d661f40ab04f936955b359999a755cb29dbedf9e056adf826552c82caa
   languageName: node
   linkType: hard
 

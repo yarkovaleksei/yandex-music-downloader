@@ -7,7 +7,9 @@ import type {
   LeaseSession,
   ManifestPartial,
   ManifestStore,
+  MediaKind,
   MusicProvider,
+  PlannedTrack,
   QualityPreference,
 } from '@music-downloader/shared';
 import type { AudioValidator } from '@music-downloader/core-validation';
@@ -79,7 +81,20 @@ export interface ProcessingHooks {
     partPath: string,
     variant: AudioVariant,
     artwork?: ArtworkData,
+    context?: MetadataProcessingContext,
   ): Promise<void>;
+}
+
+/**
+ * Snapshot передаёт writer только provider-neutral данные, полученные до processing.
+ * Старый трёхаргументный callback остаётся совместимым с trailing context.
+ */
+export interface MetadataProcessingContext {
+  readonly plannedTrack: PlannedTrack;
+  readonly sourceKind: MediaKind;
+  readonly resultPath: string;
+  readonly embedArtwork: boolean;
+  readonly saveCoverFile: boolean;
 }
 
 export interface EventPublisher {

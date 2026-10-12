@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import {
   AuthenticationError,
   DiskFullError,
@@ -33,6 +33,38 @@ describe('Download Manager', () => {
       true,
     );
     expect(requestedSizes).toEqual([400]);
+    expect(fixture.artworkRequests()).toBe(1);
+  });
+
+  it('передаёт processing исходный album и snapshot без нового запроса artwork', async () => {
+    const fixture = managerFixture(1);
+    const metadata = vi.fn();
+    fixture.deps.processing = { metadata };
+    await fixture.create('metadata-context');
+
+    await createDownloadManager(fixture.deps).run('metadata-context');
+
+    expect(metadata).toHaveBeenCalledTimes(1);
+    expect(metadata.mock.calls[0]?.[3]).toMatchObject({
+      plannedTrack: { track: { album: { title: 'Исходный альбом' } } },
+      sourceKind: 'playlist',
+      resultPath: 'metadata-context-1.mp3',
+      embedArtwork: true,
+      saveCoverFile: true,
+    });
+    expect(fixture.artworkRequests()).toBe(1);
+  });
+
+  it('загружает одну обложку для album из 12 tracks', async () => {
+    const fixture = managerFixture(12);
+    await fixture.create('album-12');
+
+    const result = await createDownloadManager(fixture.deps).run('album-12');
+
+    expect(result.tracks).toHaveLength(12);
+    expect(result.tracks.every((track) => track.status === 'completed')).toBe(
+      true,
+    );
     expect(fixture.artworkRequests()).toBe(1);
   });
 

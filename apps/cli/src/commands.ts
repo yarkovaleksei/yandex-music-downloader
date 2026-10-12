@@ -23,6 +23,7 @@ export async function executeCommand(
   beforeInvocation: () => boolean = () => true,
 ): Promise<ApplicationResult<unknown>> {
   const command = args.command!;
+  if (command === 'doctor') return api.diagnostics();
   if (command === 'auth') return api.authenticate();
   if (command === 'account') return api.account();
   if (command === 'logout') return api.logout();

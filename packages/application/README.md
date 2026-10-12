@@ -23,6 +23,13 @@ logger допустим. Без override root
 все его job используют один scheduler. Разные экземпляры не делят подписки,
 provider или последовательности событий.
 
+`diagnostics()` создаёт doctor snapshot с application-owned checks внутри
+`DiagnosticsDto.configuration`: runtime, provider/auth/account, metadata и audio
+variants canary, manifest store, filesystem и optional FFmpeg. DTO содержит только
+safe status/code и provider schema version; credentials, account ID, signed URL и
+native ошибки туда не переносятся. Проверка не открывает audio stream и не меняет
+manifest или credentials storage.
+
 Каждая команда возвращает versioned `ApplicationResult`. Исключения нормализуются
 в JSON DTO `code/message/retryable`; credentials, signed URL и runtime objects в
 DTO не попадают. При `logging.debug: true` `error.details.debug.stack` содержит

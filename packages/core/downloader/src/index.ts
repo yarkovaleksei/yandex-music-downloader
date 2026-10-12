@@ -14,6 +14,7 @@ export type {
   DownloadManagerOptions,
   DownloadFiles,
   EventPublisher,
+  MetadataProcessingContext,
   SchedulerPort,
   ProcessingHooks,
   ArtworkCache,

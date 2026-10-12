@@ -10,6 +10,10 @@
     }
   },
   "dependencies": {
-    "@music-downloader/shared": "workspace:*"
+    "@music-downloader/shared": "workspace:*",
+    "taglib-wasm": "1.5.3"
+  },
+  "devDependencies": {
+    "music-metadata": "12.1.0"
   }
 }

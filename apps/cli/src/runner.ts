@@ -29,6 +29,7 @@ export interface RunnerHost {
   readonly createApplication: (adapters: {
     concurrency?: number;
     logging: RuntimeLoggingOptions;
+    diagnosticsRuntime?: { outputDirectory: string };
   }) => ApplicationApi;
 }
 const defaultHost: RunnerHost = {
@@ -157,6 +158,9 @@ async function runApplication(
         ...(config.logFile === undefined ? {} : { filePath: config.logFile }),
         debug: config.debug,
       },
+      ...(args.command === 'doctor'
+        ? { diagnosticsRuntime: { outputDirectory: config.output } }
+        : {}),
     });
     if (isStreamingCommand(args.command!)) {
       // Пауза job применяется только к потоковым командам. Так auth сохраняет обычное завершение по SIGINT.

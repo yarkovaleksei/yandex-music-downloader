@@ -8,6 +8,7 @@ import type {
   MusicProvider,
 } from '@music-downloader/shared';
 import type { RuntimeLoggingOptions } from './contracts.js';
+import type { DiagnosticRuntimeOptions } from './diagnostics.js';
 
 /** Host передаёт только порты; Electron/CLI не попадают в переносимые DTO. */
 export interface RuntimeAdapters {
@@ -20,5 +21,6 @@ export interface RuntimeAdapters {
   readonly logging?: RuntimeLoggingOptions;
   readonly concurrency?: number;
   readonly diagnostics?: () => Promise<DiagnosticsDto>;
+  readonly diagnosticsRuntime?: Partial<DiagnosticRuntimeOptions>;
   readonly processing?: ProcessingHooks;
 }

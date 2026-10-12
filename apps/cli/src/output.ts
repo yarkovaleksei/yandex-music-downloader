@@ -30,6 +30,35 @@ export function writeRecord(output: Output, record: CommandResult): void {
     output.stderr(
       `Аккаунт: ${String(account?.displayName ?? account?.id ?? 'авторизован')}`,
     );
+  } else if (record.command === 'diagnostics' && fields(record.data)) {
+    const diagnostics = fields(record.data)!;
+    const configuration = fields(diagnostics.configuration);
+    const checks = fields(configuration?.checks);
+    output.stderr(
+      `Диагностика: ${diagnostics.available === true ? 'OK' : 'FAIL'}`,
+    );
+    output.stderr(
+      `PROVIDER_SCHEMA_VERSION: ${String(configuration?.schemaVersion ?? 'неизвестна')}`,
+    );
+    const labels: Record<string, string> = {
+      runtime: 'Node.js',
+      credentialStore: 'Хранилище credentials',
+      provider: 'Provider',
+      auth: 'Авторизация',
+      account: 'Аккаунт',
+      metadata: 'Метаданные',
+      audioVariants: 'Варианты аудио',
+      manifestStore: 'Хранилище заданий',
+      filesystem: 'Каталог вывода',
+      ffmpeg: 'FFmpeg',
+      tokenPermissions: 'Права token-файла',
+    };
+    for (const [name, check] of Object.entries(checks ?? {})) {
+      const item = fields(check);
+      output.stderr(
+        `${labels[name] ?? name}: ${item?.status === 'api-changed' ? 'API changed' : String(item?.status ?? 'неизвестно')}${item?.code === undefined ? '' : ` (${String(item.code)})`}`,
+      );
+    }
   } else if (
     (record.command === 'jobs' || record.command === 'listJobs') &&
     Array.isArray(record.data)
