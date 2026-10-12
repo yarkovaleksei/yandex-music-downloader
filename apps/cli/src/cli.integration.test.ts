@@ -58,11 +58,17 @@ describe('H-002: Ctrl+C через публичный ApplicationApi', () => {
     await expect
       .poll(() => atCreated, { timeout: 3000 })
       .toSatisfy((status) => status === 'queued' || status === 'interrupted');
+    // Readiness подтверждает работающий manager по aggregate и состоянию реального track.
     await expect
       .poll(
-        async () =>
-          (await api!.getJob(created)).kind === 'result' &&
-          (await api!.getJob(created)).data?.status === 'running',
+        async () => {
+          const snapshot = await api!.getJob(created);
+          return (
+            snapshot.kind === 'result' &&
+            snapshot.data?.status === 'running' &&
+            snapshot.data.tracks[0]?.status === 'downloading'
+          );
+        },
         { timeout: 3000 },
       )
       .toBe(true);

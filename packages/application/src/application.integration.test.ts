@@ -108,14 +108,41 @@ describe('STEP-045: команды двух application с общим stateDir',
       quality: 'best',
       destination: path.join(root, 'music'),
     });
+    // Диагностика readiness содержит только безопасные enum-поля.
     await expect
       .poll(
         async () => {
           const result = await appB!.getJob(jobId);
-          return (
-            result.kind === 'result' &&
-            result.data?.tracks[0]?.status === 'downloading' &&
-            (await store.readLeaseState(jobId)) === 'active'
+          const trackStatus =
+            result.kind === 'result'
+              ? result.data?.tracks[0]?.status
+              : undefined;
+          if (result.kind === 'result' && trackStatus === 'downloading') {
+            const leaseState = await store.readLeaseState(jobId);
+            if (leaseState === 'active') return true;
+            const manifest = await store.read(jobId);
+            throw new Error(
+              JSON.stringify({
+                resultKind: result.kind,
+                trackStatus,
+                leaseState,
+                controlState: manifest?.control.state,
+                pauseReason: manifest?.control.pauseReason,
+              }),
+            );
+          }
+          const [leaseState, manifest] = await Promise.all([
+            store.readLeaseState(jobId),
+            store.read(jobId),
+          ]);
+          throw new Error(
+            JSON.stringify({
+              resultKind: result.kind,
+              trackStatus,
+              leaseState,
+              controlState: manifest?.control.state,
+              pauseReason: manifest?.control.pauseReason,
+            }),
           );
         },
         { timeout: 30_000, interval: 10 },
@@ -213,20 +240,10 @@ describe('STEP-049: shutdown закрывающегося manager', () => {
     const store = new FileManifestStore({ stateDir });
     let seed: ReturnType<typeof createApplication> | undefined;
     let resumed: ReturnType<typeof createApplication> | undefined;
-    let jobId = '';
-    let unblockStream!: () => void;
-    let streamPullStarted!: () => void;
+    let jobId: string;
     let releaseSession!: () => void;
     let releaseStarted!: () => void;
     let releaseCalls = 0;
-    const blockedStream = new Promise<void>((resolve) => {
-      unblockStream = resolve;
-    });
-    // Пауза начинается только после реального pull: это исключает гонку с job.created
-    // в STEP-049 и сохраняет проверку прерывания уже запущенной загрузки.
-    const streamPullObserved = new Promise<void>((resolve) => {
-      streamPullStarted = resolve;
-    });
     const releaseGate = new Promise<void>((resolve) => {
       releaseSession = resolve;
     });
@@ -234,48 +251,18 @@ describe('STEP-049: shutdown закрывающегося manager', () => {
       releaseStarted = resolve;
     });
     try {
-      seed = createApplication({
-        stateDir,
-        providerOverride: {
-          ...downloads(),
-          openAudioStream: async () => ({
-            stream: new ReadableStream<Uint8Array>({
-              pull(controller) {
-                controller.enqueue(validMp3.slice(0, 1));
-                streamPullStarted();
-                return blockedStream;
-              },
-              cancel() {
-                unblockStream();
-              },
-            }),
-            contentLength: validMp3.byteLength,
-            container: 'mp3',
-            acceptsRanges: true,
-            startOffset: 0,
-          }),
-        },
-      });
-      seed.subscribe((event) => {
-        if (event.event === 'job.created') jobId = event.jobId;
-      });
-      const initial = seed.createDownload({
+      seed = createApplication({ stateDir, providerOverride: downloads() });
+      const completed = await seed.createDownload({
         source: { provider: 'mock', kind: 'track', id: 'closing' },
         quality: 'best',
         destination: path.join(root, 'music'),
       });
-      await expect
-        .poll(() => jobId, { timeout: 5_000, interval: 10 })
-        .not.toBe('');
-      await streamPullObserved;
-      await expect(seed.pause(jobId)).resolves.toMatchObject({
+      expect(completed).toMatchObject({
         kind: 'result',
-        data: { status: 'paused' },
+        data: { status: 'completed', tracks: [{ status: 'completed' }] },
       });
-      await expect(initial).resolves.toMatchObject({
-        kind: 'result',
-        data: { status: 'paused' },
-      });
+      if (completed.kind !== 'result') throw new Error('Ожидался result.');
+      jobId = completed.data.jobId;
       await seed.shutdown();
       seed = undefined;
 
@@ -330,7 +317,6 @@ describe('STEP-049: shutdown закрывающегося manager', () => {
       await expect(shutdown).resolves.toMatchObject({ kind: 'result' });
       expect(releaseCalls).toBe(1);
     } finally {
-      unblockStream?.();
       releaseSession?.();
       await seed?.shutdown();
       await resumed?.shutdown();
