@@ -53,3 +53,4 @@
 | STEP-047 | ESLint: публичный application/contracts без ослабления границ | bugfix | critical | completed | STEP-001, STEP-018 | REQ-005, REQ-029, REQ-044 |
 | STEP-048 | Поддерживаемый размер обложки при загрузке | bugfix | critical | completed | STEP-009, STEP-017, STEP-018, STEP-023 | REQ-004, REQ-026 |
 | STEP-049 | Закрытие manager и подтверждённые сбои CI PR #17 | bugfix | critical | completed | STEP-019, STEP-045 | REQ-018, REQ-030, REQ-042 |
+| STEP-050 | Причина PERMISSION_DENIED в Windows CI PR #17 | bugfix | critical | in_progress | STEP-044, STEP-045, STEP-049 | REQ-012, REQ-032, REQ-041, REQ-042 |

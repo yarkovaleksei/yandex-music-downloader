@@ -9,6 +9,7 @@ import {
   currentLeaseIdentity,
   FileManifestStore,
 } from '@music-downloader/persistence';
+import { DomainError } from '@music-downloader/shared';
 import type {
   AcquireOptions,
   JobManifestV1,
@@ -22,6 +23,91 @@ const renameFixture = vi.hoisted(() => ({
   armed: false,
   injected: 0,
 }));
+
+type NativeRetryTrace = Readonly<{
+  errno: 'EACCES' | 'EBUSY' | 'ENOSPC' | 'EPERM' | 'unknown';
+  syscall:
+    | 'close'
+    | 'fsync'
+    | 'mkdir'
+    | 'open'
+    | 'read'
+    | 'rename'
+    | 'stat'
+    | 'unlink'
+    | 'write'
+    | 'unknown';
+  targetRole: 'lease' | 'manifest' | 'temp' | 'other' | 'unknown';
+}>;
+
+const safeErrnos = new Set<NativeRetryTrace['errno']>([
+  'EACCES',
+  'EBUSY',
+  'ENOSPC',
+  'EPERM',
+]);
+const safeSyscalls = new Set<NativeRetryTrace['syscall']>([
+  'close',
+  'fsync',
+  'mkdir',
+  'open',
+  'read',
+  'rename',
+  'stat',
+  'unlink',
+  'write',
+]);
+
+function record(value: unknown): Readonly<Record<string, unknown>> | undefined {
+  return typeof value === 'object' && value !== null
+    ? (value as Readonly<Record<string, unknown>>)
+    : undefined;
+}
+
+function targetRole(value: unknown): NativeRetryTrace['targetRole'] {
+  if (typeof value !== 'string' || value.length === 0) return 'unknown';
+  const basename = path.basename(value);
+  if (basename === 'manifest.json') return 'manifest';
+  if (basename === 'lease.json') return 'lease';
+  if (basename.endsWith('.tmp') || basename.endsWith('.part')) return 'temp';
+  return 'other';
+}
+
+/**
+ * @link planning/tasks/STEP-050.md В readiness попадают только безопасные enum-поля native-ошибки.
+ * Исходная ошибка остаётся в `decideRetry`: этот helper не сериализует cause, путь или текст.
+ */
+function nativeRetryTrace(error: unknown): NativeRetryTrace {
+  const direct = record(error);
+  const cause = direct === undefined ? undefined : record(direct.cause);
+  const source = [direct, cause].find(
+    (candidate) =>
+      (typeof candidate?.code === 'string' &&
+        safeErrnos.has(candidate.code as NativeRetryTrace['errno'])) ||
+      typeof candidate?.syscall === 'string' ||
+      typeof candidate?.path === 'string' ||
+      typeof candidate?.dest === 'string',
+  );
+  const code = typeof source?.code === 'string' ? source.code : undefined;
+  const syscall =
+    typeof source?.syscall === 'string' ? source.syscall : undefined;
+  const pathRole =
+    targetRole(source?.path) !== 'unknown'
+      ? targetRole(source?.path)
+      : targetRole(source?.dest);
+  return {
+    errno:
+      code !== undefined && safeErrnos.has(code as NativeRetryTrace['errno'])
+        ? (code as NativeRetryTrace['errno'])
+        : 'unknown',
+    syscall:
+      syscall !== undefined &&
+      safeSyscalls.has(syscall as NativeRetryTrace['syscall'])
+        ? (syscall as NativeRetryTrace['syscall'])
+        : 'unknown',
+    targetRole: pathRole,
+  };
+}
 
 vi.mock('node:fs/promises', async (importOriginal) => {
   const actual = await importOriginal<typeof FsPromises>();
@@ -50,19 +136,35 @@ describe('STEP-045: команды двух application с общим stateDir',
   let running:
     | ReturnType<ReturnType<typeof createApplication>['createDownload']>
     | undefined;
+  let retryTrace: NativeRetryTrace | undefined;
+  let retryTraceSpy: { mockRestore(): void } | undefined;
 
   afterEach(async () => {
-    await appA?.shutdown();
-    await appB?.shutdown();
-    await running;
-    if (root !== undefined) await rm(root, { recursive: true, force: true });
-    appA = undefined;
-    appB = undefined;
-    running = undefined;
+    try {
+      await appA?.shutdown();
+      await appB?.shutdown();
+      await running;
+    } finally {
+      retryTraceSpy?.mockRestore();
+      retryTraceSpy = undefined;
+      retryTrace = undefined;
+      if (root !== undefined) await rm(root, { recursive: true, force: true });
+      appA = undefined;
+      appB = undefined;
+      running = undefined;
+    }
   }, 30_000);
 
   /** Готовность доказывают открытый поток и настоящая active lease, без фиксированного sleep. */
   async function startOwner(timeoutAck = false) {
+    retryTrace = undefined;
+    const decideRetry = retryCore.decideRetry;
+    retryTraceSpy = vi
+      .spyOn(retryCore, 'decideRetry')
+      .mockImplementation((input: DecideRetryInput) => {
+        retryTrace ??= nativeRetryTrace(input.error);
+        return decideRetry(input);
+      });
     root = await mkdtemp(path.join(os.tmpdir(), 'application-refusal-'));
     const stateDir = path.join(root, 'state');
     const store = new FileManifestStore({ stateDir });
@@ -128,6 +230,11 @@ describe('STEP-045: команды двух application с общим stateDir',
                 leaseState,
                 controlState: manifest?.control.state,
                 pauseReason: manifest?.control.pauseReason,
+                nativeTrace: retryTrace ?? {
+                  errno: 'unknown',
+                  syscall: 'unknown',
+                  targetRole: 'unknown',
+                },
               }),
             );
           }
@@ -142,6 +249,11 @@ describe('STEP-045: команды двух application с общим stateDir',
               leaseState,
               controlState: manifest?.control.state,
               pauseReason: manifest?.control.pauseReason,
+              nativeTrace: retryTrace ?? {
+                errno: 'unknown',
+                syscall: 'unknown',
+                targetRole: 'unknown',
+              },
             }),
           );
         },
@@ -157,6 +269,49 @@ describe('STEP-045: команды двух application с общим stateDir',
     );
     expect(JSON.stringify(result)).not.toContain(root);
   }
+
+  it('STEP-050 H-001: пишет allowlist trace и не меняет retry classification', () => {
+    const nativeError = Object.assign(
+      new Error('canary-message=secret; stack=secret'),
+      {
+        code: 'EPERM',
+        syscall: 'rename',
+        path: path.join('canary-token', '.manifest.json.canary.tmp'),
+        ownerToken: 'canary-owner-token',
+        signedUrl: 'https://canary.invalid/?signature=secret',
+      },
+    );
+    const input: DecideRetryInput = {
+      error: new DomainError('PERMISSION_DENIED', false, {
+        cause: nativeError,
+      }),
+      failedAttempts: 1,
+      random: () => 0,
+      now: () => 123,
+    };
+    const original = retryCore.decideRetry;
+    const expected = original(input);
+    let captured: NativeRetryTrace | undefined;
+    const spy = vi
+      .spyOn(retryCore, 'decideRetry')
+      .mockImplementation((retryInput: DecideRetryInput) => {
+        captured ??= nativeRetryTrace(retryInput.error);
+        return original(retryInput);
+      });
+    try {
+      expect(retryCore.decideRetry(input)).toEqual(expected);
+      expect(captured).toEqual({
+        errno: 'EPERM',
+        syscall: 'rename',
+        targetRole: 'temp',
+      });
+      expect(JSON.stringify(captured)).not.toMatch(
+        /canary|secret|ownerToken|signedUrl|message|path|cause|stack/,
+      );
+    } finally {
+      spy.mockRestore();
+    }
+  });
 
   it('различает чужую живую аренду и отсутствующий job без утечки данных владельца', async () => {
     const { jobId } = await startOwner();
