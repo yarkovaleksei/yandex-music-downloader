@@ -18,13 +18,20 @@ import {
   type LogLevel,
 } from '@music-downloader/logging';
 import { ValidationError } from '@music-downloader/shared';
+import { createMetadataWriter } from '@music-downloader/metadata';
 import {
   CliCredentialStore,
   FileManifestStore,
   resolveStateDirectory,
 } from '@music-downloader/persistence';
-import { YandexMusicProvider } from '@music-downloader/provider-yandex-music';
+import {
+  DOCTOR_CANARY_TRACK_ID,
+  PROVIDER_SCHEMA_VERSION,
+  probeCredentials,
+  YandexMusicProvider,
+} from '@music-downloader/provider-yandex-music';
 import type { RuntimeAdapters } from './runtime-adapters.js';
+import { collectDiagnostics } from './diagnostics.js';
 
 /** Единственное место регистрации Yandex adapter; @link docs/adr/ADR-001-layered-architecture-monorepo.md */
 export function createApplication(
@@ -51,10 +58,14 @@ export function createApplication(
     });
   const store = adapters.manifestStore ?? new FileManifestStore({ stateDir });
   // providerOverride полностью исключает native keyring и browser/device-auth bootstrap.
+  const credentialStore =
+    adapters.providerOverride === undefined
+      ? (adapters.credentialStore ?? new CliCredentialStore())
+      : adapters.credentialStore;
   const provider =
     adapters.providerOverride ??
     new YandexMusicProvider({
-      credentialStore: adapters.credentialStore ?? new CliCredentialStore(),
+      credentialStore: credentialStore!,
       authInteraction: adapters.authInteraction ?? {
         notify: (message) =>
           logger.info('Авторизация ожидает действия пользователя.', {
@@ -65,6 +76,8 @@ export function createApplication(
   const scheduler = new ConcurrencyScheduler(adapters.concurrency);
   const events = new ApplicationEvents(logger);
   const files = createDownloadFiles();
+  const metadata =
+    adapters.processing === undefined ? createMetadataWriter() : undefined;
   const jobs = new Jobs(
     provider,
     store,
@@ -83,15 +96,51 @@ export function createApplication(
         }),
       prepareRange: prepareRangeCandidate,
       checkpoint: finalizeWithManifestCheckpoint,
-      ...(adapters.processing === undefined
-        ? {}
-        : { processing: adapters.processing }),
+      // Полный override сохраняет тестовый/host processing; штатный writer использует snapshot core.
+      processing: adapters.processing ?? {
+        metadata: async (partPath, variant, artwork, context) => {
+          if (context === undefined) return;
+          const track = context.plannedTrack.track;
+          await metadata!.write({
+            partPath,
+            resultPath: context.resultPath,
+            container: variant.container === 'mp3' ? 'mp3' : 'mp4',
+            tags: {
+              title: track.title,
+              artists: track.artists?.map((artist) => artist.name),
+              album: track.album?.title,
+              trackNumber: track.trackNumber,
+              discNumber: track.discNumber,
+              year: track.year,
+              genre: track.genre ?? track.album?.genre,
+            },
+            artwork,
+            sourceKind: context.sourceKind,
+            embedArtwork: context.embedArtwork,
+            saveCoverFile: context.saveCoverFile,
+          });
+        },
+      },
     },
     events,
   );
   const diagnostics =
     adapters.diagnostics ??
-    (async () => ({ available: false, backend: 'file-manifest-store' }));
+    (() =>
+      collectDiagnostics({
+        provider,
+        manifestStore: store,
+        ...(credentialStore === undefined
+          ? {}
+          : { providerHealth: () => probeCredentials(credentialStore) }),
+        providerSchemaVersion: PROVIDER_SCHEMA_VERSION,
+        canaryTrackId: DOCTOR_CANARY_TRACK_ID,
+        runtime: {
+          outputDirectory:
+            adapters.diagnosticsRuntime?.outputDirectory ?? stateDir,
+          ...adapters.diagnosticsRuntime,
+        },
+      }));
   return new ApplicationFacade({
     provider,
     jobs,

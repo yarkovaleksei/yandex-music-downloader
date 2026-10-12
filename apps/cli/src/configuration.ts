@@ -128,7 +128,7 @@ export function resolveConfiguration(
   if (!Number.isInteger(concurrency) || concurrency < 1 || concurrency > 8)
     throw new Error('Некорректная concurrency.');
   const output = nonempty(
-    downloading
+    downloading || args.command === 'doctor'
       ? (args.output ??
           env.MUSIC_DOWNLOADER_OUTPUT ??
           file.output ??

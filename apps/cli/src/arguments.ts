@@ -11,7 +11,8 @@ export type CommandName =
   | 'playlist'
   | 'resume'
   | 'retry'
-  | 'cancel';
+  | 'cancel'
+  | 'doctor';
 export type LogLevel = 'error' | 'warn' | 'info' | 'debug' | 'trace';
 
 export interface ParsedArguments {
@@ -43,6 +44,7 @@ const commands = new Set<CommandName>([
   'resume',
   'retry',
   'cancel',
+  'doctor',
 ]);
 const downloadCommands = new Set<CommandName>([
   'download',
@@ -110,7 +112,11 @@ export function parseArguments(argv: readonly string[]): ParsedArguments {
     'overwrite',
     'skip-existing',
   ] as const)
-    if (values[option] !== undefined && !needsDownload)
+    if (
+      values[option] !== undefined &&
+      !needsDownload &&
+      !(option === 'output' && command === 'doctor')
+    )
       throw new UsageError('Опция неприменима к команде.');
   if (
     values.concurrency !== undefined &&
@@ -162,4 +168,4 @@ export function parseArguments(argv: readonly string[]): ParsedArguments {
   };
 }
 
-export const helpText = `music-downloader <команда> [опции]\n\nКоманды: auth, account, logout, jobs, download <URL>, track <URL>, album <URL>, playlist <URL>, resume <JOB_ID>, retry <JOB_ID>, cancel <JOB_ID>\n\nОбщие опции: --json --log-level <level> --log-file <path> --debug\nЗагрузка: --output <path> --quality <best|lossless|high|normal> --concurrency <1..8> --overwrite --skip-existing\n\nКоды завершения: 0 completed; 1 completed_with_errors; 2 usage; 3 ошибка, interrupted или не авторизован; 4 paused; 5 cancelled; 6 lease/owner acknowledgement.`;
+export const helpText = `music-downloader <команда> [опции]\n\nКоманды: auth, account, logout, jobs, doctor, download <URL>, track <URL>, album <URL>, playlist <URL>, resume <JOB_ID>, retry <JOB_ID>, cancel <JOB_ID>\n\nОбщие опции: --json --log-level <level> --log-file <path> --debug\nЗагрузка: --output <path> --quality <best|lossless|high|normal> --concurrency <1..8> --overwrite --skip-existing\nDoctor: --output <path>\n\nКоды завершения: 0 completed; 1 completed_with_errors; 2 usage; 3 ошибка, interrupted или не авторизован; 4 paused; 5 cancelled; 6 lease/owner acknowledgement.`;

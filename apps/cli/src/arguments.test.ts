@@ -7,6 +7,7 @@ describe('аргументы CLI', () => {
     ['account', ['account']],
     ['logout', ['logout']],
     ['jobs', ['jobs']],
+    ['doctor', ['doctor']],
     ['download', ['download', 'https://music.yandex.ru/track/1']],
     ['track', ['track', 'https://music.yandex.ru/track/1']],
     ['album', ['album', 'https://music.yandex.ru/album/1']],
@@ -20,7 +21,6 @@ describe('аргументы CLI', () => {
 
   it.each([
     { argv: [] },
-    { argv: ['doctor'] },
     { argv: ['download'] },
     { argv: ['auth', 'лишнее'] },
     { argv: ['resume'] },
@@ -36,6 +36,12 @@ describe('аргументы CLI', () => {
   ])('отклоняет некорректный вызов $argv', ({ argv }) =>
     expect(() => parseArguments(argv)).toThrow(UsageError),
   );
+
+  it('разрешает output только для doctor', () =>
+    expect(parseArguments(['doctor', '--output', '/music'])).toMatchObject({
+      command: 'doctor',
+      output: '/music',
+    }));
 
   it('сохраняет разрешённые флаги', () => {
     expect(

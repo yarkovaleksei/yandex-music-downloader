@@ -59,6 +59,7 @@ export function managerFixture(count = 20, concurrency = 3) {
             availability: 'available',
             title: 'Трек',
             artists: [],
+            album: { id: 'album', title: 'Исходный альбом' },
             artwork: { key: 'cover' },
           },
         })),

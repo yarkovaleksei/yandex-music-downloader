@@ -281,7 +281,7 @@ describe('runner', () => {
     const factory = vi.fn();
     await expect(
       runCli({
-        argv: ['doctor'],
+        argv: ['unknown-command'],
         env: {},
         homedir: () => '/tmp',
         stdout: () => undefined,

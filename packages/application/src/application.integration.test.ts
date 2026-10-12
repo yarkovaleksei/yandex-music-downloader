@@ -1,7 +1,9 @@
 import { mkdtemp, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import type * as FsPromises from 'node:fs/promises';
+import * as fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
+import { parseBuffer } from 'music-metadata';
 import * as retryCore from '@music-downloader/core-retry';
 import type { DecideRetryInput } from '@music-downloader/core-retry';
 import { afterEach, describe, expect, it, vi } from 'vitest';
@@ -642,6 +644,123 @@ describe('ApplicationApi: интеграция публичного фасада
       // Параллельные потоки могут открываться в любом порядке; каждый трек должен открыться ровно один раз.
       expect([...opened].sort()).toEqual(['1', '2']);
     } finally {
+      await api?.shutdown();
+      await rm(root, { recursive: true, force: true });
+    }
+  });
+
+  it('штатный writer сохраняет исходный album трека playlist', async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), 'application-metadata-'));
+    let api: ReturnType<typeof createApplication> | undefined;
+    try {
+      api = createApplication({
+        stateDir: path.join(root, 'state'),
+        providerOverride: {
+          ...downloads(),
+          getPlaylist: async () => ({
+            id: 'playlist',
+            title: 'Название плейлиста',
+            tracks: [
+              {
+                position: 1,
+                track: {
+                  id: 'track',
+                  availability: 'available' as const,
+                  title: 'Трек',
+                  artists: [],
+                  album: { id: 'album', title: 'Исходный альбом' },
+                },
+              },
+            ],
+          }),
+          getTrack: async () => ({
+            id: 'track',
+            availability: 'available' as const,
+            title: 'Трек',
+            artists: [],
+            album: { id: 'album', title: 'Исходный альбом' },
+          }),
+        },
+      });
+      const result = await api.createDownload({
+        source: { provider: 'mock', kind: 'playlist', id: 'playlist' },
+        quality: 'best',
+        destination: path.join(root, 'music'),
+      });
+      expect(result).toMatchObject({
+        kind: 'result',
+        data: { status: 'completed', tracks: [{ status: 'completed' }] },
+      });
+      if (result.kind !== 'result') throw new Error('Ожидался результат.');
+      const output = await readFile(result.data.tracks[0]!.resultPath!);
+      expect((await parseBuffer(output)).common.album).toBe('Исходный альбом');
+    } finally {
+      await api?.shutdown();
+      await rm(root, { recursive: true, force: true });
+    }
+  });
+
+  it('останавливает job при отказе записи штатного sidecar', async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), 'application-sidecar-'));
+    let api: ReturnType<typeof createApplication> | undefined;
+    const originalWriteFile = fs.writeFile;
+    const writeFileSpy = vi
+      .spyOn(fs, 'writeFile')
+      .mockImplementation(async (...args: Parameters<typeof fs.writeFile>) => {
+        if (String(args[0]).endsWith('cover.jpg')) {
+          throw Object.assign(new Error('Отказ записи sidecar.'), {
+            code: 'EACCES',
+          });
+        }
+        return originalWriteFile(...args);
+      });
+    try {
+      api = createApplication({
+        stateDir: path.join(root, 'state'),
+        concurrency: 1,
+        providerOverride: {
+          ...downloads(),
+          getAlbum: async () => ({
+            id: 'album',
+            title: 'Альбом',
+            artists: [],
+            tracks: [1, 2].map((position) => ({
+              id: `track-${position}`,
+              availability: 'available' as const,
+              title: `Трек ${position}`,
+              artists: [],
+              artwork: { key: 'cover' },
+            })),
+          }),
+          getTrack: async (id) => ({
+            id,
+            availability: 'available' as const,
+            title: id,
+            artists: [],
+            artwork: { key: 'cover' },
+          }),
+          fetchArtwork: async () => ({
+            bytes: new Uint8Array([1]),
+            mimeType: 'image/jpeg',
+          }),
+        },
+      });
+      const result = await api.createDownload({
+        source: { provider: 'mock', kind: 'album', id: 'album' },
+        quality: 'best',
+        destination: path.join(root, 'music'),
+      });
+      expect(result).toMatchObject({
+        kind: 'result',
+        data: {
+          status: 'paused',
+          pauseReason: 'PERMISSION_DENIED',
+          tracks: [{ status: 'failed' }, { status: 'queued' }],
+        },
+      });
+      expect(JSON.stringify(result)).not.toContain('Отказ записи sidecar.');
+    } finally {
+      writeFileSpy.mockRestore();
       await api?.shutdown();
       await rm(root, { recursive: true, force: true });
     }
@@ -1394,7 +1513,7 @@ describe('ApplicationApi: интеграция публичного фасада
         throw new Error('Ожидался результат загрузки.');
       const resultPath = result.data.tracks[0]?.resultPath;
       expect(resultPath).toBeTypeOf('string');
-      expect(await readFile(resultPath!)).toEqual(Buffer.from(validMp3));
+      expect((await readFile(resultPath!)).byteLength).toBeGreaterThan(0);
       const jobId = result.data.jobId;
       await expect(api.shutdown()).resolves.toMatchObject({ kind: 'result' });
       api = undefined;

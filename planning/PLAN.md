@@ -24,11 +24,11 @@
 | STEP-018 | Application layer API и composition root | implementation | high | completed | STEP-017, STEP-009, STEP-042, STEP-043 | REQ-002, REQ-044, REQ-032 |
 | STEP-019 | CLI: команды, опции и режим --json | implementation | critical | completed | STEP-018, STEP-004, STEP-045, STEP-046, STEP-047, STEP-048 | REQ-029, REQ-030, REQ-031, REQ-013, REQ-001, REQ-002, REQ-003, REQ-009, REQ-017, REQ-037 |
 | STEP-020 | ADR: библиотека метаданных и использование FFmpeg | adr | high | completed | STEP-005 | REQ-025, REQ-016 |
-| STEP-021 | Теги, встроенная обложка и cover.jpg | implementation | high | planned | STEP-020, STEP-017 | REQ-025, REQ-026, REQ-036 |
+| STEP-021 | Теги, встроенная обложка и cover.jpg | implementation | high | completed | STEP-020, STEP-017 | REQ-025, REQ-026, REQ-036 |
 | STEP-022 | Каталог playlist и .m3u8 | implementation | high | planned | STEP-017, STEP-012 | REQ-028 |
 | STEP-023 | Валидация файлов и опциональный FFmpeg | implementation | high | completed | STEP-020, STEP-015, STEP-017 | REQ-016, REQ-036 |
 | STEP-024 | Локальный cache метаданных и обложек с TTL | implementation | medium | planned | STEP-009, STEP-018 | REQ-027 |
-| STEP-025 | Doctor и provider health | hardening | high | planned | STEP-019, STEP-009, STEP-023, STEP-006 | REQ-034, REQ-007, REQ-002, REQ-016, REQ-029, REQ-031 |
+| STEP-025 | Doctor и provider health | hardening | high | completed | STEP-019, STEP-009, STEP-023, STEP-006 | REQ-034, REQ-007, REQ-002, REQ-016, REQ-029, REQ-031 |
 | STEP-026 | Интеграционный набор headless-сценариев | hardening | high | planned | STEP-019, STEP-022, STEP-021, STEP-023, STEP-025 | REQ-042, REQ-005, REQ-020 |
 | STEP-027 | Приёмка headless MVP и gate перехода к UI | audit | critical | planned | STEP-026, STEP-011 | REQ-043 |
 | STEP-028 | ADR: SQLite, модель безопасности Electron и IPC | adr | medium | planned | STEP-027 | REQ-033, REQ-046, REQ-047 |

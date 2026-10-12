@@ -14,6 +14,13 @@ export function exitCode(
       : 3;
   }
   const data = result.data;
+  if (
+    result.command === 'diagnostics' &&
+    typeof data === 'object' &&
+    data !== null &&
+    'available' in data
+  )
+    return (data as { available: boolean }).available ? 0 : 3;
   if (data === null) return result.command === 'account' ? 3 : 0;
   if (typeof data === 'object' && data !== null && 'status' in data) {
     const status = (data as { status: string }).status;

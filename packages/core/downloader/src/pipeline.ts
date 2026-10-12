@@ -220,6 +220,13 @@ export class TrackPipeline {
                   track.partPath!,
                   variant,
                   artwork,
+                  {
+                    plannedTrack: planned,
+                    sourceKind: owner.current.plan.source.kind,
+                    resultPath: track.resultPath!,
+                    embedArtwork: true,
+                    saveCoverFile: true,
+                  },
                 );
                 await context.emit('metadata.written', key);
               }

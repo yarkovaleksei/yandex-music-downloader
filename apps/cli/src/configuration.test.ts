@@ -103,6 +103,15 @@ describe('конфигурация CLI', () => {
       }).output,
     ).toBe('/mnt/music');
   });
+  it('передаёт doctor output через обычный порядок приоритетов', () => {
+    expect(
+      resolveConfiguration(parseArguments(['doctor', '--output', '/doctor']), {
+        env: { MUSIC_DOWNLOADER_OUTPUT: '/env' },
+        homedir: () => '/tmp',
+        platform: 'linux',
+      }).output,
+    ).toBe('/doctor');
+  });
   it.each(['{', JSON.stringify({ debug: 'да' })])(
     'отклоняет повреждённый settings.json',
     async (contents) => {

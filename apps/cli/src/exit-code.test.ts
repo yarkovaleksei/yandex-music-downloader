@@ -36,4 +36,14 @@ describe('коды завершения', () => {
     expect(exitCode(error('OWNER_ACK_TIMEOUT'))).toBe(6);
     expect(exitCode(error())).toBe(3);
   });
+  it('возвращает 3 для недоступного doctor', () => {
+    expect(
+      exitCode({
+        schemaVersion: 1,
+        kind: 'result',
+        command: 'diagnostics',
+        data: { available: false },
+      }),
+    ).toBe(3);
+  });
 });
