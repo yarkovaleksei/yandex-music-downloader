@@ -1,4 +1,4 @@
-import type { DomainErrorJson } from './errors.js';
+import type { CommandRefusalReason, DomainErrorJson } from './errors.js';
 
 /** Переносимые JSON-значения для DTO из ADR-007 без Node-зависимостей. */
 export type JsonValue =
@@ -55,7 +55,11 @@ export type JobEvent =
     });
 
 export interface CommandErrorDto extends DomainErrorJson {
-  readonly details?: JsonValue;
+  /** Независимые необязательные ключи расширяют DTO без смены версии ADR-007. */
+  readonly details?: {
+    readonly reason?: CommandRefusalReason;
+    readonly debug?: { readonly stack: string };
+  };
 }
 
 /** Однократный результат команды исключает одновременную передачу data и error. */

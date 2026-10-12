@@ -1,5 +1,6 @@
 import { describe, expect, expectTypeOf, it } from 'vitest';
 import type { CliRecord, CommandResult, JobEvent } from './events.js';
+import { isCommandResult, isJobEvent } from './events.js';
 import { sharedPackage } from './index.js';
 
 describe('контракты событий', () => {
@@ -34,6 +35,34 @@ describe('контракты событий', () => {
 
     expect(JSON.parse(JSON.stringify(result))).toEqual(result);
     expect(JSON.parse(JSON.stringify(failure))).toEqual(failure);
+  });
+
+  it('сохраняет проверку DTO v1 при независимом debug detail', () => {
+    expect(
+      isCommandResult({
+        schemaVersion: 1,
+        kind: 'error',
+        command: 'doctor',
+        error: {
+          code: 'DOWNLOAD_ERROR',
+          message: 'Ошибка',
+          retryable: false,
+          details: {
+            reason: 'JOB_NOT_FOUND',
+            debug: { stack: 'DOWNLOAD_ERROR: Ошибка' },
+          },
+        },
+      }),
+    ).toBe(true);
+    expect(
+      isJobEvent({
+        schemaVersion: 1,
+        event: 'job.created',
+        seq: 1,
+        jobId: 'job',
+        durationMs: 1,
+      }),
+    ).toBe(true);
   });
 
   it('экспортирует DTO через публичный shared entrypoint', () => {

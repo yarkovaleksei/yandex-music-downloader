@@ -36,79 +36,133 @@ export class ApplicationFacade implements ApplicationApi {
       events: ApplicationEvents;
       logger: Logger;
       diagnostics: () => Promise<DiagnosticsDto>;
+      debug: boolean;
     },
   ) {}
 
   public authenticate() {
-    return command('authenticate', this.deps.logger, () =>
-      this.deps.provider.authenticate().then(accountDto),
+    return command(
+      'authenticate',
+      this.deps.logger,
+      () => this.deps.provider.authenticate().then(accountDto),
+      this.deps.debug,
     );
   }
   public account() {
-    return command('account', this.deps.logger, () =>
-      this.deps.provider
-        .getAccount()
-        .then((account) => (account === null ? null : accountDto(account))),
+    return command(
+      'account',
+      this.deps.logger,
+      () =>
+        this.deps.provider
+          .getAccount()
+          .then((account) => (account === null ? null : accountDto(account))),
+      this.deps.debug,
     );
   }
   public logout() {
-    return command('logout', this.deps.logger, async () => {
-      await this.deps.provider.logout();
-      return null;
-    });
+    return command(
+      'logout',
+      this.deps.logger,
+      async () => {
+        await this.deps.provider.logout();
+        return null;
+      },
+      this.deps.debug,
+    );
   }
   public resolve(url: string) {
-    return command('resolve', this.deps.logger, () =>
-      this.deps.provider.resolveUrl(url).then(referenceDto),
+    return command(
+      'resolve',
+      this.deps.logger,
+      () => this.deps.provider.resolveUrl(url).then(referenceDto),
+      this.deps.debug,
     );
   }
   public preview(source: MediaReference) {
-    return command('preview', this.deps.logger, () =>
-      preview(this.deps.provider, source),
+    return command(
+      'preview',
+      this.deps.logger,
+      () => preview(this.deps.provider, source),
+      this.deps.debug,
     );
   }
   public createDownload(request: DownloadRequest) {
-    return command('createDownload', this.deps.logger, () =>
-      this.deps.jobs.create(request),
+    return command(
+      'createDownload',
+      this.deps.logger,
+      () => this.deps.jobs.create(request),
+      this.deps.debug,
     );
   }
   public pause(jobId: string) {
-    return command('pause', this.deps.logger, () =>
-      this.deps.jobs.command(jobId, 'pause'),
+    return command(
+      'pause',
+      this.deps.logger,
+      () => this.deps.jobs.command(jobId, 'pause'),
+      this.deps.debug,
     );
   }
   public resume(jobId: string) {
-    return command('resume', this.deps.logger, () =>
-      this.deps.jobs.command(jobId, 'resume'),
+    return command(
+      'resume',
+      this.deps.logger,
+      () => this.deps.jobs.command(jobId, 'resume'),
+      this.deps.debug,
     );
   }
   public retry(jobId: string) {
-    return command('retry', this.deps.logger, () =>
-      this.deps.jobs.command(jobId, 'retry'),
+    return command(
+      'retry',
+      this.deps.logger,
+      () => this.deps.jobs.command(jobId, 'retry'),
+      this.deps.debug,
     );
   }
   public cancel(jobId: string) {
-    return command('cancel', this.deps.logger, () =>
-      this.deps.jobs.command(jobId, 'cancel'),
+    return command(
+      'cancel',
+      this.deps.logger,
+      () => this.deps.jobs.command(jobId, 'cancel'),
+      this.deps.debug,
     );
   }
   public listJobs() {
-    return command('listJobs', this.deps.logger, () => this.deps.jobs.list());
+    return command(
+      'listJobs',
+      this.deps.logger,
+      () => this.deps.jobs.list(),
+      this.deps.debug,
+    );
   }
   public getJob(jobId: string) {
-    return command('getJob', this.deps.logger, () => this.deps.jobs.get(jobId));
+    return command(
+      'getJob',
+      this.deps.logger,
+      () => this.deps.jobs.get(jobId),
+      this.deps.debug,
+    );
   }
   public subscribe(listener: (event: JobEvent) => void) {
     return this.deps.events.subscribe(listener);
   }
   public diagnostics() {
-    return command('diagnostics', this.deps.logger, this.deps.diagnostics);
+    return command(
+      'diagnostics',
+      this.deps.logger,
+      this.deps.diagnostics,
+      this.deps.debug,
+    );
   }
   public shutdown() {
-    return command('shutdown', this.deps.logger, async () => {
-      await this.deps.jobs.shutdown();
-      this.deps.events.close();
-      return null;
-    });
+    return command(
+      'shutdown',
+      this.deps.logger,
+      async () => {
+        await this.deps.jobs.shutdown();
+        this.deps.events.close();
+        return null;
+      },
+      this.deps.debug,
+    );
   }
 }

@@ -36,4 +36,24 @@ describe('serializers', () => {
     expect(output).not.toContain(token);
     expect(output).not.toContain('?token');
   });
+
+  it('добавляет debug stack только из нормализованной ошибки', () => {
+    const raw = libraryOnlyFrame();
+    const regular = serializeError(raw);
+    const debug = serializeError(raw, createRedactor(), { debug: true });
+
+    expect(regular).not.toHaveProperty('details');
+    expect(debug.details?.debug?.stack).toContain('DOWNLOAD_ERROR');
+    expect(debug.details?.debug?.stack).not.toContain('library-only frame');
+    expect(debug.details?.debug?.stack).not.toContain('libraryOnlyFrame');
+    expect(debug.details?.debug?.stack).not.toContain('Authorization');
+    expect(JSON.stringify(debug)).not.toContain(token);
+  });
 });
+
+/** Воспроизводит library message и frame, которые не должны попасть в debug DTO. */
+function libraryOnlyFrame(): Error {
+  return new Error(
+    `library-only frame ${token} ${signedUrl}\nat Authorization: Bearer ${token}`,
+  );
+}

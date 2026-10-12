@@ -3,6 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
+  "bin": {
+    "music-downloader": "./dist/index.js"
+  },
   "exports": {
     ".": {
       "@music-downloader/source": "./src/index.ts",

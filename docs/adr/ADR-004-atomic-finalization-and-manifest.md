@@ -27,6 +27,9 @@ steps:
   - STEP-042
   - STEP-043
   - STEP-044
+  - STEP-045
+  - STEP-049
+  - STEP-050
 ---
 
 # ADR-004 — Атомарная финализация файлов, manifest и владение job

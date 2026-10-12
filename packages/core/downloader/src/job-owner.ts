@@ -1,4 +1,5 @@
 import {
+  CommandRefusalError,
   DomainError,
   ValidationError,
   safeDomainError,
@@ -151,6 +152,7 @@ export async function requestJobControl(
   jobId: string,
   command: ControlRequest['command'],
   timeoutMs = 5000,
+  leaseObserved = false,
 ): Promise<ControlReceipt> {
   const request = await store.sendControl(jobId, { command });
   const receipt = await store.waitControlAck(
@@ -158,6 +160,10 @@ export async function requestJobControl(
     request.requestId,
     timeoutMs,
   );
-  if (receipt === undefined) throw new DomainError('DOWNLOAD_ERROR', false);
+  // Таймаут не отзывает inbox-запрос: применить его всё ещё может текущий или следующий owner.
+  if (receipt === undefined) {
+    if (leaseObserved) throw new CommandRefusalError('OWNER_ACK_TIMEOUT');
+    throw new DomainError('DOWNLOAD_ERROR', false);
+  }
   return receipt;
 }

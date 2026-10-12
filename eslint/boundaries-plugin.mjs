@@ -90,12 +90,16 @@ function resolveBare(specifier, byRelative) {
   if (specifier.startsWith(workspaceScope)) {
     const [scope, name, ...rest] = specifier.split('/');
     const known = packageByName.get(`${scope}/${name}`);
+    // Публичный export contracts не является внутренним импортом (@link planning/tasks/STEP-047.md).
+    // Точное исключение сохраняет проверку матрицы и запрет относительных путей ниже.
+    const publicContracts =
+      specifier === '@music-downloader/application/contracts';
     return {
       kind: 'workspace',
       group: known ? known.group : `unknown:${name}`,
       dir: known ? known.dir : `unknown:${name}`,
       byRelative,
-      deep: rest.length > 0,
+      deep: rest.length > 0 && !publicContracts,
       specifier,
     };
   }

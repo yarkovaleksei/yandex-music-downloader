@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   AuthenticationError,
   DiskFullError,
+  DownloadError,
   PermissionError,
   ProviderError,
   ValidationError,
@@ -12,6 +13,51 @@ import { managerFixture } from './fixtures/manager-fixture.js';
 const pauseOptions = { controlPollMs: 10, stopTimeoutMs: 1000 };
 
 describe('Download Manager', () => {
+  it('использует default artworkSize=400 и дедуплицирует общую обложку', async () => {
+    const fixture = managerFixture(3);
+    const fetchArtwork = fixture.deps.provider.fetchArtwork;
+    const requestedSizes: number[] = [];
+    fixture.deps.provider.fetchArtwork = async (reference, size) => {
+      requestedSizes.push(size);
+      if (size === 500) throw new DownloadError();
+      if (size !== 400) throw new Error('Ожидался размер обложки 400.');
+      return fetchArtwork(reference, size);
+    };
+    await fixture.create('default-artwork-size');
+
+    const result = await createDownloadManager(fixture.deps).run(
+      'default-artwork-size',
+    );
+
+    expect(result.tracks.every((track) => track.status === 'completed')).toBe(
+      true,
+    );
+    expect(requestedSizes).toEqual([400]);
+    expect(fixture.artworkRequests()).toBe(1);
+  });
+
+  it('передаёт явный artworkSize=600 без подмены и дедуплицирует обложку', async () => {
+    const fixture = managerFixture(3);
+    const fetchArtwork = fixture.deps.provider.fetchArtwork;
+    const requestedSizes: number[] = [];
+    fixture.deps.provider.fetchArtwork = async (reference, size) => {
+      requestedSizes.push(size);
+      if (size !== 600) throw new Error('Ожидался размер обложки 600.');
+      return fetchArtwork(reference, size);
+    };
+    await fixture.create('explicit-artwork-size');
+
+    const result = await createDownloadManager(fixture.deps, {
+      artworkSize: 600,
+    }).run('explicit-artwork-size');
+
+    expect(result.tracks.every((track) => track.status === 'completed')).toBe(
+      true,
+    );
+    expect(requestedSizes).toEqual([600]);
+    expect(fixture.artworkRequests()).toBe(1);
+  });
+
   it('завершает 20 треков при concurrency=3, дедуплицирует обложку и различает позиции', async () => {
     const fixture = managerFixture();
     await fixture.create('job');
@@ -286,6 +332,65 @@ describe('Download Manager', () => {
     );
     await manager.shutdown('resolving');
     expect(fixture.releases).toEqual(['resolving']);
+  });
+
+  it('STEP-049: timeout release не освобождает lease до завершения того же close', async () => {
+    const fixture = managerFixture(1);
+    await fixture.create('release-timeout');
+    const acquire = fixture.deps.store.acquire;
+    let finishRelease!: () => void;
+    const releaseGate = new Promise<void>((resolve) => {
+      finishRelease = resolve;
+    });
+    fixture.deps.store.acquire = async (...args) => {
+      const session = await acquire(...args);
+      return Object.create(session, {
+        release: {
+          value: async () => {
+            await releaseGate;
+            await session.release();
+          },
+        },
+      });
+    };
+    const manager = createDownloadManager(fixture.deps, {
+      ...pauseOptions,
+      stopTimeoutMs: 10,
+    });
+
+    await expect(manager.run('release-timeout')).rejects.toThrow();
+    expect(fixture.releases).toEqual([]);
+    finishRelease();
+    await expect
+      .poll(() => fixture.releases, { timeout: 1_000, interval: 10 })
+      .toEqual(['release-timeout']);
+    await expect(manager.shutdown('release-timeout')).resolves.toBeUndefined();
+  });
+
+  it('STEP-049: rejection release сохраняется без ложного освобождения lease', async () => {
+    const fixture = managerFixture(1);
+    await fixture.create('release-rejection');
+    const acquire = fixture.deps.store.acquire;
+    fixture.deps.store.acquire = async (...args) => {
+      const session = await acquire(...args);
+      return Object.create(session, {
+        release: {
+          value: async () => {
+            throw new Error('release failed');
+          },
+        },
+      });
+    };
+    const manager = createDownloadManager(fixture.deps, pauseOptions);
+
+    await expect(manager.run('release-rejection')).rejects.toThrow(
+      'release failed',
+    );
+    expect(fixture.releases).toEqual([]);
+    await expect(manager.shutdown('release-rejection')).rejects.toThrow(
+      'release failed',
+    );
+    expect(fixture.releases).toEqual([]);
   });
 
   it('сырой текст ошибки с canary token и signed URL отсутствует в manifest/events', async () => {

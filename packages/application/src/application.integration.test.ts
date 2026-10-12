@@ -4,14 +4,16 @@ import os from 'node:os';
 import path from 'node:path';
 import * as retryCore from '@music-downloader/core-retry';
 import type { DecideRetryInput } from '@music-downloader/core-retry';
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import {
   currentLeaseIdentity,
   FileManifestStore,
 } from '@music-downloader/persistence';
+import { DomainError } from '@music-downloader/shared';
 import type {
   AcquireOptions,
   JobManifestV1,
+  LeaseSession,
   ManifestStore,
   MusicProvider,
 } from '@music-downloader/shared';
@@ -21,6 +23,91 @@ const renameFixture = vi.hoisted(() => ({
   armed: false,
   injected: 0,
 }));
+
+type NativeRetryTrace = Readonly<{
+  errno: 'EACCES' | 'EBUSY' | 'ENOSPC' | 'EPERM' | 'unknown';
+  syscall:
+    | 'close'
+    | 'fsync'
+    | 'mkdir'
+    | 'open'
+    | 'read'
+    | 'rename'
+    | 'stat'
+    | 'unlink'
+    | 'write'
+    | 'unknown';
+  targetRole: 'lease' | 'manifest' | 'temp' | 'other' | 'unknown';
+}>;
+
+const safeErrnos = new Set<NativeRetryTrace['errno']>([
+  'EACCES',
+  'EBUSY',
+  'ENOSPC',
+  'EPERM',
+]);
+const safeSyscalls = new Set<NativeRetryTrace['syscall']>([
+  'close',
+  'fsync',
+  'mkdir',
+  'open',
+  'read',
+  'rename',
+  'stat',
+  'unlink',
+  'write',
+]);
+
+function record(value: unknown): Readonly<Record<string, unknown>> | undefined {
+  return typeof value === 'object' && value !== null
+    ? (value as Readonly<Record<string, unknown>>)
+    : undefined;
+}
+
+function targetRole(value: unknown): NativeRetryTrace['targetRole'] {
+  if (typeof value !== 'string' || value.length === 0) return 'unknown';
+  const basename = path.basename(value);
+  if (basename === 'manifest.json') return 'manifest';
+  if (basename === 'lease.json') return 'lease';
+  if (basename.endsWith('.tmp') || basename.endsWith('.part')) return 'temp';
+  return 'other';
+}
+
+/**
+ * @link planning/tasks/STEP-050.md В readiness попадают только безопасные enum-поля native-ошибки.
+ * Исходная ошибка остаётся в `decideRetry`: этот helper не сериализует cause, путь или текст.
+ */
+function nativeRetryTrace(error: unknown): NativeRetryTrace {
+  const direct = record(error);
+  const cause = direct === undefined ? undefined : record(direct.cause);
+  const source = [direct, cause].find(
+    (candidate) =>
+      (typeof candidate?.code === 'string' &&
+        safeErrnos.has(candidate.code as NativeRetryTrace['errno'])) ||
+      typeof candidate?.syscall === 'string' ||
+      typeof candidate?.path === 'string' ||
+      typeof candidate?.dest === 'string',
+  );
+  const code = typeof source?.code === 'string' ? source.code : undefined;
+  const syscall =
+    typeof source?.syscall === 'string' ? source.syscall : undefined;
+  const pathRole =
+    targetRole(source?.path) !== 'unknown'
+      ? targetRole(source?.path)
+      : targetRole(source?.dest);
+  return {
+    errno:
+      code !== undefined && safeErrnos.has(code as NativeRetryTrace['errno'])
+        ? (code as NativeRetryTrace['errno'])
+        : 'unknown',
+    syscall:
+      syscall !== undefined &&
+      safeSyscalls.has(syscall as NativeRetryTrace['syscall'])
+        ? (syscall as NativeRetryTrace['syscall'])
+        : 'unknown',
+    targetRole: pathRole,
+  };
+}
 
 vi.mock('node:fs/promises', async (importOriginal) => {
   const actual = await importOriginal<typeof FsPromises>();
@@ -40,6 +127,357 @@ vi.mock('node:fs/promises', async (importOriginal) => {
       return actual.rename(temporary, target);
     },
   };
+});
+
+describe('STEP-045: команды двух application с общим stateDir', () => {
+  let root: string;
+  let appA: ReturnType<typeof createApplication> | undefined;
+  let appB: ReturnType<typeof createApplication> | undefined;
+  let running:
+    | ReturnType<ReturnType<typeof createApplication>['createDownload']>
+    | undefined;
+  let retryTrace: NativeRetryTrace | undefined;
+  let retryTraceSpy: { mockRestore(): void } | undefined;
+
+  afterEach(async () => {
+    try {
+      await appA?.shutdown();
+      await appB?.shutdown();
+      await running;
+    } finally {
+      retryTraceSpy?.mockRestore();
+      retryTraceSpy = undefined;
+      retryTrace = undefined;
+      if (root !== undefined) await rm(root, { recursive: true, force: true });
+      appA = undefined;
+      appB = undefined;
+      running = undefined;
+    }
+  }, 30_000);
+
+  /** Готовность доказывают открытый поток и настоящая active lease, без фиксированного sleep. */
+  async function startOwner(timeoutAck = false) {
+    retryTrace = undefined;
+    const decideRetry = retryCore.decideRetry;
+    retryTraceSpy = vi
+      .spyOn(retryCore, 'decideRetry')
+      .mockImplementation((input: DecideRetryInput) => {
+        retryTrace ??= nativeRetryTrace(input.error);
+        return decideRetry(input);
+      });
+    root = await mkdtemp(path.join(os.tmpdir(), 'application-refusal-'));
+    const stateDir = path.join(root, 'state');
+    const store = new FileManifestStore({ stateDir });
+    const provider: MusicProvider = {
+      ...downloads(),
+      openAudioStream: async () => ({
+        stream: new ReadableStream<Uint8Array>({
+          start(controller) {
+            controller.enqueue(new Uint8Array([1]));
+          },
+        }),
+        contentLength: 2,
+        container: 'mp3',
+        acceptsRanges: true,
+        startOffset: 0,
+      }),
+    };
+    appA = createApplication({ stateDir, providerOverride: provider });
+    appB = createApplication({
+      stateDir,
+      providerOverride: provider,
+      ...(timeoutAck
+        ? {
+            manifestStore: {
+              read: store.read.bind(store),
+              readLeaseState: store.readLeaseState.bind(store),
+              list: store.list.bind(store),
+              create: store.create.bind(store),
+              acquire: store.acquire.bind(store),
+              sendControl: store.sendControl.bind(store),
+              // STEP-045: только ожидание receipt заменено; inbox и живой owner остаются настоящими.
+              waitControlAck: async () => undefined,
+            },
+          }
+        : {}),
+    });
+    let jobId = '';
+    appA.subscribe((event) => {
+      if (event.event === 'job.created') jobId = event.jobId;
+    });
+    running = appA.createDownload({
+      source: { provider: 'mock', kind: 'track', id: 'blocked' },
+      quality: 'best',
+      destination: path.join(root, 'music'),
+    });
+    // Диагностика readiness содержит только безопасные enum-поля.
+    await expect
+      .poll(
+        async () => {
+          const result = await appB!.getJob(jobId);
+          const trackStatus =
+            result.kind === 'result'
+              ? result.data?.tracks[0]?.status
+              : undefined;
+          if (result.kind === 'result' && trackStatus === 'downloading') {
+            const leaseState = await store.readLeaseState(jobId);
+            if (leaseState === 'active') return true;
+            const manifest = await store.read(jobId);
+            throw new Error(
+              JSON.stringify({
+                resultKind: result.kind,
+                trackStatus,
+                leaseState,
+                controlState: manifest?.control.state,
+                pauseReason: manifest?.control.pauseReason,
+                nativeTrace: retryTrace ?? {
+                  errno: 'unknown',
+                  syscall: 'unknown',
+                  targetRole: 'unknown',
+                },
+              }),
+            );
+          }
+          const [leaseState, manifest] = await Promise.all([
+            store.readLeaseState(jobId),
+            store.read(jobId),
+          ]);
+          throw new Error(
+            JSON.stringify({
+              resultKind: result.kind,
+              trackStatus,
+              leaseState,
+              controlState: manifest?.control.state,
+              pauseReason: manifest?.control.pauseReason,
+              nativeTrace: retryTrace ?? {
+                errno: 'unknown',
+                syscall: 'unknown',
+                targetRole: 'unknown',
+              },
+            }),
+          );
+        },
+        { timeout: 30_000, interval: 10 },
+      )
+      .toBe(true);
+    return { jobId, store };
+  }
+
+  function safeRefusal(result: unknown) {
+    expect(JSON.stringify(result)).not.toMatch(
+      /ownerToken|pid|hostname|cause|stack/,
+    );
+    expect(JSON.stringify(result)).not.toContain(root);
+  }
+
+  it('STEP-050 H-001: пишет allowlist trace и не меняет retry classification', () => {
+    const nativeError = Object.assign(
+      new Error('canary-message=secret; stack=secret'),
+      {
+        code: 'EPERM',
+        syscall: 'rename',
+        path: path.join('canary-token', '.manifest.json.canary.tmp'),
+        ownerToken: 'canary-owner-token',
+        signedUrl: 'https://canary.invalid/?signature=secret',
+      },
+    );
+    const input: DecideRetryInput = {
+      error: new DomainError('PERMISSION_DENIED', false, {
+        cause: nativeError,
+      }),
+      failedAttempts: 1,
+      random: () => 0,
+      now: () => 123,
+    };
+    const original = retryCore.decideRetry;
+    const expected = original(input);
+    let captured: NativeRetryTrace | undefined;
+    const spy = vi
+      .spyOn(retryCore, 'decideRetry')
+      .mockImplementation((retryInput: DecideRetryInput) => {
+        captured ??= nativeRetryTrace(retryInput.error);
+        return original(retryInput);
+      });
+    try {
+      expect(retryCore.decideRetry(input)).toEqual(expected);
+      expect(captured).toEqual({
+        errno: 'EPERM',
+        syscall: 'rename',
+        targetRole: 'temp',
+      });
+      expect(JSON.stringify(captured)).not.toMatch(
+        /canary|secret|ownerToken|signedUrl|message|path|cause|stack/,
+      );
+    } finally {
+      spy.mockRestore();
+    }
+  });
+
+  it('различает чужую живую аренду и отсутствующий job без утечки данных владельца', async () => {
+    const { jobId } = await startOwner();
+    const refusal = await appB!.resume(jobId);
+    expect(refusal).toMatchObject({
+      schemaVersion: 1,
+      kind: 'error',
+      error: {
+        code: 'VALIDATION_ERROR',
+        details: { reason: 'LEASE_HELD_BY_OTHER_OWNER' },
+        retryable: false,
+      },
+    });
+    safeRefusal(refusal);
+    for (const command of ['resume', 'retry', 'cancel', 'pause'] as const) {
+      const result = await appB![command]('missing-job');
+      expect(result).toMatchObject({
+        kind: 'error',
+        error: {
+          code: 'VALIDATION_ERROR',
+          details: { reason: 'JOB_NOT_FOUND' },
+          retryable: false,
+        },
+      });
+      safeRefusal(result);
+    }
+    await expect(appB!.getJob('missing-job')).resolves.toMatchObject({
+      kind: 'result',
+      data: null,
+    });
+    expect(
+      (await readdir(path.join(root, 'state'), { recursive: true })).join('\n'),
+    ).not.toContain('missing-job');
+  }, 60_000); // Нативная Windows-проверка identity входит в общий budget readiness и control.
+
+  it('различает отсутствие подтверждения cancel, сохраняя запрос в inbox', async () => {
+    const { jobId } = await startOwner(true);
+    const refusal = await appB!.cancel(jobId);
+    expect(refusal).toMatchObject({
+      schemaVersion: 1,
+      kind: 'error',
+      error: {
+        code: 'DOWNLOAD_ERROR',
+        details: { reason: 'OWNER_ACK_TIMEOUT' },
+        retryable: false,
+      },
+    });
+    safeRefusal(refusal);
+    // Таймаут отправителя не доказывает неприменение: живой owner продолжает обрабатывать inbox.
+    await expect
+      .poll(() => appA!.getJob(jobId), { timeout: 5000, interval: 10 })
+      .toMatchObject({ kind: 'result', data: { status: 'cancelled' } });
+  }, 60_000); // Нативная Windows-проверка identity входит в общий budget readiness и control.
+
+  it('пересылает pause и resume paused job живому владельцу без lease-отказа', async () => {
+    const { jobId, store } = await startOwner();
+    const paused = await appB!.pause(jobId);
+    expect(paused).toMatchObject({
+      kind: 'result',
+      data: { status: 'paused' },
+    });
+    expect(paused).not.toHaveProperty('error');
+    expect(await store.readLeaseState(jobId)).toBe('active');
+    const resumed = await appB!.resume(jobId);
+    expect(resumed).toMatchObject({
+      kind: 'result',
+      data: { status: 'running' },
+    });
+    expect(resumed).not.toHaveProperty('error');
+    // Успешные snapshots содержат публичный resultPath; запрет путей относится к отказам.
+    expect(JSON.stringify([paused, resumed])).not.toMatch(
+      /ownerToken|pid|hostname|cause|stack/,
+    );
+  }, 60_000);
+});
+
+describe('STEP-049: shutdown закрывающегося manager', () => {
+  it('ждёт удерживаемый release после terminal resume и освобождает lease один раз', async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), 'application-close-'));
+    const stateDir = path.join(root, 'state');
+    const store = new FileManifestStore({ stateDir });
+    let seed: ReturnType<typeof createApplication> | undefined;
+    let resumed: ReturnType<typeof createApplication> | undefined;
+    let jobId: string;
+    let releaseSession!: () => void;
+    let releaseStarted!: () => void;
+    let releaseCalls = 0;
+    const releaseGate = new Promise<void>((resolve) => {
+      releaseSession = resolve;
+    });
+    const releaseObserved = new Promise<void>((resolve) => {
+      releaseStarted = resolve;
+    });
+    try {
+      seed = createApplication({ stateDir, providerOverride: downloads() });
+      const completed = await seed.createDownload({
+        source: { provider: 'mock', kind: 'track', id: 'closing' },
+        quality: 'best',
+        destination: path.join(root, 'music'),
+      });
+      expect(completed).toMatchObject({
+        kind: 'result',
+        data: { status: 'completed', tracks: [{ status: 'completed' }] },
+      });
+      if (completed.kind !== 'result') throw new Error('Ожидался result.');
+      jobId = completed.data.jobId;
+      await seed.shutdown();
+      seed = undefined;
+
+      const manifestStore: ManifestStore = {
+        read: store.read.bind(store),
+        readLeaseState: store.readLeaseState.bind(store),
+        list: store.list.bind(store),
+        create: store.create.bind(store),
+        acquire: async (...args) => {
+          const session = await store.acquire(...args);
+          return Object.create(session, {
+            release: {
+              value: async () => {
+                releaseCalls += 1;
+                await session.release();
+                releaseStarted();
+                await releaseGate;
+              },
+            },
+          }) as LeaseSession;
+        },
+        sendControl: store.sendControl.bind(store),
+        waitControlAck: store.waitControlAck.bind(store),
+      };
+      resumed = createApplication({
+        stateDir,
+        manifestStore,
+        providerOverride: downloads(),
+      });
+      await expect(resumed.resume(jobId)).resolves.toMatchObject({
+        kind: 'result',
+      });
+      await expect
+        .poll(() => store.read(jobId), { timeout: 5_000, interval: 10 })
+        .toMatchObject({
+          control: { state: 'running' },
+          tracks: [{ status: 'completed' }],
+        });
+      await releaseObserved;
+
+      let shutdownSettled = false;
+      const shutdown = resumed.shutdown().then((result) => {
+        shutdownSettled = true;
+        return result;
+      });
+      await new Promise((resolve) => setTimeout(resolve, 20));
+      expect(shutdownSettled).toBe(false);
+      await expect(store.read(jobId)).resolves.toMatchObject({
+        control: { state: 'running' },
+      });
+      releaseSession();
+      await expect(shutdown).resolves.toMatchObject({ kind: 'result' });
+      expect(releaseCalls).toBe(1);
+    } finally {
+      releaseSession?.();
+      await seed?.shutdown();
+      await resumed?.shutdown();
+      await rm(root, { recursive: true, force: true });
+    }
+  }, 15_000);
 });
 
 const delay = (milliseconds: number) =>

@@ -387,6 +387,8 @@ __metadata:
   resolution: "@music-downloader/cli@workspace:apps/cli"
   dependencies:
     "@music-downloader/application": "workspace:*"
+  bin:
+    music-downloader: ./dist/index.js
   languageName: unknown
   linkType: soft
 

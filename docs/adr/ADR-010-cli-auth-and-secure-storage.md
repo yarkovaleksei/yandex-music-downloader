@@ -17,6 +17,7 @@ steps:
   - STEP-019
   - STEP-025
   - STEP-041
+  - STEP-046
 ---
 
 # ADR-010 — Авторизация CLI и системное хранилище credentials
