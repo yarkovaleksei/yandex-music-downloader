@@ -28,6 +28,7 @@ steps:
   - STEP-044
   - STEP-045
   - STEP-046
+  - STEP-049
 ---
 
 # ADR-007 — Application API, события и результаты команд

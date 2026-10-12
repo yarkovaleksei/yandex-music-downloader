@@ -45,6 +45,7 @@ describe('конфигурация CLI', () => {
             MUSIC_DOWNLOADER_CONCURRENCY: '3',
           },
           homedir: () => root!,
+          platform: 'linux',
         },
       ),
     ).toMatchObject({
@@ -115,6 +116,7 @@ describe('конфигурация CLI', () => {
         resolveConfiguration(parseArguments(['download', 'u']), {
           env: {},
           homedir: () => root!,
+          platform: 'linux',
         }),
       ).toThrow();
     },

@@ -334,6 +334,65 @@ describe('Download Manager', () => {
     expect(fixture.releases).toEqual(['resolving']);
   });
 
+  it('STEP-049: timeout release не освобождает lease до завершения того же close', async () => {
+    const fixture = managerFixture(1);
+    await fixture.create('release-timeout');
+    const acquire = fixture.deps.store.acquire;
+    let finishRelease!: () => void;
+    const releaseGate = new Promise<void>((resolve) => {
+      finishRelease = resolve;
+    });
+    fixture.deps.store.acquire = async (...args) => {
+      const session = await acquire(...args);
+      return Object.create(session, {
+        release: {
+          value: async () => {
+            await releaseGate;
+            await session.release();
+          },
+        },
+      });
+    };
+    const manager = createDownloadManager(fixture.deps, {
+      ...pauseOptions,
+      stopTimeoutMs: 10,
+    });
+
+    await expect(manager.run('release-timeout')).rejects.toThrow();
+    expect(fixture.releases).toEqual([]);
+    finishRelease();
+    await expect
+      .poll(() => fixture.releases, { timeout: 1_000, interval: 10 })
+      .toEqual(['release-timeout']);
+    await expect(manager.shutdown('release-timeout')).resolves.toBeUndefined();
+  });
+
+  it('STEP-049: rejection release сохраняется без ложного освобождения lease', async () => {
+    const fixture = managerFixture(1);
+    await fixture.create('release-rejection');
+    const acquire = fixture.deps.store.acquire;
+    fixture.deps.store.acquire = async (...args) => {
+      const session = await acquire(...args);
+      return Object.create(session, {
+        release: {
+          value: async () => {
+            throw new Error('release failed');
+          },
+        },
+      });
+    };
+    const manager = createDownloadManager(fixture.deps, pauseOptions);
+
+    await expect(manager.run('release-rejection')).rejects.toThrow(
+      'release failed',
+    );
+    expect(fixture.releases).toEqual([]);
+    await expect(manager.shutdown('release-rejection')).rejects.toThrow(
+      'release failed',
+    );
+    expect(fixture.releases).toEqual([]);
+  });
+
   it('сырой текст ошибки с canary token и signed URL отсутствует в manifest/events', async () => {
     const fixture = managerFixture(1);
     await fixture.create('secrets');

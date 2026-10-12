@@ -30,6 +30,7 @@ interface LiveJob {
   generation: number;
   seq: number;
   closed: boolean;
+  closePromise?: Promise<void>;
   polling: boolean;
   poll?: ReturnType<typeof setInterval>;
   heartbeat?: ReturnType<typeof setInterval>;
@@ -136,6 +137,12 @@ export class DownloadManager {
   public async shutdown(jobId: string): Promise<void> {
     const live = this.jobs.get(jobId);
     if (live === undefined) return;
+    // @link planning/tasks/STEP-049.md: закрывающаяся session уже освобождает lease.
+    // Новый pause в это окно нарушает порядок lane и маскирует исход release.
+    if (live.closed) {
+      await this.close(jobId, live);
+      return;
+    }
     if (live.intent === 'running') await this.apply(live, 'pause');
     else await this.bounded(Promise.allSettled([...live.effects]));
     await this.bounded(live.owner.exclusive(async () => undefined));
@@ -401,12 +408,17 @@ export class DownloadManager {
   }
 
   private async close(jobId: string, live: LiveJob): Promise<void> {
-    if (live.closed) return;
-    live.closed = true;
-    clearInterval(live.poll);
-    clearInterval(live.heartbeat);
-    await live.owner.session.release();
-    this.jobs.delete(jobId);
+    if (live.closePromise === undefined) {
+      live.closed = true;
+      clearInterval(live.poll);
+      clearInterval(live.heartbeat);
+      // @link planning/tasks/STEP-049.md: все close/shutdown ждут один release.
+      // Job исчезает только после успешного release, чтобы не объявить lease свободной раньше времени.
+      live.closePromise = live.owner.session.release().then(() => {
+        this.jobs.delete(jobId);
+      });
+    }
+    await this.bounded(live.closePromise);
   }
   private async bounded<T>(operation: Promise<T>): Promise<T> {
     let timer: ReturnType<typeof setTimeout> | undefined;

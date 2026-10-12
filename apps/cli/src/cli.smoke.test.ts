@@ -41,7 +41,11 @@ describe('собранный bin', () => {
   });
   it('не пишет human help в stdout при --help --json', async () => {
     const binPath = fileURLToPath(new URL('../dist/index.js', import.meta.url));
-    const result = await execute(process.execPath, [binPath, '--help', '--json']);
+    const result = await execute(process.execPath, [
+      binPath,
+      '--help',
+      '--json',
+    ]);
     expect(result.stdout).toBe('');
     expect(result.stderr).toContain('music-downloader');
   });

@@ -12,6 +12,7 @@ import {
 import type {
   AcquireOptions,
   JobManifestV1,
+  LeaseSession,
   ManifestStore,
   MusicProvider,
 } from '@music-downloader/shared';
@@ -162,7 +163,7 @@ describe('STEP-045: команды двух application с общим stateDir',
     expect(
       (await readdir(path.join(root, 'state'), { recursive: true })).join('\n'),
     ).not.toContain('missing-job');
-  });
+  }, 30_000); // Нативная Windows-проверка identity занимает до 10s помимо readiness/control budget.
 
   it('различает отсутствие подтверждения cancel, сохраняя запрос в inbox', async () => {
     const { jobId } = await startOwner(true);
@@ -181,7 +182,7 @@ describe('STEP-045: команды двух application с общим stateDir',
     await expect
       .poll(() => appA!.getJob(jobId), { timeout: 5000, interval: 10 })
       .toMatchObject({ kind: 'result', data: { status: 'cancelled' } });
-  });
+  }, 30_000); // Нативная Windows-проверка identity занимает до 10s помимо readiness/control budget.
 
   it('пересылает pause и resume paused job живому владельцу без lease-отказа', async () => {
     const { jobId, store } = await startOwner();
@@ -203,6 +204,131 @@ describe('STEP-045: команды двух application с общим stateDir',
       /ownerToken|pid|hostname|cause|stack/,
     );
   });
+});
+
+describe('STEP-049: shutdown закрывающегося manager', () => {
+  it('ждёт удерживаемый release после terminal resume и освобождает lease один раз', async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), 'application-close-'));
+    const stateDir = path.join(root, 'state');
+    const store = new FileManifestStore({ stateDir });
+    let seed: ReturnType<typeof createApplication> | undefined;
+    let resumed: ReturnType<typeof createApplication> | undefined;
+    let jobId = '';
+    let unblockStream!: () => void;
+    let releaseSession!: () => void;
+    let releaseStarted!: () => void;
+    let releaseCalls = 0;
+    const blockedStream = new Promise<void>((resolve) => {
+      unblockStream = resolve;
+    });
+    const releaseGate = new Promise<void>((resolve) => {
+      releaseSession = resolve;
+    });
+    const releaseObserved = new Promise<void>((resolve) => {
+      releaseStarted = resolve;
+    });
+    try {
+      seed = createApplication({
+        stateDir,
+        providerOverride: {
+          ...downloads(),
+          openAudioStream: async () => ({
+            stream: new ReadableStream<Uint8Array>({
+              pull(controller) {
+                controller.enqueue(validMp3.slice(0, 1));
+                return blockedStream;
+              },
+              cancel() {
+                unblockStream();
+              },
+            }),
+            contentLength: validMp3.byteLength,
+            container: 'mp3',
+            acceptsRanges: true,
+            startOffset: 0,
+          }),
+        },
+      });
+      seed.subscribe((event) => {
+        if (event.event === 'job.created') jobId = event.jobId;
+      });
+      const initial = seed.createDownload({
+        source: { provider: 'mock', kind: 'track', id: 'closing' },
+        quality: 'best',
+        destination: path.join(root, 'music'),
+      });
+      await expect
+        .poll(() => jobId, { timeout: 5_000, interval: 10 })
+        .not.toBe('');
+      await expect(seed.pause(jobId)).resolves.toMatchObject({
+        kind: 'result',
+        data: { status: 'paused' },
+      });
+      await expect(initial).resolves.toMatchObject({
+        kind: 'result',
+        data: { status: 'paused' },
+      });
+      await seed.shutdown();
+      seed = undefined;
+
+      const manifestStore: ManifestStore = {
+        read: store.read.bind(store),
+        readLeaseState: store.readLeaseState.bind(store),
+        list: store.list.bind(store),
+        create: store.create.bind(store),
+        acquire: async (...args) => {
+          const session = await store.acquire(...args);
+          return Object.create(session, {
+            release: {
+              value: async () => {
+                releaseCalls += 1;
+                await session.release();
+                releaseStarted();
+                await releaseGate;
+              },
+            },
+          }) as LeaseSession;
+        },
+        sendControl: store.sendControl.bind(store),
+        waitControlAck: store.waitControlAck.bind(store),
+      };
+      resumed = createApplication({
+        stateDir,
+        manifestStore,
+        providerOverride: downloads(),
+      });
+      await expect(resumed.resume(jobId)).resolves.toMatchObject({
+        kind: 'result',
+      });
+      await expect
+        .poll(() => store.read(jobId), { timeout: 5_000, interval: 10 })
+        .toMatchObject({
+          control: { state: 'running' },
+          tracks: [{ status: 'completed' }],
+        });
+      await releaseObserved;
+
+      let shutdownSettled = false;
+      const shutdown = resumed.shutdown().then((result) => {
+        shutdownSettled = true;
+        return result;
+      });
+      await new Promise((resolve) => setTimeout(resolve, 20));
+      expect(shutdownSettled).toBe(false);
+      await expect(store.read(jobId)).resolves.toMatchObject({
+        control: { state: 'running' },
+      });
+      releaseSession();
+      await expect(shutdown).resolves.toMatchObject({ kind: 'result' });
+      expect(releaseCalls).toBe(1);
+    } finally {
+      unblockStream?.();
+      releaseSession?.();
+      await seed?.shutdown();
+      await resumed?.shutdown();
+      await rm(root, { recursive: true, force: true });
+    }
+  }, 15_000);
 });
 
 const delay = (milliseconds: number) =>
