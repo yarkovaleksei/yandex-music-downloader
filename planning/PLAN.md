@@ -43,7 +43,7 @@
 | STEP-037 | ADR: Yarn workspaces вместо npm workspaces | adr | critical | completed | — | REQ-040 |
 | STEP-038 | ADR: жанр и доступность в shared metadata contract | adr | critical | completed | STEP-003, STEP-006 | REQ-006 |
 | STEP-039 | Shared metadata: жанр, доступность и контрактные тесты | implementation | critical | completed | STEP-003, STEP-038 | REQ-006 |
-| STEP-040 | Синхронизировать описание реализованной foundation и provider | documentation | medium | planned | STEP-004, STEP-007, STEP-008, STEP-009, STEP-010, STEP-011, STEP-039 | — |
+| STEP-040 | Синхронизировать описание реализованной foundation и provider | documentation | medium | completed | STEP-004, STEP-007, STEP-008, STEP-009, STEP-010, STEP-011, STEP-039 | — |
 | STEP-041 | Оформить приватную страницу авторизации по макету | implementation | medium | completed | STEP-008 | REQ-001, REQ-002, REQ-056 |
 | STEP-042 | Перечисление сохранённых заданий через ManifestStore | implementation | high | completed | STEP-016 | REQ-032, REQ-044 |
 | STEP-043 | Чтение состояния аренды через ManifestStore | implementation | high | completed | STEP-016, STEP-042 | REQ-020, REQ-032, REQ-044 |

@@ -61,9 +61,21 @@ yarn run format
 
 По умолчанию используются track `2224197`, album `221173` и playlist `users/<account>/playlists/1000`. Для разрешённых аккаунту ресурсов можно задать не секретные `PROVIDER_TEST_TRACK_ID`, `PROVIDER_TEST_ALBUM_ID` и `PROVIDER_TEST_PLAYLIST_ID`; допустимы числовые ID track/album и UUID или `users/<encoded-owner>/playlists/<number>` для playlist. `yarn test` остаётся offline, не требует токена и не запускает этот suite; PR CI также его не запускает.
 
+Историческая проверка реального аккаунта от 2026-10-09 подтвердила schema `1.1.0`: account, track, album с 11 треками, playlist с 33 позициями и два variants; test-only credentials в памяти очищены ([STEP-011](../planning/tasks/STEP-011.md), [runner](../packages/providers/yandex-music/test-live/runner.mjs)). Она не доказывает результат для других аккаунтов или универсальную доступность контента.
+
 ## Workspace
 
-Workspace-пакеты (все `private`, ESM): `@music-downloader/shared`, `@music-downloader/core-downloader`, `@music-downloader/core-planner`, `@music-downloader/core-queue`, `@music-downloader/core-retry`, `@music-downloader/core-manifest`, `@music-downloader/core-filesystem`, `@music-downloader/core-validation`, `@music-downloader/provider-yandex-music`, `@music-downloader/metadata`, `@music-downloader/persistence`, `@music-downloader/application`, `@music-downloader/logging`, `@music-downloader/testing`, `@music-downloader/cli`. Всего 15; каталоги — `packages/shared`, `packages/core/*`, `packages/providers/yandex-music`, `packages/metadata`, `packages/persistence`, `packages/application`, `packages/logging`, `packages/testing`, `apps/cli`. STEP-003 добавил доменные типы, безопасные ошибки и контракт `MusicProvider` в `shared`, а также mock provider и fixtures в `testing`. Остальные production-пакеты пока содержат каркасы; STEP-005/006 завершили исследования и архитектурные решения, а не реализацию provider или авторизации. CLI-команд и desktop на этом этапе нет.
+Workspace-пакеты (все `private`, ESM): `@music-downloader/shared`, `@music-downloader/core-downloader`, `@music-downloader/core-planner`, `@music-downloader/core-queue`, `@music-downloader/core-retry`, `@music-downloader/core-manifest`, `@music-downloader/core-filesystem`, `@music-downloader/core-validation`, `@music-downloader/provider-yandex-music`, `@music-downloader/metadata`, `@music-downloader/persistence`, `@music-downloader/application`, `@music-downloader/logging`, `@music-downloader/testing`, `@music-downloader/cli`. Всего 15; каталоги — `packages/shared`, `packages/core/*`, `packages/providers/yandex-music`, `packages/metadata`, `packages/persistence`, `packages/application`, `packages/logging`, `packages/testing`, `apps/cli`. STEP-003 добавил доменные типы, безопасные ошибки и контракт `MusicProvider` в `shared`, а также mock provider и fixtures в `testing`. Реализованные foundation/provider части описаны ниже; остальные production-возможности принадлежат отдельным STEP. Core, application и CLI реализованы в [STEP-017](../planning/tasks/STEP-017.md), [STEP-018](../planning/tasks/STEP-018.md) и [STEP-019](../planning/tasks/STEP-019.md); MVP acceptance gate [STEP-027](../planning/tasks/STEP-027.md) остаётся planned.
+
+### Реализованные foundation и provider
+
+`shared` экспортирует metadata union `Track` (`available`/`unavailable`/`unknown`), обязательные `title`/`artists` для доступного трека, необязательный `genre` и сохранение позиции/повторов в коллекциях, а также schema `1` для `JobEvent` и `CommandResult` ([контракт metadata](../packages/shared/src/domain.ts), [события](../packages/shared/src/events.ts), [STEP-003](../planning/tasks/STEP-003.md), [STEP-004](../planning/tasks/STEP-004.md)).
+
+`@music-downloader/logging` выводит JSON в stderr на уровне `info` по умолчанию; дочерний logger переносит `jobId` и `correlationId`. Redactor очищает известные или зарегистрированные поля и значения, включая query URL, но не ищет неизвестные секреты ([logger](../packages/logging/src/logger.ts), [redactor](../packages/logging/src/redactor.ts), [STEP-004](../planning/tasks/STEP-004.md)).
+
+`CliCredentialStore` хранит единственную CLI credential текущего пользователя через `@napi-rs/keyring`; Linux принудительно выбирает Secret Service, а plaintext fallback отсутствует ([реализация](../packages/persistence/src/cli-credential-store.ts), [STEP-008](../planning/tasks/STEP-008.md)). Канонические evidence подтверждают canary Linux GNOME Login Secret Service и macOS 15.7.7 arm64 Login Keychain, а также Windows x64 VirtualBox Credential Manager: write/read, persistence из нового процесса и delete. Это ограниченные native probes, не packaging и не полная platform qualification; Windows exit code не реконструируется.
+
+`@music-downloader/provider-yandex-music` реализует URL resolution, Device Authorization, metadata track/album/playlist, artwork, variants и открытие audio stream; текущий `PROVIDER_SCHEMA_VERSION` — `1.1.0` ([экспорт](../packages/providers/yandex-music/src/index.ts), [STEP-009](../planning/tasks/STEP-009.md), [STEP-010](../planning/tasks/STEP-010.md)). Историческое наблюдение STEP-009 относится к schema `1.0.0`. Live evidence STEP-010 ограничен одним треком MP3 192 kbps: полный EOF `5 650 599` bytes и один `Range` response offset `8`/`56` bytes. Вариант допускается только при явном `preview=false`; modern preview/unknown исключаются, а `encraw` проверен только synthetic; универсальные TTL signed URL и Range support не заявляются.
 
 Каждый пакет экспортирует `src/index.ts` под условием `@music-downloader/source` и `dist/index.js` по умолчанию. TypeScript (`customConditions`) и Vitest (`resolve`/`ssr` conditions) используют условие `source`, поэтому тесты и typecheck не зависят от предварительной сборки `dist`.
 
@@ -103,7 +115,7 @@ Boundary-проход директивы не принимает вообще. E
 
 ## Testing
 
-Тесты лежат рядом с кодом (`src/*.test.ts`): smoke-тесты проверяют каркасы пакетов, а тесты `shared` и `testing` — доменные ошибки, контракт `MusicProvider` и mock provider из STEP-003. `eslint/*.test.ts` проверяют toolchain: границы (`boundaries.test.ts`, независимый oracle по ADR-001), strict-контракт (`strict.test.ts`), качество (`quality.test.ts`), согласованность конфигураций (`consistency.test.ts`).
+Тесты лежат рядом с кодом (`src/*.test.ts`): smoke-тесты проверяют каркасы пакетов, а тесты `shared` и `testing` — доменные ошибки, контракт `MusicProvider` и mock provider из STEP-003. Реализованные logger, native store и provider покрыты offline-тестами ([logger](../packages/logging/src/logger.test.ts), [store](../packages/persistence/src/cli-credential-store.test.ts), [provider](../packages/providers/yandex-music/src/yandex-music-auth.test.ts)). `eslint/*.test.ts` проверяют toolchain: границы (`boundaries.test.ts`, независимый oracle по ADR-001), strict-контракт (`strict.test.ts`), качество (`quality.test.ts`), согласованность конфигураций (`consistency.test.ts`).
 
 ## Воспроизводимая проверка STEP-001
 
@@ -122,7 +134,7 @@ Boundary-проход директивы не принимает вообще. E
 
 ## Database / migrations
 
-Не применимо до появления persistence.
+Для реализованного native `CliCredentialStore` миграции базы данных не требуются. SQLite и миграции desktop остаются будущей работой.
 
 ## CI/CD
 
