@@ -6,6 +6,7 @@ import {
   discardPart,
   finalizePart,
   inspectExisting,
+  writeM3u8,
   writeStreamToPart,
 } from '@music-downloader/core-filesystem';
 import type { DownloadFiles } from '@music-downloader/core-downloader';
@@ -35,6 +36,7 @@ export function createDownloadFiles(): DownloadFiles {
       if (track === undefined)
         throw new Error('Трек отсутствует в плане задания.');
       const resultPath =
+        manifest.plan.source.kind !== 'playlist' &&
         manifest.plan.tracks.length === 1
           ? buildTrackLayout(track.track, variant.container, {
               root: manifest.destination,
@@ -81,5 +83,25 @@ export function createDownloadFiles(): DownloadFiles {
         onExisting,
         platform,
       }),
+    async writePlaylist(manifest, orderedResultPaths) {
+      const layout = buildPlaylistLayout(
+        {
+          id: manifest.plan.source.id,
+          title: manifest.plan.title,
+          tracks: manifest.plan.tracks.map((item) => ({
+            position: item.position,
+            track: item.track,
+          })),
+        },
+        {
+          root: manifest.destination,
+          platform,
+          extensionOf: () => 'mp3',
+        },
+      );
+      await writeM3u8(layout.playlistFile.path, orderedResultPaths, {
+        platform,
+      });
+    },
   };
 }

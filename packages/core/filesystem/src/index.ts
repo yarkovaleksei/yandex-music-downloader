@@ -24,6 +24,7 @@ export {
 } from './layout.js';
 export { buildPartPath, type PartPathOptions } from './part-path.js';
 export { fileErrorCode, mapFileError } from './file-errors.js';
+export { writeM3u8, type WriteM3u8Options } from './m3u8.js';
 export {
   defaultFsOps,
   type FsFile,

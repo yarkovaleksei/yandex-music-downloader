@@ -264,33 +264,47 @@ export class DownloadManager {
           }
         }),
     );
-    const loop = work.then(async () => {
-      if (
-        !live.closed &&
-        generation === live.generation &&
-        live.intent === 'running'
-      ) {
-        const status = aggregateJobStatus({
-          control: live.owner.current.control.state,
-          leaseAlive: true,
-          tracks: live.owner.current.tracks.map((track) => track.status),
-        });
-        if (['completed', 'completed_with_errors', 'failed'].includes(status)) {
-          await this.emit(live, 'job.completed');
-          await this.close(jobId, live);
+    const loop = work
+      .then(async () => {
+        if (
+          !live.closed &&
+          generation === live.generation &&
+          live.intent === 'running'
+        ) {
+          const status = aggregateJobStatus({
+            control: live.owner.current.control.state,
+            leaseAlive: true,
+            tracks: live.owner.current.tracks.map((track) => track.status),
+          });
+          if (
+            ['completed', 'completed_with_errors', 'failed'].includes(status)
+          ) {
+            await this.writePlaylist(live, generation);
+            if (
+              !live.closed &&
+              live.intent === 'running' &&
+              generation === live.generation
+            ) {
+              await this.emit(live, 'job.completed');
+              await this.close(jobId, live);
+            }
+          }
         }
-      }
-      // Глобальная остановка освобождает lease только после полного drain.
-      // Следующий resume делает настоящий acquire/recovery незавершённых побочных фаз.
-      if (
-        !live.closed &&
-        live.intent === 'paused' &&
-        live.owner.current.control.pauseReason !== undefined &&
-        live.effects.size === 0
-      )
-        await this.close(jobId, live);
-      return live.owner.current;
-    });
+        // Глобальная остановка освобождает lease только после полного drain.
+        // Следующий resume делает настоящий acquire/recovery незавершённых побочных фаз.
+        if (
+          !live.closed &&
+          live.intent === 'paused' &&
+          live.owner.current.control.pauseReason !== undefined &&
+          live.effects.size === 0
+        )
+          await this.close(jobId, live);
+        return live.owner.current;
+      })
+      .catch(async (error: unknown) => {
+        if (!live.closed) await this.close(jobId, live);
+        throw error;
+      });
     live.loop = loop;
     return loop;
   }
@@ -405,6 +419,42 @@ export class DownloadManager {
     );
     live.eventTail = publication.catch(() => undefined);
     await publication;
+  }
+
+  /**
+   * M3U8 создаётся owner-ом после terminal-состояний и до job.completed. @link docs/requirements/REQ-028-playlist-m3u8.md
+   * Порядок берётся из immutable plan, а не из порядка завершения параллельных треков.
+   */
+  private async writePlaylist(
+    live: LiveJob,
+    generation: number,
+  ): Promise<void> {
+    if (
+      live.owner.current.plan.source.kind !== 'playlist' ||
+      this.deps.files.writePlaylist === undefined
+    )
+      return;
+    await live.owner.exclusive(async () =>
+      live.owner.session.runOwned(async () => {
+        if (
+          live.closed ||
+          live.intent !== 'running' ||
+          generation !== live.generation
+        )
+          return;
+        const manifest = live.owner.current;
+        const orderedResultPaths = manifest.plan.tracks.flatMap((planned) => {
+          const track = manifest.tracks.find(
+            (item) => item.trackKey === planned.trackKey,
+          );
+          return track?.resultPath !== undefined &&
+            (track.status === 'completed' || track.status === 'skipped')
+            ? [track.resultPath]
+            : [];
+        });
+        await this.deps.files.writePlaylist!(manifest, orderedResultPaths);
+      }),
+    );
   }
 
   private async close(jobId: string, live: LiveJob): Promise<void> {

@@ -69,6 +69,11 @@ export interface DownloadFiles {
     variant: AudioVariant,
     onExisting: 'skip' | 'replace',
   ): Promise<{ status: 'completed' | 'skipped'; path: string }>;
+  /** Создаёт M3U8 после terminal-состояний playlist без прямого доступа manager к ФС. */
+  writePlaylist?(
+    manifest: JobManifestV1,
+    orderedResultPaths: readonly string[],
+  ): Promise<void>;
 }
 
 export interface ProcessingHooks {
