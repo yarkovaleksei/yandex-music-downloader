@@ -13,6 +13,95 @@ import { managerFixture } from './fixtures/manager-fixture.js';
 const pauseOptions = { controlPollMs: 10, stopTimeoutMs: 1000 };
 
 describe('Download Manager', () => {
+  it('создаёт playlist до job.completed и освобождения lease', async () => {
+    const fixture = managerFixture(2);
+    const order: string[] = [];
+    fixture.deps.files.writePlaylist = async (_manifest, paths) => {
+      order.push('playlist');
+      expect(paths).toEqual(['order-1.mp3', 'order-2.mp3']);
+    };
+    fixture.deps.events = {
+      publish: (event) => {
+        order.push(event.event);
+      },
+    };
+    await fixture.create('order');
+
+    await createDownloadManager(fixture.deps).run('order');
+
+    expect(order).toEqual(
+      expect.arrayContaining(['playlist', 'job.completed']),
+    );
+    expect(order.indexOf('playlist')).toBeLessThan(
+      order.indexOf('job.completed'),
+    );
+    expect(fixture.releases).toEqual(['order']);
+  });
+
+  it('при ошибке writer освобождает lease без job.completed', async () => {
+    const fixture = managerFixture(1);
+    fixture.deps.files.writePlaylist = async () => {
+      throw new DownloadError();
+    };
+    await fixture.create('playlist-error');
+
+    await expect(
+      createDownloadManager(fixture.deps).run('playlist-error'),
+    ).rejects.toBeInstanceOf(DownloadError);
+
+    expect(
+      fixture.events.some((event) => event.event === 'job.completed'),
+    ).toBe(false);
+    expect(fixture.releases).toEqual(['playlist-error']);
+  });
+
+  it('не публикует completion, если cancel меняет control во время writer', async () => {
+    const fixture = managerFixture(1);
+    let releaseWriter: (() => void) | undefined;
+    let enteredWriter: (() => void) | undefined;
+    fixture.deps.files.writePlaylist = async () =>
+      new Promise<void>((resolve) => {
+        enteredWriter = resolve;
+        releaseWriter = resolve;
+      });
+    await fixture.create('playlist-pause');
+    const manager = createDownloadManager(fixture.deps, pauseOptions);
+    const running = manager.run('playlist-pause');
+    await new Promise<void>((resolve) => {
+      const timer = setInterval(() => {
+        if (enteredWriter === undefined) return;
+        clearInterval(timer);
+        resolve();
+      }, 1);
+    });
+
+    const pausing = manager.command('playlist-pause', 'cancel');
+    await new Promise((resolve) => setTimeout(resolve, 1));
+    releaseWriter?.();
+    await pausing;
+    await running;
+
+    expect(
+      fixture.events.some((event) => event.event === 'job.completed'),
+    ).toBe(false);
+    expect(fixture.releases).toEqual(['playlist-pause']);
+  });
+
+  it('не вызывает writer для source, не являющегося playlist', async () => {
+    const fixture = managerFixture(1);
+    const writer = vi.fn();
+    fixture.deps.files.writePlaylist = writer;
+    await fixture.create('track');
+    const manifest = await fixture.deps.store.read('track');
+    if (manifest === undefined)
+      throw new Error('Отсутствует manifest fixture.');
+    Object.assign(manifest.plan.source, { kind: 'track' });
+
+    await createDownloadManager(fixture.deps).run('track');
+
+    expect(writer).not.toHaveBeenCalled();
+  });
+
   it('использует default artworkSize=400 и дедуплицирует общую обложку', async () => {
     const fixture = managerFixture(3);
     const fetchArtwork = fixture.deps.provider.fetchArtwork;

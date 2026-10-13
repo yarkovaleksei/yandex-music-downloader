@@ -21,6 +21,7 @@ steps:
   - STEP-018
   - STEP-019
   - STEP-021
+  - STEP-022
   - STEP-030
   - STEP-047
 ---
