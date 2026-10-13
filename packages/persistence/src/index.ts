@@ -5,3 +5,5 @@ export * from './process-identity.js';
 export * from './state-directory.js';
 
 export * from './cli-credential-store.js';
+export * from './cache-store.js';
+export * from './file-cache-store.js';
