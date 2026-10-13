@@ -10,6 +10,14 @@ import type {
 import type { RuntimeLoggingOptions } from './contracts.js';
 import type { DiagnosticRuntimeOptions } from './diagnostics.js';
 
+export interface RuntimeCacheOptions {
+  /** Ноль отключает cache; provider override требует обе части namespace. */
+  readonly ttlMs?: number;
+  readonly now?: () => number;
+  readonly providerId?: string;
+  readonly schemaVersion?: string;
+}
+
 /** Host передаёт только порты; Electron/CLI не попадают в переносимые DTO. */
 export interface RuntimeAdapters {
   readonly stateDir?: string;
@@ -23,4 +31,5 @@ export interface RuntimeAdapters {
   readonly diagnostics?: () => Promise<DiagnosticsDto>;
   readonly diagnosticsRuntime?: Partial<DiagnosticRuntimeOptions>;
   readonly processing?: ProcessingHooks;
+  readonly cache?: RuntimeCacheOptions;
 }

@@ -77,3 +77,11 @@ Default download adapter использует текущую filesystem-клас
 Полная проверка контейнера/длительности остаётся в STEP-023, а metadata tagging —
 в STEP-021. Пока hooks не переданы host, `validation.completed` и
 `metadata.written` не публикуются.
+
+## Локальный cache metadata
+
+`createApplication` по умолчанию хранит metadata и artwork в `stateDir/cache` пять минут. Ключ хешируется с provider, текущим account и `PROVIDER_SCHEMA_VERSION`; cache обходит запрос при отсутствии account и не используется provider override без явных `cache.providerId` и `cache.schemaVersion`.
+
+`cache.ttlMs: 0` отключает cache, а `cache.now` предназначен для управляемых часов в host-тестах. Diagnostics продолжает обращаться к исходному provider, поэтому live auth probe не получает старые metadata.
+
+`clearApplicationCache({ stateDir })` возвращает `ApplicationResult<null>` и удаляет только каталог cache. Audio, download info, ссылки на поток, manifest, скачанные файлы и job artwork snapshot не попадают под эту операцию.

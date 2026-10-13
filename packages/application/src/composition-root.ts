@@ -17,10 +17,11 @@ import {
   createLogger,
   type LogLevel,
 } from '@music-downloader/logging';
-import { ValidationError } from '@music-downloader/shared';
+import { ValidationError, type MusicProvider } from '@music-downloader/shared';
 import { createMetadataWriter } from '@music-downloader/metadata';
 import {
   CliCredentialStore,
+  FileCacheStore,
   FileManifestStore,
   resolveStateDirectory,
 } from '@music-downloader/persistence';
@@ -32,6 +33,7 @@ import {
 } from '@music-downloader/provider-yandex-music';
 import type { RuntimeAdapters } from './runtime-adapters.js';
 import { collectDiagnostics } from './diagnostics.js';
+import { CachedProvider } from './cached-provider.js';
 
 /** Единственное место регистрации Yandex adapter; @link docs/adr/ADR-001-layered-architecture-monorepo.md */
 export function createApplication(
@@ -73,13 +75,14 @@ export function createApplication(
           }),
       },
     });
+  const cachedProvider = createCachedProvider(provider, stateDir, adapters);
   const scheduler = new ConcurrencyScheduler(adapters.concurrency);
   const events = new ApplicationEvents(logger);
   const files = createDownloadFiles();
   const metadata =
     adapters.processing === undefined ? createMetadataWriter() : undefined;
   const jobs = new Jobs(
-    provider,
+    cachedProvider,
     store,
     {
       scheduler,
@@ -142,13 +145,44 @@ export function createApplication(
         },
       }));
   return new ApplicationFacade({
-    provider,
+    provider: cachedProvider,
     jobs,
     events,
     logger,
     diagnostics,
     debug: logging?.debug === true,
   });
+}
+
+function createCachedProvider(
+  provider: MusicProvider,
+  stateDir: string,
+  adapters: RuntimeAdapters,
+) {
+  const options = adapters.cache;
+  const ttlMs = options?.ttlMs ?? 5 * 60_000;
+  if (!Number.isSafeInteger(ttlMs) || ttlMs < 0) throw new ValidationError();
+  if (ttlMs === 0) return provider;
+  const namespace =
+    adapters.providerOverride === undefined
+      ? { providerId: 'yandex-music', schemaVersion: PROVIDER_SCHEMA_VERSION }
+      : options?.providerId !== undefined && options.schemaVersion !== undefined
+        ? {
+            providerId: options.providerId,
+            schemaVersion: options.schemaVersion,
+          }
+        : undefined;
+  if (
+    namespace === undefined ||
+    namespace.providerId.length === 0 ||
+    namespace.schemaVersion.length === 0
+  )
+    return provider;
+  return new CachedProvider(
+    provider,
+    new FileCacheStore({ stateDir, ttlMs, now: options?.now }),
+    namespace,
+  );
 }
 
 function isLogLevel(value: string): value is LogLevel {
