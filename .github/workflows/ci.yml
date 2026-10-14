@@ -46,9 +46,9 @@ jobs:
     # Отображаемое имя job в GitHub UI.
     # Пример: "Quality".
     name: Quality
-    # Закреплённый runner image, чтобы смена `latest` не меняла CI молча.
-    # Пример: ubuntu-24.04.
-    runs-on: ubuntu-24.04
+    # Linux runner настраивается Repository Actions Variable с безопасным fallback.
+    # Пример: `CI_LINUX_RUNS_ON=["self-hosted","linux","x64","ci"]` или ubuntu-24.04.
+    runs-on: ${{ fromJSON(vars.CI_LINUX_RUNS_ON || '"ubuntu-24.04"') }}
     # Максимальное время job до принудительной остановки.
     # Пример: 15 минут с запасом для установки зависимостей и сборки.
     timeout-minutes: 15
@@ -145,9 +145,9 @@ jobs:
     # Отображаемое имя варианта матрицы в GitHub UI.
     # Пример: "Test (ubuntu-24.04, Node.js 22.13.0)".
     name: Test (${{ matrix.os }}, Node.js ${{ matrix.node }})
-    # Runner берётся из матрицы.
-    # Пример: ubuntu-24.04, windows-2025 или macos-15.
-    runs-on: ${{ matrix.os }}
+    # Только Linux runner настраивается переменной; Windows и macOS берутся из матрицы.
+    # Пример: Linux — CI_LINUX_RUNS_ON, Windows — windows-2025, macOS — macos-15.
+    runs-on: ${{ matrix.os == 'ubuntu-24.04' && fromJSON(vars.CI_LINUX_RUNS_ON || '"ubuntu-24.04"') || matrix.os }}
     # Максимальное время одного варианта; Windows и macOS медленнее Linux.
     # Пример: 20 минут.
     timeout-minutes: 20
