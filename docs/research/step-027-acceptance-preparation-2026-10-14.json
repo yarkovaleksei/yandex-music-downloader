@@ -1,0 +1,1290 @@
+{
+  "schema": 1,
+  "step": "STEP-027",
+  "subjectDigest": "sha256:5c90380eae10221e52a38e324dd55a1e4d1cce19fd0246c20bb616b2308a6ed2",
+  "archive": {
+    "path": "/tmp/STEP-027-checks-windows-macos.zip",
+    "bytes": 3400236,
+    "files": 320,
+    "sha256": "1297e0e9ce5f65b953368ad2d1e7acb53276302f267c52c3ae9145b5ffc942cf",
+    "crcPass": true,
+    "sourceDigestVerifiedInsideArchive": true,
+    "sourcesEmpty": true
+  },
+  "offlineRunnerTests": {
+    "passed": 7,
+    "command": "node --test docs/research/step-027-acceptance/run.test.mjs"
+  },
+  "portableLinuxSmoke": {
+    "schema": 1,
+    "step": "STEP-027",
+    "runnerVersion": 1,
+    "startedAt": "2026-10-14T08:39:57.473Z",
+    "platform": {
+      "os": "linux",
+      "architecture": "x64",
+      "release": "7.0.0-38-generic",
+      "node": "v24.21.0"
+    },
+    "mode": "smoke",
+    "status": "SMOKE_PASS",
+    "checks": [
+      {
+        "args": [
+          "packages/testing/scripts/run-yarn.mjs",
+          "install",
+          "--immutable"
+        ],
+        "startedAt": "2026-10-14T08:39:57.510Z",
+        "finishedAt": "2026-10-14T08:39:58.121Z",
+        "code": 0,
+        "timedOut": false,
+        "stdoutSha256": "82156049b0d5b73874c2396da3701a74d7e179dc1b9e247be4515c4addb9ac19",
+        "stderrSha256": "bfec6f0b0ed4e98041896996f31540ead1369fc6f4fe067199120753dc1e5ab2"
+      },
+      {
+        "args": [
+          "packages/testing/scripts/run-yarn.mjs",
+          "run",
+          "lint"
+        ],
+        "startedAt": "2026-10-14T08:39:58.121Z",
+        "finishedAt": "2026-10-14T08:40:05.750Z",
+        "code": 0,
+        "timedOut": false,
+        "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderrSha256": "f59ba696a15507a8febe0f9ea94ac75ccc5411952df61ee4cb3c971b47b6bc12"
+      },
+      {
+        "args": [
+          "packages/testing/scripts/run-yarn.mjs",
+          "run",
+          "typecheck"
+        ],
+        "startedAt": "2026-10-14T08:40:05.751Z",
+        "finishedAt": "2026-10-14T08:40:09.146Z",
+        "code": 0,
+        "timedOut": false,
+        "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderrSha256": "ffbfd8ec2bfcf3e8f0e99a93f081f695da2de832eba56c5ae6943a4052680411"
+      },
+      {
+        "args": [
+          "packages/testing/scripts/run-yarn.mjs",
+          "test"
+        ],
+        "startedAt": "2026-10-14T08:40:09.147Z",
+        "finishedAt": "2026-10-14T08:40:16.583Z",
+        "code": 0,
+        "timedOut": false,
+        "stdoutSha256": "9f06e5e20d141b939f0734769ae20dd44f57f0970573be3f37ab231dd3478483",
+        "stderrSha256": "f6fef7be39cda1eef5a5a8a64d857547fe8f4c7e9520ae946794e8cec44ba58b"
+      },
+      {
+        "args": [
+          "packages/testing/scripts/run-yarn.mjs",
+          "build"
+        ],
+        "startedAt": "2026-10-14T08:40:16.583Z",
+        "finishedAt": "2026-10-14T08:40:16.974Z",
+        "code": 0,
+        "timedOut": false,
+        "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderrSha256": "0157d8afc3a7265ca4e7c585e12c0dad6c6e3b575b60dd6b58851567da7c61d3"
+      },
+      {
+        "args": [
+          "packages/testing/scripts/verify-step-026-coverage.mjs"
+        ],
+        "startedAt": "2026-10-14T08:40:16.975Z",
+        "finishedAt": "2026-10-14T08:40:17.007Z",
+        "code": 0,
+        "timedOut": false,
+        "stdoutSha256": "174f8131fdad4e33968eaff63b4b341e99ba25557cd3db6a15af3a52040c2e3a",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "args": [
+          "--test",
+          "packages/providers/yandex-music/test-live/runner.test.mjs"
+        ],
+        "startedAt": "2026-10-14T08:40:17.007Z",
+        "finishedAt": "2026-10-14T08:40:17.128Z",
+        "code": 0,
+        "timedOut": false,
+        "stdoutSha256": "25079bbf51c385a998189eb7a2e866bfba131c05f3c8b2cc30f36384788701a3",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    ],
+    "cycles": [
+      {
+        "kind": "track",
+        "iteration": 1,
+        "startedAt": "2026-10-14T08:40:19.438Z",
+        "pass": true,
+        "download": {
+          "args": [
+            "track",
+            "https://music.yandex.ru/album/221173/track/2224197?utm_source=web&utm_medium=copy_link",
+            "--json",
+            "--quality",
+            "best",
+            "--concurrency",
+            "1",
+            "--output",
+            "/home/user/music-downloader-check-B5bsSg/track-1"
+          ],
+          "startedAt": "2026-10-14T08:40:19.438Z",
+          "events": [
+            {
+              "event": "job.created",
+              "seq": 1,
+              "jobId": "e3d724a1-4bca-425f-b974-e16d57ab8c1a",
+              "payload": {}
+            },
+            {
+              "event": "entity.resolved",
+              "seq": 2,
+              "jobId": "e3d724a1-4bca-425f-b974-e16d57ab8c1a",
+              "payload": {}
+            },
+            {
+              "event": "plan.created",
+              "seq": 3,
+              "jobId": "e3d724a1-4bca-425f-b974-e16d57ab8c1a",
+              "payload": {}
+            },
+            {
+              "event": "track.started",
+              "seq": 4,
+              "jobId": "e3d724a1-4bca-425f-b974-e16d57ab8c1a",
+              "trackKey": "1",
+              "payload": {}
+            },
+            {
+              "event": "variant.selected",
+              "seq": 5,
+              "jobId": "e3d724a1-4bca-425f-b974-e16d57ab8c1a",
+              "trackKey": "1",
+              "payload": {}
+            },
+            {
+              "event": "download.started",
+              "seq": 6,
+              "jobId": "e3d724a1-4bca-425f-b974-e16d57ab8c1a",
+              "trackKey": "1",
+              "payload": {}
+            }
+          ],
+          "eventCounts": {
+            "job.created": 1,
+            "entity.resolved": 1,
+            "plan.created": 1,
+            "track.started": 1,
+            "variant.selected": 1,
+            "download.started": 1,
+            "track.progress": 17
+          },
+          "progressByTrack": {
+            "1": {
+              "count": 17,
+              "first": {
+                "seq": 7,
+                "bytes": 15210
+              },
+              "last": {
+                "seq": 23,
+                "bytes": 277354
+              }
+            }
+          },
+          "privacyPassed": true,
+          "stderrBytes": 0,
+          "jobId": "e3d724a1-4bca-425f-b974-e16d57ab8c1a",
+          "firstProgress": {
+            "event": "track.progress",
+            "seq": 7,
+            "jobId": "e3d724a1-4bca-425f-b974-e16d57ab8c1a",
+            "trackKey": "1",
+            "payload": {
+              "bytes": 15210,
+              "fraction": 0.002691750025085836,
+              "speed": 14471.931493815415,
+              "eta": 389401.3043392505
+            }
+          },
+          "signalAt": "2026-10-14T08:40:22.944Z",
+          "signalBytes": 277354,
+          "code": 4,
+          "signal": null,
+          "finishedAt": "2026-10-14T08:40:23.167Z"
+        },
+        "before": {
+          "counts": {
+            "completed": 0,
+            "skipped": 0,
+            "failed": 0,
+            "paused": 1,
+            "unavailable": 0,
+            "queued": 0
+          },
+          "completedFiles": [],
+          "partialFiles": [
+            {
+              "trackKey": "1",
+              "bytes": 277354,
+              "manifestBytes": 277354
+            }
+          ]
+        },
+        "manifestPrivacyBefore": true,
+        "resume": {
+          "args": [
+            "resume",
+            "e3d724a1-4bca-425f-b974-e16d57ab8c1a",
+            "--json",
+            "--concurrency",
+            "1"
+          ],
+          "startedAt": "2026-10-14T08:40:23.169Z",
+          "events": [
+            {
+              "event": "download.started",
+              "seq": 1,
+              "jobId": "e3d724a1-4bca-425f-b974-e16d57ab8c1a",
+              "trackKey": "1",
+              "payload": {}
+            },
+            {
+              "event": "download.completed",
+              "seq": 332,
+              "jobId": "e3d724a1-4bca-425f-b974-e16d57ab8c1a",
+              "trackKey": "1",
+              "payload": {}
+            },
+            {
+              "event": "metadata.written",
+              "seq": 333,
+              "jobId": "e3d724a1-4bca-425f-b974-e16d57ab8c1a",
+              "trackKey": "1",
+              "payload": {}
+            },
+            {
+              "event": "validation.completed",
+              "seq": 334,
+              "jobId": "e3d724a1-4bca-425f-b974-e16d57ab8c1a",
+              "trackKey": "1",
+              "payload": {
+                "durationMs": 235416
+              }
+            },
+            {
+              "event": "job.progress",
+              "seq": 336,
+              "jobId": "e3d724a1-4bca-425f-b974-e16d57ab8c1a",
+              "payload": {
+                "completed": 1,
+                "total": 1,
+                "fraction": 1
+              }
+            },
+            {
+              "event": "job.completed",
+              "seq": 337,
+              "jobId": "e3d724a1-4bca-425f-b974-e16d57ab8c1a",
+              "payload": {}
+            }
+          ],
+          "eventCounts": {
+            "download.started": 1,
+            "track.progress": 331,
+            "download.completed": 1,
+            "metadata.written": 1,
+            "validation.completed": 1,
+            "job.progress": 1,
+            "job.completed": 1
+          },
+          "progressByTrack": {
+            "1": {
+              "count": 331,
+              "first": {
+                "seq": 2,
+                "bytes": 277354
+              },
+              "last": {
+                "seq": 335,
+                "bytes": 5650599
+              }
+            }
+          },
+          "privacyPassed": true,
+          "stderrBytes": 0,
+          "jobId": "e3d724a1-4bca-425f-b974-e16d57ab8c1a",
+          "firstProgress": {
+            "event": "track.progress",
+            "seq": 2,
+            "jobId": "e3d724a1-4bca-425f-b974-e16d57ab8c1a",
+            "trackKey": "1",
+            "payload": {
+              "bytes": 277354,
+              "fraction": 0.049083999767104335,
+              "speed": 0
+            }
+          },
+          "code": 0,
+          "signal": null,
+          "finishedAt": "2026-10-14T08:40:25.993Z"
+        },
+        "after": {
+          "counts": {
+            "completed": 1,
+            "skipped": 0,
+            "failed": 0,
+            "paused": 0,
+            "unavailable": 0,
+            "queued": 0
+          },
+          "total": 1,
+          "files": [
+            {
+              "trackKey": "1",
+              "file": "track-1/Bad Meets Evil - Living Proof.mp3",
+              "bytes": 5701954,
+              "sha256": "20b1633012c5c046bec8f723ca6ba42545bf864e7d49d2a827b89bee0ceead1c",
+              "mtimeNs": "1791967225955192394",
+              "inode": "40936852",
+              "variant": {
+                "codec": "mp3",
+                "container": "mp3",
+                "bitrate": 192
+              },
+              "validation": {
+                "durationMs": 235416
+              },
+              "tags": {
+                "title": "Living Proof",
+                "artist": "Bad Meets Evil",
+                "album": "Hell: The Sequel",
+                "pictures": [
+                  {
+                    "format": "image/jpeg",
+                    "bytes": 50026
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "manifestPrivacyAfter": true,
+        "preservedCompleted": true,
+        "noRepeatedCompletedDownloads": true,
+        "partsRemaining": 0,
+        "referencedPartsRemaining": 0,
+        "failedAttemptCount": 0,
+        "playlistSidecars": [],
+        "finishedAt": "2026-10-14T08:40:26.022Z"
+      }
+    ],
+    "sourceDigest": "sha256:5c90380eae10221e52a38e324dd55a1e4d1cce19fd0246c20bb616b2308a6ed2",
+    "sourceFileCount": 306,
+    "gitHead": "b57db587ca4d70173fba6a495fb4c76337250227",
+    "signalProbe": {
+      "args": [
+        "docs/research/step-027-acceptance/signal-probe.mjs"
+      ],
+      "startedAt": "2026-10-14T08:40:17.128Z",
+      "events": [
+        {
+          "kind": "result",
+          "status": "paused"
+        }
+      ],
+      "eventCounts": {
+        "track.progress": 1,
+        "result": 1
+      },
+      "progressByTrack": {
+        "1": {
+          "count": 1,
+          "first": {
+            "seq": 1,
+            "bytes": 300000
+          },
+          "last": {
+            "seq": 1,
+            "bytes": 300000
+          }
+        }
+      },
+      "privacyPassed": true,
+      "stderrBytes": 0,
+      "firstProgress": {
+        "event": "track.progress",
+        "seq": 1,
+        "trackKey": "1",
+        "payload": {
+          "bytes": 300000
+        }
+      },
+      "signalAt": "2026-10-14T08:40:17.251Z",
+      "signalBytes": 300000,
+      "code": 4,
+      "signal": null,
+      "finishedAt": "2026-10-14T08:40:17.255Z"
+    },
+    "cliBuildDigest": "sha256:baf25c74bd54a0198b182a947cab7907f7e338a3a340ce92b0062e179abb0484",
+    "providerBuildDigest": "sha256:5735d8e8a815af0cd697ff31852b30eda7d7383a42084a02ac5e96db00329c0a",
+    "account": {
+      "authorized": true,
+      "exitCode": 0
+    },
+    "initialFreeBytes": 437198745600,
+    "doctorAttempts": [
+      {
+        "exitCode": 0,
+        "available": true,
+        "privacyPassed": true,
+        "schemaVersion": "1.1.0",
+        "credentialBackend": "native-keyring",
+        "configurationConfirmed": false,
+        "checks": {
+          "runtime": {
+            "status": "ok"
+          },
+          "credentialStore": {
+            "status": "ok"
+          },
+          "provider": {
+            "status": "ok"
+          },
+          "auth": {
+            "status": "ok"
+          },
+          "account": {
+            "status": "ok"
+          },
+          "metadata": {
+            "status": "ok"
+          },
+          "audioVariants": {
+            "status": "ok"
+          },
+          "manifestStore": {
+            "status": "ok"
+          },
+          "filesystem": {
+            "status": "ok"
+          },
+          "ffmpeg": {
+            "status": "ok"
+          },
+          "tokenPermissions": {
+            "status": "skipped",
+            "code": "NOT_APPLICABLE"
+          }
+        },
+        "attempt": 1,
+        "finishedAt": "2026-10-14T08:40:19.437Z"
+      }
+    ],
+    "doctor": {
+      "exitCode": 0,
+      "available": true,
+      "privacyPassed": true,
+      "schemaVersion": "1.1.0",
+      "credentialBackend": "native-keyring",
+      "configurationConfirmed": false,
+      "checks": {
+        "runtime": {
+          "status": "ok"
+        },
+        "credentialStore": {
+          "status": "ok"
+        },
+        "provider": {
+          "status": "ok"
+        },
+        "auth": {
+          "status": "ok"
+        },
+        "account": {
+          "status": "ok"
+        },
+        "metadata": {
+          "status": "ok"
+        },
+        "audioVariants": {
+          "status": "ok"
+        },
+        "manifestStore": {
+          "status": "ok"
+        },
+        "filesystem": {
+          "status": "ok"
+        },
+        "ffmpeg": {
+          "status": "ok"
+        },
+        "tokenPermissions": {
+          "status": "skipped",
+          "code": "NOT_APPLICABLE"
+        }
+      }
+    },
+    "sourceDigestAfter": "sha256:5c90380eae10221e52a38e324dd55a1e4d1cce19fd0246c20bb616b2308a6ed2",
+    "ownerGo": "PENDING",
+    "finishedAt": "2026-10-14T08:40:26.053Z",
+    "passedCycles": 1,
+    "validatedFiles": 1
+  },
+  "earlierDoctorNetworkFailure": {
+    "status": "FAIL",
+    "code": "NETWORK_ERROR",
+    "reportSaved": true
+  },
+  "packagingRepairs": [
+    "eslint.config.d.mts",
+    "docs/brand/icon.png"
+  ],
+  "fullCrossPlatformQualification": "PENDING",
+  "windowsControllerRuntime": "PENDING",
+  "ownerGo": "PENDING",
+  "interactiveOwnLinkSmoke": {
+    "schema": 1,
+    "step": "STEP-027",
+    "runnerVersion": 1,
+    "startedAt": "2026-10-14T08:44:25.651Z",
+    "platform": {
+      "os": "linux",
+      "architecture": "x64",
+      "release": "7.0.0-38-generic",
+      "node": "v24.21.0"
+    },
+    "mode": "smoke",
+    "status": "SMOKE_PASS",
+    "checks": [],
+    "cycles": [
+      {
+        "kind": "track",
+        "iteration": 1,
+        "startedAt": "2026-10-14T08:44:44.452Z",
+        "pass": true,
+        "download": {
+          "args": [
+            "track",
+            "https://music.yandex.ru/album/221173/track/2224197",
+            "--json",
+            "--quality",
+            "best",
+            "--concurrency",
+            "1",
+            "--output",
+            "/home/user/music-downloader-check-7Wuufi/track-1"
+          ],
+          "startedAt": "2026-10-14T08:44:44.452Z",
+          "events": [
+            {
+              "event": "job.created",
+              "seq": 1,
+              "jobId": "3e4db573-0d56-47ed-9a37-a4c69f6737d1",
+              "payload": {}
+            },
+            {
+              "event": "entity.resolved",
+              "seq": 2,
+              "jobId": "3e4db573-0d56-47ed-9a37-a4c69f6737d1",
+              "payload": {}
+            },
+            {
+              "event": "plan.created",
+              "seq": 3,
+              "jobId": "3e4db573-0d56-47ed-9a37-a4c69f6737d1",
+              "payload": {}
+            },
+            {
+              "event": "track.started",
+              "seq": 4,
+              "jobId": "3e4db573-0d56-47ed-9a37-a4c69f6737d1",
+              "trackKey": "1",
+              "payload": {}
+            },
+            {
+              "event": "variant.selected",
+              "seq": 5,
+              "jobId": "3e4db573-0d56-47ed-9a37-a4c69f6737d1",
+              "trackKey": "1",
+              "payload": {}
+            },
+            {
+              "event": "download.started",
+              "seq": 6,
+              "jobId": "3e4db573-0d56-47ed-9a37-a4c69f6737d1",
+              "trackKey": "1",
+              "payload": {}
+            }
+          ],
+          "eventCounts": {
+            "job.created": 1,
+            "entity.resolved": 1,
+            "plan.created": 1,
+            "track.started": 1,
+            "variant.selected": 1,
+            "download.started": 1,
+            "track.progress": 17
+          },
+          "progressByTrack": {
+            "1": {
+              "count": 17,
+              "first": {
+                "seq": 7,
+                "bytes": 15209
+              },
+              "last": {
+                "seq": 23,
+                "bytes": 277353
+              }
+            }
+          },
+          "privacyPassed": true,
+          "stderrBytes": 0,
+          "jobId": "3e4db573-0d56-47ed-9a37-a4c69f6737d1",
+          "firstProgress": {
+            "event": "track.progress",
+            "seq": 7,
+            "jobId": "3e4db573-0d56-47ed-9a37-a4c69f6737d1",
+            "trackKey": "1",
+            "payload": {
+              "bytes": 15209,
+              "fraction": 0.002691573052697599,
+              "speed": 12517.69547325103,
+              "eta": 450193.88848708
+            }
+          },
+          "signalAt": "2026-10-14T08:44:47.503Z",
+          "signalBytes": 277353,
+          "code": 4,
+          "signal": null,
+          "finishedAt": "2026-10-14T08:44:47.752Z"
+        },
+        "before": {
+          "counts": {
+            "completed": 0,
+            "skipped": 0,
+            "failed": 0,
+            "paused": 1,
+            "unavailable": 0,
+            "queued": 0
+          },
+          "completedFiles": [],
+          "partialFiles": [
+            {
+              "trackKey": "1",
+              "bytes": 277353,
+              "manifestBytes": 277353
+            }
+          ]
+        },
+        "manifestPrivacyBefore": true,
+        "resume": {
+          "args": [
+            "resume",
+            "3e4db573-0d56-47ed-9a37-a4c69f6737d1",
+            "--json",
+            "--concurrency",
+            "1"
+          ],
+          "startedAt": "2026-10-14T08:44:47.754Z",
+          "events": [
+            {
+              "event": "download.started",
+              "seq": 1,
+              "jobId": "3e4db573-0d56-47ed-9a37-a4c69f6737d1",
+              "trackKey": "1",
+              "payload": {}
+            },
+            {
+              "event": "download.started",
+              "seq": 2,
+              "jobId": "3e4db573-0d56-47ed-9a37-a4c69f6737d1",
+              "trackKey": "1",
+              "payload": {}
+            },
+            {
+              "event": "download.started",
+              "seq": 3,
+              "jobId": "3e4db573-0d56-47ed-9a37-a4c69f6737d1",
+              "trackKey": "1",
+              "payload": {}
+            },
+            {
+              "event": "download.started",
+              "seq": 4,
+              "jobId": "3e4db573-0d56-47ed-9a37-a4c69f6737d1",
+              "trackKey": "1",
+              "payload": {}
+            },
+            {
+              "event": "download.started",
+              "seq": 5,
+              "jobId": "3e4db573-0d56-47ed-9a37-a4c69f6737d1",
+              "trackKey": "1",
+              "payload": {}
+            },
+            {
+              "event": "download.completed",
+              "seq": 336,
+              "jobId": "3e4db573-0d56-47ed-9a37-a4c69f6737d1",
+              "trackKey": "1",
+              "payload": {}
+            },
+            {
+              "event": "metadata.written",
+              "seq": 337,
+              "jobId": "3e4db573-0d56-47ed-9a37-a4c69f6737d1",
+              "trackKey": "1",
+              "payload": {}
+            },
+            {
+              "event": "validation.completed",
+              "seq": 338,
+              "jobId": "3e4db573-0d56-47ed-9a37-a4c69f6737d1",
+              "trackKey": "1",
+              "payload": {
+                "durationMs": 235416
+              }
+            },
+            {
+              "event": "job.progress",
+              "seq": 340,
+              "jobId": "3e4db573-0d56-47ed-9a37-a4c69f6737d1",
+              "payload": {
+                "completed": 1,
+                "total": 1,
+                "fraction": 1
+              }
+            },
+            {
+              "event": "job.completed",
+              "seq": 341,
+              "jobId": "3e4db573-0d56-47ed-9a37-a4c69f6737d1",
+              "payload": {}
+            }
+          ],
+          "eventCounts": {
+            "download.started": 5,
+            "track.progress": 331,
+            "download.completed": 1,
+            "metadata.written": 1,
+            "validation.completed": 1,
+            "job.progress": 1,
+            "job.completed": 1
+          },
+          "progressByTrack": {
+            "1": {
+              "count": 331,
+              "first": {
+                "seq": 6,
+                "bytes": 277353
+              },
+              "last": {
+                "seq": 339,
+                "bytes": 5650599
+              }
+            }
+          },
+          "privacyPassed": true,
+          "stderrBytes": 0,
+          "jobId": "3e4db573-0d56-47ed-9a37-a4c69f6737d1",
+          "firstProgress": {
+            "event": "track.progress",
+            "seq": 6,
+            "jobId": "3e4db573-0d56-47ed-9a37-a4c69f6737d1",
+            "trackKey": "1",
+            "payload": {
+              "bytes": 277353,
+              "fraction": 0.0490838227947161,
+              "speed": 0
+            }
+          },
+          "code": 0,
+          "signal": null,
+          "finishedAt": "2026-10-14T08:45:03.872Z"
+        },
+        "after": {
+          "counts": {
+            "completed": 1,
+            "skipped": 0,
+            "failed": 0,
+            "paused": 0,
+            "unavailable": 0,
+            "queued": 0
+          },
+          "total": 1,
+          "files": [
+            {
+              "trackKey": "1",
+              "file": "track-1/Bad Meets Evil - Living Proof.mp3",
+              "bytes": 5701954,
+              "sha256": "20b1633012c5c046bec8f723ca6ba42545bf864e7d49d2a827b89bee0ceead1c",
+              "mtimeNs": "1791967503829812870",
+              "inode": "40936856",
+              "variant": {
+                "codec": "mp3",
+                "container": "mp3",
+                "bitrate": 192
+              },
+              "validation": {
+                "durationMs": 235416
+              },
+              "tags": {
+                "title": "Living Proof",
+                "artist": "Bad Meets Evil",
+                "album": "Hell: The Sequel",
+                "pictures": [
+                  {
+                    "format": "image/jpeg",
+                    "bytes": 50026
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "manifestPrivacyAfter": true,
+        "preservedCompleted": true,
+        "noRepeatedCompletedDownloads": true,
+        "partsRemaining": 0,
+        "referencedPartsRemaining": 0,
+        "failedAttemptCount": 4,
+        "playlistSidecars": [],
+        "finishedAt": "2026-10-14T08:45:03.911Z"
+      }
+    ],
+    "sourceDigest": "sha256:5c90380eae10221e52a38e324dd55a1e4d1cce19fd0246c20bb616b2308a6ed2",
+    "sourceFileCount": 306,
+    "gitHead": "b57db587ca4d70173fba6a495fb4c76337250227",
+    "sources": {
+      "track": "https://music.yandex.ru/album/221173/track/2224197"
+    },
+    "preparationSkipped": true,
+    "signalProbe": {
+      "args": [
+        "docs/research/step-027-acceptance/signal-probe.mjs"
+      ],
+      "startedAt": "2026-10-14T08:44:36.395Z",
+      "events": [
+        {
+          "kind": "result",
+          "status": "paused"
+        }
+      ],
+      "eventCounts": {
+        "track.progress": 1,
+        "result": 1
+      },
+      "progressByTrack": {
+        "1": {
+          "count": 1,
+          "first": {
+            "seq": 1,
+            "bytes": 300000
+          },
+          "last": {
+            "seq": 1,
+            "bytes": 300000
+          }
+        }
+      },
+      "privacyPassed": true,
+      "stderrBytes": 0,
+      "firstProgress": {
+        "event": "track.progress",
+        "seq": 1,
+        "trackKey": "1",
+        "payload": {
+          "bytes": 300000
+        }
+      },
+      "signalAt": "2026-10-14T08:44:36.523Z",
+      "signalBytes": 300000,
+      "code": 4,
+      "signal": null,
+      "finishedAt": "2026-10-14T08:44:36.529Z"
+    },
+    "cliBuildDigest": "sha256:baf25c74bd54a0198b182a947cab7907f7e338a3a340ce92b0062e179abb0484",
+    "providerBuildDigest": "sha256:5735d8e8a815af0cd697ff31852b30eda7d7383a42084a02ac5e96db00329c0a",
+    "account": {
+      "authorized": true,
+      "exitCode": 0
+    },
+    "initialFreeBytes": 438900436992,
+    "doctorAttempts": [
+      {
+        "exitCode": 3,
+        "available": false,
+        "privacyPassed": true,
+        "schemaVersion": "1.1.0",
+        "credentialBackend": "native-keyring",
+        "configurationConfirmed": false,
+        "checks": {
+          "runtime": {
+            "status": "ok"
+          },
+          "credentialStore": {
+            "status": "ok"
+          },
+          "provider": {
+            "status": "failed",
+            "code": "NETWORK_ERROR"
+          },
+          "auth": {
+            "status": "failed",
+            "code": "NETWORK_ERROR"
+          },
+          "account": {
+            "status": "skipped",
+            "code": "DEPENDENCY_FAILED"
+          },
+          "metadata": {
+            "status": "skipped",
+            "code": "DEPENDENCY_FAILED"
+          },
+          "audioVariants": {
+            "status": "skipped",
+            "code": "DEPENDENCY_FAILED"
+          },
+          "manifestStore": {
+            "status": "ok"
+          },
+          "filesystem": {
+            "status": "ok"
+          },
+          "ffmpeg": {
+            "status": "ok"
+          },
+          "tokenPermissions": {
+            "status": "skipped",
+            "code": "NOT_APPLICABLE"
+          }
+        },
+        "attempt": 1,
+        "finishedAt": "2026-10-14T08:44:38.028Z"
+      },
+      {
+        "exitCode": 0,
+        "available": true,
+        "privacyPassed": true,
+        "schemaVersion": "1.1.0",
+        "credentialBackend": "native-keyring",
+        "configurationConfirmed": false,
+        "checks": {
+          "runtime": {
+            "status": "ok"
+          },
+          "credentialStore": {
+            "status": "ok"
+          },
+          "provider": {
+            "status": "ok"
+          },
+          "auth": {
+            "status": "ok"
+          },
+          "account": {
+            "status": "ok"
+          },
+          "metadata": {
+            "status": "ok"
+          },
+          "audioVariants": {
+            "status": "ok"
+          },
+          "manifestStore": {
+            "status": "ok"
+          },
+          "filesystem": {
+            "status": "ok"
+          },
+          "ffmpeg": {
+            "status": "ok"
+          },
+          "tokenPermissions": {
+            "status": "skipped",
+            "code": "NOT_APPLICABLE"
+          }
+        },
+        "attempt": 2,
+        "finishedAt": "2026-10-14T08:44:44.451Z"
+      }
+    ],
+    "doctor": {
+      "exitCode": 0,
+      "available": true,
+      "privacyPassed": true,
+      "schemaVersion": "1.1.0",
+      "credentialBackend": "native-keyring",
+      "configurationConfirmed": false,
+      "checks": {
+        "runtime": {
+          "status": "ok"
+        },
+        "credentialStore": {
+          "status": "ok"
+        },
+        "provider": {
+          "status": "ok"
+        },
+        "auth": {
+          "status": "ok"
+        },
+        "account": {
+          "status": "ok"
+        },
+        "metadata": {
+          "status": "ok"
+        },
+        "audioVariants": {
+          "status": "ok"
+        },
+        "manifestStore": {
+          "status": "ok"
+        },
+        "filesystem": {
+          "status": "ok"
+        },
+        "ffmpeg": {
+          "status": "ok"
+        },
+        "tokenPermissions": {
+          "status": "skipped",
+          "code": "NOT_APPLICABLE"
+        }
+      }
+    },
+    "sourceDigestAfter": "sha256:5c90380eae10221e52a38e324dd55a1e4d1cce19fd0246c20bb616b2308a6ed2",
+    "ownerGo": "PENDING",
+    "finishedAt": "2026-10-14T08:45:03.952Z",
+    "passedCycles": 1,
+    "validatedFiles": 1
+  },
+  "preparationAttemptReports": [
+    {
+      "schema": 1,
+      "step": "STEP-027",
+      "runnerVersion": 1,
+      "startedAt": "2026-10-14T08:33:18.193Z",
+      "platform": {
+        "os": "linux",
+        "architecture": "x64",
+        "release": "7.0.0-38-generic",
+        "node": "v24.21.0"
+      },
+      "mode": "smoke",
+      "status": "FAIL",
+      "checks": [
+        {
+          "args": [
+            "packages/testing/scripts/run-yarn.mjs",
+            "install",
+            "--immutable"
+          ],
+          "startedAt": "2026-10-14T08:33:18.227Z",
+          "finishedAt": "2026-10-14T08:33:27.079Z",
+          "code": 0,
+          "timedOut": false,
+          "stdoutSha256": "887d4ddec2862551968cdd9bf3635193aa7f9f7314c4f914a0193775b1654ee0",
+          "stderrSha256": "bfec6f0b0ed4e98041896996f31540ead1369fc6f4fe067199120753dc1e5ab2"
+        },
+        {
+          "args": [
+            "packages/testing/scripts/run-yarn.mjs",
+            "run",
+            "lint"
+          ],
+          "startedAt": "2026-10-14T08:33:27.080Z",
+          "finishedAt": "2026-10-14T08:33:35.630Z",
+          "code": 0,
+          "timedOut": false,
+          "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderrSha256": "f59ba696a15507a8febe0f9ea94ac75ccc5411952df61ee4cb3c971b47b6bc12"
+        },
+        {
+          "args": [
+            "packages/testing/scripts/run-yarn.mjs",
+            "run",
+            "typecheck"
+          ],
+          "startedAt": "2026-10-14T08:33:35.630Z",
+          "finishedAt": "2026-10-14T08:33:41.592Z",
+          "code": 2,
+          "timedOut": false,
+          "stdoutSha256": "03b35d8d4ca97d613939e1976c4e703c07c2cbc967a0a806b764730daf7da018",
+          "stderrSha256": "ffbfd8ec2bfcf3e8f0e99a93f081f695da2de832eba56c5ae6943a4052680411"
+        }
+      ],
+      "cycles": [],
+      "sourceDigest": "sha256:5c90380eae10221e52a38e324dd55a1e4d1cce19fd0246c20bb616b2308a6ed2",
+      "sourceFileCount": 306,
+      "gitHead": "b57db587ca4d70173fba6a495fb4c76337250227",
+      "failureCode": "AUTOMATED_CHECK_FAILED",
+      "finishedAt": "2026-10-14T08:33:41.593Z",
+      "passedCycles": 0,
+      "validatedFiles": 0
+    },
+    {
+      "schema": 1,
+      "step": "STEP-027",
+      "runnerVersion": 1,
+      "startedAt": "2026-10-14T08:35:26.514Z",
+      "platform": {
+        "os": "linux",
+        "architecture": "x64",
+        "release": "7.0.0-38-generic",
+        "node": "v24.21.0"
+      },
+      "mode": "smoke",
+      "status": "FAIL",
+      "checks": [
+        {
+          "args": [
+            "packages/testing/scripts/run-yarn.mjs",
+            "install",
+            "--immutable"
+          ],
+          "startedAt": "2026-10-14T08:35:26.556Z",
+          "finishedAt": "2026-10-14T08:35:27.242Z",
+          "code": 0,
+          "timedOut": false,
+          "stdoutSha256": "90670a9390032f0d9691ac0a5adf83eecde127d122c5b967560d78a739c57c12",
+          "stderrSha256": "bfec6f0b0ed4e98041896996f31540ead1369fc6f4fe067199120753dc1e5ab2"
+        },
+        {
+          "args": [
+            "packages/testing/scripts/run-yarn.mjs",
+            "run",
+            "lint"
+          ],
+          "startedAt": "2026-10-14T08:35:27.243Z",
+          "finishedAt": "2026-10-14T08:35:36.193Z",
+          "code": 0,
+          "timedOut": false,
+          "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderrSha256": "f59ba696a15507a8febe0f9ea94ac75ccc5411952df61ee4cb3c971b47b6bc12"
+        },
+        {
+          "args": [
+            "packages/testing/scripts/run-yarn.mjs",
+            "run",
+            "typecheck"
+          ],
+          "startedAt": "2026-10-14T08:35:36.194Z",
+          "finishedAt": "2026-10-14T08:35:40.112Z",
+          "code": 0,
+          "timedOut": false,
+          "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderrSha256": "ffbfd8ec2bfcf3e8f0e99a93f081f695da2de832eba56c5ae6943a4052680411"
+        },
+        {
+          "args": [
+            "packages/testing/scripts/run-yarn.mjs",
+            "test"
+          ],
+          "startedAt": "2026-10-14T08:35:40.113Z",
+          "finishedAt": "2026-10-14T08:36:46.348Z",
+          "code": 1,
+          "timedOut": false,
+          "stdoutSha256": "541573e82d2e4e022f206963838ea856ae8e4803c30d0e199081bde0eb8d9bec",
+          "stderrSha256": "eb36998a5c5b1d378a55f5f4bd02ad7f058db500ec4b79e64fd06334445d8d72"
+        }
+      ],
+      "cycles": [],
+      "sourceDigest": "sha256:5c90380eae10221e52a38e324dd55a1e4d1cce19fd0246c20bb616b2308a6ed2",
+      "sourceFileCount": 306,
+      "gitHead": "b57db587ca4d70173fba6a495fb4c76337250227",
+      "failureCode": "AUTOMATED_CHECK_FAILED",
+      "finishedAt": "2026-10-14T08:36:46.349Z",
+      "passedCycles": 0,
+      "validatedFiles": 0
+    },
+    {
+      "schema": 1,
+      "step": "STEP-027",
+      "runnerVersion": 1,
+      "startedAt": "2026-10-14T08:37:51.438Z",
+      "platform": {
+        "os": "linux",
+        "architecture": "x64",
+        "release": "7.0.0-38-generic",
+        "node": "v24.21.0"
+      },
+      "mode": "smoke",
+      "status": "FAIL",
+      "checks": [
+        {
+          "args": [
+            "packages/testing/scripts/run-yarn.mjs",
+            "install",
+            "--immutable"
+          ],
+          "startedAt": "2026-10-14T08:37:51.475Z",
+          "finishedAt": "2026-10-14T08:37:52.087Z",
+          "code": 0,
+          "timedOut": false,
+          "stdoutSha256": "d4b1525bd8f63d7a0b4b7c5dfc5c154f24253f62d754e46951aae22d1a30201e",
+          "stderrSha256": "bfec6f0b0ed4e98041896996f31540ead1369fc6f4fe067199120753dc1e5ab2"
+        },
+        {
+          "args": [
+            "packages/testing/scripts/run-yarn.mjs",
+            "run",
+            "lint"
+          ],
+          "startedAt": "2026-10-14T08:37:52.088Z",
+          "finishedAt": "2026-10-14T08:37:59.818Z",
+          "code": 0,
+          "timedOut": false,
+          "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderrSha256": "f59ba696a15507a8febe0f9ea94ac75ccc5411952df61ee4cb3c971b47b6bc12"
+        },
+        {
+          "args": [
+            "packages/testing/scripts/run-yarn.mjs",
+            "run",
+            "typecheck"
+          ],
+          "startedAt": "2026-10-14T08:37:59.819Z",
+          "finishedAt": "2026-10-14T08:38:03.103Z",
+          "code": 0,
+          "timedOut": false,
+          "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderrSha256": "ffbfd8ec2bfcf3e8f0e99a93f081f695da2de832eba56c5ae6943a4052680411"
+        },
+        {
+          "args": [
+            "packages/testing/scripts/run-yarn.mjs",
+            "test"
+          ],
+          "startedAt": "2026-10-14T08:38:03.104Z",
+          "finishedAt": "2026-10-14T08:38:10.306Z",
+          "code": 1,
+          "timedOut": false,
+          "stdoutSha256": "76f5cf99c0c868ae3612f4041c7afa96b054b0d6210c24ffc1a7ffc7b6b2b1fd",
+          "stderrSha256": "04e3ef8beeaeec94a4b2d7558746a18e22a439c1280069b2591e1ba1f2c5b0c7"
+        }
+      ],
+      "cycles": [],
+      "sourceDigest": "sha256:5c90380eae10221e52a38e324dd55a1e4d1cce19fd0246c20bb616b2308a6ed2",
+      "sourceFileCount": 306,
+      "gitHead": "b57db587ca4d70173fba6a495fb4c76337250227",
+      "failureCode": "AUTOMATED_CHECK_FAILED",
+      "finishedAt": "2026-10-14T08:38:10.306Z",
+      "passedCycles": 0,
+      "validatedFiles": 0
+    }
+  ],
+  "notes": [
+    "В архиве нет предустановленных ссылок; runner запрашивает свои или использует sources из config.",
+    "Один промежуточный offline test exit 1 не классифицирован по raw output: сохранялись только hashes; последующий test без правки продукта и итоговый полный preparation прошли.",
+    "Полная Linux 9/9 остаётся evidence принятого subject; smoke инструмента не добавляется к обязательным 27 циклам."
+  ]
+}

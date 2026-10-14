@@ -1,0 +1,76 @@
+{
+  "schema": 1,
+  "step": "STEP-027",
+  "correctiveStep": "STEP-052",
+  "recordedAt": "2026-10-14T10:10:30.871502+00:00",
+  "provenance": {
+    "kind": "summary_of_user_pasted_terminal_output",
+    "originalTerminalBytesCaptured": false,
+    "relationToEarlierAttempt": "Новый verbose test run; точные timestamp, source digest и exit code отдельно не предоставлены. Предыдущий report относится к предыдущему run и не выдаётся за идентичный прогон."
+  },
+  "observed": {
+    "platform": "Windows",
+    "testFiles": {
+      "failed": 1,
+      "passed": 94,
+      "total": 95
+    },
+    "tests": {
+      "failed": 4,
+      "passed": 1200,
+      "total": 1204
+    },
+    "reportedStartTime": "13:02:18",
+    "reportedDurationSeconds": 62.57,
+    "failedSuite": "@music-downloader/core-filesystem src/m3u8.test.ts",
+    "cases": [
+      {
+        "name": "сохраняет UTF-8 относительные пути в переданном порядке",
+        "line": 26,
+        "failure": "Получены абсолютные C:/Users/... пути вместо двух относительных UTF-8 имён."
+      },
+      {
+        "name": "заменяет существующий playlist только после записи временного файла",
+        "line": 79,
+        "failure": "Получен абсолютный C:/Users/... путь вместо относительного имени."
+      },
+      {
+        "name": "публикует два параллельных writer без общего temporary файла",
+        "line": 107,
+        "failure": "Получен абсолютный C:/Users/... путь вместо относительного имени."
+      },
+      {
+        "name": "публикует playlist с допустимым UTF-8 basename в 255 байт",
+        "line": 113,
+        "failure": "VALIDATION_ERROR; cause: Output root must be absolute."
+      }
+    ]
+  },
+  "localCodeInspection": {
+    "gitHead": "b57db587ca4d70173fba6a495fb4c76337250227",
+    "writerDefault": "undefined platform выбирает path.posix",
+    "layoutFixture": "Native root используется с explicit linux platform",
+    "applicationAdapter": "createDownloadFiles.writePlaylist явно передаёт host platform; реальный Windows playlist дефект не установлен"
+  },
+  "localPathReproduction": {
+    "command": "node --input-type=module, node:path posix/win32 dirname+relative; Windows sample paths без файлового IO",
+    "exitCode": 0,
+    "currentDefault": "C:/Music/Список/01 - Автор - Трек.mp3",
+    "explicitWin32": "01 - Автор - Трек.mp3",
+    "linuxLayoutAcceptsWindowsRoot": false,
+    "nativeWindowsRuntime": false
+  },
+  "qualifiedMatrix": {
+    "linux": 9,
+    "windows": 0,
+    "macos": 0,
+    "total": 9,
+    "required": 27
+  },
+  "classification": "WINDOWS_M3U8_DEFAULT_PLATFORM_AND_FIXTURE_DEFECTS",
+  "limitations": [
+    "Предыдущие EBUSY/EPERM не являются установленной причиной четырёх failures.",
+    "Проверка Windows была выполнена владельцем; в текущем окружении Windows runtime не запускался.",
+    "Production и test fixes в рамках audit не выполнялись."
+  ]
+}

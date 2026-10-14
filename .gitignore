@@ -33,6 +33,8 @@ dist/
 build/
 coverage/
 .cache/
+STEP-052-acceptance.zip
+STEP-052-update.zip
 
 # Toolchain STEP-001: Yarn 4, TypeScript, Vitest (generated/local; yarn.lock и .yarnrc.yml отслеживаются).
 .yarn/

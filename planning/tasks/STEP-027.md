@@ -18,14 +18,14 @@ risk_flags:
   - release-critical
 plan:
   status: ready
-  revision: 2
-  context_basis: sha256:8b12ee1de9c3a798a11f0666c9fd03dc2693edc2fa5cf49450dec3680faad90a
-  content_hash: sha256:fb9458d28f460e5774a4163fc5da4f6dbcc5eb2175fd0ae272b4502c4d044990
-  reviewed_report: planning/plan-reviews/STEP-027/PLAN-REVIEW-20261011T130310Z.md
-  planned_at: 2026-10-11T13:03:10+00:00
+  revision: 3
+  context_basis: sha256:a51bc4f77a4018b8c5bf3d0005e16c4680805d0f0ecbcd2644b1353d2381de00
+  content_hash: sha256:30c2fd1d6d922b03dfce33a055c887337a7d0d316fb8743cdd847591dc418eff
+  reviewed_report: planning/plan-reviews/STEP-027/PLAN-REVIEW-20261013T212158Z.md
+  planned_at: 2026-10-13T21:21:58+00:00
   execution_groups:
   context_components:
-    - "ARCH@docs/architecture.md#reliability-observability=sha256:a9c337102c2ed62fdaca7173e8e2c05ffe6d68a1d99140fe986a552b3cc636d4"
+    - "ARCH@docs/architecture.md#reliability-observability=sha256:32d51a796240a2af1ee204e9c2f90f91f217a8e7ced4df0b4893217f98b6a6d2"
     - "ARCH@docs/architecture.md#system-context=sha256:24edf9c39d2006aa32e18bdef2a2ae31e5ab04e9ca7402e89d71ab7145cf3aba"
     - "PRN@PRN-001=sha256:3b3801f207fafc3f77272f0e93570258a6d006964839d93a276accd814d548af"
     - "PRN@PRN-002=sha256:f29ee3fbdb9cf65cf9739d0907768bbf192ad88b8e443110d4d82f81c6b79ecb"
@@ -33,7 +33,7 @@ plan:
     - "REQ@REQ-043=sha256:25b24d5d4547a9aa170d94bf0046a74a82ad5a817296f8d9f168295399286484"
     - "STEP@STEP-011=sha256:41c08ce3e6527815954bffc6b84f1a5583ce99716da76a1d531c8660a1a512f4"
     - "STEP@STEP-026=sha256:0c5cc608966d02e44fcfbdc70599b40eb4a676427ab51a168da389b559a4966f"
-    - "STEP@STEP-027=sha256:1314cbedb634cb7a8f6034a9fd2309c1427c15a3d1c71b69f7efecf489b76831"
+    - "STEP@STEP-027=sha256:b867da35179b822ea7f337467bf710c0d8368c85672a25543902b436b19aac68"
 ---
 
 # STEP-027 — Приёмка headless MVP и gate перехода к UI
@@ -83,6 +83,8 @@ Brief §47–§48 запрещает начинать UI до подтвержд
 - command: `node packages/testing/scripts/run-yarn.mjs run typecheck`
 - command: `node packages/testing/scripts/run-yarn.mjs test`
 - command: `node packages/testing/scripts/run-yarn.mjs build`
+- command: `node apps/cli/dist/index.js --help`
+- command: `node packages/testing/scripts/verify-step-026-coverage.mjs`
 - command: `node --test packages/providers/yandex-music/test-live/runner.test.mjs`
 - command: `python3 .harness/tools/validate.py --mode manual`
 - manual: Матрица REQ-043: на одной принятой ревизии выполнить на реальных Linux, macOS и Windows по три последовательных успешных CLI end-to-end прогона каждого track/album/playlist, каждый с interruption и resume. Проверить конечные файлы, validation, metadata, quality, terminal status и сохранение completed при resume; зафиксировать ОС, runtime, безопасные команды, порядок, exit codes, результаты и классификацию сбоев. Отсутствие платформы, mock/CI build или старый provider smoke не заменяет реальную ячейку.
@@ -97,9 +99,9 @@ Brief §47–§48 запрещает начинать UI до подтвержд
 
 ### 1. Зафиксировать предмет приёмки и доступность сред
 
-- После разрешения RUN deterministic dispatcher проверить актуальную Verification и acceptance evidence STEP-026/STEP-011. Ready plan не означает завершение зависимостей: при их непрохождении не запускать приёмку через обход gates.
-- Создать отчёт planning/audits/STEP-027-headless-acceptance.md с датой, проверяемым HEAD/build и существенными изменениями worktree, версиями Node/Yarn/SDK/provider schema, ОС/архитектурами, списком критериев и матрицей 3 ОС × 3 сценария × 3 последовательных успеха. До evidence каждый пункт pending, решение no-go.
-- Проверить доступ к реальным Linux/macOS/Windows, native credential backend, разрешённому аккаунту и доступным ему track/album/playlist. Использовать готовую CLI из предыдущих STEP; зафиксировать точные команды по её фактическому --help и docs/development.md, включая login/download/resume/doctor и параметры quality/output. Если CLI или среда отсутствует, записать blocker, не добавлять реализацию и не подменять платформу mock/CI build.
+- STEP-026 и STEP-011 завершены. В начале RUN проверить их текущую Evidence и subject identity: STEP-026 даёт offline/file/privacy proof, STEP-011 — историческую live проверку metadata/variants на прежнем subject. Они не подтверждают физическое скачивание через штатный CLI на трёх ОС; фактические результаты приёмки сохраняются в отчёте STEP-027.
+- Создать отчёт planning/audits/STEP-027-headless-acceptance.md с датой, проверяемым HEAD/build и существенными изменениями worktree, версиями Node/Yarn/SDK/provider schema, ОС/архитектурами, списком критериев и матрицей 3 ОС × 3 сценария × 3 последовательных успеха. До evidence каждый пункт pending, решение no-go. Принятая ревизия означает один source subject: HEAD, digest существенных tracked/untracked product исходников и lockfile; build identity отдельно фиксируется для каждой ОС. Текущие новые файлы STEP-026 ещё не входят в HEAD; перед реальными прогонами обеспечить одинаковые product исходники и lockfile на всех ОС, зафиксировать их digest и platform-specific build identity, не выполнять commit/push автоматически.
+- Проверить доступ к реальным Linux/macOS/Windows, native credential backend, разрешённому аккаунту и доступным ему track/album/playlist. Использовать штатный built bin: node apps/cli/dist/index.js --help; auth --json; account --json; doctor --json --output <OUTPUT_DIR>; track|album|playlist <URL> --json --quality <QUALITY> --output <OUTPUT_DIR>; jobs --json; resume <JOB_ID> --json; retry <JOB_ID> --json. Эти argv выполнять отдельными вызовами без shell operators; placeholders заменяются только безопасными ресурсами. Авторизация идёт через существующий auth/native storage; не придумывать login, --token, providerOverride или test-only IPC для реальных циклов. Недоступная среда или CLI фиксируется как blocker RUN, без implementation. Download и resume выполняются от того же пользователя с тем же profile/state directory; resume использует persisted quality/output, новые --output/--quality к нему не добавлять.
 - Зафиксировать безопасный способ передачи credentials существующей CLI и хранения только отредактированного evidence. Не записывать токен/cookies/Authorization/ключи/signed URL, account IDs или raw DTO/Error в отчёт; полные секретные команды/снимки не прикладывать.
 
 **Files:**
@@ -114,9 +116,9 @@ Brief §47–§48 запрещает начинать UI до подтвержд
 ### 2. Собрать доказательства каждого условия готовности
 
 - В отчёте каждому пункту brief §48/REQ-043 назначить конкретное evidence: track, album, playlist — реальные CLI прогоны следующего этапа; auth — реальный вход и повторное использование существующего native storage; quality — запрос/фактически выбранный variant и контейнер конечного файла; metadata — прочитанные теги/обложка конечного файла. Не требовать нового quality policy или FFmpeg packaging decision внутри audit.
-- Retry и interruption/recovery подтвердить существующими актуальными offline сценариями STEP-026 с наблюдаемыми попытками/terminal state, а resume дополнительно реальной CLI матрицей. Doctor API incompatibility подтвердить существующей проверкой владельца diagnostics с несовместимым provider response и безопасным доменным результатом; healthy doctor отдельно прогнать на каждой реальной ОС. Успешный обычный download не является доказательством retry/API_CHANGED.
+- Retry/interruption/recovery подтвердить актуальными offline suites STEP-026: отдельные network interruption с физическим prefix и Range, transient retry, partial failure, cancel и process crash/resume. Это supporting evidence для соответствующего условия, а каждый real resume дополнительно доказывается полной CLI матрицей. Doctor API incompatibility подтверждают текущие packages/application/src/doctor.integration.test.ts и apps/cli/src/doctor.integration.test.ts с безопасными status/code и exit; healthy doctor отдельно проходит на каждой реальной ОС. Успешный обычный download не является доказательством retry/API_CHANGED.
 - Отдельно покрыть каждый негативный критерий brief §47: восстановление, отсутствие provider API в core/CLI, отсутствие секретов в logs/events/manifest, queue abstraction playlist, validation, контролируемая ошибка при несовместимости API без runtime crash, тестируемость через mock. Использовать существующие code/config и тесты владельцев, boundary lint и unit traceability STEP-026; отсутствие доказательства записать как blocker.
-- Выполнить root lint/typecheck/offline test/build и Node offline guard suite test:provider; сохранённое STEP-011 real API evidence указать с датой и ограничениями. При необходимости актуализации выполнить существующий test:provider с токеном только в окружении; отсутствие токена/SKIP не является real PASS. Provider metadata/variants suite не заменяет полное скачивание или матрицу ОС.
+- Выполнить root lint/typecheck/offline test/build и Node offline guard suite test:provider; сохранённое STEP-011 real API evidence указать с датой и ограничениями. При необходимости актуализации выполнить существующий test:provider с токеном только в окружении; отсутствие токена/SKIP не является real PASS. Provider metadata/variants suite не заменяет полное скачивание или матрицу ОС. Добавленные CLI --help и verify-step-026-coverage.mjs доказывают доступность bin и inventory, а не факт real matrix. Старый STEP-011 PASS сохраняется как исторический; приёмка опирается на текущие real auth/doctor/download результаты.
 - Для каждого утверждения сохранять команду без секретов, exit code, дату, предмет проверки и фактически наблюдаемый результат. Старый PASS не выдавать за проверку текущей ревизии; существенные изменения владельца требуют актуального доказательства. Отчёт не должен делать новые ADR/REQ решения.
 
 **Files:**
@@ -131,7 +133,7 @@ Brief §47–§48 запрещает начинать UI до подтвержд
 ### 3. Выполнить реальную матрицу track/album/playlist с interruption/resume
 
 - H-001: Матрица REQ-043: на одной принятой ревизии выполнить на реальных Linux, macOS и Windows по три последовательных успешных CLI end-to-end прогона каждого track/album/playlist, каждый с interruption и resume. Проверить конечные файлы, validation, metadata, quality, terminal status и сохранение completed при resume; зафиксировать ОС, runtime, безопасные команды, порядок, exit codes, результаты и классификацию сбоев. Отсутствие платформы, mock/CI build или старый provider smoke не заменяет реальную ячейку.
-- Для каждой ОС и каждого сценария выполнить три последовательных успешных цикла: фактический download доступного контента → реальное прерывание до завершения → существующая команда resume → завершение. Использовать независимые output/job для повторов, чтобы skipped старого результата не заменял новый download. Выбирать доступную коллекцию/момент прерывания, позволяющие наблюдать незавершённые треки; credentials и доступность provider не подменять.
+- Для каждой ОС и каждого сценария выполнить три последовательных успешных цикла: фактический download доступного контента → реальное прерывание до завершения → существующая команда resume → завершение. Использовать независимые output/job для повторов, чтобы skipped старого результата не заменял новый download. Выбирать доступную коллекцию/момент прерывания, позволяющие наблюдать незавершённые треки; credentials и доступность provider не подменять. Для штатного interruption нажать Ctrl+C во время реально начатого download, дождаться exit 4 и persisted paused, затем запустить новый node apps/cli/dist/index.js resume <JOB_ID> --json и дождаться exit 0. Completed или skipped до прерывания не считается требуемым циклом; если прерывание пропущено, выполнить новый цикл с новым output/job. При реальной аварии использовать штатное stale-lease recovery без правки lease/manifest/heartbeat, не переносить test-only ускорение из STEP-026 в audit.
 - Проверить содержимое и валидность итогового аудио, выбранные codec/container/quality, metadata, полный доступный состав album/playlist и согласованные terminal состояния job/manifest. На resume подтвердить сохранение completed треков и отсутствие повторной загрузки/перезаписи завершённых результатов; сверить финальные файлы/manifest после атомарной финализации. Существующие недоступные позиции не должны приводить к обходу PRN-003 или выдуманному успеху.
 - Для каждой попытки записать порядковый номер, CLI команды с безопасными аргументами, exit codes, до/после interruption, итоговые counts/status и проверку файлов. Ошибки сети/аккаунта фиксировать отдельно с причиной и повтором; их не считать успешными прогонами. Дефект приложения аннулирует успешную серию затронутой ячейки; после исправления владельцем повторить три последовательных успеха на принятой ревизии.
 - При изменении проверяемого приложения по результатам дефекта привязать final evidence к новой ревизии и повторить затронутые сценарии/условия; до go обеспечить полную матрицу на единой принятой ревизии. Не выдавать Linux container/эмуляцию за реальный macOS/Windows E2E.
@@ -175,12 +177,132 @@ Brief §47–§48 запрещает начинать UI до подтвержд
 - Canonical автоматическая и manual Verification; отсутствие незакрытых критериев перед completion.
 
 **Risks:**
-- Semantic Blast Radius PLAN: INCONCLUSIVE, H-001/H-002 — будущие обязательства проверки, не пройденная приёмка.
+- Validated Semantic Blast Radius PLAN: INCONCLUSIVE. H-001 (реальная единая матрица) и H-002 (полный отчёт и фактическое go) перенесены в manual Verification/план как будущие обязательства; current PLAN не заявляет выполненную приёмку. Отдельный Arena preflight — SKIP.
 
 ## Evidence
 
+
+
+
+
+<!-- VERIFICATION-EVIDENCE:START -->
+- Verification run: 2026-10-14T13:11:54Z
+- Status: MANUAL_REQUIRED
+- Automated resumed: false
+- Git head: b57db587ca4d70173fba6a495fb4c76337250227
+- Worktree hash: sha256:32d81342638c89bd9484c7b705f84a41bacc654edee19466a76824da8efab9a9
+- Verification contract basis: sha256:5d0cee68c1ded438de858f1d963bb66aefcf4b0283187dd52ac2646943c30b5a
+- Subject git head: b57db587ca4d70173fba6a495fb4c76337250227
+- Subject worktree hash: sha256:cab016373cc9a5547c429e72cd00bb3eba5d3fd0cbf0a7cfeb3040ea4c7ec75c
+
+### Automated verification
+- Command: node packages/testing/scripts/run-yarn.mjs run lint
+  - Status: PASS
+  - Exit code: 0
+  - Duration ms: 9126
+  - stdout sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  - stderr sha256: f59ba696a15507a8febe0f9ea94ac75ccc5411952df61ee4cb3c971b47b6bc12
+  - stdout bytes: 0
+  - stderr bytes: 25
+- Command: node packages/testing/scripts/run-yarn.mjs run typecheck
+  - Status: PASS
+  - Exit code: 0
+  - Duration ms: 3668
+  - stdout sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  - stderr sha256: ffbfd8ec2bfcf3e8f0e99a93f081f695da2de832eba56c5ae6943a4052680411
+  - stdout bytes: 0
+  - stderr bytes: 30
+- Command: node packages/testing/scripts/run-yarn.mjs test
+  - Status: PASS
+  - Exit code: 0
+  - Duration ms: 8194
+  - stdout sha256: e0b6d4774f4b2c9256aa93f9cac8e93923f8cd9df4f9251e9eaeb0e8a18d0256
+  - stderr sha256: cb0b18d88e666b8bfd4728bce6c03bae76ffc88caef9f33a0147678a8f85ebeb
+  - stdout bytes: 12600
+  - stderr bytes: 2527
+- Command: node packages/testing/scripts/run-yarn.mjs build
+  - Status: PASS
+  - Exit code: 0
+  - Duration ms: 414
+  - stdout sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  - stderr sha256: 0157d8afc3a7265ca4e7c585e12c0dad6c6e3b575b60dd6b58851567da7c61d3
+  - stdout bytes: 0
+  - stderr bytes: 22
+- Command: node apps/cli/dist/index.js --help
+  - Status: PASS
+  - Exit code: 0
+  - Duration ms: 264
+  - stdout sha256: 400aa5447ee89a5a5398de2bbca18e1a6003fb07fa4dbed02a7a1405a7315751
+  - stderr sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  - stdout bytes: 627
+  - stderr bytes: 0
+- Command: node packages/testing/scripts/verify-step-026-coverage.mjs
+  - Status: PASS
+  - Exit code: 0
+  - Duration ms: 63
+  - stdout sha256: 174f8131fdad4e33968eaff63b4b341e99ba25557cd3db6a15af3a52040c2e3a
+  - stderr sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  - stdout bytes: 110
+  - stderr bytes: 0
+- Command: node --test packages/providers/yandex-music/test-live/runner.test.mjs
+  - Status: PASS
+  - Exit code: 0
+  - Duration ms: 164
+  - stdout sha256: 4cffacb0ca38bb6ee92d1f51b49334cd1d4365ac88a6bf0e9f8abed0233c0b59
+  - stderr sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  - stdout bytes: 680
+  - stderr bytes: 0
+- Command: python3 .harness/tools/validate.py --mode manual
+  - Status: PASS
+  - Exit code: 0
+  - Duration ms: 4819
+  - stdout sha256: 359c3612e5ba95ae1031ea2f5327f81fc413ab6eb60d7c651704b0b5ded7350d
+  - stderr sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  - stdout bytes: 2048
+  - stderr bytes: 0
+
+### Product verification
+- none
+
+### Manual verification
+- Check: Матрица REQ-043: на одной принятой ревизии выполнить на реальных Linux, macOS и Windows по три последовательных успешных CLI end-to-end прогона каждого track/album/playlist, каждый с interruption и resume. Проверить конечные файлы, validation, metadata, quality, terminal status и сохранение completed при resume; зафиксировать ОС, runtime, безопасные команды, порядок, exit codes, результаты и классификацию сбоев. Отсутствие платформы, mock/CI build или старый provider smoke не заменяет реальную ячейку.
+  - Status: PENDING
+- Check: Покрытие brief §47–48: отдельное актуальное evidence auth/quality/retry/resume/metadata, provider abstraction/queue/validation/mock и doctor API incompatibility без runtime crash; healthy doctor на каждой ОС. Проверить отсутствие токена/cookies/Authorization/ключей/signed URL в сохраняемых logs/events/manifest/отчёте. Существующие offline тесты не заменяют обязательную real CLI матрицу; no-token test:provider SKIP не является real API PASS.
+  - Status: PENDING
+- Check: Отчёт STEP-027: каждый пункт brief §47–48 и REQ-043 связан с актуальным evidence; H-001 реальная матрица и H-002 полнота go/no-go проверены. Все дефекты приложения и незакрытые пункты имеют blocker/корректирующий STEP/OQ; явное решение пользователя go с датой и принятой ревизией допускается только при отсутствии blockers. No-go или pending сохраняет STEP не completed и запрет desktop.
+  - Status: PENDING
+<!-- VERIFICATION-EVIDENCE:END -->
+
 Generated verification block записывает deterministic runner. Дополнительные semantic observations можно хранить вне generated markers.
+
+В предыдущем RUN пользователь 2026-10-14 (Europe/Moscow) отложил ручную приёмку: 8/8 автоматических PASS, real matrix 0/27. Исторический отчёт: [AUDIT-20261013T213918Z](../audits/AUDIT-20261013T213918Z.md).
+
+Последующий RUN 2026-10-14: пользователь разрешил агенту самостоятельно выполнить Linux-проверки на существующей авторизации и предоставил track/album/playlist ссылки. Подтверждены три последовательных реальных track-цикла и три album-цикла с SIGINT/paused/exit 4 и новым resume/completed/exit 0. Все 36 файлов проходят validation и содержат metadata/artwork; completed-файл альбома сохраняет SHA-256, mtimeNs и inode, повторных download/metadata событий для него нет. Source/build digest соответствует предыдущему предмету проверки. Автоматические проверки повторены: 8/8 PASS. Матрица: Linux track 3/3, album 3/3, playlist 0/3; всего 6/27.
+
+Предоставленная playlist-ссылка коллекции «Мне нравится» с lk.UUID возвращает CLI UNSUPPORTED_URL. Отдельное read-only исследование подтвердило существующий SDK playlist(lk.UUID), 148 доступных треков в том же порядке, что usersLikesTracks; текущие raw schema/mapper принимают ответ. Удаление lk даёт NotFoundError. Исправление зарегистрировано в [STEP-051](STEP-051.md); production в audit не менялся. Новый отчёт: [AUDIT-20261014T071038Z](../audits/AUDIT-20261014T071038Z.md). Решение владельца go отсутствует; STEP не completed, desktop gate закрыт.
+
+Текущий RUN после STEP-051 (2026-10-14): admission lk.UUID исправлен завершённым STEP-051 с независимым lead/security/tests PASS. Linux-матрица на новой единой source revision подтверждена полностью: track 3/3, album 3/3, playlist «Мне нравится» 3/3; всего 9/27. Все девять циклов имеют реальный SIGINT/paused/exit 4 и новый resume/completed/exit 0. Проверены 480 конечных файлов, metadata/artwork/quality/validation; completed в каждой коллекции сохранил SHA-256/mtimeNs/inode, повторных download/metadata событий нет, собственных part/candidate после завершения нет. Первый playlist-цикл переиспользован из STEP-051 по совпадающим source/CLI/provider digests; остальные восемь выполнены в этом RUN. Старые шесть циклов до исправления выше остаются историческим evidence и в текущие девять не добавляются.
+
+Source `sha256:5c90380eae10221e52a38e324dd55a1e4d1cce19fd0246c20bb616b2308a6ed2`, CLI `sha256:baf25c74bd54a0198b182a947cab7907f7e338a3a340ce92b0062e179abb0484`, provider `sha256:5735d8e8a815af0cd697ff31852b30eda7d7383a42084a02ac5e96db00329c0a`; повторная финальная проверка идентичности PASS. Автоматический Verification текущей версии: 8/8 PASS, общий MANUAL_REQUIRED; native account и Linux doctor PASS. Privacy проверена на наблюдавшихся CLI streams и manifest без сохранения credentials. Новый [отчёт](../audits/AUDIT-20261014T081648Z.md) и [durable evidence](../../docs/research/step-027-linux-current-2026-10-14.json) связывают все критерии brief §47–48 с актуальными доказательствами и их границами. macOS/Windows отложены пользователем, owner go pending; STEP не completed, desktop gate закрыт.
+
+
+По запросу владельца подготовлен [переносимый инструментарий Windows/macOS](../../docs/research/step-027-acceptance/README.md): одна команда, собственные ссылки проверяющего через вопросы/config, штатный auth, автоматические install/checks/build/doctor, девять real pause/resume циклов и один безопасный report.json. В архиве default sources пусты; упаковщик запрещает заполненные ссылки. Приложение/lockfile не менялись, source digest Linux-приёмки сохранён. Семь offline tests инструмента PASS; в чистой распакованной копии preparation commands PASS и real track smoke PASS; интерактивный ввод и bounded doctor network retry подтверждены. Новый [audit](../audits/AUDIT-20261014T084954Z.md) и [evidence подготовки](../../docs/research/step-027-acceptance-preparation-2026-10-14.json). Smoke не добавляется к матрице: остаётся 9/27, Windows helper/macOS runtime и owner go pending.
+
+
+Владелец лично передал Windows report.json от 2026-10-14: Windows x64/release 10.0.26200, Node v24.21.0; source/tool digests совпали с поставленным комплектом runner 1. Результат full FAIL до музыкальных циклов: install --immutable exit 1, без timeout; Windows 0/9. Владелец подтвердил Corepack 0.36.0. Причина не определяется по старым hashes; отсутствующая программа/сеть/файловая система не объявляются доказанной причиной. В research-инструментарии runner 2 добавлены безопасные preparation codes и короткий --diagnose-install без ссылок/auth/загрузок; 12 tests PASS и реальный Linux install diagnostic PASS. Update ZIP сохраняет config. [Windows attempt](../../docs/research/step-027-windows-attempt-2026-10-14.json), [обновление/проверка диагностики](../../docs/research/step-027-windows-install-diagnostics-2026-10-14.json), [новый audit](../audits/AUDIT-20261014T093042Z.md). Матрица остаётся 9/27; product/lockfile/Git не менялись.
+
+
+Следующая лично выполненная Windows-попытка после переноса с Z: на локальный диск: install --immutable/lint/typecheck exit 0; test exit 1 без timeout, observedCodes EBUSY/EPERM, конкретные failed cases/операции/stack не captured. Source digest совпадает с Linux, Windows реальные циклы ещё не запускались (0/9); матрица остаётся 9/27. Стадия install в новой попытке прошла. [Новая сводка](../../docs/research/step-027-windows-tests-attempt-2026-10-14.json) и [audit](../audits/AUDIT-20261014T095900Z.md). Следующий диагностический шаг — test --reporter=verbose и конкретные Failed Tests/Failed Suites; product/test code не менялся.
+
+Новый verbose Windows output уточнил четыре failures: 1200/1204 tests PASS, 94/95 suites PASS; три native M3U8 tests получают абсолютные строки из-за POSIX default writer, четвёртый смешивает Windows root с linux layout. Application adapter явно передаёт host platform; его реальный Windows output не признан дефектным по unit failures. [Evidence](../../docs/research/step-027-windows-m3u8-failures-2026-10-14.json) и [audit](../audits/AUDIT-20261014T101030Z.md); создан STEP-052. Общие EBUSY/EPERM не являются установленной причиной. Код в audit не исправлялся, текущая квалифицированная матрица остаётся 9/27 прежнего subject.
+
+- Текущий RUN после завершённого STEP-052 принял Windows report9/9/source25a6/toolddde и самостоятельно выполнил новые Linux9/9 на том же subject. CLI/provider build digests совпали на обеих ОС; validated30+30files, pause4/resume0, parts0, completed preservation/privacy PASS. [Актуальный audit](../audits/AUDIT-20261014T130622Z.md), [сводный отчёт приёмки](../../docs/research/step-027-headless-acceptance.md), [исходный Linux report](../../docs/research/step-027-linux-pass-2026-10-14.json), [исходный Windows report](../../docs/research/step-052-windows-pass-2026-10-14.json). Матрица текущей версии18/27; прежний Linux9/9 предыдущего digest не переносился.
+- Сохранена [первая ограниченная Linux-попытка](../../docs/research/step-027-linux-restricted-attempt-2026-10-14.json): семь preparation checks exit0, но DOWNLOAD_ERROR/exit3 до начала загрузки; отдельная diagnostic попытка NETWORK_ERROR/exit3. Запуск с доступом к штатному native profile/сети дал последовательную live серию9/9 без product fixes. Native errno первой ошибки не captured, она не объявляется доказанным дефектом приложения. Media/report scratch в .cache/checks внутри текущего проекта. На macOS real циклы не предоставлены; полный подготовленный ZIP остаётся с пустыми default sources. OwnerGo не запрашивался до закрытия macOS blocker.
+
+
+
+- По явному поручению владельца подготовлен отдельный `STEP-027-macos.zip` в корне, с инструкцией и launcher без системного Node: официальные Node24.21.0 darwin-arm64/x64 уже внутри, checksum проверяется перед извлечением, private runtime/кеши/отчёты внутри комплекта. [Audit подготовки](../audits/AUDIT-20261014T134419Z.md), [полные факты](../../docs/research/step-027-macos-package-2026-10-14.json). 28 helper/launcher tests PASS; чистая распаковка в Unicode/space path дала real private-Corepack immutable install и lint/typecheck/test/build PASS на Linux. OS adapters и Mach-O→Linux Node подмена использованы только в тестовой копии; native macOS не заявляется. Source25a6/toolddde и прежние18/27 остаются актуальны; реальные macOS9/9 и owner go pending.
 
 ## Blocker / Failure reason
 
-—
+MACOS_REAL_MATRIX_PENDING: на текущем source sha256:25a6a43bde2aa78ac3f5d74f533cec434ff0173d87859dbf0dfcaf78c0fdea07 Linux9/9 и Windows9/9 PASS, macOS0/9 pending. Матрица18/27, 60validated audio files; full offline supporting checks текущей версии прошли, account/doctor/privacy/physical interruption/resume подтверждены на Linux/Windows. Прежний Windows corrective STEP-052 completed с независимым review PASS. OwnerGo PENDING; macOS ранее отложен владельцем. Desktop gate закрыт до macOS PASS и явного go. Следующий шаг — полный runner на macOS и STEP RUN STEP-027 с его report.

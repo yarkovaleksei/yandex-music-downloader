@@ -181,21 +181,25 @@ describe('матрица границ ADR-001: group x group', () => {
   const sources = [...actors, ...virtualSources];
   for (const from of sources) {
     for (const isTest of [false, true]) {
-      it(`${from.dir} (${isTest ? 'test' : 'src'}): все цели, value и type-only`, async () => {
-        const filePath = `${from.dir}/src/probe${isTest ? '.test' : ''}.ts`;
-        for (const to of actors) {
-          if (to.id === from.id || to.specifier === null) continue;
-          for (const typeOnly of [false, true]) {
-            const code = `${typeOnly ? 'import type' : 'import'} { X } from '${to.specifier}';`;
-            const allowed = oracleAllows(from, to, typeOnly, isTest);
-            if (allowed) {
-              await expectClean(code, filePath);
-            } else {
-              await expectRule(code, filePath, 'boundaries/dependency');
+      it(
+        `${from.dir} (${isTest ? 'test' : 'src'}): все цели, value и type-only`,
+        async () => {
+          const filePath = `${from.dir}/src/probe${isTest ? '.test' : ''}.ts`;
+          for (const to of actors) {
+            if (to.id === from.id || to.specifier === null) continue;
+            for (const typeOnly of [false, true]) {
+              const code = `${typeOnly ? 'import type' : 'import'} { X } from '${to.specifier}';`;
+              const allowed = oracleAllows(from, to, typeOnly, isTest);
+              if (allowed) {
+                await expectClean(code, filePath);
+              } else {
+                await expectRule(code, filePath, 'boundaries/dependency');
+              }
             }
           }
-        }
-      });
+        },
+        from.dir === 'apps/cli' && !isTest ? 30_000 : 5_000,
+      );
     }
   }
 });

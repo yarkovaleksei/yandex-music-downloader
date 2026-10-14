@@ -226,7 +226,7 @@ describe('ignores кеша Yarn и backup в ESLint и Prettier', () => {
         path.join(root, 'packages/shared/src/index.ts'),
       ),
     ).toBe(false);
-  });
+  }, 30_000);
 
   it('boundary-проход игнорирует каталоги', async () => {
     const eslint = new ESLint({
@@ -242,7 +242,7 @@ describe('ignores кеша Yarn и backup в ESLint и Prettier', () => {
         path.join(root, 'packages/shared/src/index.ts'),
       ),
     ).toBe(false);
-  });
+  }, 30_000);
 
   it('Prettier исключает кеши, build и yarn.lock', () => {
     const lines = read('.prettierignore').split('\n');

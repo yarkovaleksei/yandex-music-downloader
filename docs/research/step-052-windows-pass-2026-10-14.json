@@ -1,0 +1,4749 @@
+{
+  "schema": 1,
+  "step": "STEP-027",
+  "runnerVersion": 2,
+  "startedAt": "2026-10-14T12:23:18.840Z",
+  "platform": {
+    "os": "win32",
+    "architecture": "x64",
+    "release": "10.0.26200",
+    "node": "v24.21.0"
+  },
+  "mode": "full",
+  "status": "PASS",
+  "checks": [],
+  "cycles": [
+    {
+      "kind": "track",
+      "iteration": 1,
+      "startedAt": "2026-10-14T12:24:43.040Z",
+      "pass": true,
+      "download": {
+        "args": [
+          "track",
+          "https://music.yandex.ru/album/221173/track/2224197",
+          "--json",
+          "--quality",
+          "best",
+          "--concurrency",
+          "1",
+          "--output",
+          "C:\\Users\\vboxuser\\test2\\music-downloader-check-w0kud8\\track-1"
+        ],
+        "startedAt": "2026-10-14T12:24:43.042Z",
+        "events": [
+          {
+            "event": "job.created",
+            "seq": 1,
+            "jobId": "ba31eec6-2c53-412c-9e4a-2b8d1ff0f03a",
+            "payload": {}
+          },
+          {
+            "event": "entity.resolved",
+            "seq": 2,
+            "jobId": "ba31eec6-2c53-412c-9e4a-2b8d1ff0f03a",
+            "payload": {}
+          },
+          {
+            "event": "plan.created",
+            "seq": 3,
+            "jobId": "ba31eec6-2c53-412c-9e4a-2b8d1ff0f03a",
+            "payload": {}
+          },
+          {
+            "event": "track.started",
+            "seq": 4,
+            "jobId": "ba31eec6-2c53-412c-9e4a-2b8d1ff0f03a",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 5,
+            "jobId": "ba31eec6-2c53-412c-9e4a-2b8d1ff0f03a",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 6,
+            "jobId": "ba31eec6-2c53-412c-9e4a-2b8d1ff0f03a",
+            "trackKey": "1",
+            "payload": {}
+          }
+        ],
+        "eventCounts": {
+          "job.created": 1,
+          "entity.resolved": 1,
+          "plan.created": 1,
+          "track.started": 1,
+          "variant.selected": 1,
+          "download.started": 1,
+          "track.progress": 18
+        },
+        "progressByTrack": {
+          "1": {
+            "count": 18,
+            "first": {
+              "seq": 7,
+              "bytes": 15209
+            },
+            "last": {
+              "seq": 24,
+              "bytes": 293737
+            }
+          }
+        },
+        "privacyPassed": true,
+        "stderrBytes": 12,
+        "jobId": "ba31eec6-2c53-412c-9e4a-2b8d1ff0f03a",
+        "firstProgress": {
+          "event": "track.progress",
+          "seq": 7,
+          "jobId": "ba31eec6-2c53-412c-9e4a-2b8d1ff0f03a",
+          "trackKey": "1",
+          "payload": {
+            "bytes": 15209,
+            "fraction": 0.002691573052697599,
+            "speed": 12621.576763485476,
+            "eta": 446488.5889933592
+          }
+        },
+        "signalAt": "2026-10-14T12:24:51.373Z",
+        "signalBytes": 277353,
+        "ctrlCSent": true,
+        "code": 4,
+        "signal": null,
+        "finishedAt": "2026-10-14T12:24:53.892Z"
+      },
+      "before": {
+        "counts": {
+          "completed": 0,
+          "skipped": 0,
+          "failed": 0,
+          "paused": 1,
+          "unavailable": 0,
+          "queued": 0
+        },
+        "completedFiles": [],
+        "partialFiles": [
+          {
+            "trackKey": "1",
+            "bytes": 293737,
+            "manifestBytes": 293737
+          }
+        ]
+      },
+      "manifestPrivacyBefore": true,
+      "resume": {
+        "args": [
+          "resume",
+          "ba31eec6-2c53-412c-9e4a-2b8d1ff0f03a",
+          "--json",
+          "--concurrency",
+          "1"
+        ],
+        "startedAt": "2026-10-14T12:24:53.902Z",
+        "events": [
+          {
+            "event": "download.started",
+            "seq": 1,
+            "jobId": "ba31eec6-2c53-412c-9e4a-2b8d1ff0f03a",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 330,
+            "jobId": "ba31eec6-2c53-412c-9e4a-2b8d1ff0f03a",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 331,
+            "jobId": "ba31eec6-2c53-412c-9e4a-2b8d1ff0f03a",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 332,
+            "jobId": "ba31eec6-2c53-412c-9e4a-2b8d1ff0f03a",
+            "trackKey": "1",
+            "payload": {
+              "durationMs": 235416
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 334,
+            "jobId": "ba31eec6-2c53-412c-9e4a-2b8d1ff0f03a",
+            "payload": {
+              "completed": 1,
+              "total": 1,
+              "fraction": 1
+            }
+          },
+          {
+            "event": "job.completed",
+            "seq": 335,
+            "jobId": "ba31eec6-2c53-412c-9e4a-2b8d1ff0f03a",
+            "payload": {}
+          }
+        ],
+        "eventCounts": {
+          "download.started": 1,
+          "track.progress": 329,
+          "download.completed": 1,
+          "metadata.written": 1,
+          "validation.completed": 1,
+          "job.progress": 1,
+          "job.completed": 1
+        },
+        "progressByTrack": {
+          "1": {
+            "count": 329,
+            "first": {
+              "seq": 2,
+              "bytes": 293737
+            },
+            "last": {
+              "seq": 333,
+              "bytes": 5650599
+            }
+          }
+        },
+        "privacyPassed": true,
+        "stderrBytes": 0,
+        "jobId": "ba31eec6-2c53-412c-9e4a-2b8d1ff0f03a",
+        "firstProgress": {
+          "event": "track.progress",
+          "seq": 2,
+          "jobId": "ba31eec6-2c53-412c-9e4a-2b8d1ff0f03a",
+          "trackKey": "1",
+          "payload": {
+            "bytes": 293737,
+            "fraction": 0.051983338403592254,
+            "speed": 0
+          }
+        },
+        "code": 0,
+        "signal": null,
+        "finishedAt": "2026-10-14T12:25:03.271Z"
+      },
+      "after": {
+        "counts": {
+          "completed": 1,
+          "skipped": 0,
+          "failed": 0,
+          "paused": 0,
+          "unavailable": 0,
+          "queued": 0
+        },
+        "total": 1,
+        "files": [
+          {
+            "trackKey": "1",
+            "file": "track-1/Bad Meets Evil - Living Proof.mp3",
+            "bytes": 5701954,
+            "sha256": "20b1633012c5c046bec8f723ca6ba42545bf864e7d49d2a827b89bee0ceead1c",
+            "mtimeNs": "1791980700937497100",
+            "inode": "2533274790576800",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 235416
+            },
+            "tags": {
+              "title": "Living Proof",
+              "artist": "Bad Meets Evil",
+              "album": "Hell: The Sequel",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 50026
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "manifestPrivacyAfter": true,
+      "preservedCompleted": true,
+      "noRepeatedCompletedDownloads": true,
+      "partsRemaining": 0,
+      "referencedPartsRemaining": 0,
+      "failedAttemptCount": 0,
+      "playlistSidecars": [],
+      "finishedAt": "2026-10-14T12:25:03.312Z"
+    },
+    {
+      "kind": "track",
+      "iteration": 2,
+      "startedAt": "2026-10-14T12:25:03.314Z",
+      "pass": true,
+      "download": {
+        "args": [
+          "track",
+          "https://music.yandex.ru/album/221173/track/2224197",
+          "--json",
+          "--quality",
+          "best",
+          "--concurrency",
+          "1",
+          "--output",
+          "C:\\Users\\vboxuser\\test2\\music-downloader-check-w0kud8\\track-2"
+        ],
+        "startedAt": "2026-10-14T12:25:03.316Z",
+        "events": [
+          {
+            "event": "job.created",
+            "seq": 1,
+            "jobId": "963b82b6-f8df-45a0-9702-216bd4112521",
+            "payload": {}
+          },
+          {
+            "event": "entity.resolved",
+            "seq": 2,
+            "jobId": "963b82b6-f8df-45a0-9702-216bd4112521",
+            "payload": {}
+          },
+          {
+            "event": "plan.created",
+            "seq": 3,
+            "jobId": "963b82b6-f8df-45a0-9702-216bd4112521",
+            "payload": {}
+          },
+          {
+            "event": "track.started",
+            "seq": 4,
+            "jobId": "963b82b6-f8df-45a0-9702-216bd4112521",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 5,
+            "jobId": "963b82b6-f8df-45a0-9702-216bd4112521",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 6,
+            "jobId": "963b82b6-f8df-45a0-9702-216bd4112521",
+            "trackKey": "1",
+            "payload": {}
+          }
+        ],
+        "eventCounts": {
+          "job.created": 1,
+          "entity.resolved": 1,
+          "plan.created": 1,
+          "track.started": 1,
+          "variant.selected": 1,
+          "download.started": 1,
+          "track.progress": 16
+        },
+        "progressByTrack": {
+          "1": {
+            "count": 16,
+            "first": {
+              "seq": 7,
+              "bytes": 15210
+            },
+            "last": {
+              "seq": 22,
+              "bytes": 277354
+            }
+          }
+        },
+        "privacyPassed": true,
+        "stderrBytes": 12,
+        "jobId": "963b82b6-f8df-45a0-9702-216bd4112521",
+        "firstProgress": {
+          "event": "track.progress",
+          "seq": 7,
+          "jobId": "963b82b6-f8df-45a0-9702-216bd4112521",
+          "trackKey": "1",
+          "payload": {
+            "bytes": 15210,
+            "fraction": 0.002691750025085836,
+            "speed": 7732.587697000508,
+            "eta": 728784.3631163709
+          }
+        },
+        "signalAt": "2026-10-14T12:25:11.226Z",
+        "signalBytes": 277354,
+        "ctrlCSent": true,
+        "code": 4,
+        "signal": null,
+        "finishedAt": "2026-10-14T12:25:13.816Z"
+      },
+      "before": {
+        "counts": {
+          "completed": 0,
+          "skipped": 0,
+          "failed": 0,
+          "paused": 1,
+          "unavailable": 0,
+          "queued": 0
+        },
+        "completedFiles": [],
+        "partialFiles": [
+          {
+            "trackKey": "1",
+            "bytes": 277354,
+            "manifestBytes": 277354
+          }
+        ]
+      },
+      "manifestPrivacyBefore": true,
+      "resume": {
+        "args": [
+          "resume",
+          "963b82b6-f8df-45a0-9702-216bd4112521",
+          "--json",
+          "--concurrency",
+          "1"
+        ],
+        "startedAt": "2026-10-14T12:25:13.824Z",
+        "events": [
+          {
+            "event": "download.started",
+            "seq": 1,
+            "jobId": "963b82b6-f8df-45a0-9702-216bd4112521",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 332,
+            "jobId": "963b82b6-f8df-45a0-9702-216bd4112521",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 333,
+            "jobId": "963b82b6-f8df-45a0-9702-216bd4112521",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 334,
+            "jobId": "963b82b6-f8df-45a0-9702-216bd4112521",
+            "trackKey": "1",
+            "payload": {
+              "durationMs": 235416
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 336,
+            "jobId": "963b82b6-f8df-45a0-9702-216bd4112521",
+            "payload": {
+              "completed": 1,
+              "total": 1,
+              "fraction": 1
+            }
+          },
+          {
+            "event": "job.completed",
+            "seq": 337,
+            "jobId": "963b82b6-f8df-45a0-9702-216bd4112521",
+            "payload": {}
+          }
+        ],
+        "eventCounts": {
+          "download.started": 1,
+          "track.progress": 331,
+          "download.completed": 1,
+          "metadata.written": 1,
+          "validation.completed": 1,
+          "job.progress": 1,
+          "job.completed": 1
+        },
+        "progressByTrack": {
+          "1": {
+            "count": 331,
+            "first": {
+              "seq": 2,
+              "bytes": 277354
+            },
+            "last": {
+              "seq": 335,
+              "bytes": 5650599
+            }
+          }
+        },
+        "privacyPassed": true,
+        "stderrBytes": 0,
+        "jobId": "963b82b6-f8df-45a0-9702-216bd4112521",
+        "firstProgress": {
+          "event": "track.progress",
+          "seq": 2,
+          "jobId": "963b82b6-f8df-45a0-9702-216bd4112521",
+          "trackKey": "1",
+          "payload": {
+            "bytes": 277354,
+            "fraction": 0.049083999767104335,
+            "speed": 0
+          }
+        },
+        "code": 0,
+        "signal": null,
+        "finishedAt": "2026-10-14T12:25:22.661Z"
+      },
+      "after": {
+        "counts": {
+          "completed": 1,
+          "skipped": 0,
+          "failed": 0,
+          "paused": 0,
+          "unavailable": 0,
+          "queued": 0
+        },
+        "total": 1,
+        "files": [
+          {
+            "trackKey": "1",
+            "file": "track-2/Bad Meets Evil - Living Proof.mp3",
+            "bytes": 5701954,
+            "sha256": "20b1633012c5c046bec8f723ca6ba42545bf864e7d49d2a827b89bee0ceead1c",
+            "mtimeNs": "1791980720333526600",
+            "inode": "3377699720708426",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 235416
+            },
+            "tags": {
+              "title": "Living Proof",
+              "artist": "Bad Meets Evil",
+              "album": "Hell: The Sequel",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 50026
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "manifestPrivacyAfter": true,
+      "preservedCompleted": true,
+      "noRepeatedCompletedDownloads": true,
+      "partsRemaining": 0,
+      "referencedPartsRemaining": 0,
+      "failedAttemptCount": 0,
+      "playlistSidecars": [],
+      "finishedAt": "2026-10-14T12:25:22.683Z"
+    },
+    {
+      "kind": "track",
+      "iteration": 3,
+      "startedAt": "2026-10-14T12:25:22.685Z",
+      "pass": true,
+      "download": {
+        "args": [
+          "track",
+          "https://music.yandex.ru/album/221173/track/2224197",
+          "--json",
+          "--quality",
+          "best",
+          "--concurrency",
+          "1",
+          "--output",
+          "C:\\Users\\vboxuser\\test2\\music-downloader-check-w0kud8\\track-3"
+        ],
+        "startedAt": "2026-10-14T12:25:22.687Z",
+        "events": [
+          {
+            "event": "job.created",
+            "seq": 1,
+            "jobId": "4e8a2a7b-7b55-4e65-bf7a-848720c5634a",
+            "payload": {}
+          },
+          {
+            "event": "entity.resolved",
+            "seq": 2,
+            "jobId": "4e8a2a7b-7b55-4e65-bf7a-848720c5634a",
+            "payload": {}
+          },
+          {
+            "event": "plan.created",
+            "seq": 3,
+            "jobId": "4e8a2a7b-7b55-4e65-bf7a-848720c5634a",
+            "payload": {}
+          },
+          {
+            "event": "track.started",
+            "seq": 4,
+            "jobId": "4e8a2a7b-7b55-4e65-bf7a-848720c5634a",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 5,
+            "jobId": "4e8a2a7b-7b55-4e65-bf7a-848720c5634a",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 6,
+            "jobId": "4e8a2a7b-7b55-4e65-bf7a-848720c5634a",
+            "trackKey": "1",
+            "payload": {}
+          }
+        ],
+        "eventCounts": {
+          "job.created": 1,
+          "entity.resolved": 1,
+          "plan.created": 1,
+          "track.started": 1,
+          "variant.selected": 1,
+          "download.started": 1,
+          "track.progress": 18
+        },
+        "progressByTrack": {
+          "1": {
+            "count": 18,
+            "first": {
+              "seq": 7,
+              "bytes": 15210
+            },
+            "last": {
+              "seq": 24,
+              "bytes": 293738
+            }
+          }
+        },
+        "privacyPassed": true,
+        "stderrBytes": 12,
+        "jobId": "4e8a2a7b-7b55-4e65-bf7a-848720c5634a",
+        "firstProgress": {
+          "event": "track.progress",
+          "seq": 7,
+          "jobId": "4e8a2a7b-7b55-4e65-bf7a-848720c5634a",
+          "trackKey": "1",
+          "payload": {
+            "bytes": 15210,
+            "fraction": 0.002691750025085836,
+            "speed": 11151.026392961878,
+            "eta": 505369.532938856
+          }
+        },
+        "signalAt": "2026-10-14T12:25:29.386Z",
+        "signalBytes": 277354,
+        "ctrlCSent": true,
+        "code": 4,
+        "signal": null,
+        "finishedAt": "2026-10-14T12:25:31.896Z"
+      },
+      "before": {
+        "counts": {
+          "completed": 0,
+          "skipped": 0,
+          "failed": 0,
+          "paused": 1,
+          "unavailable": 0,
+          "queued": 0
+        },
+        "completedFiles": [],
+        "partialFiles": [
+          {
+            "trackKey": "1",
+            "bytes": 293738,
+            "manifestBytes": 293738
+          }
+        ]
+      },
+      "manifestPrivacyBefore": true,
+      "resume": {
+        "args": [
+          "resume",
+          "4e8a2a7b-7b55-4e65-bf7a-848720c5634a",
+          "--json",
+          "--concurrency",
+          "1"
+        ],
+        "startedAt": "2026-10-14T12:25:31.904Z",
+        "events": [
+          {
+            "event": "download.started",
+            "seq": 1,
+            "jobId": "4e8a2a7b-7b55-4e65-bf7a-848720c5634a",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 331,
+            "jobId": "4e8a2a7b-7b55-4e65-bf7a-848720c5634a",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 332,
+            "jobId": "4e8a2a7b-7b55-4e65-bf7a-848720c5634a",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 333,
+            "jobId": "4e8a2a7b-7b55-4e65-bf7a-848720c5634a",
+            "trackKey": "1",
+            "payload": {
+              "durationMs": 235416
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 335,
+            "jobId": "4e8a2a7b-7b55-4e65-bf7a-848720c5634a",
+            "payload": {
+              "completed": 1,
+              "total": 1,
+              "fraction": 1
+            }
+          },
+          {
+            "event": "job.completed",
+            "seq": 336,
+            "jobId": "4e8a2a7b-7b55-4e65-bf7a-848720c5634a",
+            "payload": {}
+          }
+        ],
+        "eventCounts": {
+          "download.started": 1,
+          "track.progress": 330,
+          "download.completed": 1,
+          "metadata.written": 1,
+          "validation.completed": 1,
+          "job.progress": 1,
+          "job.completed": 1
+        },
+        "progressByTrack": {
+          "1": {
+            "count": 330,
+            "first": {
+              "seq": 2,
+              "bytes": 293738
+            },
+            "last": {
+              "seq": 334,
+              "bytes": 5650599
+            }
+          }
+        },
+        "privacyPassed": true,
+        "stderrBytes": 0,
+        "jobId": "4e8a2a7b-7b55-4e65-bf7a-848720c5634a",
+        "firstProgress": {
+          "event": "track.progress",
+          "seq": 2,
+          "jobId": "4e8a2a7b-7b55-4e65-bf7a-848720c5634a",
+          "trackKey": "1",
+          "payload": {
+            "bytes": 293738,
+            "fraction": 0.05198351537598049,
+            "speed": 0
+          }
+        },
+        "code": 0,
+        "signal": null,
+        "finishedAt": "2026-10-14T12:25:40.442Z"
+      },
+      "after": {
+        "counts": {
+          "completed": 1,
+          "skipped": 0,
+          "failed": 0,
+          "paused": 0,
+          "unavailable": 0,
+          "queued": 0
+        },
+        "total": 1,
+        "files": [
+          {
+            "trackKey": "1",
+            "file": "track-3/Bad Meets Evil - Living Proof.mp3",
+            "bytes": 5701954,
+            "sha256": "20b1633012c5c046bec8f723ca6ba42545bf864e7d49d2a827b89bee0ceead1c",
+            "mtimeNs": "1791980738088892700",
+            "inode": "5066549580972720",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 235416
+            },
+            "tags": {
+              "title": "Living Proof",
+              "artist": "Bad Meets Evil",
+              "album": "Hell: The Sequel",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 50026
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "manifestPrivacyAfter": true,
+      "preservedCompleted": true,
+      "noRepeatedCompletedDownloads": true,
+      "partsRemaining": 0,
+      "referencedPartsRemaining": 0,
+      "failedAttemptCount": 0,
+      "playlistSidecars": [],
+      "finishedAt": "2026-10-14T12:25:40.463Z"
+    },
+    {
+      "kind": "album",
+      "iteration": 1,
+      "startedAt": "2026-10-14T12:25:40.465Z",
+      "pass": true,
+      "download": {
+        "args": [
+          "album",
+          "https://music.yandex.ru/album/41904408",
+          "--json",
+          "--quality",
+          "best",
+          "--concurrency",
+          "1",
+          "--output",
+          "C:\\Users\\vboxuser\\test2\\music-downloader-check-w0kud8\\album-1"
+        ],
+        "startedAt": "2026-10-14T12:25:40.467Z",
+        "events": [
+          {
+            "event": "job.created",
+            "seq": 1,
+            "jobId": "cbcabba3-692e-4a55-85f8-49eda8936134",
+            "payload": {}
+          },
+          {
+            "event": "entity.resolved",
+            "seq": 2,
+            "jobId": "cbcabba3-692e-4a55-85f8-49eda8936134",
+            "payload": {}
+          },
+          {
+            "event": "plan.created",
+            "seq": 3,
+            "jobId": "cbcabba3-692e-4a55-85f8-49eda8936134",
+            "payload": {}
+          },
+          {
+            "event": "track.started",
+            "seq": 4,
+            "jobId": "cbcabba3-692e-4a55-85f8-49eda8936134",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 5,
+            "jobId": "cbcabba3-692e-4a55-85f8-49eda8936134",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 6,
+            "jobId": "cbcabba3-692e-4a55-85f8-49eda8936134",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 283,
+            "jobId": "cbcabba3-692e-4a55-85f8-49eda8936134",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 284,
+            "jobId": "cbcabba3-692e-4a55-85f8-49eda8936134",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 285,
+            "jobId": "cbcabba3-692e-4a55-85f8-49eda8936134",
+            "trackKey": "1",
+            "payload": {
+              "durationMs": 252526
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 287,
+            "jobId": "cbcabba3-692e-4a55-85f8-49eda8936134",
+            "payload": {
+              "completed": 1,
+              "total": 7,
+              "fraction": 0.14285714285714285
+            }
+          },
+          {
+            "event": "track.started",
+            "seq": 288,
+            "jobId": "cbcabba3-692e-4a55-85f8-49eda8936134",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 289,
+            "jobId": "cbcabba3-692e-4a55-85f8-49eda8936134",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 290,
+            "jobId": "cbcabba3-692e-4a55-85f8-49eda8936134",
+            "trackKey": "2",
+            "payload": {}
+          }
+        ],
+        "eventCounts": {
+          "job.created": 1,
+          "entity.resolved": 1,
+          "plan.created": 1,
+          "track.started": 2,
+          "variant.selected": 2,
+          "download.started": 2,
+          "track.progress": 295,
+          "download.completed": 1,
+          "metadata.written": 1,
+          "validation.completed": 1,
+          "job.progress": 1
+        },
+        "progressByTrack": {
+          "1": {
+            "count": 277,
+            "first": {
+              "seq": 7,
+              "bytes": 15205
+            },
+            "last": {
+              "seq": 286,
+              "bytes": 6061244
+            }
+          },
+          "2": {
+            "count": 18,
+            "first": {
+              "seq": 291,
+              "bytes": 15211
+            },
+            "last": {
+              "seq": 308,
+              "bytes": 293739
+            }
+          }
+        },
+        "privacyPassed": true,
+        "stderrBytes": 12,
+        "jobId": "cbcabba3-692e-4a55-85f8-49eda8936134",
+        "firstProgress": {
+          "event": "track.progress",
+          "seq": 7,
+          "jobId": "cbcabba3-692e-4a55-85f8-49eda8936134",
+          "trackKey": "1",
+          "payload": {
+            "bytes": 15205,
+            "fraction": 0.0025085609488745214,
+            "speed": 10252.865812542144,
+            "eta": 589692.5903978954
+          }
+        },
+        "signalAt": "2026-10-14T12:25:52.889Z",
+        "signalBytes": 277355,
+        "ctrlCSent": true,
+        "code": 4,
+        "signal": null,
+        "finishedAt": "2026-10-14T12:25:55.477Z"
+      },
+      "before": {
+        "counts": {
+          "completed": 1,
+          "skipped": 0,
+          "failed": 0,
+          "paused": 1,
+          "unavailable": 0,
+          "queued": 5
+        },
+        "completedFiles": [
+          {
+            "trackKey": "1",
+            "file": "album-1/Горизонт/01 - ЛегендаРус - Горизонт.mp3",
+            "bytes": 6105186,
+            "sha256": "3899c0562f0347490531d14eb50258084ccc787854a85903f4e0466362d72363",
+            "mtimeNs": "1791980750338474800",
+            "inode": "2251799813866177",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 252526
+            },
+            "tags": {
+              "title": "Горизонт",
+              "artist": "ЛегендаРус",
+              "album": "Горизонт",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 42604
+                }
+              ]
+            }
+          }
+        ],
+        "partialFiles": [
+          {
+            "trackKey": "2",
+            "bytes": 293739,
+            "manifestBytes": 293739
+          }
+        ]
+      },
+      "manifestPrivacyBefore": true,
+      "resume": {
+        "args": [
+          "resume",
+          "cbcabba3-692e-4a55-85f8-49eda8936134",
+          "--json",
+          "--concurrency",
+          "1"
+        ],
+        "startedAt": "2026-10-14T12:25:55.497Z",
+        "events": [
+          {
+            "event": "download.started",
+            "seq": 1,
+            "jobId": "cbcabba3-692e-4a55-85f8-49eda8936134",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 276,
+            "jobId": "cbcabba3-692e-4a55-85f8-49eda8936134",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 277,
+            "jobId": "cbcabba3-692e-4a55-85f8-49eda8936134",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 278,
+            "jobId": "cbcabba3-692e-4a55-85f8-49eda8936134",
+            "trackKey": "2",
+            "payload": {
+              "durationMs": 198139
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 280,
+            "jobId": "cbcabba3-692e-4a55-85f8-49eda8936134",
+            "payload": {
+              "completed": 2,
+              "total": 7,
+              "fraction": 0.2857142857142857
+            }
+          },
+          {
+            "event": "track.started",
+            "seq": 281,
+            "jobId": "cbcabba3-692e-4a55-85f8-49eda8936134",
+            "trackKey": "3",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 282,
+            "jobId": "cbcabba3-692e-4a55-85f8-49eda8936134",
+            "trackKey": "3",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 283,
+            "jobId": "cbcabba3-692e-4a55-85f8-49eda8936134",
+            "trackKey": "3",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 526,
+            "jobId": "cbcabba3-692e-4a55-85f8-49eda8936134",
+            "trackKey": "3",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 527,
+            "jobId": "cbcabba3-692e-4a55-85f8-49eda8936134",
+            "trackKey": "3",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 528,
+            "jobId": "cbcabba3-692e-4a55-85f8-49eda8936134",
+            "trackKey": "3",
+            "payload": {
+              "durationMs": 253179
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 530,
+            "jobId": "cbcabba3-692e-4a55-85f8-49eda8936134",
+            "payload": {
+              "completed": 3,
+              "total": 7,
+              "fraction": 0.42857142857142855
+            }
+          },
+          {
+            "event": "track.started",
+            "seq": 531,
+            "jobId": "cbcabba3-692e-4a55-85f8-49eda8936134",
+            "trackKey": "4",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 532,
+            "jobId": "cbcabba3-692e-4a55-85f8-49eda8936134",
+            "trackKey": "4",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 533,
+            "jobId": "cbcabba3-692e-4a55-85f8-49eda8936134",
+            "trackKey": "4",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 715,
+            "jobId": "cbcabba3-692e-4a55-85f8-49eda8936134",
+            "trackKey": "4",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 716,
+            "jobId": "cbcabba3-692e-4a55-85f8-49eda8936134",
+            "trackKey": "4",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 717,
+            "jobId": "cbcabba3-692e-4a55-85f8-49eda8936134",
+            "trackKey": "4",
+            "payload": {
+              "durationMs": 157780
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 719,
+            "jobId": "cbcabba3-692e-4a55-85f8-49eda8936134",
+            "payload": {
+              "completed": 4,
+              "total": 7,
+              "fraction": 0.5714285714285714
+            }
+          },
+          {
+            "event": "track.started",
+            "seq": 720,
+            "jobId": "cbcabba3-692e-4a55-85f8-49eda8936134",
+            "trackKey": "5",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 721,
+            "jobId": "cbcabba3-692e-4a55-85f8-49eda8936134",
+            "trackKey": "5",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 722,
+            "jobId": "cbcabba3-692e-4a55-85f8-49eda8936134",
+            "trackKey": "5",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 1035,
+            "jobId": "cbcabba3-692e-4a55-85f8-49eda8936134",
+            "trackKey": "5",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 1036,
+            "jobId": "cbcabba3-692e-4a55-85f8-49eda8936134",
+            "trackKey": "5",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 1037,
+            "jobId": "cbcabba3-692e-4a55-85f8-49eda8936134",
+            "trackKey": "5",
+            "payload": {
+              "durationMs": 296699
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 1039,
+            "jobId": "cbcabba3-692e-4a55-85f8-49eda8936134",
+            "payload": {
+              "completed": 5,
+              "total": 7,
+              "fraction": 0.7142857142857143
+            }
+          },
+          {
+            "event": "track.started",
+            "seq": 1040,
+            "jobId": "cbcabba3-692e-4a55-85f8-49eda8936134",
+            "trackKey": "6",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 1041,
+            "jobId": "cbcabba3-692e-4a55-85f8-49eda8936134",
+            "trackKey": "6",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 1042,
+            "jobId": "cbcabba3-692e-4a55-85f8-49eda8936134",
+            "trackKey": "6",
+            "payload": {}
+          },
+          {
+            "event": "track.started",
+            "seq": 1043,
+            "jobId": "cbcabba3-692e-4a55-85f8-49eda8936134",
+            "trackKey": "7",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 1044,
+            "jobId": "cbcabba3-692e-4a55-85f8-49eda8936134",
+            "trackKey": "7",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 1045,
+            "jobId": "cbcabba3-692e-4a55-85f8-49eda8936134",
+            "trackKey": "7",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 1219,
+            "jobId": "cbcabba3-692e-4a55-85f8-49eda8936134",
+            "trackKey": "7",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 1220,
+            "jobId": "cbcabba3-692e-4a55-85f8-49eda8936134",
+            "trackKey": "7",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 1221,
+            "jobId": "cbcabba3-692e-4a55-85f8-49eda8936134",
+            "trackKey": "7",
+            "payload": {
+              "durationMs": 162142
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 1223,
+            "jobId": "cbcabba3-692e-4a55-85f8-49eda8936134",
+            "payload": {
+              "completed": 6,
+              "total": 7,
+              "fraction": 0.8571428571428571
+            }
+          },
+          {
+            "event": "download.started",
+            "seq": 1224,
+            "jobId": "cbcabba3-692e-4a55-85f8-49eda8936134",
+            "trackKey": "6",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 1383,
+            "jobId": "cbcabba3-692e-4a55-85f8-49eda8936134",
+            "trackKey": "6",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 1384,
+            "jobId": "cbcabba3-692e-4a55-85f8-49eda8936134",
+            "trackKey": "6",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 1385,
+            "jobId": "cbcabba3-692e-4a55-85f8-49eda8936134",
+            "trackKey": "6",
+            "payload": {
+              "durationMs": 164937
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 1387,
+            "jobId": "cbcabba3-692e-4a55-85f8-49eda8936134",
+            "payload": {
+              "completed": 7,
+              "total": 7,
+              "fraction": 1
+            }
+          },
+          {
+            "event": "job.completed",
+            "seq": 1388,
+            "jobId": "cbcabba3-692e-4a55-85f8-49eda8936134",
+            "payload": {}
+          }
+        ],
+        "eventCounts": {
+          "download.started": 7,
+          "track.progress": 1346,
+          "download.completed": 6,
+          "metadata.written": 6,
+          "validation.completed": 6,
+          "job.progress": 6,
+          "track.started": 5,
+          "variant.selected": 5,
+          "job.completed": 1
+        },
+        "progressByTrack": {
+          "2": {
+            "count": 275,
+            "first": {
+              "seq": 2,
+              "bytes": 293739
+            },
+            "last": {
+              "seq": 279,
+              "bytes": 4755957
+            }
+          },
+          "3": {
+            "count": 243,
+            "first": {
+              "seq": 284,
+              "bytes": 15210
+            },
+            "last": {
+              "seq": 529,
+              "bytes": 6076917
+            }
+          },
+          "4": {
+            "count": 182,
+            "first": {
+              "seq": 534,
+              "bytes": 15209
+            },
+            "last": {
+              "seq": 718,
+              "bytes": 3787337
+            }
+          },
+          "5": {
+            "count": 313,
+            "first": {
+              "seq": 723,
+              "bytes": 15209
+            },
+            "last": {
+              "seq": 1038,
+              "bytes": 7121397
+            }
+          },
+          "6": {
+            "count": 159,
+            "first": {
+              "seq": 1225,
+              "bytes": 15209
+            },
+            "last": {
+              "seq": 1386,
+              "bytes": 3959118
+            }
+          },
+          "7": {
+            "count": 174,
+            "first": {
+              "seq": 1046,
+              "bytes": 15209
+            },
+            "last": {
+              "seq": 1222,
+              "bytes": 3892035
+            }
+          }
+        },
+        "privacyPassed": true,
+        "stderrBytes": 0,
+        "jobId": "cbcabba3-692e-4a55-85f8-49eda8936134",
+        "firstProgress": {
+          "event": "track.progress",
+          "seq": 2,
+          "jobId": "cbcabba3-692e-4a55-85f8-49eda8936134",
+          "trackKey": "2",
+          "payload": {
+            "bytes": 293739,
+            "fraction": 0.061762333006795476,
+            "speed": 0
+          }
+        },
+        "code": 0,
+        "signal": null,
+        "finishedAt": "2026-10-14T12:26:33.462Z"
+      },
+      "after": {
+        "counts": {
+          "completed": 7,
+          "skipped": 0,
+          "failed": 0,
+          "paused": 0,
+          "unavailable": 0,
+          "queued": 0
+        },
+        "total": 7,
+        "files": [
+          {
+            "trackKey": "1",
+            "file": "album-1/Горизонт/01 - ЛегендаРус - Горизонт.mp3",
+            "bytes": 6105186,
+            "sha256": "3899c0562f0347490531d14eb50258084ccc787854a85903f4e0466362d72363",
+            "mtimeNs": "1791980750338474800",
+            "inode": "2251799813866177",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 252526
+            },
+            "tags": {
+              "title": "Горизонт",
+              "artist": "ЛегендаРус",
+              "album": "Горизонт",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 42604
+                }
+              ]
+            }
+          },
+          {
+            "trackKey": "2",
+            "file": "album-1/Горизонт/02 - ЛегендаРус - Богатый Город.mp3",
+            "bytes": 4799908,
+            "sha256": "fddc9cbc25d9d7872ad95b7e4db96612326e139176716acef465d2fb059437c2",
+            "mtimeNs": "1791980762070800600",
+            "inode": "2814749767287482",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 198139
+            },
+            "tags": {
+              "title": "Богатый Город",
+              "artist": "ЛегендаРус",
+              "album": "Горизонт",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 42604
+                }
+              ]
+            }
+          },
+          {
+            "trackKey": "3",
+            "file": "album-1/Горизонт/03 - ЛегендаРус - Старые Кроссовки.mp3",
+            "bytes": 6120874,
+            "sha256": "905bb68297725b4fd0ec3b3f96c5c496d1b5342c171801b5f7aed0799fad663a",
+            "mtimeNs": "1791980765849140100",
+            "inode": "5066549580972742",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 253179
+            },
+            "tags": {
+              "title": "Старые Кроссовки",
+              "artist": "ЛегендаРус",
+              "album": "Горизонт",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 42604
+                }
+              ]
+            }
+          },
+          {
+            "trackKey": "4",
+            "file": "album-1/Горизонт/04 - ЛегендаРус - Зарница - Пляшем Вместе.mp3",
+            "bytes": 3831305,
+            "sha256": "0a39d3e8a43a8d7bd3b9799a7757ad142c6c5142443d97a6b75472ebb83c1ea2",
+            "mtimeNs": "1791980768722680600",
+            "inode": "5066549580972745",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 157780
+            },
+            "tags": {
+              "title": "Зарница - Пляшем Вместе",
+              "artist": "ЛегендаРус",
+              "album": "Горизонт",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 42604
+                }
+              ]
+            }
+          },
+          {
+            "trackKey": "5",
+            "file": "album-1/Горизонт/05 - ЛегендаРус - Путь Моряка.mp3",
+            "bytes": 7165344,
+            "sha256": "71615196f8f4dce344136495e15cb3261eaf2d492d8bff3f9f34f1ddf915465e",
+            "mtimeNs": "1791980772608717700",
+            "inode": "4222124650840779",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 296699
+            },
+            "tags": {
+              "title": "Путь Моряка",
+              "artist": "ЛегендаРус",
+              "album": "Горизонт",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 42604
+                }
+              ]
+            }
+          },
+          {
+            "trackKey": "6",
+            "file": "album-1/Горизонт/06 - ЛегендаРус - Цена Победы.mp3",
+            "bytes": 4003065,
+            "sha256": "b1c6d0e473f23b3a612532e5952c54b35069972fff656b69d8022a565553d080",
+            "mtimeNs": "1791980791155286500",
+            "inode": "2251799813866201",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 164937
+            },
+            "tags": {
+              "title": "Цена Победы",
+              "artist": "ЛегендаРус",
+              "album": "Горизонт",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 42604
+                }
+              ]
+            }
+          },
+          {
+            "trackKey": "7",
+            "file": "album-1/Горизонт/07 - ЛегендаРус - Малая Земля.mp3",
+            "bytes": 3935982,
+            "sha256": "fbf2effe83f6f1ce708475343399fbf1e729e74d8c82d29c5386df6be3f5dbf2",
+            "mtimeNs": "1791980788762270100",
+            "inode": "6192449487815382",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 162142
+            },
+            "tags": {
+              "title": "Малая Земля",
+              "artist": "ЛегендаРус",
+              "album": "Горизонт",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 42604
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "manifestPrivacyAfter": true,
+      "preservedCompleted": true,
+      "noRepeatedCompletedDownloads": true,
+      "partsRemaining": 0,
+      "referencedPartsRemaining": 0,
+      "failedAttemptCount": 1,
+      "playlistSidecars": [],
+      "finishedAt": "2026-10-14T12:26:33.530Z"
+    },
+    {
+      "kind": "album",
+      "iteration": 2,
+      "startedAt": "2026-10-14T12:26:33.532Z",
+      "pass": true,
+      "download": {
+        "args": [
+          "album",
+          "https://music.yandex.ru/album/41904408",
+          "--json",
+          "--quality",
+          "best",
+          "--concurrency",
+          "1",
+          "--output",
+          "C:\\Users\\vboxuser\\test2\\music-downloader-check-w0kud8\\album-2"
+        ],
+        "startedAt": "2026-10-14T12:26:33.534Z",
+        "events": [
+          {
+            "event": "job.created",
+            "seq": 1,
+            "jobId": "3576f3b8-4600-4790-aefc-9194dad7147a",
+            "payload": {}
+          },
+          {
+            "event": "entity.resolved",
+            "seq": 2,
+            "jobId": "3576f3b8-4600-4790-aefc-9194dad7147a",
+            "payload": {}
+          },
+          {
+            "event": "plan.created",
+            "seq": 3,
+            "jobId": "3576f3b8-4600-4790-aefc-9194dad7147a",
+            "payload": {}
+          },
+          {
+            "event": "track.started",
+            "seq": 4,
+            "jobId": "3576f3b8-4600-4790-aefc-9194dad7147a",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 5,
+            "jobId": "3576f3b8-4600-4790-aefc-9194dad7147a",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 6,
+            "jobId": "3576f3b8-4600-4790-aefc-9194dad7147a",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 299,
+            "jobId": "3576f3b8-4600-4790-aefc-9194dad7147a",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 300,
+            "jobId": "3576f3b8-4600-4790-aefc-9194dad7147a",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 301,
+            "jobId": "3576f3b8-4600-4790-aefc-9194dad7147a",
+            "trackKey": "1",
+            "payload": {
+              "durationMs": 252526
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 303,
+            "jobId": "3576f3b8-4600-4790-aefc-9194dad7147a",
+            "payload": {
+              "completed": 1,
+              "total": 7,
+              "fraction": 0.14285714285714285
+            }
+          },
+          {
+            "event": "track.started",
+            "seq": 304,
+            "jobId": "3576f3b8-4600-4790-aefc-9194dad7147a",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 305,
+            "jobId": "3576f3b8-4600-4790-aefc-9194dad7147a",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 306,
+            "jobId": "3576f3b8-4600-4790-aefc-9194dad7147a",
+            "trackKey": "2",
+            "payload": {}
+          }
+        ],
+        "eventCounts": {
+          "job.created": 1,
+          "entity.resolved": 1,
+          "plan.created": 1,
+          "track.started": 2,
+          "variant.selected": 2,
+          "download.started": 2,
+          "track.progress": 309,
+          "download.completed": 1,
+          "metadata.written": 1,
+          "validation.completed": 1,
+          "job.progress": 1
+        },
+        "progressByTrack": {
+          "1": {
+            "count": 293,
+            "first": {
+              "seq": 7,
+              "bytes": 15205
+            },
+            "last": {
+              "seq": 302,
+              "bytes": 6061244
+            }
+          },
+          "2": {
+            "count": 16,
+            "first": {
+              "seq": 307,
+              "bytes": 15209
+            },
+            "last": {
+              "seq": 322,
+              "bytes": 359273
+            }
+          }
+        },
+        "privacyPassed": true,
+        "stderrBytes": 12,
+        "jobId": "3576f3b8-4600-4790-aefc-9194dad7147a",
+        "firstProgress": {
+          "event": "track.progress",
+          "seq": 7,
+          "jobId": "3576f3b8-4600-4790-aefc-9194dad7147a",
+          "trackKey": "1",
+          "payload": {
+            "bytes": 15205,
+            "fraction": 0.0025085609488745214,
+            "speed": 12402.120717781403,
+            "eta": 487500.4152581388
+          }
+        },
+        "signalAt": "2026-10-14T12:26:43.563Z",
+        "signalBytes": 342889,
+        "ctrlCSent": true,
+        "code": 4,
+        "signal": null,
+        "finishedAt": "2026-10-14T12:26:46.082Z"
+      },
+      "before": {
+        "counts": {
+          "completed": 1,
+          "skipped": 0,
+          "failed": 0,
+          "paused": 1,
+          "unavailable": 0,
+          "queued": 5
+        },
+        "completedFiles": [
+          {
+            "trackKey": "1",
+            "file": "album-2/Горизонт/01 - ЛегендаРус - Горизонт.mp3",
+            "bytes": 6105186,
+            "sha256": "3899c0562f0347490531d14eb50258084ccc787854a85903f4e0466362d72363",
+            "mtimeNs": "1791980800990034900",
+            "inode": "844424930312931",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 252526
+            },
+            "tags": {
+              "title": "Горизонт",
+              "artist": "ЛегендаРус",
+              "album": "Горизонт",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 42604
+                }
+              ]
+            }
+          }
+        ],
+        "partialFiles": [
+          {
+            "trackKey": "2",
+            "bytes": 359273,
+            "manifestBytes": 359273
+          }
+        ]
+      },
+      "manifestPrivacyBefore": true,
+      "resume": {
+        "args": [
+          "resume",
+          "3576f3b8-4600-4790-aefc-9194dad7147a",
+          "--json",
+          "--concurrency",
+          "1"
+        ],
+        "startedAt": "2026-10-14T12:26:46.105Z",
+        "events": [
+          {
+            "event": "download.started",
+            "seq": 1,
+            "jobId": "3576f3b8-4600-4790-aefc-9194dad7147a",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 272,
+            "jobId": "3576f3b8-4600-4790-aefc-9194dad7147a",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 273,
+            "jobId": "3576f3b8-4600-4790-aefc-9194dad7147a",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 274,
+            "jobId": "3576f3b8-4600-4790-aefc-9194dad7147a",
+            "trackKey": "2",
+            "payload": {
+              "durationMs": 198139
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 276,
+            "jobId": "3576f3b8-4600-4790-aefc-9194dad7147a",
+            "payload": {
+              "completed": 2,
+              "total": 7,
+              "fraction": 0.2857142857142857
+            }
+          },
+          {
+            "event": "track.started",
+            "seq": 277,
+            "jobId": "3576f3b8-4600-4790-aefc-9194dad7147a",
+            "trackKey": "3",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 278,
+            "jobId": "3576f3b8-4600-4790-aefc-9194dad7147a",
+            "trackKey": "3",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 279,
+            "jobId": "3576f3b8-4600-4790-aefc-9194dad7147a",
+            "trackKey": "3",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 491,
+            "jobId": "3576f3b8-4600-4790-aefc-9194dad7147a",
+            "trackKey": "3",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 492,
+            "jobId": "3576f3b8-4600-4790-aefc-9194dad7147a",
+            "trackKey": "3",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 493,
+            "jobId": "3576f3b8-4600-4790-aefc-9194dad7147a",
+            "trackKey": "3",
+            "payload": {
+              "durationMs": 253179
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 495,
+            "jobId": "3576f3b8-4600-4790-aefc-9194dad7147a",
+            "payload": {
+              "completed": 3,
+              "total": 7,
+              "fraction": 0.42857142857142855
+            }
+          },
+          {
+            "event": "track.started",
+            "seq": 496,
+            "jobId": "3576f3b8-4600-4790-aefc-9194dad7147a",
+            "trackKey": "4",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 497,
+            "jobId": "3576f3b8-4600-4790-aefc-9194dad7147a",
+            "trackKey": "4",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 498,
+            "jobId": "3576f3b8-4600-4790-aefc-9194dad7147a",
+            "trackKey": "4",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 695,
+            "jobId": "3576f3b8-4600-4790-aefc-9194dad7147a",
+            "trackKey": "4",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 696,
+            "jobId": "3576f3b8-4600-4790-aefc-9194dad7147a",
+            "trackKey": "4",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 697,
+            "jobId": "3576f3b8-4600-4790-aefc-9194dad7147a",
+            "trackKey": "4",
+            "payload": {
+              "durationMs": 157780
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 699,
+            "jobId": "3576f3b8-4600-4790-aefc-9194dad7147a",
+            "payload": {
+              "completed": 4,
+              "total": 7,
+              "fraction": 0.5714285714285714
+            }
+          },
+          {
+            "event": "track.started",
+            "seq": 700,
+            "jobId": "3576f3b8-4600-4790-aefc-9194dad7147a",
+            "trackKey": "5",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 701,
+            "jobId": "3576f3b8-4600-4790-aefc-9194dad7147a",
+            "trackKey": "5",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 702,
+            "jobId": "3576f3b8-4600-4790-aefc-9194dad7147a",
+            "trackKey": "5",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 1020,
+            "jobId": "3576f3b8-4600-4790-aefc-9194dad7147a",
+            "trackKey": "5",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 1021,
+            "jobId": "3576f3b8-4600-4790-aefc-9194dad7147a",
+            "trackKey": "5",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 1022,
+            "jobId": "3576f3b8-4600-4790-aefc-9194dad7147a",
+            "trackKey": "5",
+            "payload": {
+              "durationMs": 296699
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 1024,
+            "jobId": "3576f3b8-4600-4790-aefc-9194dad7147a",
+            "payload": {
+              "completed": 5,
+              "total": 7,
+              "fraction": 0.7142857142857143
+            }
+          },
+          {
+            "event": "track.started",
+            "seq": 1025,
+            "jobId": "3576f3b8-4600-4790-aefc-9194dad7147a",
+            "trackKey": "6",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 1026,
+            "jobId": "3576f3b8-4600-4790-aefc-9194dad7147a",
+            "trackKey": "6",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 1027,
+            "jobId": "3576f3b8-4600-4790-aefc-9194dad7147a",
+            "trackKey": "6",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 1255,
+            "jobId": "3576f3b8-4600-4790-aefc-9194dad7147a",
+            "trackKey": "6",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 1256,
+            "jobId": "3576f3b8-4600-4790-aefc-9194dad7147a",
+            "trackKey": "6",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 1257,
+            "jobId": "3576f3b8-4600-4790-aefc-9194dad7147a",
+            "trackKey": "6",
+            "payload": {
+              "durationMs": 164937
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 1259,
+            "jobId": "3576f3b8-4600-4790-aefc-9194dad7147a",
+            "payload": {
+              "completed": 6,
+              "total": 7,
+              "fraction": 0.8571428571428571
+            }
+          },
+          {
+            "event": "track.started",
+            "seq": 1260,
+            "jobId": "3576f3b8-4600-4790-aefc-9194dad7147a",
+            "trackKey": "7",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 1261,
+            "jobId": "3576f3b8-4600-4790-aefc-9194dad7147a",
+            "trackKey": "7",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 1262,
+            "jobId": "3576f3b8-4600-4790-aefc-9194dad7147a",
+            "trackKey": "7",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 1485,
+            "jobId": "3576f3b8-4600-4790-aefc-9194dad7147a",
+            "trackKey": "7",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 1486,
+            "jobId": "3576f3b8-4600-4790-aefc-9194dad7147a",
+            "trackKey": "7",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 1487,
+            "jobId": "3576f3b8-4600-4790-aefc-9194dad7147a",
+            "trackKey": "7",
+            "payload": {
+              "durationMs": 162142
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 1489,
+            "jobId": "3576f3b8-4600-4790-aefc-9194dad7147a",
+            "payload": {
+              "completed": 7,
+              "total": 7,
+              "fraction": 1
+            }
+          },
+          {
+            "event": "job.completed",
+            "seq": 1490,
+            "jobId": "3576f3b8-4600-4790-aefc-9194dad7147a",
+            "payload": {}
+          }
+        ],
+        "eventCounts": {
+          "download.started": 6,
+          "track.progress": 1449,
+          "download.completed": 6,
+          "metadata.written": 6,
+          "validation.completed": 6,
+          "job.progress": 6,
+          "track.started": 5,
+          "variant.selected": 5,
+          "job.completed": 1
+        },
+        "progressByTrack": {
+          "2": {
+            "count": 271,
+            "first": {
+              "seq": 2,
+              "bytes": 359273
+            },
+            "last": {
+              "seq": 275,
+              "bytes": 4755957
+            }
+          },
+          "3": {
+            "count": 212,
+            "first": {
+              "seq": 280,
+              "bytes": 15209
+            },
+            "last": {
+              "seq": 494,
+              "bytes": 6076917
+            }
+          },
+          "4": {
+            "count": 197,
+            "first": {
+              "seq": 499,
+              "bytes": 15209
+            },
+            "last": {
+              "seq": 698,
+              "bytes": 3787337
+            }
+          },
+          "5": {
+            "count": 318,
+            "first": {
+              "seq": 703,
+              "bytes": 15209
+            },
+            "last": {
+              "seq": 1023,
+              "bytes": 7121397
+            }
+          },
+          "6": {
+            "count": 228,
+            "first": {
+              "seq": 1028,
+              "bytes": 15209
+            },
+            "last": {
+              "seq": 1258,
+              "bytes": 3959118
+            }
+          },
+          "7": {
+            "count": 223,
+            "first": {
+              "seq": 1263,
+              "bytes": 15209
+            },
+            "last": {
+              "seq": 1488,
+              "bytes": 3892035
+            }
+          }
+        },
+        "privacyPassed": true,
+        "stderrBytes": 0,
+        "jobId": "3576f3b8-4600-4790-aefc-9194dad7147a",
+        "firstProgress": {
+          "event": "track.progress",
+          "seq": 2,
+          "jobId": "3576f3b8-4600-4790-aefc-9194dad7147a",
+          "trackKey": "2",
+          "payload": {
+            "bytes": 359273,
+            "fraction": 0.07554168382935338,
+            "speed": 0
+          }
+        },
+        "code": 0,
+        "signal": null,
+        "finishedAt": "2026-10-14T12:27:10.290Z"
+      },
+      "after": {
+        "counts": {
+          "completed": 7,
+          "skipped": 0,
+          "failed": 0,
+          "paused": 0,
+          "unavailable": 0,
+          "queued": 0
+        },
+        "total": 7,
+        "files": [
+          {
+            "trackKey": "1",
+            "file": "album-2/Горизонт/01 - ЛегендаРус - Горизонт.mp3",
+            "bytes": 6105186,
+            "sha256": "3899c0562f0347490531d14eb50258084ccc787854a85903f4e0466362d72363",
+            "mtimeNs": "1791980800990034900",
+            "inode": "844424930312931",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 252526
+            },
+            "tags": {
+              "title": "Горизонт",
+              "artist": "ЛегендаРус",
+              "album": "Горизонт",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 42604
+                }
+              ]
+            }
+          },
+          {
+            "trackKey": "2",
+            "file": "album-2/Горизонт/02 - ЛегендаРус - Богатый Город.mp3",
+            "bytes": 4799908,
+            "sha256": "fddc9cbc25d9d7872ad95b7e4db96612326e139176716acef465d2fb059437c2",
+            "mtimeNs": "1791980812232910000",
+            "inode": "2251799813866206",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 198139
+            },
+            "tags": {
+              "title": "Богатый Город",
+              "artist": "ЛегендаРус",
+              "album": "Горизонт",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 42604
+                }
+              ]
+            }
+          },
+          {
+            "trackKey": "3",
+            "file": "album-2/Горизонт/03 - ЛегендаРус - Старые Кроссовки.mp3",
+            "bytes": 6120874,
+            "sha256": "905bb68297725b4fd0ec3b3f96c5c496d1b5342c171801b5f7aed0799fad663a",
+            "mtimeNs": "1791980815873426600",
+            "inode": "4503599627551462",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 253179
+            },
+            "tags": {
+              "title": "Старые Кроссовки",
+              "artist": "ЛегендаРус",
+              "album": "Горизонт",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 42604
+                }
+              ]
+            }
+          },
+          {
+            "trackKey": "4",
+            "file": "album-2/Горизонт/04 - ЛегендаРус - Зарница - Пляшем Вместе.mp3",
+            "bytes": 3831305,
+            "sha256": "0a39d3e8a43a8d7bd3b9799a7757ad142c6c5142443d97a6b75472ebb83c1ea2",
+            "mtimeNs": "1791980818722289300",
+            "inode": "5066549580972726",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 157780
+            },
+            "tags": {
+              "title": "Зарница - Пляшем Вместе",
+              "artist": "ЛегендаРус",
+              "album": "Горизонт",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 42604
+                }
+              ]
+            }
+          },
+          {
+            "trackKey": "5",
+            "file": "album-2/Горизонт/05 - ЛегендаРус - Путь Моряка.mp3",
+            "bytes": 7165344,
+            "sha256": "71615196f8f4dce344136495e15cb3261eaf2d492d8bff3f9f34f1ddf915465e",
+            "mtimeNs": "1791980821636277100",
+            "inode": "3377699720708842",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 296699
+            },
+            "tags": {
+              "title": "Путь Моряка",
+              "artist": "ЛегендаРус",
+              "album": "Горизонт",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 42604
+                }
+              ]
+            }
+          },
+          {
+            "trackKey": "6",
+            "file": "album-2/Горизонт/06 - ЛегендаРус - Цена Победы.mp3",
+            "bytes": 4003065,
+            "sha256": "b1c6d0e473f23b3a612532e5952c54b35069972fff656b69d8022a565553d080",
+            "mtimeNs": "1791980824398037400",
+            "inode": "3377699720708844",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 164937
+            },
+            "tags": {
+              "title": "Цена Победы",
+              "artist": "ЛегендаРус",
+              "album": "Горизонт",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 42604
+                }
+              ]
+            }
+          },
+          {
+            "trackKey": "7",
+            "file": "album-2/Горизонт/07 - ЛегендаРус - Малая Земля.mp3",
+            "bytes": 3935982,
+            "sha256": "fbf2effe83f6f1ce708475343399fbf1e729e74d8c82d29c5386df6be3f5dbf2",
+            "mtimeNs": "1791980827970388500",
+            "inode": "3096224743998190",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 162142
+            },
+            "tags": {
+              "title": "Малая Земля",
+              "artist": "ЛегендаРус",
+              "album": "Горизонт",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 42604
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "manifestPrivacyAfter": true,
+      "preservedCompleted": true,
+      "noRepeatedCompletedDownloads": true,
+      "partsRemaining": 0,
+      "referencedPartsRemaining": 0,
+      "failedAttemptCount": 0,
+      "playlistSidecars": [],
+      "finishedAt": "2026-10-14T12:27:10.351Z"
+    },
+    {
+      "kind": "album",
+      "iteration": 3,
+      "startedAt": "2026-10-14T12:27:10.354Z",
+      "pass": true,
+      "download": {
+        "args": [
+          "album",
+          "https://music.yandex.ru/album/41904408",
+          "--json",
+          "--quality",
+          "best",
+          "--concurrency",
+          "1",
+          "--output",
+          "C:\\Users\\vboxuser\\test2\\music-downloader-check-w0kud8\\album-3"
+        ],
+        "startedAt": "2026-10-14T12:27:10.357Z",
+        "events": [
+          {
+            "event": "job.created",
+            "seq": 1,
+            "jobId": "457b8400-4545-47f9-ad2b-30203c34a6ca",
+            "payload": {}
+          },
+          {
+            "event": "entity.resolved",
+            "seq": 2,
+            "jobId": "457b8400-4545-47f9-ad2b-30203c34a6ca",
+            "payload": {}
+          },
+          {
+            "event": "plan.created",
+            "seq": 3,
+            "jobId": "457b8400-4545-47f9-ad2b-30203c34a6ca",
+            "payload": {}
+          },
+          {
+            "event": "track.started",
+            "seq": 4,
+            "jobId": "457b8400-4545-47f9-ad2b-30203c34a6ca",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 5,
+            "jobId": "457b8400-4545-47f9-ad2b-30203c34a6ca",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 6,
+            "jobId": "457b8400-4545-47f9-ad2b-30203c34a6ca",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 283,
+            "jobId": "457b8400-4545-47f9-ad2b-30203c34a6ca",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 284,
+            "jobId": "457b8400-4545-47f9-ad2b-30203c34a6ca",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 285,
+            "jobId": "457b8400-4545-47f9-ad2b-30203c34a6ca",
+            "trackKey": "1",
+            "payload": {
+              "durationMs": 252526
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 287,
+            "jobId": "457b8400-4545-47f9-ad2b-30203c34a6ca",
+            "payload": {
+              "completed": 1,
+              "total": 7,
+              "fraction": 0.14285714285714285
+            }
+          },
+          {
+            "event": "track.started",
+            "seq": 288,
+            "jobId": "457b8400-4545-47f9-ad2b-30203c34a6ca",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 289,
+            "jobId": "457b8400-4545-47f9-ad2b-30203c34a6ca",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 290,
+            "jobId": "457b8400-4545-47f9-ad2b-30203c34a6ca",
+            "trackKey": "2",
+            "payload": {}
+          }
+        ],
+        "eventCounts": {
+          "job.created": 1,
+          "entity.resolved": 1,
+          "plan.created": 1,
+          "track.started": 2,
+          "variant.selected": 2,
+          "download.started": 2,
+          "track.progress": 295,
+          "download.completed": 1,
+          "metadata.written": 1,
+          "validation.completed": 1,
+          "job.progress": 1
+        },
+        "progressByTrack": {
+          "1": {
+            "count": 277,
+            "first": {
+              "seq": 7,
+              "bytes": 15205
+            },
+            "last": {
+              "seq": 286,
+              "bytes": 6061244
+            }
+          },
+          "2": {
+            "count": 18,
+            "first": {
+              "seq": 291,
+              "bytes": 15211
+            },
+            "last": {
+              "seq": 308,
+              "bytes": 293739
+            }
+          }
+        },
+        "privacyPassed": true,
+        "stderrBytes": 12,
+        "jobId": "457b8400-4545-47f9-ad2b-30203c34a6ca",
+        "firstProgress": {
+          "event": "track.progress",
+          "seq": 7,
+          "jobId": "457b8400-4545-47f9-ad2b-30203c34a6ca",
+          "trackKey": "1",
+          "payload": {
+            "bytes": 15205,
+            "fraction": 0.0025085609488745214,
+            "speed": 11415.165165165165,
+            "eta": 529649.7170667545
+          }
+        },
+        "signalAt": "2026-10-14T12:27:19.883Z",
+        "signalBytes": 277355,
+        "ctrlCSent": true,
+        "code": 4,
+        "signal": null,
+        "finishedAt": "2026-10-14T12:27:22.421Z"
+      },
+      "before": {
+        "counts": {
+          "completed": 1,
+          "skipped": 0,
+          "failed": 0,
+          "paused": 1,
+          "unavailable": 0,
+          "queued": 5
+        },
+        "completedFiles": [
+          {
+            "trackKey": "1",
+            "file": "album-3/Горизонт/01 - ЛегендаРус - Горизонт.mp3",
+            "bytes": 6105186,
+            "sha256": "3899c0562f0347490531d14eb50258084ccc787854a85903f4e0466362d72363",
+            "mtimeNs": "1791980837656483700",
+            "inode": "844424930312954",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 252526
+            },
+            "tags": {
+              "title": "Горизонт",
+              "artist": "ЛегендаРус",
+              "album": "Горизонт",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 42604
+                }
+              ]
+            }
+          }
+        ],
+        "partialFiles": [
+          {
+            "trackKey": "2",
+            "bytes": 293739,
+            "manifestBytes": 293739
+          }
+        ]
+      },
+      "manifestPrivacyBefore": true,
+      "resume": {
+        "args": [
+          "resume",
+          "457b8400-4545-47f9-ad2b-30203c34a6ca",
+          "--json",
+          "--concurrency",
+          "1"
+        ],
+        "startedAt": "2026-10-14T12:27:22.446Z",
+        "events": [
+          {
+            "event": "download.started",
+            "seq": 1,
+            "jobId": "457b8400-4545-47f9-ad2b-30203c34a6ca",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 276,
+            "jobId": "457b8400-4545-47f9-ad2b-30203c34a6ca",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 277,
+            "jobId": "457b8400-4545-47f9-ad2b-30203c34a6ca",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 278,
+            "jobId": "457b8400-4545-47f9-ad2b-30203c34a6ca",
+            "trackKey": "2",
+            "payload": {
+              "durationMs": 198139
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 280,
+            "jobId": "457b8400-4545-47f9-ad2b-30203c34a6ca",
+            "payload": {
+              "completed": 2,
+              "total": 7,
+              "fraction": 0.2857142857142857
+            }
+          },
+          {
+            "event": "track.started",
+            "seq": 281,
+            "jobId": "457b8400-4545-47f9-ad2b-30203c34a6ca",
+            "trackKey": "3",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 282,
+            "jobId": "457b8400-4545-47f9-ad2b-30203c34a6ca",
+            "trackKey": "3",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 283,
+            "jobId": "457b8400-4545-47f9-ad2b-30203c34a6ca",
+            "trackKey": "3",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 552,
+            "jobId": "457b8400-4545-47f9-ad2b-30203c34a6ca",
+            "trackKey": "3",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 553,
+            "jobId": "457b8400-4545-47f9-ad2b-30203c34a6ca",
+            "trackKey": "3",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 554,
+            "jobId": "457b8400-4545-47f9-ad2b-30203c34a6ca",
+            "trackKey": "3",
+            "payload": {
+              "durationMs": 253179
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 556,
+            "jobId": "457b8400-4545-47f9-ad2b-30203c34a6ca",
+            "payload": {
+              "completed": 3,
+              "total": 7,
+              "fraction": 0.42857142857142855
+            }
+          },
+          {
+            "event": "track.started",
+            "seq": 557,
+            "jobId": "457b8400-4545-47f9-ad2b-30203c34a6ca",
+            "trackKey": "4",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 558,
+            "jobId": "457b8400-4545-47f9-ad2b-30203c34a6ca",
+            "trackKey": "4",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 559,
+            "jobId": "457b8400-4545-47f9-ad2b-30203c34a6ca",
+            "trackKey": "4",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 760,
+            "jobId": "457b8400-4545-47f9-ad2b-30203c34a6ca",
+            "trackKey": "4",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 761,
+            "jobId": "457b8400-4545-47f9-ad2b-30203c34a6ca",
+            "trackKey": "4",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 762,
+            "jobId": "457b8400-4545-47f9-ad2b-30203c34a6ca",
+            "trackKey": "4",
+            "payload": {
+              "durationMs": 157780
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 764,
+            "jobId": "457b8400-4545-47f9-ad2b-30203c34a6ca",
+            "payload": {
+              "completed": 4,
+              "total": 7,
+              "fraction": 0.5714285714285714
+            }
+          },
+          {
+            "event": "track.started",
+            "seq": 765,
+            "jobId": "457b8400-4545-47f9-ad2b-30203c34a6ca",
+            "trackKey": "5",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 766,
+            "jobId": "457b8400-4545-47f9-ad2b-30203c34a6ca",
+            "trackKey": "5",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 767,
+            "jobId": "457b8400-4545-47f9-ad2b-30203c34a6ca",
+            "trackKey": "5",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 1002,
+            "jobId": "457b8400-4545-47f9-ad2b-30203c34a6ca",
+            "trackKey": "5",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 1003,
+            "jobId": "457b8400-4545-47f9-ad2b-30203c34a6ca",
+            "trackKey": "5",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 1004,
+            "jobId": "457b8400-4545-47f9-ad2b-30203c34a6ca",
+            "trackKey": "5",
+            "payload": {
+              "durationMs": 296699
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 1006,
+            "jobId": "457b8400-4545-47f9-ad2b-30203c34a6ca",
+            "payload": {
+              "completed": 5,
+              "total": 7,
+              "fraction": 0.7142857142857143
+            }
+          },
+          {
+            "event": "track.started",
+            "seq": 1007,
+            "jobId": "457b8400-4545-47f9-ad2b-30203c34a6ca",
+            "trackKey": "6",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 1008,
+            "jobId": "457b8400-4545-47f9-ad2b-30203c34a6ca",
+            "trackKey": "6",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 1009,
+            "jobId": "457b8400-4545-47f9-ad2b-30203c34a6ca",
+            "trackKey": "6",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 1129,
+            "jobId": "457b8400-4545-47f9-ad2b-30203c34a6ca",
+            "trackKey": "6",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 1130,
+            "jobId": "457b8400-4545-47f9-ad2b-30203c34a6ca",
+            "trackKey": "6",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 1131,
+            "jobId": "457b8400-4545-47f9-ad2b-30203c34a6ca",
+            "trackKey": "6",
+            "payload": {
+              "durationMs": 164937
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 1133,
+            "jobId": "457b8400-4545-47f9-ad2b-30203c34a6ca",
+            "payload": {
+              "completed": 6,
+              "total": 7,
+              "fraction": 0.8571428571428571
+            }
+          },
+          {
+            "event": "track.started",
+            "seq": 1134,
+            "jobId": "457b8400-4545-47f9-ad2b-30203c34a6ca",
+            "trackKey": "7",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 1135,
+            "jobId": "457b8400-4545-47f9-ad2b-30203c34a6ca",
+            "trackKey": "7",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 1136,
+            "jobId": "457b8400-4545-47f9-ad2b-30203c34a6ca",
+            "trackKey": "7",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 1279,
+            "jobId": "457b8400-4545-47f9-ad2b-30203c34a6ca",
+            "trackKey": "7",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 1280,
+            "jobId": "457b8400-4545-47f9-ad2b-30203c34a6ca",
+            "trackKey": "7",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 1281,
+            "jobId": "457b8400-4545-47f9-ad2b-30203c34a6ca",
+            "trackKey": "7",
+            "payload": {
+              "durationMs": 162142
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 1283,
+            "jobId": "457b8400-4545-47f9-ad2b-30203c34a6ca",
+            "payload": {
+              "completed": 7,
+              "total": 7,
+              "fraction": 1
+            }
+          },
+          {
+            "event": "job.completed",
+            "seq": 1284,
+            "jobId": "457b8400-4545-47f9-ad2b-30203c34a6ca",
+            "payload": {}
+          }
+        ],
+        "eventCounts": {
+          "download.started": 6,
+          "track.progress": 1243,
+          "download.completed": 6,
+          "metadata.written": 6,
+          "validation.completed": 6,
+          "job.progress": 6,
+          "track.started": 5,
+          "variant.selected": 5,
+          "job.completed": 1
+        },
+        "progressByTrack": {
+          "2": {
+            "count": 275,
+            "first": {
+              "seq": 2,
+              "bytes": 293739
+            },
+            "last": {
+              "seq": 279,
+              "bytes": 4755957
+            }
+          },
+          "3": {
+            "count": 269,
+            "first": {
+              "seq": 284,
+              "bytes": 15209
+            },
+            "last": {
+              "seq": 555,
+              "bytes": 6076917
+            }
+          },
+          "4": {
+            "count": 201,
+            "first": {
+              "seq": 560,
+              "bytes": 15211
+            },
+            "last": {
+              "seq": 763,
+              "bytes": 3787337
+            }
+          },
+          "5": {
+            "count": 235,
+            "first": {
+              "seq": 768,
+              "bytes": 15211
+            },
+            "last": {
+              "seq": 1005,
+              "bytes": 7121397
+            }
+          },
+          "6": {
+            "count": 120,
+            "first": {
+              "seq": 1010,
+              "bytes": 15209
+            },
+            "last": {
+              "seq": 1132,
+              "bytes": 3959118
+            }
+          },
+          "7": {
+            "count": 143,
+            "first": {
+              "seq": 1137,
+              "bytes": 15209
+            },
+            "last": {
+              "seq": 1282,
+              "bytes": 3892035
+            }
+          }
+        },
+        "privacyPassed": true,
+        "stderrBytes": 0,
+        "jobId": "457b8400-4545-47f9-ad2b-30203c34a6ca",
+        "firstProgress": {
+          "event": "track.progress",
+          "seq": 2,
+          "jobId": "457b8400-4545-47f9-ad2b-30203c34a6ca",
+          "trackKey": "2",
+          "payload": {
+            "bytes": 293739,
+            "fraction": 0.061762333006795476,
+            "speed": 0
+          }
+        },
+        "code": 0,
+        "signal": null,
+        "finishedAt": "2026-10-14T12:27:47.960Z"
+      },
+      "after": {
+        "counts": {
+          "completed": 7,
+          "skipped": 0,
+          "failed": 0,
+          "paused": 0,
+          "unavailable": 0,
+          "queued": 0
+        },
+        "total": 7,
+        "files": [
+          {
+            "trackKey": "1",
+            "file": "album-3/Горизонт/01 - ЛегендаРус - Горизонт.mp3",
+            "bytes": 6105186,
+            "sha256": "3899c0562f0347490531d14eb50258084ccc787854a85903f4e0466362d72363",
+            "mtimeNs": "1791980837656483700",
+            "inode": "844424930312954",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 252526
+            },
+            "tags": {
+              "title": "Горизонт",
+              "artist": "ЛегендаРус",
+              "album": "Горизонт",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 42604
+                }
+              ]
+            }
+          },
+          {
+            "trackKey": "2",
+            "file": "album-3/Горизонт/02 - ЛегендаРус - Богатый Город.mp3",
+            "bytes": 4799908,
+            "sha256": "fddc9cbc25d9d7872ad95b7e4db96612326e139176716acef465d2fb059437c2",
+            "mtimeNs": "1791980848850102700",
+            "inode": "2251799813866229",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 198139
+            },
+            "tags": {
+              "title": "Богатый Город",
+              "artist": "ЛегендаРус",
+              "album": "Горизонт",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 42604
+                }
+              ]
+            }
+          },
+          {
+            "trackKey": "3",
+            "file": "album-3/Горизонт/03 - ЛегендаРус - Старые Кроссовки.mp3",
+            "bytes": 6120874,
+            "sha256": "905bb68297725b4fd0ec3b3f96c5c496d1b5342c171801b5f7aed0799fad663a",
+            "mtimeNs": "1791980852158811800",
+            "inode": "3659174697419518",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 253179
+            },
+            "tags": {
+              "title": "Старые Кроссовки",
+              "artist": "ЛегендаРус",
+              "album": "Горизонт",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 42604
+                }
+              ]
+            }
+          },
+          {
+            "trackKey": "4",
+            "file": "album-3/Горизонт/04 - ЛегендаРус - Зарница - Пляшем Вместе.mp3",
+            "bytes": 3831305,
+            "sha256": "0a39d3e8a43a8d7bd3b9799a7757ad142c6c5142443d97a6b75472ebb83c1ea2",
+            "mtimeNs": "1791980855377585000",
+            "inode": "2814749767287552",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 157780
+            },
+            "tags": {
+              "title": "Зарница - Пляшем Вместе",
+              "artist": "ЛегендаРус",
+              "album": "Горизонт",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 42604
+                }
+              ]
+            }
+          },
+          {
+            "trackKey": "5",
+            "file": "album-3/Горизонт/05 - ЛегендаРус - Путь Моряка.mp3",
+            "bytes": 7165344,
+            "sha256": "71615196f8f4dce344136495e15cb3261eaf2d492d8bff3f9f34f1ddf915465e",
+            "mtimeNs": "1791980858808544600",
+            "inode": "3377699720708865",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 296699
+            },
+            "tags": {
+              "title": "Путь Моряка",
+              "artist": "ЛегендаРус",
+              "album": "Горизонт",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 42604
+                }
+              ]
+            }
+          },
+          {
+            "trackKey": "6",
+            "file": "album-3/Горизонт/06 - ЛегендаРус - Цена Победы.mp3",
+            "bytes": 4003065,
+            "sha256": "b1c6d0e473f23b3a612532e5952c54b35069972fff656b69d8022a565553d080",
+            "mtimeNs": "1791980862156693500",
+            "inode": "3096224743998212",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 164937
+            },
+            "tags": {
+              "title": "Цена Победы",
+              "artist": "ЛегендаРус",
+              "album": "Горизонт",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 42604
+                }
+              ]
+            }
+          },
+          {
+            "trackKey": "7",
+            "file": "album-3/Горизонт/07 - ЛегендаРус - Малая Земля.mp3",
+            "bytes": 3935982,
+            "sha256": "fbf2effe83f6f1ce708475343399fbf1e729e74d8c82d29c5386df6be3f5dbf2",
+            "mtimeNs": "1791980865591635900",
+            "inode": "2814749767287558",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 162142
+            },
+            "tags": {
+              "title": "Малая Земля",
+              "artist": "ЛегендаРус",
+              "album": "Горизонт",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 42604
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "manifestPrivacyAfter": true,
+      "preservedCompleted": true,
+      "noRepeatedCompletedDownloads": true,
+      "partsRemaining": 0,
+      "referencedPartsRemaining": 0,
+      "failedAttemptCount": 0,
+      "playlistSidecars": [],
+      "finishedAt": "2026-10-14T12:27:48.017Z"
+    },
+    {
+      "kind": "playlist",
+      "iteration": 1,
+      "startedAt": "2026-10-14T12:27:48.020Z",
+      "pass": true,
+      "download": {
+        "args": [
+          "playlist",
+          "https://music.yandex.ru/playlists/0eac681b-5642-dd74-bc4a-76b20280de38",
+          "--json",
+          "--quality",
+          "best",
+          "--concurrency",
+          "1",
+          "--output",
+          "C:\\Users\\vboxuser\\test2\\music-downloader-check-w0kud8\\playlist-1"
+        ],
+        "startedAt": "2026-10-14T12:27:48.025Z",
+        "events": [
+          {
+            "event": "job.created",
+            "seq": 1,
+            "jobId": "4fa31b15-5b4f-4b5d-872e-33f0f65b29f6",
+            "payload": {}
+          },
+          {
+            "event": "entity.resolved",
+            "seq": 2,
+            "jobId": "4fa31b15-5b4f-4b5d-872e-33f0f65b29f6",
+            "payload": {}
+          },
+          {
+            "event": "plan.created",
+            "seq": 3,
+            "jobId": "4fa31b15-5b4f-4b5d-872e-33f0f65b29f6",
+            "payload": {}
+          },
+          {
+            "event": "track.started",
+            "seq": 4,
+            "jobId": "4fa31b15-5b4f-4b5d-872e-33f0f65b29f6",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 5,
+            "jobId": "4fa31b15-5b4f-4b5d-872e-33f0f65b29f6",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 6,
+            "jobId": "4fa31b15-5b4f-4b5d-872e-33f0f65b29f6",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 206,
+            "jobId": "4fa31b15-5b4f-4b5d-872e-33f0f65b29f6",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 207,
+            "jobId": "4fa31b15-5b4f-4b5d-872e-33f0f65b29f6",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 208,
+            "jobId": "4fa31b15-5b4f-4b5d-872e-33f0f65b29f6",
+            "trackKey": "1",
+            "payload": {
+              "durationMs": 187847
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 210,
+            "jobId": "4fa31b15-5b4f-4b5d-872e-33f0f65b29f6",
+            "payload": {
+              "completed": 1,
+              "total": 2,
+              "fraction": 0.5
+            }
+          },
+          {
+            "event": "track.started",
+            "seq": 211,
+            "jobId": "4fa31b15-5b4f-4b5d-872e-33f0f65b29f6",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 212,
+            "jobId": "4fa31b15-5b4f-4b5d-872e-33f0f65b29f6",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 213,
+            "jobId": "4fa31b15-5b4f-4b5d-872e-33f0f65b29f6",
+            "trackKey": "2",
+            "payload": {}
+          }
+        ],
+        "eventCounts": {
+          "job.created": 1,
+          "entity.resolved": 1,
+          "plan.created": 1,
+          "track.started": 2,
+          "variant.selected": 2,
+          "download.started": 2,
+          "track.progress": 217,
+          "download.completed": 1,
+          "metadata.written": 1,
+          "validation.completed": 1,
+          "job.progress": 1
+        },
+        "progressByTrack": {
+          "1": {
+            "count": 200,
+            "first": {
+              "seq": 7,
+              "bytes": 15205
+            },
+            "last": {
+              "seq": 209,
+              "bytes": 4508943
+            }
+          },
+          "2": {
+            "count": 17,
+            "first": {
+              "seq": 214,
+              "bytes": 15205
+            },
+            "last": {
+              "seq": 230,
+              "bytes": 277349
+            }
+          }
+        },
+        "privacyPassed": true,
+        "stderrBytes": 12,
+        "jobId": "4fa31b15-5b4f-4b5d-872e-33f0f65b29f6",
+        "firstProgress": {
+          "event": "track.progress",
+          "seq": 7,
+          "jobId": "4fa31b15-5b4f-4b5d-872e-33f0f65b29f6",
+          "trackKey": "1",
+          "payload": {
+            "bytes": 15205,
+            "fraction": 0.003372187228802848,
+            "speed": 11090.444930707512,
+            "eta": 405190.055771128
+          }
+        },
+        "signalAt": "2026-10-14T12:27:59.606Z",
+        "signalBytes": 277349,
+        "ctrlCSent": true,
+        "code": 4,
+        "signal": null,
+        "finishedAt": "2026-10-14T12:28:02.125Z"
+      },
+      "before": {
+        "counts": {
+          "completed": 1,
+          "skipped": 0,
+          "failed": 0,
+          "paused": 1,
+          "unavailable": 0,
+          "queued": 0
+        },
+        "completedFiles": [
+          {
+            "trackKey": "1",
+            "file": "playlist-1/Новый плейлист/01 - Проект ВОП - Ты и я.mp3",
+            "bytes": 4537650,
+            "sha256": "04620019ba88242c90508dc22573417bd732469f4f8fb6f67eda50956b41f2a6",
+            "mtimeNs": "1791980876717870400",
+            "inode": "844424930312980",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 187847
+            },
+            "tags": {
+              "title": "Ты и я",
+              "artist": "Проект ВОП",
+              "album": "Ты и я",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 27374
+                }
+              ]
+            }
+          }
+        ],
+        "partialFiles": [
+          {
+            "trackKey": "2",
+            "bytes": 277349,
+            "manifestBytes": 277349
+          }
+        ]
+      },
+      "manifestPrivacyBefore": true,
+      "resume": {
+        "args": [
+          "resume",
+          "4fa31b15-5b4f-4b5d-872e-33f0f65b29f6",
+          "--json",
+          "--concurrency",
+          "1"
+        ],
+        "startedAt": "2026-10-14T12:28:02.143Z",
+        "events": [
+          {
+            "event": "download.started",
+            "seq": 1,
+            "jobId": "4fa31b15-5b4f-4b5d-872e-33f0f65b29f6",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 2,
+            "jobId": "4fa31b15-5b4f-4b5d-872e-33f0f65b29f6",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 297,
+            "jobId": "4fa31b15-5b4f-4b5d-872e-33f0f65b29f6",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 298,
+            "jobId": "4fa31b15-5b4f-4b5d-872e-33f0f65b29f6",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 299,
+            "jobId": "4fa31b15-5b4f-4b5d-872e-33f0f65b29f6",
+            "trackKey": "2",
+            "payload": {
+              "durationMs": 211017
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 301,
+            "jobId": "4fa31b15-5b4f-4b5d-872e-33f0f65b29f6",
+            "payload": {
+              "completed": 2,
+              "total": 2,
+              "fraction": 1
+            }
+          },
+          {
+            "event": "job.completed",
+            "seq": 302,
+            "jobId": "4fa31b15-5b4f-4b5d-872e-33f0f65b29f6",
+            "payload": {}
+          }
+        ],
+        "eventCounts": {
+          "download.started": 2,
+          "track.progress": 295,
+          "download.completed": 1,
+          "metadata.written": 1,
+          "validation.completed": 1,
+          "job.progress": 1,
+          "job.completed": 1
+        },
+        "progressByTrack": {
+          "2": {
+            "count": 295,
+            "first": {
+              "seq": 3,
+              "bytes": 277349
+            },
+            "last": {
+              "seq": 300,
+              "bytes": 5065038
+            }
+          }
+        },
+        "privacyPassed": true,
+        "stderrBytes": 0,
+        "jobId": "4fa31b15-5b4f-4b5d-872e-33f0f65b29f6",
+        "firstProgress": {
+          "event": "track.progress",
+          "seq": 3,
+          "jobId": "4fa31b15-5b4f-4b5d-872e-33f0f65b29f6",
+          "trackKey": "2",
+          "payload": {
+            "bytes": 277349,
+            "fraction": 0.05475753587633499,
+            "speed": 0
+          }
+        },
+        "code": 0,
+        "signal": null,
+        "finishedAt": "2026-10-14T12:28:13.678Z"
+      },
+      "after": {
+        "counts": {
+          "completed": 2,
+          "skipped": 0,
+          "failed": 0,
+          "paused": 0,
+          "unavailable": 0,
+          "queued": 0
+        },
+        "total": 2,
+        "files": [
+          {
+            "trackKey": "1",
+            "file": "playlist-1/Новый плейлист/01 - Проект ВОП - Ты и я.mp3",
+            "bytes": 4537650,
+            "sha256": "04620019ba88242c90508dc22573417bd732469f4f8fb6f67eda50956b41f2a6",
+            "mtimeNs": "1791980876717870400",
+            "inode": "844424930312980",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 187847
+            },
+            "tags": {
+              "title": "Ты и я",
+              "artist": "Проект ВОП",
+              "album": "Ты и я",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 27374
+                }
+              ]
+            }
+          },
+          {
+            "trackKey": "2",
+            "file": "playlist-1/Новый плейлист/02 - Nick Thayer - Like Boom.mp3",
+            "bytes": 5094860,
+            "sha256": "8073af325c6da71766ec5879bfbf24e37bd30fc52d777120862b7931ca3407ea",
+            "mtimeNs": "1791980891315036100",
+            "inode": "2814749767287565",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 211017
+            },
+            "tags": {
+              "title": "Like Boom",
+              "artist": "Nick Thayer",
+              "album": "Like Boom EP",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 28502
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "manifestPrivacyAfter": true,
+      "preservedCompleted": true,
+      "noRepeatedCompletedDownloads": true,
+      "partsRemaining": 0,
+      "referencedPartsRemaining": 0,
+      "failedAttemptCount": 1,
+      "playlistSidecars": [
+        {
+          "file": "playlist-1/Новый плейлист/Новый плейлист.m3u8",
+          "entries": 2
+        }
+      ],
+      "finishedAt": "2026-10-14T12:28:13.705Z"
+    },
+    {
+      "kind": "playlist",
+      "iteration": 2,
+      "startedAt": "2026-10-14T12:28:13.708Z",
+      "pass": true,
+      "download": {
+        "args": [
+          "playlist",
+          "https://music.yandex.ru/playlists/0eac681b-5642-dd74-bc4a-76b20280de38",
+          "--json",
+          "--quality",
+          "best",
+          "--concurrency",
+          "1",
+          "--output",
+          "C:\\Users\\vboxuser\\test2\\music-downloader-check-w0kud8\\playlist-2"
+        ],
+        "startedAt": "2026-10-14T12:28:13.711Z",
+        "events": [
+          {
+            "event": "job.created",
+            "seq": 1,
+            "jobId": "5fbdf261-b342-461f-b084-696d3c9b5e11",
+            "payload": {}
+          },
+          {
+            "event": "entity.resolved",
+            "seq": 2,
+            "jobId": "5fbdf261-b342-461f-b084-696d3c9b5e11",
+            "payload": {}
+          },
+          {
+            "event": "plan.created",
+            "seq": 3,
+            "jobId": "5fbdf261-b342-461f-b084-696d3c9b5e11",
+            "payload": {}
+          },
+          {
+            "event": "track.started",
+            "seq": 4,
+            "jobId": "5fbdf261-b342-461f-b084-696d3c9b5e11",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 5,
+            "jobId": "5fbdf261-b342-461f-b084-696d3c9b5e11",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 6,
+            "jobId": "5fbdf261-b342-461f-b084-696d3c9b5e11",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 238,
+            "jobId": "5fbdf261-b342-461f-b084-696d3c9b5e11",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 239,
+            "jobId": "5fbdf261-b342-461f-b084-696d3c9b5e11",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 240,
+            "jobId": "5fbdf261-b342-461f-b084-696d3c9b5e11",
+            "trackKey": "1",
+            "payload": {
+              "durationMs": 187847
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 242,
+            "jobId": "5fbdf261-b342-461f-b084-696d3c9b5e11",
+            "payload": {
+              "completed": 1,
+              "total": 2,
+              "fraction": 0.5
+            }
+          },
+          {
+            "event": "track.started",
+            "seq": 243,
+            "jobId": "5fbdf261-b342-461f-b084-696d3c9b5e11",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 244,
+            "jobId": "5fbdf261-b342-461f-b084-696d3c9b5e11",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 245,
+            "jobId": "5fbdf261-b342-461f-b084-696d3c9b5e11",
+            "trackKey": "2",
+            "payload": {}
+          }
+        ],
+        "eventCounts": {
+          "job.created": 1,
+          "entity.resolved": 1,
+          "plan.created": 1,
+          "track.started": 2,
+          "variant.selected": 2,
+          "download.started": 2,
+          "track.progress": 250,
+          "download.completed": 1,
+          "metadata.written": 1,
+          "validation.completed": 1,
+          "job.progress": 1
+        },
+        "progressByTrack": {
+          "1": {
+            "count": 232,
+            "first": {
+              "seq": 7,
+              "bytes": 15205
+            },
+            "last": {
+              "seq": 241,
+              "bytes": 4508943
+            }
+          },
+          "2": {
+            "count": 18,
+            "first": {
+              "seq": 246,
+              "bytes": 15205
+            },
+            "last": {
+              "seq": 263,
+              "bytes": 293733
+            }
+          }
+        },
+        "privacyPassed": true,
+        "stderrBytes": 12,
+        "jobId": "5fbdf261-b342-461f-b084-696d3c9b5e11",
+        "firstProgress": {
+          "event": "track.progress",
+          "seq": 7,
+          "jobId": "5fbdf261-b342-461f-b084-696d3c9b5e11",
+          "trackKey": "1",
+          "payload": {
+            "bytes": 15205,
+            "fraction": 0.003372187228802848,
+            "speed": 11288.047512991834,
+            "eta": 398097.01321933576
+          }
+        },
+        "signalAt": "2026-10-14T12:28:24.180Z",
+        "signalBytes": 277349,
+        "ctrlCSent": true,
+        "code": 4,
+        "signal": null,
+        "finishedAt": "2026-10-14T12:28:26.711Z"
+      },
+      "before": {
+        "counts": {
+          "completed": 1,
+          "skipped": 0,
+          "failed": 0,
+          "paused": 1,
+          "unavailable": 0,
+          "queued": 0
+        },
+        "completedFiles": [
+          {
+            "trackKey": "1",
+            "file": "playlist-2/Новый плейлист/01 - Проект ВОП - Ты и я.mp3",
+            "bytes": 4537650,
+            "sha256": "04620019ba88242c90508dc22573417bd732469f4f8fb6f67eda50956b41f2a6",
+            "mtimeNs": "1791980901515706000",
+            "inode": "1125899907023652",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 187847
+            },
+            "tags": {
+              "title": "Ты и я",
+              "artist": "Проект ВОП",
+              "album": "Ты и я",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 27374
+                }
+              ]
+            }
+          }
+        ],
+        "partialFiles": [
+          {
+            "trackKey": "2",
+            "bytes": 293733,
+            "manifestBytes": 293733
+          }
+        ]
+      },
+      "manifestPrivacyBefore": true,
+      "resume": {
+        "args": [
+          "resume",
+          "5fbdf261-b342-461f-b084-696d3c9b5e11",
+          "--json",
+          "--concurrency",
+          "1"
+        ],
+        "startedAt": "2026-10-14T12:28:26.730Z",
+        "events": [
+          {
+            "event": "download.started",
+            "seq": 1,
+            "jobId": "5fbdf261-b342-461f-b084-696d3c9b5e11",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 295,
+            "jobId": "5fbdf261-b342-461f-b084-696d3c9b5e11",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 296,
+            "jobId": "5fbdf261-b342-461f-b084-696d3c9b5e11",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 297,
+            "jobId": "5fbdf261-b342-461f-b084-696d3c9b5e11",
+            "trackKey": "2",
+            "payload": {
+              "durationMs": 211017
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 299,
+            "jobId": "5fbdf261-b342-461f-b084-696d3c9b5e11",
+            "payload": {
+              "completed": 2,
+              "total": 2,
+              "fraction": 1
+            }
+          },
+          {
+            "event": "job.completed",
+            "seq": 300,
+            "jobId": "5fbdf261-b342-461f-b084-696d3c9b5e11",
+            "payload": {}
+          }
+        ],
+        "eventCounts": {
+          "download.started": 1,
+          "track.progress": 294,
+          "download.completed": 1,
+          "metadata.written": 1,
+          "validation.completed": 1,
+          "job.progress": 1,
+          "job.completed": 1
+        },
+        "progressByTrack": {
+          "2": {
+            "count": 294,
+            "first": {
+              "seq": 2,
+              "bytes": 293733
+            },
+            "last": {
+              "seq": 298,
+              "bytes": 5065038
+            }
+          }
+        },
+        "privacyPassed": true,
+        "stderrBytes": 0,
+        "jobId": "5fbdf261-b342-461f-b084-696d3c9b5e11",
+        "firstProgress": {
+          "event": "track.progress",
+          "seq": 2,
+          "jobId": "5fbdf261-b342-461f-b084-696d3c9b5e11",
+          "trackKey": "2",
+          "payload": {
+            "bytes": 293733,
+            "fraction": 0.05799225988037997,
+            "speed": 0
+          }
+        },
+        "code": 0,
+        "signal": null,
+        "finishedAt": "2026-10-14T12:28:35.024Z"
+      },
+      "after": {
+        "counts": {
+          "completed": 2,
+          "skipped": 0,
+          "failed": 0,
+          "paused": 0,
+          "unavailable": 0,
+          "queued": 0
+        },
+        "total": 2,
+        "files": [
+          {
+            "trackKey": "1",
+            "file": "playlist-2/Новый плейлист/01 - Проект ВОП - Ты и я.mp3",
+            "bytes": 4537650,
+            "sha256": "04620019ba88242c90508dc22573417bd732469f4f8fb6f67eda50956b41f2a6",
+            "mtimeNs": "1791980901515706000",
+            "inode": "1125899907023652",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 187847
+            },
+            "tags": {
+              "title": "Ты и я",
+              "artist": "Проект ВОП",
+              "album": "Ты и я",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 27374
+                }
+              ]
+            }
+          },
+          {
+            "trackKey": "2",
+            "file": "playlist-2/Новый плейлист/02 - Nick Thayer - Like Boom.mp3",
+            "bytes": 5094860,
+            "sha256": "8073af325c6da71766ec5879bfbf24e37bd30fc52d777120862b7931ca3407ea",
+            "mtimeNs": "1791980912691600900",
+            "inode": "2533274790576927",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 211017
+            },
+            "tags": {
+              "title": "Like Boom",
+              "artist": "Nick Thayer",
+              "album": "Like Boom EP",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 28502
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "manifestPrivacyAfter": true,
+      "preservedCompleted": true,
+      "noRepeatedCompletedDownloads": true,
+      "partsRemaining": 0,
+      "referencedPartsRemaining": 0,
+      "failedAttemptCount": 0,
+      "playlistSidecars": [
+        {
+          "file": "playlist-2/Новый плейлист/Новый плейлист.m3u8",
+          "entries": 2
+        }
+      ],
+      "finishedAt": "2026-10-14T12:28:35.047Z"
+    },
+    {
+      "kind": "playlist",
+      "iteration": 3,
+      "startedAt": "2026-10-14T12:28:35.049Z",
+      "pass": true,
+      "download": {
+        "args": [
+          "playlist",
+          "https://music.yandex.ru/playlists/0eac681b-5642-dd74-bc4a-76b20280de38",
+          "--json",
+          "--quality",
+          "best",
+          "--concurrency",
+          "1",
+          "--output",
+          "C:\\Users\\vboxuser\\test2\\music-downloader-check-w0kud8\\playlist-3"
+        ],
+        "startedAt": "2026-10-14T12:28:35.055Z",
+        "events": [
+          {
+            "event": "job.created",
+            "seq": 1,
+            "jobId": "32faaa12-ec90-4533-9985-f421cbca48d8",
+            "payload": {}
+          },
+          {
+            "event": "entity.resolved",
+            "seq": 2,
+            "jobId": "32faaa12-ec90-4533-9985-f421cbca48d8",
+            "payload": {}
+          },
+          {
+            "event": "plan.created",
+            "seq": 3,
+            "jobId": "32faaa12-ec90-4533-9985-f421cbca48d8",
+            "payload": {}
+          },
+          {
+            "event": "track.started",
+            "seq": 4,
+            "jobId": "32faaa12-ec90-4533-9985-f421cbca48d8",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 5,
+            "jobId": "32faaa12-ec90-4533-9985-f421cbca48d8",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 6,
+            "jobId": "32faaa12-ec90-4533-9985-f421cbca48d8",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 136,
+            "jobId": "32faaa12-ec90-4533-9985-f421cbca48d8",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 137,
+            "jobId": "32faaa12-ec90-4533-9985-f421cbca48d8",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 138,
+            "jobId": "32faaa12-ec90-4533-9985-f421cbca48d8",
+            "trackKey": "1",
+            "payload": {
+              "durationMs": 187847
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 140,
+            "jobId": "32faaa12-ec90-4533-9985-f421cbca48d8",
+            "payload": {
+              "completed": 1,
+              "total": 2,
+              "fraction": 0.5
+            }
+          },
+          {
+            "event": "track.started",
+            "seq": 141,
+            "jobId": "32faaa12-ec90-4533-9985-f421cbca48d8",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 142,
+            "jobId": "32faaa12-ec90-4533-9985-f421cbca48d8",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 143,
+            "jobId": "32faaa12-ec90-4533-9985-f421cbca48d8",
+            "trackKey": "2",
+            "payload": {}
+          }
+        ],
+        "eventCounts": {
+          "job.created": 1,
+          "entity.resolved": 1,
+          "plan.created": 1,
+          "track.started": 2,
+          "variant.selected": 2,
+          "download.started": 2,
+          "track.progress": 147,
+          "download.completed": 1,
+          "metadata.written": 1,
+          "validation.completed": 1,
+          "job.progress": 1
+        },
+        "progressByTrack": {
+          "1": {
+            "count": 130,
+            "first": {
+              "seq": 7,
+              "bytes": 15205
+            },
+            "last": {
+              "seq": 139,
+              "bytes": 4508943
+            }
+          },
+          "2": {
+            "count": 17,
+            "first": {
+              "seq": 144,
+              "bytes": 15205
+            },
+            "last": {
+              "seq": 160,
+              "bytes": 277349
+            }
+          }
+        },
+        "privacyPassed": true,
+        "stderrBytes": 12,
+        "jobId": "32faaa12-ec90-4533-9985-f421cbca48d8",
+        "firstProgress": {
+          "event": "track.progress",
+          "seq": 7,
+          "jobId": "32faaa12-ec90-4533-9985-f421cbca48d8",
+          "trackKey": "1",
+          "payload": {
+            "bytes": 15205,
+            "fraction": 0.003372187228802848,
+            "speed": 12281.906300484652,
+            "eta": 365882.77829661296
+          }
+        },
+        "signalAt": "2026-10-14T12:28:44.831Z",
+        "signalBytes": 277349,
+        "ctrlCSent": true,
+        "code": 4,
+        "signal": null,
+        "finishedAt": "2026-10-14T12:28:47.382Z"
+      },
+      "before": {
+        "counts": {
+          "completed": 1,
+          "skipped": 0,
+          "failed": 0,
+          "paused": 1,
+          "unavailable": 0,
+          "queued": 0
+        },
+        "completedFiles": [
+          {
+            "trackKey": "1",
+            "file": "playlist-3/Новый плейлист/01 - Проект ВОП - Ты и я.mp3",
+            "bytes": 4537650,
+            "sha256": "04620019ba88242c90508dc22573417bd732469f4f8fb6f67eda50956b41f2a6",
+            "mtimeNs": "1791980922580384600",
+            "inode": "4222124650840885",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 187847
+            },
+            "tags": {
+              "title": "Ты и я",
+              "artist": "Проект ВОП",
+              "album": "Ты и я",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 27374
+                }
+              ]
+            }
+          }
+        ],
+        "partialFiles": [
+          {
+            "trackKey": "2",
+            "bytes": 277349,
+            "manifestBytes": 277349
+          }
+        ]
+      },
+      "manifestPrivacyBefore": true,
+      "resume": {
+        "args": [
+          "resume",
+          "32faaa12-ec90-4533-9985-f421cbca48d8",
+          "--json",
+          "--concurrency",
+          "1"
+        ],
+        "startedAt": "2026-10-14T12:28:47.404Z",
+        "events": [
+          {
+            "event": "download.started",
+            "seq": 1,
+            "jobId": "32faaa12-ec90-4533-9985-f421cbca48d8",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 296,
+            "jobId": "32faaa12-ec90-4533-9985-f421cbca48d8",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 297,
+            "jobId": "32faaa12-ec90-4533-9985-f421cbca48d8",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 298,
+            "jobId": "32faaa12-ec90-4533-9985-f421cbca48d8",
+            "trackKey": "2",
+            "payload": {
+              "durationMs": 211017
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 300,
+            "jobId": "32faaa12-ec90-4533-9985-f421cbca48d8",
+            "payload": {
+              "completed": 2,
+              "total": 2,
+              "fraction": 1
+            }
+          },
+          {
+            "event": "job.completed",
+            "seq": 301,
+            "jobId": "32faaa12-ec90-4533-9985-f421cbca48d8",
+            "payload": {}
+          }
+        ],
+        "eventCounts": {
+          "download.started": 1,
+          "track.progress": 295,
+          "download.completed": 1,
+          "metadata.written": 1,
+          "validation.completed": 1,
+          "job.progress": 1,
+          "job.completed": 1
+        },
+        "progressByTrack": {
+          "2": {
+            "count": 295,
+            "first": {
+              "seq": 2,
+              "bytes": 277349
+            },
+            "last": {
+              "seq": 299,
+              "bytes": 5065038
+            }
+          }
+        },
+        "privacyPassed": true,
+        "stderrBytes": 0,
+        "jobId": "32faaa12-ec90-4533-9985-f421cbca48d8",
+        "firstProgress": {
+          "event": "track.progress",
+          "seq": 2,
+          "jobId": "32faaa12-ec90-4533-9985-f421cbca48d8",
+          "trackKey": "2",
+          "payload": {
+            "bytes": 277349,
+            "fraction": 0.05475753587633499,
+            "speed": 0
+          }
+        },
+        "code": 0,
+        "signal": null,
+        "finishedAt": "2026-10-14T12:28:55.422Z"
+      },
+      "after": {
+        "counts": {
+          "completed": 2,
+          "skipped": 0,
+          "failed": 0,
+          "paused": 0,
+          "unavailable": 0,
+          "queued": 0
+        },
+        "total": 2,
+        "files": [
+          {
+            "trackKey": "1",
+            "file": "playlist-3/Новый плейлист/01 - Проект ВОП - Ты и я.mp3",
+            "bytes": 4537650,
+            "sha256": "04620019ba88242c90508dc22573417bd732469f4f8fb6f67eda50956b41f2a6",
+            "mtimeNs": "1791980922580384600",
+            "inode": "4222124650840885",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 187847
+            },
+            "tags": {
+              "title": "Ты и я",
+              "artist": "Проект ВОП",
+              "album": "Ты и я",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 27374
+                }
+              ]
+            }
+          },
+          {
+            "trackKey": "2",
+            "file": "playlist-3/Новый плейлист/02 - Nick Thayer - Like Boom.mp3",
+            "bytes": 5094860,
+            "sha256": "8073af325c6da71766ec5879bfbf24e37bd30fc52d777120862b7931ca3407ea",
+            "mtimeNs": "1791980933099609500",
+            "inode": "2814749767287598",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 211017
+            },
+            "tags": {
+              "title": "Like Boom",
+              "artist": "Nick Thayer",
+              "album": "Like Boom EP",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 28502
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "manifestPrivacyAfter": true,
+      "preservedCompleted": true,
+      "noRepeatedCompletedDownloads": true,
+      "partsRemaining": 0,
+      "referencedPartsRemaining": 0,
+      "failedAttemptCount": 0,
+      "playlistSidecars": [
+        {
+          "file": "playlist-3/Новый плейлист/Новый плейлист.m3u8",
+          "entries": 2
+        }
+      ],
+      "finishedAt": "2026-10-14T12:28:55.450Z"
+    }
+  ],
+  "toolDigest": "sha256:ddde95ec3ab0b57948de69a7aeb4995b88ea66274f0dd4b62616d25467bdad3f",
+  "sourceDigest": "sha256:25a6a43bde2aa78ac3f5d74f533cec434ff0173d87859dbf0dfcaf78c0fdea07",
+  "sourceFileCount": 306,
+  "gitHead": "b57db587ca4d70173fba6a495fb4c76337250227",
+  "sources": {
+    "track": "https://music.yandex.ru/album/221173/track/2224197",
+    "album": "https://music.yandex.ru/album/41904408",
+    "playlist": "https://music.yandex.ru/playlists/0eac681b-5642-dd74-bc4a-76b20280de38"
+  },
+  "preparationSkipped": true,
+  "signalProbe": {
+    "args": [
+      "docs/research/step-027-acceptance/signal-probe.mjs"
+    ],
+    "startedAt": "2026-10-14T12:23:19.066Z",
+    "events": [
+      {
+        "kind": "result",
+        "status": "paused"
+      }
+    ],
+    "eventCounts": {
+      "track.progress": 1,
+      "result": 1
+    },
+    "progressByTrack": {
+      "1": {
+        "count": 1,
+        "first": {
+          "seq": 1,
+          "bytes": 300000
+        },
+        "last": {
+          "seq": 1,
+          "bytes": 300000
+        }
+      }
+    },
+    "privacyPassed": true,
+    "stderrBytes": 12,
+    "firstProgress": {
+      "event": "track.progress",
+      "seq": 1,
+      "trackKey": "1",
+      "payload": {
+        "bytes": 300000
+      }
+    },
+    "signalAt": "2026-10-14T12:23:20.553Z",
+    "signalBytes": 300000,
+    "ctrlCSent": true,
+    "code": 4,
+    "signal": null,
+    "finishedAt": "2026-10-14T12:23:23.081Z"
+  },
+  "cliBuildDigest": "sha256:baf25c74bd54a0198b182a947cab7907f7e338a3a340ce92b0062e179abb0484",
+  "providerBuildDigest": "sha256:5735d8e8a815af0cd697ff31852b30eda7d7383a42084a02ac5e96db00329c0a",
+  "account": {
+    "authorized": true,
+    "exitCode": 0
+  },
+  "initialFreeBytes": 53161517056,
+  "doctorAttempts": [
+    {
+      "exitCode": 0,
+      "available": true,
+      "privacyPassed": true,
+      "schemaVersion": "1.1.0",
+      "credentialBackend": "native-keyring",
+      "configurationConfirmed": false,
+      "checks": {
+        "runtime": {
+          "status": "ok"
+        },
+        "credentialStore": {
+          "status": "ok"
+        },
+        "provider": {
+          "status": "ok"
+        },
+        "auth": {
+          "status": "ok"
+        },
+        "account": {
+          "status": "ok"
+        },
+        "metadata": {
+          "status": "ok"
+        },
+        "audioVariants": {
+          "status": "ok"
+        },
+        "manifestStore": {
+          "status": "ok"
+        },
+        "filesystem": {
+          "status": "ok"
+        },
+        "ffmpeg": {
+          "status": "optional",
+          "code": "NOT_INSTALLED"
+        },
+        "tokenPermissions": {
+          "status": "skipped",
+          "code": "NOT_APPLICABLE"
+        }
+      },
+      "attempt": 1,
+      "finishedAt": "2026-10-14T12:24:43.038Z"
+    }
+  ],
+  "doctor": {
+    "exitCode": 0,
+    "available": true,
+    "privacyPassed": true,
+    "schemaVersion": "1.1.0",
+    "credentialBackend": "native-keyring",
+    "configurationConfirmed": false,
+    "checks": {
+      "runtime": {
+        "status": "ok"
+      },
+      "credentialStore": {
+        "status": "ok"
+      },
+      "provider": {
+        "status": "ok"
+      },
+      "auth": {
+        "status": "ok"
+      },
+      "account": {
+        "status": "ok"
+      },
+      "metadata": {
+        "status": "ok"
+      },
+      "audioVariants": {
+        "status": "ok"
+      },
+      "manifestStore": {
+        "status": "ok"
+      },
+      "filesystem": {
+        "status": "ok"
+      },
+      "ffmpeg": {
+        "status": "optional",
+        "code": "NOT_INSTALLED"
+      },
+      "tokenPermissions": {
+        "status": "skipped",
+        "code": "NOT_APPLICABLE"
+      }
+    }
+  },
+  "sourceDigestAfter": "sha256:25a6a43bde2aa78ac3f5d74f533cec434ff0173d87859dbf0dfcaf78c0fdea07",
+  "ownerGo": "PENDING",
+  "finishedAt": "2026-10-14T12:28:55.708Z",
+  "passedCycles": 9,
+  "validatedFiles": 30
+}

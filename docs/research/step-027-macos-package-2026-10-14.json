@@ -1,0 +1,95 @@
+{
+  "schema": 1,
+  "step": "STEP-027",
+  "scope": "Комплект macOS без системной установки Node.js",
+  "archive": "STEP-027-macos.zip",
+  "archiveBytes": 110531919,
+  "archiveSha256": "9362ba41b1db4a87654cddd1221fcc8e1ee56b9e86e84b0853038be1a44ab992",
+  "files": 329,
+  "bundle": {
+    "schema": 1,
+    "step": "STEP-027",
+    "nodeVersion": "24.21.0",
+    "minimumMacOS": "13.5",
+    "sourceDigest": "sha256:25a6a43bde2aa78ac3f5d74f533cec434ff0173d87859dbf0dfcaf78c0fdea07",
+    "sourceFileCount": 306,
+    "runtimes": [
+      {
+        "architecture": "arm64",
+        "file": "node-v24.21.0-darwin-arm64.tar.gz",
+        "sha256": "bed7eea5325e1108f32ce5228ddd6a5f0f08a499ee42aa7442aea583702f6057",
+        "nodeSha256": "e4b5a3af0e05c75de2eae013904145f40fe7fc2a6e6f17510128bf45cca4e79b",
+        "url": "https://nodejs.org/dist/v24.21.0/node-v24.21.0-darwin-arm64.tar.gz"
+      },
+      {
+        "architecture": "x64",
+        "file": "node-v24.21.0-darwin-x64.tar.gz",
+        "sha256": "1462cb3b3046b815cf8ea436d3da450ec1a9f11dac7e5a46b0ada5305d7e8097",
+        "nodeSha256": "7abcf39bd37ab251015337ff75304d7555f0d8e88c6e0fbf04bce8ce34636f49",
+        "url": "https://nodejs.org/dist/v24.21.0/node-v24.21.0-darwin-x64.tar.gz"
+      }
+    ],
+    "launcherSha256": "6f63eb4a62495aeed7d7a35c6b3e8420a2601594ec4bca2978bd30402ea5406c"
+  },
+  "launcherAndRunnerTests": {
+    "command": "node --test docs/research/step-027-macos/launcher.test.mjs docs/research/step-027-acceptance/run.test.mjs",
+    "exitCode": 0,
+    "passed": 28,
+    "platform": "linux",
+    "macosLauncherOsAdaptersMocked": true
+  },
+  "syntaxChecks": {
+    "bash": true,
+    "python": true
+  },
+  "cleanBundleRehearsal": {
+    "nativeOS": "linux",
+    "macosOsCommandsMocked": true,
+    "macosNodeReplacedByLinuxNodeInFixtureOnly": true,
+    "status": "INSTALL_PASS",
+    "exitCode": 0,
+    "sourceDigest": "sha256:25a6a43bde2aa78ac3f5d74f533cec434ff0173d87859dbf0dfcaf78c0fdea07",
+    "checks": [
+      {
+        "command": "lint",
+        "exitCode": 0,
+        "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderrSha256": "f59ba696a15507a8febe0f9ea94ac75ccc5411952df61ee4cb3c971b47b6bc12"
+      },
+      {
+        "command": "typecheck",
+        "exitCode": 0,
+        "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderrSha256": "ffbfd8ec2bfcf3e8f0e99a93f081f695da2de832eba56c5ae6943a4052680411"
+      },
+      {
+        "command": "test",
+        "exitCode": 0,
+        "stdoutSha256": "02a90387a40d87d9857f4a2ce825da1eacb7bbe5471bb365d3141fcf6e656ae7",
+        "stderrSha256": "577c3301618c2ee8f46c907a074c8c06f9c6c53c5d041443b9a2ffe379ff4cd1"
+      },
+      {
+        "command": "build",
+        "exitCode": 0,
+        "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderrSha256": "a0b5ebe8b7786637f56a665a03d6d27f3d6a927d0669b1870beb1307702b651a"
+      }
+    ]
+  },
+  "byteChecks": {
+    "all306SourceFilesMatch": true,
+    "allRuntimeArchivesMatchOfficialSha256": true,
+    "launcherExecutableModePreserved": true,
+    "defaultSourcesEmpty": true,
+    "credentialFilesAbsent": true,
+    "sourceSubjectUnchanged": true,
+    "sharedToolDigestUnchanged": true
+  },
+  "nativeMacOSQualification": "PENDING",
+  "currentRealMatrix": {
+    "linux": 9,
+    "windows": 9,
+    "macos": 0
+  },
+  "ownerGo": "PENDING"
+}

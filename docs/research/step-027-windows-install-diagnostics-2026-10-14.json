@@ -1,0 +1,128 @@
+{
+  "schema": 1,
+  "step": "STEP-027",
+  "receivedWindowsReport": "docs/research/step-027-windows-attempt-2026-10-14.json",
+  "receivedWindowsReportSha256": "da744706fd4ffa664ac6623e7e8705cf666922fb0c670c560dcf3144055ddde8",
+  "reportedWindowsVersions": {
+    "basis": "user confirmation",
+    "node": "24.21.0",
+    "corepack": "0.36.0"
+  },
+  "windowsInstallCause": "UNKNOWN_FROM_V1_HASH_ONLY_REPORT",
+  "windowsQualifiedCycles": 0,
+  "linuxDiagnosticMode": {
+    "schema": 1,
+    "step": "STEP-027",
+    "runnerVersion": 2,
+    "startedAt": "2026-10-14T09:30:21.095Z",
+    "platform": {
+      "os": "linux",
+      "architecture": "x64",
+      "release": "7.0.0-38-generic",
+      "node": "v24.21.0"
+    },
+    "mode": "install-diagnostic",
+    "status": "INSTALL_PASS",
+    "checks": [
+      {
+        "command": "node",
+        "args": [
+          "packages/testing/scripts/run-yarn.mjs",
+          "install",
+          "--immutable"
+        ],
+        "startedAt": "2026-10-14T09:30:21.910Z",
+        "finishedAt": "2026-10-14T09:30:22.610Z",
+        "code": 0,
+        "signal": null,
+        "timedOut": false,
+        "stdoutSha256": "c07667bf3f1461e81d42388f12703981d683415ffcc4046c82eed5d18837ccb7",
+        "stderrSha256": "bfec6f0b0ed4e98041896996f31540ead1369fc6f4fe067199120753dc1e5ab2",
+        "diagnostics": {
+          "observedCodes": [
+            "YN0000"
+          ],
+          "observedMarkers": []
+        }
+      }
+    ],
+    "cycles": [],
+    "toolDigest": "sha256:4e98e0ae74ddbaa9eae59e121859224b6fc12add1fd7232fb6faa3306494a911",
+    "sourceDigest": "sha256:5c90380eae10221e52a38e324dd55a1e4d1cce19fd0246c20bb616b2308a6ed2",
+    "sourceFileCount": 306,
+    "gitHead": "b57db587ca4d70173fba6a495fb4c76337250227",
+    "projectLocation": {
+      "kind": "local",
+      "pathLength": 59
+    },
+    "environmentFlags": {
+      "HTTP_PROXY": false,
+      "HTTPS_PROXY": false,
+      "NO_PROXY": true,
+      "NODE_USE_ENV_PROXY": false,
+      "NODE_EXTRA_CA_CERTS": false,
+      "COREPACK_NPM_REGISTRY": false,
+      "YARN_NPM_REGISTRY_SERVER": false
+    },
+    "corepack": {
+      "command": "corepack",
+      "args": [
+        "--version"
+      ],
+      "startedAt": "2026-10-14T09:30:21.130Z",
+      "finishedAt": "2026-10-14T09:30:21.188Z",
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdoutSha256": "867a70774294546ebe3cac14fa311d8d27922466625e3fd9a42e9a26682a86e7",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnostics": {
+        "observedCodes": [],
+        "observedMarkers": [],
+        "version": "0.36.0"
+      }
+    },
+    "networkProbes": [
+      {
+        "host": "registry.npmjs.org",
+        "elapsedMs": 697,
+        "reachable": true,
+        "statusCode": 200
+      },
+      {
+        "host": "repo.yarnpkg.com",
+        "elapsedMs": 711,
+        "reachable": true,
+        "statusCode": 404
+      }
+    ],
+    "sourceDigestAfter": "sha256:5c90380eae10221e52a38e324dd55a1e4d1cce19fd0246c20bb616b2308a6ed2",
+    "finishedAt": "2026-10-14T09:30:22.649Z",
+    "passedCycles": 0,
+    "validatedFiles": 0
+  },
+  "runnerTests": {
+    "passed": 12,
+    "command": "node --test docs/research/step-027-acceptance/run.test.mjs"
+  },
+  "updateArchive": {
+    "path": "/tmp/STEP-027-runner-v2-update.zip",
+    "bytes": 21892,
+    "sha256": "5e28d4e796d51d57727c3f1b1b7bcbc92ca9e8aed0d8fe9e91dca112a2df7511",
+    "files": [
+      "docs/research/step-027-acceptance/run.mjs",
+      "docs/research/step-027-acceptance/install-diagnostics.mjs",
+      "docs/research/step-027-acceptance/run.test.mjs",
+      "docs/research/step-027-acceptance/README.md"
+    ],
+    "preservesConfig": true,
+    "crcPass": true
+  },
+  "fullArchive": {
+    "path": "/tmp/STEP-027-checks-windows-macos-v2.zip",
+    "sha256": "f326a6366b348ee48a9718fb4441acb7079f180f1d4e4796eab00f513d95ada3"
+  },
+  "followUpCommand": "node docs/research/step-027-acceptance/run.mjs --diagnose-install",
+  "manualMatrixPassed": 9,
+  "manualMatrixRequired": 27
+}

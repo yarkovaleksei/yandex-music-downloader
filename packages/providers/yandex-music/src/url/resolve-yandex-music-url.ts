@@ -71,6 +71,13 @@ function resolvePathname(pathname: string): MediaReference | undefined {
   if (uuidPlaylist?.[1] !== undefined && uuidPattern.test(uuidPlaylist[1]))
     return mediaReference('playlist', uuidPlaylist[1].toLowerCase());
 
+  const likedPlaylist = /^\/playlists\/lk\.([0-9a-fA-F-]+)\/?$/.exec(pathname);
+  if (likedPlaylist?.[1] !== undefined && uuidPattern.test(likedPlaylist[1])) {
+    // API отличает «Мне нравится» по lk.; префикс нельзя удалять.
+    // @link ../../../../../planning/tasks/STEP-051.md
+    return mediaReference('playlist', `lk.${likedPlaylist[1].toLowerCase()}`);
+  }
+
   return undefined;
 }
 

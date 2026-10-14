@@ -1,0 +1,60 @@
+{
+  "schema": 1,
+  "step": "STEP-027",
+  "capture": "summary extracted from user-pasted report.json; original bytes not captured",
+  "runnerVersion": 2,
+  "startedAt": "2026-10-14T09:45:30.164Z",
+  "finishedAt": "2026-10-14T09:47:59.371Z",
+  "platform": {
+    "os": "win32",
+    "architecture": "x64",
+    "release": "10.0.26200",
+    "node": "v24.21.0"
+  },
+  "mode": "full",
+  "status": "FAIL",
+  "sourceDigest": "sha256:5c90380eae10221e52a38e324dd55a1e4d1cce19fd0246c20bb616b2308a6ed2",
+  "sourceFileCount": 306,
+  "gitHead": "b57db587ca4d70173fba6a495fb4c76337250227",
+  "toolDigest": "sha256:4e98e0ae74ddbaa9eae59e121859224b6fc12add1fd7232fb6faa3306494a911",
+  "checks": [
+    {
+      "command": "node packages/testing/scripts/run-yarn.mjs install --immutable",
+      "exitCode": 0,
+      "observedCodes": [
+        "YN0000",
+        "YN0004"
+      ]
+    },
+    {
+      "command": "node packages/testing/scripts/run-yarn.mjs run lint",
+      "exitCode": 0
+    },
+    {
+      "command": "node packages/testing/scripts/run-yarn.mjs run typecheck",
+      "exitCode": 0
+    },
+    {
+      "command": "node packages/testing/scripts/run-yarn.mjs test",
+      "exitCode": 1,
+      "startedAt": "2026-10-14T09:46:13.411Z",
+      "finishedAt": "2026-10-14T09:47:59.369Z",
+      "timedOut": false,
+      "observedCodes": [
+        "EBUSY",
+        "EPERM"
+      ],
+      "stdoutSha256": "aa6b87299d6200e1850ad475be534eacb118335e4eb67827fc50ba4224e7b92a",
+      "stderrSha256": "580d13bbe0866b803d20e41c8828890b268f0828d87df1ea8ba1a19f05ab8b1c"
+    }
+  ],
+  "failureCode": "AUTOMATED_CHECK_FAILED",
+  "passedCycles": 0,
+  "validatedFiles": 0,
+  "cycleCount": 0,
+  "failedTestNames": "NOT_CAPTURED",
+  "errorOperationsAndStack": "NOT_CAPTURED",
+  "localDiskMove": "reported by user before this attempt",
+  "matrixPassed": 9,
+  "matrixRequired": 27
+}

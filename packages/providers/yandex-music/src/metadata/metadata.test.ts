@@ -1,6 +1,9 @@
 import { readFileSync } from 'node:fs';
 import { z } from 'zod';
-import { Track as SdkTrack } from '@dvxch/yandex-music';
+import {
+  Playlist as SdkPlaylist,
+  Track as SdkTrack,
+} from '@dvxch/yandex-music';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   ProviderError,
@@ -227,6 +230,71 @@ describe('provider metadata', () => {
     expect(fetch.mock.calls[1]?.[0]).toContain(
       '/playlist/00000000-0000-4000-8000-000000000001',
     );
+  });
+
+  it('передаёт lk collection через public facade без потери порядка и доступности', async () => {
+    const identifier = 'lk.01234567-89ab-cdef-0123-456789abcdef';
+    const tracks = [
+      { id: '101', available: true, title: 'Доступный', artists: [] },
+      { id: '102', available: false },
+      { id: '103' },
+    ];
+    const fetch = vi.fn<AuthFetch>().mockResolvedValue(
+      response({
+        result: {
+          title: 'Мне нравится',
+          tracks: tracks.map((track) => ({ id: track.id, track })),
+        },
+      }),
+    );
+    const { provider } = setup(fetch);
+
+    const reference = await provider.resolveUrl(
+      'https://music.yandex.ru/playlists/lk.01234567-89AB-CDEF-0123-456789ABCDEF?utm_source=share#liked',
+    );
+    const playlist = await provider.getPlaylist(reference.id);
+
+    expect(reference).toEqual({
+      provider: 'yandex-music',
+      kind: 'playlist',
+      id: identifier,
+    });
+    expect(fetch).toHaveBeenCalledTimes(1);
+    expect(fetch.mock.calls[0]?.[0]).toContain(`/playlist/${identifier}`);
+    expect(fetch.mock.calls[0]?.[0]).not.toContain(
+      '/playlist/01234567-89ab-cdef-0123-456789abcdef',
+    );
+    expect(
+      playlist.tracks.map(({ position, track }) => [
+        position,
+        track.id,
+        track.availability,
+      ]),
+    ).toEqual([
+      [1, '101', 'available'],
+      [2, '102', 'unavailable'],
+      [3, '103', 'unknown'],
+    ]);
+  });
+
+  it('отклоняет malformed lk response до SDK defaults', async () => {
+    const deJson = vi.spyOn(SdkPlaylist, 'deJson');
+    const fetch = vi.fn<AuthFetch>().mockResolvedValue(
+      response({
+        result: {
+          title: 42,
+          tracks: [],
+        },
+      }),
+    );
+
+    await expect(
+      setup(fetch).provider.getPlaylist(
+        'lk.01234567-89ab-cdef-0123-456789abcdef',
+      ),
+    ).rejects.toMatchObject({ code: 'PROVIDER_RESPONSE_INVALID' });
+    expect(fetch).toHaveBeenCalledTimes(1);
+    expect(deJson).not.toHaveBeenCalled();
   });
 
   it('сохраняет synthetic minimal records, повторы и все позиции коллекций', async () => {
