@@ -4,6 +4,8 @@ CLI обращается только к публичному Application API. �
 
 Команды: `auth`, `account`, `logout`, `jobs`, `doctor`, `download URL`, `track URL`, `album URL`, `playlist URL`, `resume JOB_ID`, `retry JOB_ID`, `cancel JOB_ID`. `download` определяет тип ссылки через application; остальные команды загрузки проверяют соответствие типа. `resume` и `retry` используют сохранённые параметры job и ждут конечного снимка.
 
+Для коллекции «Мне нравится» используйте ссылку `https://music.yandex.ru/playlists/lk.<UUID>` с сохранённым префиксом `lk.`. Команды `playlist` и `download` принимают её так же, как обычные ссылки `/playlists/<UUID>` и `/users/<owner>/playlists/<kind>`; маркетинговые query-параметры и fragment не меняют идентичность коллекции.
+
 `doctor` проверяет Node runtime, secure storage, provider/account, metadata и варианты аудио canary `2224197`, read-only manifest store, каталог вывода и optional FFmpeg. `music-downloader doctor --json` пишет один `CommandResult` в stdout; human-отчёт и статусы идут в stderr. Версия provider schema выводится в отчёте. Отсутствующий FFmpeg не меняет exit code, а обязательный failed/skipped check даёт код `3`. Doctor не подтверждает конфигурацию только успешным чтением keyring и не проверяет права token-файла: native storage не использует такой файл.
 
 | Опции                                                                                       | Команды                                         |

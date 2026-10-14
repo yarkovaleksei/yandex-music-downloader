@@ -68,6 +68,22 @@ describe('resolveYandexMusicUrl', () => {
         id: '01234567-89ab-cdef-0123-456789abcdef',
       },
     ],
+    [
+      'https://music.yandex.by/playlists/lk.01234567-89AB-CDEF-0123-456789ABCDEF?utm_source=share#liked',
+      {
+        provider: 'yandex-music',
+        kind: 'playlist',
+        id: 'lk.01234567-89ab-cdef-0123-456789abcdef',
+      },
+    ],
+    [
+      'https://music.yandex.com/playlists/lk.1c2f4e22-b0f3-b81a-b471-36e6c248c859',
+      {
+        provider: 'yandex-music',
+        kind: 'playlist',
+        id: 'lk.1c2f4e22-b0f3-b81a-b471-36e6c248c859',
+      },
+    ],
   ] as const)('нормализует %s', async (url, expected) => {
     await expect(resolveYandexMusicUrl(url)).resolves.toEqual(expected);
   });
@@ -128,7 +144,10 @@ describe('resolveYandexMusicUrl', () => {
     'https://music.yandex.ru/users/%2F/playlists/7',
     'https://music.yandex.ru/users/%ZZ/playlists/7',
     'https://music.yandex.ru/playlists/1c2f4e22-b0f3-b81a-b471-36e6c248c85',
+    'https://music.yandex.ru/playlists/lk.1c2f4e22-b0f3-b81a-b471-36e6c248c85',
+    'https://music.yandex.ru/playlists/fk.1c2f4e22-b0f3-b81a-b471-36e6c248c859',
     'https://music.yandex.ru/playlists/1c2f4e22-b0f3-b81a-b471-36e6c248c859/extra',
+    'https://music.yandex.ru/playlists/lk.1c2f4e22-b0f3-b81a-b471-36e6c248c859/extra',
     'https://music.yandex.ru/iframe?url=/track/42',
   ])('безопасно отклоняет %s', async (url) => {
     await expect(resolveYandexMusicUrl(url)).rejects.toBeInstanceOf(

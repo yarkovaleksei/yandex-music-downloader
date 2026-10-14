@@ -4,6 +4,7 @@ id: REQ-044
 priority: high
 source: brief
 steps:
+  - STEP-052
   - STEP-018
   - STEP-042
   - STEP-043

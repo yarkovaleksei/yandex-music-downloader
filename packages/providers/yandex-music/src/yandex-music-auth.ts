@@ -203,12 +203,18 @@ export class YandexMusicProviderAuth {
       /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
         id,
       );
+    // API требует lk. для «Мне нравится»; без него endpoint отвечает NotFoundError.
+    // @link ../../../../planning/tasks/STEP-051.md
+    const liked =
+      /^lk\.[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(
+        id,
+      );
     const legacy = /^users\/([^/]+)\/playlists\/(\d+)$/.exec(id);
     const owner = legacy?.[1];
     const kind = legacy?.[2];
-    if (!uuid && (owner === undefined || kind === undefined))
+    if (!uuid && !liked && (owner === undefined || kind === undefined))
       throw new TrackUnavailableError();
-    if (!uuid && owner !== undefined) {
+    if (!uuid && !liked && owner !== undefined) {
       try {
         const decoded = decodeURIComponent(owner);
         if (
@@ -227,7 +233,9 @@ export class YandexMusicProviderAuth {
     const { raw, model } = await this.metadataRequest(
       rawPlaylistSchema,
       (client) =>
-        uuid ? client.playlist(id) : client.usersPlaylists(kind ?? '', owner),
+        uuid || liked
+          ? client.playlist(id)
+          : client.usersPlaylists(kind ?? '', owner),
     );
     if (!model || Array.isArray(model)) throw invalidProviderResponse();
     return mapPlaylist(raw, id, model);

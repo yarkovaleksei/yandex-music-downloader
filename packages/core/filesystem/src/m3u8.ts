@@ -10,7 +10,17 @@ export interface WriteM3u8Options {
   readonly platform?: TargetPlatform;
 }
 
+/** Паузы между пятью попытками публикации playlist на Windows. */
+const renameRetryDelays: readonly number[] = [50, 100, 200, 400];
+
+function sleep(milliseconds: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, milliseconds));
+}
+
 function pathApi(platform: TargetPlatform | undefined): typeof path.posix {
+  // Без override native API учитывает Windows-пути; явная платформа сохраняет приоритет.
+  // @link planning/tasks/STEP-052.md
+  if (platform === undefined) return path;
   return platform === 'win32' ? path.win32 : path.posix;
 }
 
@@ -25,6 +35,38 @@ function utf8Source(content: string): ReadableStream<Uint8Array> {
 }
 
 /**
+ * После закрытия temporary-файла Windows может кратко удерживать его при rename.
+ * @link planning/tasks/STEP-052.md Повторяем только подтверждённые EPERM/EBUSY и
+ * не меняем уже записанный файл или destination между попытками.
+ */
+async function publishM3u8(
+  temporaryPath: string,
+  playlistPath: string,
+  platform: TargetPlatform | undefined,
+  ops: FsOps,
+): Promise<void> {
+  for (let attempt = 0; ; attempt += 1) {
+    try {
+      await ops.rename(temporaryPath, playlistPath);
+      return;
+    } catch (error) {
+      const code =
+        typeof error === 'object' && error !== null
+          ? (error as { readonly code?: unknown }).code
+          : undefined;
+      const delay = renameRetryDelays[attempt];
+      if (
+        platform !== 'win32' ||
+        (code !== 'EPERM' && code !== 'EBUSY') ||
+        delay === undefined
+      )
+        throw error;
+      await sleep(delay);
+    }
+  }
+}
+
+/**
  * Публикует playlist только после flush и close временного файла. @link docs/requirements/REQ-028-playlist-m3u8.md
  * Строки остаются относительными и сохраняют входной порядок, поэтому номера файлов не пересчитываются.
  */
@@ -34,7 +76,14 @@ export async function writeM3u8(
   options: WriteM3u8Options = {},
 ): Promise<void> {
   const ops = options.ops ?? defaultFsOps;
-  const paths = pathApi(options.platform);
+  const effectivePlatform: TargetPlatform =
+    options.platform ??
+    (process.platform === 'win32'
+      ? 'win32'
+      : process.platform === 'darwin'
+        ? 'darwin'
+        : 'linux');
+  const paths = pathApi(effectivePlatform);
   // @link planning/reviews/STEP-022/REVIEW-20261013T192045Z.md F-001/F-002:
   // короткое уникальное имя исключает конфликт writers и не удлиняет допустимый basename playlist.
   const temporaryPath = paths.join(
@@ -56,7 +105,7 @@ export async function writeM3u8(
         ops,
       },
     );
-    await ops.rename(temporaryPath, playlistPath);
+    await publishM3u8(temporaryPath, playlistPath, effectivePlatform, ops);
   } catch (error) {
     await discardPart(temporaryPath, ops).catch(() => undefined);
     throw mapFileError(error);

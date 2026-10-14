@@ -1,0 +1,343 @@
+{
+  "schema": 1,
+  "step": "STEP-027",
+  "runnerVersion": 2,
+  "startedAt": "2026-10-14T12:59:02.320Z",
+  "platform": {
+    "os": "linux",
+    "architecture": "x64",
+    "release": "7.0.0-38-generic",
+    "node": "v24.21.0"
+  },
+  "mode": "full",
+  "status": "FAIL",
+  "checks": [
+    {
+      "command": "node",
+      "args": [
+        "packages/testing/scripts/run-yarn.mjs",
+        "install",
+        "--immutable"
+      ],
+      "startedAt": "2026-10-14T12:59:02.363Z",
+      "finishedAt": "2026-10-14T12:59:03.046Z",
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdoutSha256": "48912f75da6ea391afae4d40e6d7ed2252357b4257064c5971e6a0cc6249bb17",
+      "stderrSha256": "bfec6f0b0ed4e98041896996f31540ead1369fc6f4fe067199120753dc1e5ab2",
+      "diagnostics": {
+        "observedCodes": [
+          "YN0000"
+        ],
+        "observedMarkers": []
+      }
+    },
+    {
+      "command": "node",
+      "args": [
+        "packages/testing/scripts/run-yarn.mjs",
+        "run",
+        "lint"
+      ],
+      "startedAt": "2026-10-14T12:59:03.047Z",
+      "finishedAt": "2026-10-14T12:59:12.119Z",
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "f59ba696a15507a8febe0f9ea94ac75ccc5411952df61ee4cb3c971b47b6bc12",
+      "diagnostics": {
+        "observedCodes": [],
+        "observedMarkers": []
+      }
+    },
+    {
+      "command": "node",
+      "args": [
+        "packages/testing/scripts/run-yarn.mjs",
+        "run",
+        "typecheck"
+      ],
+      "startedAt": "2026-10-14T12:59:12.120Z",
+      "finishedAt": "2026-10-14T12:59:15.778Z",
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "ffbfd8ec2bfcf3e8f0e99a93f081f695da2de832eba56c5ae6943a4052680411",
+      "diagnostics": {
+        "observedCodes": [],
+        "observedMarkers": []
+      }
+    },
+    {
+      "command": "node",
+      "args": [
+        "packages/testing/scripts/run-yarn.mjs",
+        "test"
+      ],
+      "startedAt": "2026-10-14T12:59:15.779Z",
+      "finishedAt": "2026-10-14T12:59:23.855Z",
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdoutSha256": "9cf3a00a9185d14c658bb01951da3a350ff4f60efe40031fb8e0e7894b22f5fe",
+      "stderrSha256": "54bc4274d82f501f0d8685cd2331d369c8616eab5abd55db80e3471334ba8e22",
+      "diagnostics": {
+        "observedCodes": [
+          "EBUSY",
+          "EPERM"
+        ],
+        "observedMarkers": []
+      }
+    },
+    {
+      "command": "node",
+      "args": [
+        "packages/testing/scripts/run-yarn.mjs",
+        "build"
+      ],
+      "startedAt": "2026-10-14T12:59:23.856Z",
+      "finishedAt": "2026-10-14T12:59:24.284Z",
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "0157d8afc3a7265ca4e7c585e12c0dad6c6e3b575b60dd6b58851567da7c61d3",
+      "diagnostics": {
+        "observedCodes": [],
+        "observedMarkers": []
+      }
+    },
+    {
+      "command": "node",
+      "args": [
+        "packages/testing/scripts/verify-step-026-coverage.mjs"
+      ],
+      "startedAt": "2026-10-14T12:59:24.284Z",
+      "finishedAt": "2026-10-14T12:59:24.320Z",
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdoutSha256": "174f8131fdad4e33968eaff63b4b341e99ba25557cd3db6a15af3a52040c2e3a",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnostics": {
+        "observedCodes": [],
+        "observedMarkers": []
+      }
+    },
+    {
+      "command": "node",
+      "args": [
+        "--test",
+        "packages/providers/yandex-music/test-live/runner.test.mjs"
+      ],
+      "startedAt": "2026-10-14T12:59:24.321Z",
+      "finishedAt": "2026-10-14T12:59:24.450Z",
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdoutSha256": "3a673a1b9dbbfb7ead8eee25d8939d926f18389b3f5801614c54cd1cfaff9285",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnostics": {
+        "observedCodes": [],
+        "observedMarkers": []
+      }
+    }
+  ],
+  "cycles": [
+    {
+      "kind": "track",
+      "iteration": 1,
+      "startedAt": "2026-10-14T12:59:27.453Z",
+      "pass": false,
+      "download": {
+        "args": [
+          "track",
+          "https://music.yandex.ru/album/221173/track/2224197",
+          "--json",
+          "--quality",
+          "best",
+          "--concurrency",
+          "1",
+          "--output",
+          "/home/user/github.com/yarkovaleksei/yandex-music-downloader/.cache/checks/music-downloader-check-wMumMI/track-1"
+        ],
+        "startedAt": "2026-10-14T12:59:27.454Z",
+        "events": [
+          {
+            "kind": "error",
+            "code": "DOWNLOAD_ERROR",
+            "retryable": false
+          }
+        ],
+        "eventCounts": {
+          "error": 1
+        },
+        "progressByTrack": {},
+        "privacyPassed": true,
+        "stderrBytes": 202,
+        "code": 3,
+        "signal": null,
+        "finishedAt": "2026-10-14T12:59:29.351Z"
+      }
+    }
+  ],
+  "toolDigest": "sha256:ddde95ec3ab0b57948de69a7aeb4995b88ea66274f0dd4b62616d25467bdad3f",
+  "sourceDigest": "sha256:25a6a43bde2aa78ac3f5d74f533cec434ff0173d87859dbf0dfcaf78c0fdea07",
+  "sourceFileCount": 306,
+  "gitHead": "b57db587ca4d70173fba6a495fb4c76337250227",
+  "sources": {
+    "track": "https://music.yandex.ru/album/221173/track/2224197",
+    "album": "https://music.yandex.ru/album/41904408",
+    "playlist": "https://music.yandex.ru/playlists/0eac681b-5642-dd74-bc4a-76b20280de38"
+  },
+  "signalProbe": {
+    "args": [
+      "docs/research/step-027-acceptance/signal-probe.mjs"
+    ],
+    "startedAt": "2026-10-14T12:59:24.450Z",
+    "events": [
+      {
+        "kind": "result",
+        "status": "paused"
+      }
+    ],
+    "eventCounts": {
+      "track.progress": 1,
+      "result": 1
+    },
+    "progressByTrack": {
+      "1": {
+        "count": 1,
+        "first": {
+          "seq": 1,
+          "bytes": 300000
+        },
+        "last": {
+          "seq": 1,
+          "bytes": 300000
+        }
+      }
+    },
+    "privacyPassed": true,
+    "stderrBytes": 0,
+    "firstProgress": {
+      "event": "track.progress",
+      "seq": 1,
+      "trackKey": "1",
+      "payload": {
+        "bytes": 300000
+      }
+    },
+    "signalAt": "2026-10-14T12:59:24.577Z",
+    "signalBytes": 300000,
+    "code": 4,
+    "signal": null,
+    "finishedAt": "2026-10-14T12:59:24.581Z"
+  },
+  "cliBuildDigest": "sha256:baf25c74bd54a0198b182a947cab7907f7e338a3a340ce92b0062e179abb0484",
+  "providerBuildDigest": "sha256:5735d8e8a815af0cd697ff31852b30eda7d7383a42084a02ac5e96db00329c0a",
+  "account": {
+    "authorized": true,
+    "exitCode": 0
+  },
+  "initialFreeBytes": 429312835584,
+  "doctorAttempts": [
+    {
+      "exitCode": 0,
+      "available": true,
+      "privacyPassed": true,
+      "schemaVersion": "1.1.0",
+      "credentialBackend": "native-keyring",
+      "configurationConfirmed": false,
+      "checks": {
+        "runtime": {
+          "status": "ok"
+        },
+        "credentialStore": {
+          "status": "ok"
+        },
+        "provider": {
+          "status": "ok"
+        },
+        "auth": {
+          "status": "ok"
+        },
+        "account": {
+          "status": "ok"
+        },
+        "metadata": {
+          "status": "ok"
+        },
+        "audioVariants": {
+          "status": "ok"
+        },
+        "manifestStore": {
+          "status": "ok"
+        },
+        "filesystem": {
+          "status": "ok"
+        },
+        "ffmpeg": {
+          "status": "ok"
+        },
+        "tokenPermissions": {
+          "status": "skipped",
+          "code": "NOT_APPLICABLE"
+        }
+      },
+      "attempt": 1,
+      "finishedAt": "2026-10-14T12:59:27.452Z"
+    }
+  ],
+  "doctor": {
+    "exitCode": 0,
+    "available": true,
+    "privacyPassed": true,
+    "schemaVersion": "1.1.0",
+    "credentialBackend": "native-keyring",
+    "configurationConfirmed": false,
+    "checks": {
+      "runtime": {
+        "status": "ok"
+      },
+      "credentialStore": {
+        "status": "ok"
+      },
+      "provider": {
+        "status": "ok"
+      },
+      "auth": {
+        "status": "ok"
+      },
+      "account": {
+        "status": "ok"
+      },
+      "metadata": {
+        "status": "ok"
+      },
+      "audioVariants": {
+        "status": "ok"
+      },
+      "manifestStore": {
+        "status": "ok"
+      },
+      "filesystem": {
+        "status": "ok"
+      },
+      "ffmpeg": {
+        "status": "ok"
+      },
+      "tokenPermissions": {
+        "status": "skipped",
+        "code": "NOT_APPLICABLE"
+      }
+    }
+  },
+  "failureCode": "DOWNLOAD_DID_NOT_PAUSE",
+  "finishedAt": "2026-10-14T12:59:29.351Z",
+  "passedCycles": 0,
+  "validatedFiles": 0
+}

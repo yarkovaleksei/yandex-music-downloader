@@ -1,0 +1,93 @@
+{
+  "schema": 1,
+  "step": "STEP-027",
+  "runnerVersion": 2,
+  "startedAt": "2026-10-14T13:35:47.667Z",
+  "platform": {
+    "os": "linux",
+    "architecture": "x64",
+    "release": "7.0.0-38-generic",
+    "node": "v24.21.0"
+  },
+  "mode": "install-diagnostic",
+  "status": "INSTALL_PASS",
+  "checks": [
+    {
+      "command": "node",
+      "args": [
+        "packages/testing/scripts/run-yarn.mjs",
+        "install",
+        "--immutable"
+      ],
+      "startedAt": "2026-10-14T13:35:55.001Z",
+      "finishedAt": "2026-10-14T13:36:35.785Z",
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdoutSha256": "08441ccd9ed3160ca5a2e8168d68284afb49391f99e7c78b249a719ad49d200c",
+      "stderrSha256": "bfec6f0b0ed4e98041896996f31540ead1369fc6f4fe067199120753dc1e5ab2",
+      "diagnostics": {
+        "observedCodes": [
+          "YN0000",
+          "YN0004",
+          "YN0013"
+        ],
+        "observedMarkers": []
+      }
+    }
+  ],
+  "cycles": [],
+  "toolDigest": "sha256:ddde95ec3ab0b57948de69a7aeb4995b88ea66274f0dd4b62616d25467bdad3f",
+  "sourceDigest": "sha256:25a6a43bde2aa78ac3f5d74f533cec434ff0173d87859dbf0dfcaf78c0fdea07",
+  "sourceFileCount": 306,
+  "gitHead": "b57db587ca4d70173fba6a495fb4c76337250227",
+  "projectLocation": {
+    "kind": "local",
+    "pathLength": 131
+  },
+  "environmentFlags": {
+    "HTTP_PROXY": false,
+    "HTTPS_PROXY": false,
+    "NO_PROXY": true,
+    "NODE_USE_ENV_PROXY": false,
+    "NODE_EXTRA_CA_CERTS": false,
+    "COREPACK_NPM_REGISTRY": false,
+    "YARN_NPM_REGISTRY_SERVER": false
+  },
+  "corepack": {
+    "command": "corepack",
+    "args": [
+      "--version"
+    ],
+    "startedAt": "2026-10-14T13:35:47.706Z",
+    "finishedAt": "2026-10-14T13:35:47.756Z",
+    "code": 0,
+    "signal": null,
+    "timedOut": false,
+    "stdoutSha256": "867a70774294546ebe3cac14fa311d8d27922466625e3fd9a42e9a26682a86e7",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "diagnostics": {
+      "observedCodes": [],
+      "observedMarkers": [],
+      "version": "0.36.0"
+    }
+  },
+  "networkProbes": [
+    {
+      "host": "registry.npmjs.org",
+      "elapsedMs": 7244,
+      "reachable": true,
+      "statusCode": 200
+    },
+    {
+      "host": "repo.yarnpkg.com",
+      "elapsedMs": 634,
+      "reachable": true,
+      "statusCode": 404
+    }
+  ],
+  "sourceDigestAfter": "sha256:25a6a43bde2aa78ac3f5d74f533cec434ff0173d87859dbf0dfcaf78c0fdea07",
+  "finishedAt": "2026-10-14T13:36:35.816Z",
+  "passedCycles": 0,
+  "validatedFiles": 0
+}

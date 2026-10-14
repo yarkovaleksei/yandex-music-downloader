@@ -1,4 +1,6 @@
 import { defineConfig } from 'vitest/config';
+import { mkdirSync } from 'node:fs';
+import path from 'node:path';
 import {
   testFileSuffixes,
   workspacePackages,
@@ -6,6 +8,16 @@ import {
 
 /** Условие экспорта, при котором workspace-пакеты резолвятся из src без dist. */
 const sourceCondition = '@music-downloader/source';
+const checksDirectory = path.resolve(import.meta.dirname, '.cache/checks');
+
+// @link planning/tasks/STEP-052.md Каждый project и его child process получают
+// workspace scratch, не системный temporary-каталог.
+mkdirSync(checksDirectory, { recursive: true });
+const testEnvironment = {
+  TMP: checksDirectory,
+  TEMP: checksDirectory,
+  TMPDIR: checksDirectory,
+};
 
 const shared = {
   resolve: { conditions: [sourceCondition] },
@@ -21,6 +33,7 @@ export default defineConfig({
           name: workspace.name,
           root: workspace.dir,
           include: testFileSuffixes.map((suffix) => `src/**/*.${suffix}.ts`),
+          env: testEnvironment,
         },
       })),
       {
@@ -29,6 +42,7 @@ export default defineConfig({
           name: 'tooling',
           root: 'eslint',
           include: ['**/*.test.ts'],
+          env: testEnvironment,
         },
       },
     ],

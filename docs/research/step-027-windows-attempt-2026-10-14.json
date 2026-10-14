@@ -1,0 +1,43 @@
+{
+  "schema": 1,
+  "step": "STEP-027",
+  "runnerVersion": 1,
+  "startedAt": "2026-10-14T09:07:58.665Z",
+  "platform": {
+    "os": "win32",
+    "architecture": "x64",
+    "release": "10.0.26200",
+    "node": "v24.21.0"
+  },
+  "mode": "full",
+  "status": "FAIL",
+  "checks": [
+    {
+      "args": [
+        "packages/testing/scripts/run-yarn.mjs",
+        "install",
+        "--immutable"
+      ],
+      "startedAt": "2026-10-14T09:09:54.445Z",
+      "finishedAt": "2026-10-14T09:10:09.981Z",
+      "code": 1,
+      "timedOut": false,
+      "stdoutSha256": "be75c741accf52bec6bc5979bf8c5aa275e29e589de62cb4ef2ba57394e77646",
+      "stderrSha256": "bfec6f0b0ed4e98041896996f31540ead1369fc6f4fe067199120753dc1e5ab2"
+    }
+  ],
+  "cycles": [],
+  "toolDigest": "sha256:fd271a20f14e22862c9674a74bf6d6aa082250428fea39c47d503a540b876b54",
+  "sourceDigest": "sha256:5c90380eae10221e52a38e324dd55a1e4d1cce19fd0246c20bb616b2308a6ed2",
+  "sourceFileCount": 306,
+  "gitHead": "b57db587ca4d70173fba6a495fb4c76337250227",
+  "sources": {
+    "track": "https://music.yandex.ru/album/221173/track/2224197",
+    "album": "https://music.yandex.ru/album/221173",
+    "playlist": "https://music.yandex.ru/playlists/0eac681b-5642-dd74-bc4a-76b20280de38"
+  },
+  "failureCode": "INSTALL_FAILED_CHECK_COREPACK_AND_NETWORK",
+  "finishedAt": "2026-10-14T09:10:09.991Z",
+  "passedCycles": 0,
+  "validatedFiles": 0
+}

@@ -207,61 +207,106 @@ describe('STEP-045: команды двух application с общим stateDir',
     appA.subscribe((event) => {
       if (event.event === 'job.created') jobId = event.jobId;
     });
+    let terminalOutcome: Record<string, string> | undefined;
+    const captureTerminalOutcome = (
+      value: unknown,
+      rejected = false,
+    ): Record<string, string> => {
+      if (rejected)
+        return { state: 'rejected', code: 'unknown', reason: 'unknown' };
+      if (typeof value !== 'object' || value === null)
+        return { state: 'settled', code: 'unknown', reason: 'unknown' };
+      const result = value as {
+        readonly kind?: unknown;
+        readonly error?: {
+          readonly code?: unknown;
+          readonly details?: { readonly reason?: unknown };
+        };
+      };
+      const knownCodes = new Set([
+        'VALIDATION_ERROR',
+        'DOWNLOAD_ERROR',
+        'PERMISSION_DENIED',
+        'AUTH_REQUIRED',
+      ]);
+      const knownReasons = new Set([
+        'LEASE_HELD_BY_OTHER_OWNER',
+        'JOB_NOT_FOUND',
+        'OWNER_ACK_TIMEOUT',
+      ]);
+      const code =
+        typeof result.error?.code === 'string' &&
+        knownCodes.has(result.error.code)
+          ? result.error.code
+          : 'unknown';
+      const reason =
+        typeof result.error?.details?.reason === 'string' &&
+        knownReasons.has(result.error.details.reason)
+          ? result.error.details.reason
+          : 'unknown';
+      return {
+        state: 'settled',
+        resultKind:
+          result.kind === 'result' || result.kind === 'error'
+            ? result.kind
+            : 'unknown',
+        code,
+        reason,
+      };
+    };
     running = appA.createDownload({
       source: { provider: 'mock', kind: 'track', id: 'blocked' },
       quality: 'best',
       destination: path.join(root, 'music'),
     });
-    // Диагностика readiness содержит только безопасные enum-поля.
-    await expect
-      .poll(
-        async () => {
-          const result = await appB!.getJob(jobId);
-          const trackStatus =
-            result.kind === 'result'
-              ? result.data?.tracks[0]?.status
-              : undefined;
-          if (result.kind === 'result' && trackStatus === 'downloading') {
-            const leaseState = await store.readLeaseState(jobId);
-            if (leaseState === 'active') return true;
-            const manifest = await store.read(jobId);
-            throw new Error(
-              JSON.stringify({
-                resultKind: result.kind,
-                trackStatus,
-                leaseState,
-                controlState: manifest?.control.state,
-                pauseReason: manifest?.control.pauseReason,
-                nativeTrace: retryTrace ?? {
-                  errno: 'unknown',
-                  syscall: 'unknown',
-                  targetRole: 'unknown',
-                },
-              }),
-            );
-          }
-          const [leaseState, manifest] = await Promise.all([
-            store.readLeaseState(jobId),
-            store.read(jobId),
-          ]);
-          throw new Error(
-            JSON.stringify({
-              resultKind: result.kind,
-              trackStatus,
-              leaseState,
-              controlState: manifest?.control.state,
-              pauseReason: manifest?.control.pauseReason,
-              nativeTrace: retryTrace ?? {
-                errno: 'unknown',
-                syscall: 'unknown',
-                targetRole: 'unknown',
-              },
-            }),
-          );
-        },
-        { timeout: 30_000, interval: 10 },
-      )
-      .toBe(true);
+    void running.then(
+      (result) => {
+        terminalOutcome = captureTerminalOutcome(result);
+      },
+      () => {
+        terminalOutcome = captureTerminalOutcome(undefined, true);
+      },
+    );
+    // @link planning/tasks/STEP-052.md Ранний terminal outcome не ждёт весь Windows budget.
+    const deadline = Date.now() + 90_000;
+    for (;;) {
+      if (terminalOutcome !== undefined)
+        throw new Error(
+          `OWNER_STARTUP_FAILED ${JSON.stringify({ readiness: terminalOutcome })}`,
+        );
+      const result = await appB!.getJob(jobId);
+      const trackStatus =
+        result.kind === 'result' ? result.data?.tracks[0]?.status : undefined;
+      if (result.kind === 'result' && trackStatus === 'downloading') {
+        const leaseState = await store.readLeaseState(jobId);
+        if (leaseState === 'active') break;
+      }
+      if (terminalOutcome !== undefined)
+        throw new Error(
+          `OWNER_STARTUP_FAILED ${JSON.stringify({ readiness: terminalOutcome })}`,
+        );
+      if (Date.now() >= deadline) {
+        const [leaseState, manifest] = await Promise.all([
+          store.readLeaseState(jobId),
+          store.read(jobId),
+        ]);
+        throw new Error(
+          JSON.stringify({
+            resultKind: result.kind,
+            trackStatus,
+            leaseState,
+            controlState: manifest?.control.state,
+            pauseReason: manifest?.control.pauseReason,
+            nativeTrace: retryTrace ?? {
+              errno: 'unknown',
+              syscall: 'unknown',
+              targetRole: 'unknown',
+            },
+          }),
+        );
+      }
+      await new Promise((resolve) => setTimeout(resolve, 10));
+    }
     return { jobId, store };
   }
 
@@ -347,7 +392,7 @@ describe('STEP-045: команды двух application с общим stateDir',
     expect(
       (await readdir(path.join(root, 'state'), { recursive: true })).join('\n'),
     ).not.toContain('missing-job');
-  }, 60_000); // Нативная Windows-проверка identity входит в общий budget readiness и control.
+  }, 180_000); // Нативная Windows-проверка identity входит в общий budget readiness и control.
 
   it('различает отсутствие подтверждения cancel, сохраняя запрос в inbox', async () => {
     const { jobId } = await startOwner(true);
@@ -366,7 +411,7 @@ describe('STEP-045: команды двух application с общим stateDir',
     await expect
       .poll(() => appA!.getJob(jobId), { timeout: 5000, interval: 10 })
       .toMatchObject({ kind: 'result', data: { status: 'cancelled' } });
-  }, 60_000); // Нативная Windows-проверка identity входит в общий budget readiness и control.
+  }, 180_000); // Нативная Windows-проверка identity входит в общий budget readiness и control.
 
   it('пересылает pause и resume paused job живому владельцу без lease-отказа', async () => {
     const { jobId, store } = await startOwner();
@@ -387,7 +432,7 @@ describe('STEP-045: команды двух application с общим stateDir',
     expect(JSON.stringify([paused, resumed])).not.toMatch(
       /ownerToken|pid|hostname|cause|stack/,
     );
-  }, 60_000);
+  }, 180_000);
 });
 
 describe('STEP-049: shutdown закрывающегося manager', () => {
