@@ -140,6 +140,8 @@ Boundary-проход директивы не принимает вообще. E
 
 Workflow `.github/workflows/ci.yml` (STEP-002) запускается на `pull_request` в `main` и на `push` в `main`. Права — только `contents: read`, secrets не используются. Устаревшие запуски PR отменяются; запуск для `main` новым push не отменяется, но ожидающий в очереди запуск GitHub может заменить более новым, поэтому не каждый промежуточный merge commit гарантированно проверяется отдельно. Все actions закреплены полными SHA, runner images — конкретными версиями (`ubuntu-24.04`, `windows-2025`, `macos-15`).
 
+Для Linux jobs можно задать Repository Actions Variable `CI_LINUX_RUNS_ON`: JSON-массив labels или JSON-строку. Например, `["self-hosted","linux","x64","ci"]`. При пустом или отсутствующем значении используется `ubuntu-24.04`; labels приведены как пример и должны совпадать с labels runner. Эта переменная применяется только к Linux jobs, поэтому Windows и macOS продолжают использовать версии из матрицы.
+
 - Job `quality` (Ubuntu, Node.js 24): `install --immutable`, `lint`, `typecheck`, `format:check`, `build`. Провал любого шага роняет job.
 - Job `test` — матрица ОС (`ubuntu-24.04`, `windows-2025`, `macos-15`) × Node.js (`22.13.0` — нижняя граница `engines`, и `24`), `fail-fast: false`. Каждый вариант выполняет `install --immutable` и `test`; один и тот же набор Vitest (unit и integration) идёт на всех ОС, чтобы особенности файловой системы выявлялись рано. Сборка выполняется один раз в `quality`: тесты не требуют `dist`.
 - Установка и запуск везде идут через `node packages/testing/scripts/run-yarn.mjs`, без зависимости от глобальных shims Corepack.
