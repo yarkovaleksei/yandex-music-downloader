@@ -1,0 +1,112 @@
+{
+  "schema": 1,
+  "step": "STEP-027",
+  "runnerVersion": 2,
+  "startedAt": "2026-10-15T02:34:58.139Z",
+  "platform": {
+    "os": "darwin",
+    "architecture": "arm64",
+    "release": "25.5.0",
+    "node": "v24.21.0"
+  },
+  "mode": "full",
+  "status": "FAIL",
+  "checks": [
+    {
+      "command": "node",
+      "args": [
+        "packages/testing/scripts/run-yarn.mjs",
+        "install",
+        "--immutable"
+      ],
+      "startedAt": "2026-10-15T02:36:05.897Z",
+      "finishedAt": "2026-10-15T02:36:17.114Z",
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdoutSha256": "cb43dac89d03c33ef79e32505a4cb23b24442f74626fadf478d64e8cdd5eca5f",
+      "stderrSha256": "bfec6f0b0ed4e98041896996f31540ead1369fc6f4fe067199120753dc1e5ab2",
+      "diagnostics": {
+        "observedCodes": [
+          "YN0000",
+          "YN0004",
+          "YN0013"
+        ],
+        "observedMarkers": []
+      }
+    },
+    {
+      "command": "node",
+      "args": [
+        "packages/testing/scripts/run-yarn.mjs",
+        "run",
+        "lint"
+      ],
+      "startedAt": "2026-10-15T02:36:17.119Z",
+      "finishedAt": "2026-10-15T02:36:25.518Z",
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "f59ba696a15507a8febe0f9ea94ac75ccc5411952df61ee4cb3c971b47b6bc12",
+      "diagnostics": {
+        "observedCodes": [],
+        "observedMarkers": []
+      }
+    },
+    {
+      "command": "node",
+      "args": [
+        "packages/testing/scripts/run-yarn.mjs",
+        "run",
+        "typecheck"
+      ],
+      "startedAt": "2026-10-15T02:36:25.521Z",
+      "finishedAt": "2026-10-15T02:36:30.481Z",
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "ffbfd8ec2bfcf3e8f0e99a93f081f695da2de832eba56c5ae6943a4052680411",
+      "diagnostics": {
+        "observedCodes": [],
+        "observedMarkers": []
+      }
+    },
+    {
+      "command": "node",
+      "args": [
+        "packages/testing/scripts/run-yarn.mjs",
+        "test"
+      ],
+      "startedAt": "2026-10-15T02:36:30.482Z",
+      "finishedAt": "2026-10-15T02:36:47.584Z",
+      "code": 1,
+      "signal": null,
+      "timedOut": false,
+      "stdoutSha256": "492c365ab9665b942c53fbe8ce0b9058688056043f52c7c5e916a7b724eedd6f",
+      "stderrSha256": "4f50b9ae54f0058614ddd456ed4893bc94f396c804abd518edc48f2db8e102b3",
+      "diagnostics": {
+        "observedCodes": [
+          "EBUSY",
+          "EPERM"
+        ],
+        "observedMarkers": []
+      }
+    }
+  ],
+  "cycles": [],
+  "toolDigest": "sha256:ddde95ec3ab0b57948de69a7aeb4995b88ea66274f0dd4b62616d25467bdad3f",
+  "sourceDigest": "sha256:25a6a43bde2aa78ac3f5d74f533cec434ff0173d87859dbf0dfcaf78c0fdea07",
+  "sourceFileCount": 306,
+  "gitHead": "b57db587ca4d70173fba6a495fb4c76337250227",
+  "sources": {
+    "track": "https://music.yandex.ru/artist/160970",
+    "album": "https://music.yandex.ru/album/35858220",
+    "playlist": "https://music.yandex.ru/album/35858220"
+  },
+  "failureCode": "AUTOMATED_CHECK_FAILED",
+  "finishedAt": "2026-10-15T02:36:47.586Z",
+  "passedCycles": 0,
+  "validatedFiles": 0
+}

@@ -1,0 +1,1248 @@
+{
+  "schema": 1,
+  "step": "STEP-027",
+  "runnerVersion": 2,
+  "startedAt": "2026-10-15T16:44:32.096Z",
+  "platform": {
+    "os": "darwin",
+    "architecture": "arm64",
+    "release": "25.6.0",
+    "node": "v24.21.0"
+  },
+  "mode": "full",
+  "status": "FAIL",
+  "checks": [
+    {
+      "command": "node",
+      "args": [
+        "packages/testing/scripts/run-yarn.mjs",
+        "install",
+        "--immutable"
+      ],
+      "startedAt": "2026-10-15T16:44:53.988Z",
+      "finishedAt": "2026-10-15T16:46:18.254Z",
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdoutSha256": "92f76230e6215477de303105e65282a30e9785a277e5f9a556ea66cea869509b",
+      "stderrSha256": "bfec6f0b0ed4e98041896996f31540ead1369fc6f4fe067199120753dc1e5ab2",
+      "diagnostics": {
+        "observedCodes": [
+          "YN0000",
+          "YN0004",
+          "YN0013"
+        ],
+        "observedMarkers": []
+      }
+    },
+    {
+      "command": "node",
+      "args": [
+        "packages/testing/scripts/run-yarn.mjs",
+        "run",
+        "lint"
+      ],
+      "startedAt": "2026-10-15T16:46:18.256Z",
+      "finishedAt": "2026-10-15T16:46:27.296Z",
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "f59ba696a15507a8febe0f9ea94ac75ccc5411952df61ee4cb3c971b47b6bc12",
+      "diagnostics": {
+        "observedCodes": [],
+        "observedMarkers": []
+      }
+    },
+    {
+      "command": "node",
+      "args": [
+        "packages/testing/scripts/run-yarn.mjs",
+        "run",
+        "typecheck"
+      ],
+      "startedAt": "2026-10-15T16:46:27.297Z",
+      "finishedAt": "2026-10-15T16:46:31.136Z",
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "ffbfd8ec2bfcf3e8f0e99a93f081f695da2de832eba56c5ae6943a4052680411",
+      "diagnostics": {
+        "observedCodes": [],
+        "observedMarkers": []
+      }
+    },
+    {
+      "command": "node",
+      "args": [
+        "packages/testing/scripts/run-yarn.mjs",
+        "test"
+      ],
+      "startedAt": "2026-10-15T16:46:31.136Z",
+      "finishedAt": "2026-10-15T16:46:40.894Z",
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdoutSha256": "31d2e96c389a3867b69c78c901741d5d0c21f50ce932a6ebf5cfcab85b2ce8a6",
+      "stderrSha256": "0f954002241a17899fe16fe0216f95913b75df5ff22809adab617e22c14852bd",
+      "diagnostics": {
+        "observedCodes": [
+          "EBUSY",
+          "EPERM"
+        ],
+        "observedMarkers": []
+      }
+    },
+    {
+      "command": "node",
+      "args": [
+        "packages/testing/scripts/run-yarn.mjs",
+        "build"
+      ],
+      "startedAt": "2026-10-15T16:46:40.895Z",
+      "finishedAt": "2026-10-15T16:46:41.322Z",
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "0157d8afc3a7265ca4e7c585e12c0dad6c6e3b575b60dd6b58851567da7c61d3",
+      "diagnostics": {
+        "observedCodes": [],
+        "observedMarkers": []
+      }
+    },
+    {
+      "command": "node",
+      "args": [
+        "packages/testing/scripts/verify-step-026-coverage.mjs"
+      ],
+      "startedAt": "2026-10-15T16:46:41.323Z",
+      "finishedAt": "2026-10-15T16:46:41.359Z",
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdoutSha256": "174f8131fdad4e33968eaff63b4b341e99ba25557cd3db6a15af3a52040c2e3a",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnostics": {
+        "observedCodes": [],
+        "observedMarkers": []
+      }
+    },
+    {
+      "command": "node",
+      "args": [
+        "--test",
+        "packages/providers/yandex-music/test-live/runner.test.mjs"
+      ],
+      "startedAt": "2026-10-15T16:46:41.360Z",
+      "finishedAt": "2026-10-15T16:46:41.475Z",
+      "code": 0,
+      "signal": null,
+      "timedOut": false,
+      "stdoutSha256": "7702477bf8ce26b6ab56a26cea36ca759a957c579dbb91ad31254cb952a8f835",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "diagnostics": {
+        "observedCodes": [],
+        "observedMarkers": []
+      }
+    }
+  ],
+  "cycles": [
+    {
+      "kind": "track",
+      "iteration": 1,
+      "startedAt": "2026-10-15T16:48:56.434Z",
+      "pass": true,
+      "download": {
+        "args": [
+          "track",
+          "https://music.yandex.com/album/38818449/track/144356630",
+          "--json",
+          "--quality",
+          "best",
+          "--concurrency",
+          "1",
+          "--output",
+          "~/music-downloader-macos/music-downloader-check-hVx6s9/track-1"
+        ],
+        "startedAt": "2026-10-15T16:48:56.435Z",
+        "events": [
+          {
+            "event": "job.created",
+            "seq": 1,
+            "jobId": "1d97bf7d-c4d6-49d9-89e2-df21cec23bb0",
+            "payload": {}
+          },
+          {
+            "event": "entity.resolved",
+            "seq": 2,
+            "jobId": "1d97bf7d-c4d6-49d9-89e2-df21cec23bb0",
+            "payload": {}
+          },
+          {
+            "event": "plan.created",
+            "seq": 3,
+            "jobId": "1d97bf7d-c4d6-49d9-89e2-df21cec23bb0",
+            "payload": {}
+          },
+          {
+            "event": "track.started",
+            "seq": 4,
+            "jobId": "1d97bf7d-c4d6-49d9-89e2-df21cec23bb0",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 5,
+            "jobId": "1d97bf7d-c4d6-49d9-89e2-df21cec23bb0",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 6,
+            "jobId": "1d97bf7d-c4d6-49d9-89e2-df21cec23bb0",
+            "trackKey": "1",
+            "payload": {}
+          }
+        ],
+        "eventCounts": {
+          "job.created": 1,
+          "entity.resolved": 1,
+          "plan.created": 1,
+          "track.started": 1,
+          "variant.selected": 1,
+          "download.started": 1,
+          "track.progress": 15
+        },
+        "progressByTrack": {
+          "1": {
+            "count": 15,
+            "first": {
+              "seq": 7,
+              "bytes": 15211
+            },
+            "last": {
+              "seq": 21,
+              "bytes": 326507
+            }
+          }
+        },
+        "privacyPassed": true,
+        "stderrBytes": 0,
+        "jobId": "1d97bf7d-c4d6-49d9-89e2-df21cec23bb0",
+        "firstProgress": {
+          "event": "track.progress",
+          "seq": 7,
+          "jobId": "1d97bf7d-c4d6-49d9-89e2-df21cec23bb0",
+          "trackKey": "1",
+          "payload": {
+            "bytes": 15211,
+            "fraction": 0.004553743059441151
+          }
+        },
+        "signalAt": "2026-10-15T16:48:58.464Z",
+        "signalBytes": 277355,
+        "code": 4,
+        "signal": null,
+        "finishedAt": "2026-10-15T16:48:58.534Z"
+      },
+      "before": {
+        "counts": {
+          "completed": 0,
+          "skipped": 0,
+          "failed": 0,
+          "paused": 1,
+          "unavailable": 0,
+          "queued": 0
+        },
+        "completedFiles": [],
+        "partialFiles": [
+          {
+            "trackKey": "1",
+            "bytes": 326507,
+            "manifestBytes": 326507
+          }
+        ]
+      },
+      "manifestPrivacyBefore": true,
+      "resume": {
+        "args": [
+          "resume",
+          "1d97bf7d-c4d6-49d9-89e2-df21cec23bb0",
+          "--json",
+          "--concurrency",
+          "1"
+        ],
+        "startedAt": "2026-10-15T16:48:58.538Z",
+        "events": [
+          {
+            "event": "download.started",
+            "seq": 1,
+            "jobId": "1d97bf7d-c4d6-49d9-89e2-df21cec23bb0",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 184,
+            "jobId": "1d97bf7d-c4d6-49d9-89e2-df21cec23bb0",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 185,
+            "jobId": "1d97bf7d-c4d6-49d9-89e2-df21cec23bb0",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 186,
+            "jobId": "1d97bf7d-c4d6-49d9-89e2-df21cec23bb0",
+            "trackKey": "1",
+            "payload": {
+              "durationMs": 139154
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 188,
+            "jobId": "1d97bf7d-c4d6-49d9-89e2-df21cec23bb0",
+            "payload": {
+              "completed": 1,
+              "total": 1,
+              "fraction": 1
+            }
+          },
+          {
+            "event": "job.completed",
+            "seq": 189,
+            "jobId": "1d97bf7d-c4d6-49d9-89e2-df21cec23bb0",
+            "payload": {}
+          }
+        ],
+        "eventCounts": {
+          "download.started": 1,
+          "track.progress": 183,
+          "download.completed": 1,
+          "metadata.written": 1,
+          "validation.completed": 1,
+          "job.progress": 1,
+          "job.completed": 1
+        },
+        "progressByTrack": {
+          "1": {
+            "count": 183,
+            "first": {
+              "seq": 2,
+              "bytes": 326507
+            },
+            "last": {
+              "seq": 187,
+              "bytes": 3340329
+            }
+          }
+        },
+        "privacyPassed": true,
+        "stderrBytes": 0,
+        "jobId": "1d97bf7d-c4d6-49d9-89e2-df21cec23bb0",
+        "firstProgress": {
+          "event": "track.progress",
+          "seq": 2,
+          "jobId": "1d97bf7d-c4d6-49d9-89e2-df21cec23bb0",
+          "trackKey": "1",
+          "payload": {
+            "bytes": 326507,
+            "fraction": 0.0977469584582836
+          }
+        },
+        "code": 0,
+        "signal": null,
+        "finishedAt": "2026-10-15T16:48:59.888Z"
+      },
+      "after": {
+        "counts": {
+          "completed": 1,
+          "skipped": 0,
+          "failed": 0,
+          "paused": 0,
+          "unavailable": 0,
+          "queued": 0
+        },
+        "total": 1,
+        "files": [
+          {
+            "trackKey": "1",
+            "file": "track-1/Peaceful Melody, soave lofi - This Is What You Came For.mp3",
+            "bytes": 3382838,
+            "sha256": "25472ef1b31698f606feabad87f33c8b5c32993660032edc7df4e18c3b7e26ab",
+            "mtimeNs": "1792082939852514915",
+            "inode": "140196758",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 139154
+            },
+            "tags": {
+              "title": "This Is What You Came For",
+              "artist": "Peaceful Melody; soave lofi",
+              "album": "This Is What You Came For",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 41139
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "manifestPrivacyAfter": true,
+      "preservedCompleted": true,
+      "noRepeatedCompletedDownloads": true,
+      "partsRemaining": 0,
+      "referencedPartsRemaining": 0,
+      "failedAttemptCount": 0,
+      "playlistSidecars": [],
+      "finishedAt": "2026-10-15T16:48:59.907Z"
+    },
+    {
+      "kind": "track",
+      "iteration": 2,
+      "startedAt": "2026-10-15T16:48:59.907Z",
+      "pass": true,
+      "download": {
+        "args": [
+          "track",
+          "https://music.yandex.com/album/38818449/track/144356630",
+          "--json",
+          "--quality",
+          "best",
+          "--concurrency",
+          "1",
+          "--output",
+          "~/music-downloader-macos/music-downloader-check-hVx6s9/track-2"
+        ],
+        "startedAt": "2026-10-15T16:48:59.908Z",
+        "events": [
+          {
+            "event": "job.created",
+            "seq": 1,
+            "jobId": "6101b75c-bd3c-48fc-8c7e-c272b7feb5dc",
+            "payload": {}
+          },
+          {
+            "event": "entity.resolved",
+            "seq": 2,
+            "jobId": "6101b75c-bd3c-48fc-8c7e-c272b7feb5dc",
+            "payload": {}
+          },
+          {
+            "event": "plan.created",
+            "seq": 3,
+            "jobId": "6101b75c-bd3c-48fc-8c7e-c272b7feb5dc",
+            "payload": {}
+          },
+          {
+            "event": "track.started",
+            "seq": 4,
+            "jobId": "6101b75c-bd3c-48fc-8c7e-c272b7feb5dc",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 5,
+            "jobId": "6101b75c-bd3c-48fc-8c7e-c272b7feb5dc",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 6,
+            "jobId": "6101b75c-bd3c-48fc-8c7e-c272b7feb5dc",
+            "trackKey": "1",
+            "payload": {}
+          }
+        ],
+        "eventCounts": {
+          "job.created": 1,
+          "entity.resolved": 1,
+          "plan.created": 1,
+          "track.started": 1,
+          "variant.selected": 1,
+          "download.started": 1,
+          "track.progress": 9
+        },
+        "progressByTrack": {
+          "1": {
+            "count": 9,
+            "first": {
+              "seq": 7,
+              "bytes": 15211
+            },
+            "last": {
+              "seq": 15,
+              "bytes": 293739
+            }
+          }
+        },
+        "privacyPassed": true,
+        "stderrBytes": 0,
+        "jobId": "6101b75c-bd3c-48fc-8c7e-c272b7feb5dc",
+        "firstProgress": {
+          "event": "track.progress",
+          "seq": 7,
+          "jobId": "6101b75c-bd3c-48fc-8c7e-c272b7feb5dc",
+          "trackKey": "1",
+          "payload": {
+            "bytes": 15211,
+            "fraction": 0.004553743059441151
+          }
+        },
+        "signalAt": "2026-10-15T16:49:02.134Z",
+        "signalBytes": 277355,
+        "code": 4,
+        "signal": null,
+        "finishedAt": "2026-10-15T16:49:02.187Z"
+      },
+      "before": {
+        "counts": {
+          "completed": 0,
+          "skipped": 0,
+          "failed": 0,
+          "paused": 1,
+          "unavailable": 0,
+          "queued": 0
+        },
+        "completedFiles": [],
+        "partialFiles": [
+          {
+            "trackKey": "1",
+            "bytes": 293739,
+            "manifestBytes": 293739
+          }
+        ]
+      },
+      "manifestPrivacyBefore": true,
+      "resume": {
+        "args": [
+          "resume",
+          "6101b75c-bd3c-48fc-8c7e-c272b7feb5dc",
+          "--json",
+          "--concurrency",
+          "1"
+        ],
+        "startedAt": "2026-10-15T16:49:02.188Z",
+        "events": [
+          {
+            "event": "download.started",
+            "seq": 1,
+            "jobId": "6101b75c-bd3c-48fc-8c7e-c272b7feb5dc",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 189,
+            "jobId": "6101b75c-bd3c-48fc-8c7e-c272b7feb5dc",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 190,
+            "jobId": "6101b75c-bd3c-48fc-8c7e-c272b7feb5dc",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 191,
+            "jobId": "6101b75c-bd3c-48fc-8c7e-c272b7feb5dc",
+            "trackKey": "1",
+            "payload": {
+              "durationMs": 139154
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 193,
+            "jobId": "6101b75c-bd3c-48fc-8c7e-c272b7feb5dc",
+            "payload": {
+              "completed": 1,
+              "total": 1,
+              "fraction": 1
+            }
+          },
+          {
+            "event": "job.completed",
+            "seq": 194,
+            "jobId": "6101b75c-bd3c-48fc-8c7e-c272b7feb5dc",
+            "payload": {}
+          }
+        ],
+        "eventCounts": {
+          "download.started": 1,
+          "track.progress": 188,
+          "download.completed": 1,
+          "metadata.written": 1,
+          "validation.completed": 1,
+          "job.progress": 1,
+          "job.completed": 1
+        },
+        "progressByTrack": {
+          "1": {
+            "count": 188,
+            "first": {
+              "seq": 2,
+              "bytes": 293739
+            },
+            "last": {
+              "seq": 192,
+              "bytes": 3340329
+            }
+          }
+        },
+        "privacyPassed": true,
+        "stderrBytes": 0,
+        "jobId": "6101b75c-bd3c-48fc-8c7e-c272b7feb5dc",
+        "firstProgress": {
+          "event": "track.progress",
+          "seq": 2,
+          "jobId": "6101b75c-bd3c-48fc-8c7e-c272b7feb5dc",
+          "trackKey": "1",
+          "payload": {
+            "bytes": 293739,
+            "fraction": 0.08793714631103702
+          }
+        },
+        "code": 0,
+        "signal": null,
+        "finishedAt": "2026-10-15T16:49:03.168Z"
+      },
+      "after": {
+        "counts": {
+          "completed": 1,
+          "skipped": 0,
+          "failed": 0,
+          "paused": 0,
+          "unavailable": 0,
+          "queued": 0
+        },
+        "total": 1,
+        "files": [
+          {
+            "trackKey": "1",
+            "file": "track-2/Peaceful Melody, soave lofi - This Is What You Came For.mp3",
+            "bytes": 3382838,
+            "sha256": "25472ef1b31698f606feabad87f33c8b5c32993660032edc7df4e18c3b7e26ab",
+            "mtimeNs": "1792082943111855652",
+            "inode": "140196795",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 139154
+            },
+            "tags": {
+              "title": "This Is What You Came For",
+              "artist": "Peaceful Melody; soave lofi",
+              "album": "This Is What You Came For",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 41139
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "manifestPrivacyAfter": true,
+      "preservedCompleted": true,
+      "noRepeatedCompletedDownloads": true,
+      "partsRemaining": 0,
+      "referencedPartsRemaining": 0,
+      "failedAttemptCount": 0,
+      "playlistSidecars": [],
+      "finishedAt": "2026-10-15T16:49:03.175Z"
+    },
+    {
+      "kind": "track",
+      "iteration": 3,
+      "startedAt": "2026-10-15T16:49:03.176Z",
+      "pass": true,
+      "download": {
+        "args": [
+          "track",
+          "https://music.yandex.com/album/38818449/track/144356630",
+          "--json",
+          "--quality",
+          "best",
+          "--concurrency",
+          "1",
+          "--output",
+          "~/music-downloader-macos/music-downloader-check-hVx6s9/track-3"
+        ],
+        "startedAt": "2026-10-15T16:49:03.177Z",
+        "events": [
+          {
+            "event": "job.created",
+            "seq": 1,
+            "jobId": "3a75cd8c-048c-444a-8c6d-d141816bceb3",
+            "payload": {}
+          },
+          {
+            "event": "entity.resolved",
+            "seq": 2,
+            "jobId": "3a75cd8c-048c-444a-8c6d-d141816bceb3",
+            "payload": {}
+          },
+          {
+            "event": "plan.created",
+            "seq": 3,
+            "jobId": "3a75cd8c-048c-444a-8c6d-d141816bceb3",
+            "payload": {}
+          },
+          {
+            "event": "track.started",
+            "seq": 4,
+            "jobId": "3a75cd8c-048c-444a-8c6d-d141816bceb3",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 5,
+            "jobId": "3a75cd8c-048c-444a-8c6d-d141816bceb3",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 6,
+            "jobId": "3a75cd8c-048c-444a-8c6d-d141816bceb3",
+            "trackKey": "1",
+            "payload": {}
+          }
+        ],
+        "eventCounts": {
+          "job.created": 1,
+          "entity.resolved": 1,
+          "plan.created": 1,
+          "track.started": 1,
+          "variant.selected": 1,
+          "download.started": 1,
+          "track.progress": 7
+        },
+        "progressByTrack": {
+          "1": {
+            "count": 7,
+            "first": {
+              "seq": 7,
+              "bytes": 15211
+            },
+            "last": {
+              "seq": 13,
+              "bytes": 310123
+            }
+          }
+        },
+        "privacyPassed": true,
+        "stderrBytes": 0,
+        "jobId": "3a75cd8c-048c-444a-8c6d-d141816bceb3",
+        "firstProgress": {
+          "event": "track.progress",
+          "seq": 7,
+          "jobId": "3a75cd8c-048c-444a-8c6d-d141816bceb3",
+          "trackKey": "1",
+          "payload": {
+            "bytes": 15211,
+            "fraction": 0.004553743059441151,
+            "speed": 15060.39603960396,
+            "eta": 220785.56176451253
+          }
+        },
+        "signalAt": "2026-10-15T16:49:05.434Z",
+        "signalBytes": 277355,
+        "code": 4,
+        "signal": null,
+        "finishedAt": "2026-10-15T16:49:05.495Z"
+      },
+      "before": {
+        "counts": {
+          "completed": 0,
+          "skipped": 0,
+          "failed": 0,
+          "paused": 1,
+          "unavailable": 0,
+          "queued": 0
+        },
+        "completedFiles": [],
+        "partialFiles": [
+          {
+            "trackKey": "1",
+            "bytes": 310123,
+            "manifestBytes": 310123
+          }
+        ]
+      },
+      "manifestPrivacyBefore": true,
+      "resume": {
+        "args": [
+          "resume",
+          "3a75cd8c-048c-444a-8c6d-d141816bceb3",
+          "--json",
+          "--concurrency",
+          "1"
+        ],
+        "startedAt": "2026-10-15T16:49:05.497Z",
+        "events": [
+          {
+            "event": "download.started",
+            "seq": 1,
+            "jobId": "3a75cd8c-048c-444a-8c6d-d141816bceb3",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 188,
+            "jobId": "3a75cd8c-048c-444a-8c6d-d141816bceb3",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 189,
+            "jobId": "3a75cd8c-048c-444a-8c6d-d141816bceb3",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 190,
+            "jobId": "3a75cd8c-048c-444a-8c6d-d141816bceb3",
+            "trackKey": "1",
+            "payload": {
+              "durationMs": 139154
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 192,
+            "jobId": "3a75cd8c-048c-444a-8c6d-d141816bceb3",
+            "payload": {
+              "completed": 1,
+              "total": 1,
+              "fraction": 1
+            }
+          },
+          {
+            "event": "job.completed",
+            "seq": 193,
+            "jobId": "3a75cd8c-048c-444a-8c6d-d141816bceb3",
+            "payload": {}
+          }
+        ],
+        "eventCounts": {
+          "download.started": 1,
+          "track.progress": 187,
+          "download.completed": 1,
+          "metadata.written": 1,
+          "validation.completed": 1,
+          "job.progress": 1,
+          "job.completed": 1
+        },
+        "progressByTrack": {
+          "1": {
+            "count": 187,
+            "first": {
+              "seq": 2,
+              "bytes": 310123
+            },
+            "last": {
+              "seq": 191,
+              "bytes": 3340329
+            }
+          }
+        },
+        "privacyPassed": true,
+        "stderrBytes": 0,
+        "jobId": "3a75cd8c-048c-444a-8c6d-d141816bceb3",
+        "firstProgress": {
+          "event": "track.progress",
+          "seq": 2,
+          "jobId": "3a75cd8c-048c-444a-8c6d-d141816bceb3",
+          "trackKey": "1",
+          "payload": {
+            "bytes": 310123,
+            "fraction": 0.09284205238466031
+          }
+        },
+        "code": 0,
+        "signal": null,
+        "finishedAt": "2026-10-15T16:49:06.452Z"
+      },
+      "after": {
+        "counts": {
+          "completed": 1,
+          "skipped": 0,
+          "failed": 0,
+          "paused": 0,
+          "unavailable": 0,
+          "queued": 0
+        },
+        "total": 1,
+        "files": [
+          {
+            "trackKey": "1",
+            "file": "track-3/Peaceful Melody, soave lofi - This Is What You Came For.mp3",
+            "bytes": 3382838,
+            "sha256": "25472ef1b31698f606feabad87f33c8b5c32993660032edc7df4e18c3b7e26ab",
+            "mtimeNs": "1792082946416977809",
+            "inode": "140196834",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 139154
+            },
+            "tags": {
+              "title": "This Is What You Came For",
+              "artist": "Peaceful Melody; soave lofi",
+              "album": "This Is What You Came For",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 41139
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "manifestPrivacyAfter": true,
+      "preservedCompleted": true,
+      "noRepeatedCompletedDownloads": true,
+      "partsRemaining": 0,
+      "referencedPartsRemaining": 0,
+      "failedAttemptCount": 0,
+      "playlistSidecars": [],
+      "finishedAt": "2026-10-15T16:49:06.459Z"
+    },
+    {
+      "kind": "album",
+      "iteration": 1,
+      "startedAt": "2026-10-15T16:49:06.460Z",
+      "pass": false,
+      "download": {
+        "args": [
+          "album",
+          "https://music.yandex.com/album/38818449",
+          "--json",
+          "--quality",
+          "best",
+          "--concurrency",
+          "1",
+          "--output",
+          "~/music-downloader-macos/music-downloader-check-hVx6s9/album-1"
+        ],
+        "startedAt": "2026-10-15T16:49:06.461Z",
+        "events": [
+          {
+            "event": "job.created",
+            "seq": 1,
+            "jobId": "e3bddf2d-480c-4d69-b5a1-ad28c98cd1ef",
+            "payload": {}
+          },
+          {
+            "event": "entity.resolved",
+            "seq": 2,
+            "jobId": "e3bddf2d-480c-4d69-b5a1-ad28c98cd1ef",
+            "payload": {}
+          },
+          {
+            "event": "plan.created",
+            "seq": 3,
+            "jobId": "e3bddf2d-480c-4d69-b5a1-ad28c98cd1ef",
+            "payload": {}
+          },
+          {
+            "event": "track.started",
+            "seq": 4,
+            "jobId": "e3bddf2d-480c-4d69-b5a1-ad28c98cd1ef",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 5,
+            "jobId": "e3bddf2d-480c-4d69-b5a1-ad28c98cd1ef",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 6,
+            "jobId": "e3bddf2d-480c-4d69-b5a1-ad28c98cd1ef",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 154,
+            "jobId": "e3bddf2d-480c-4d69-b5a1-ad28c98cd1ef",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 155,
+            "jobId": "e3bddf2d-480c-4d69-b5a1-ad28c98cd1ef",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 156,
+            "jobId": "e3bddf2d-480c-4d69-b5a1-ad28c98cd1ef",
+            "trackKey": "1",
+            "payload": {
+              "durationMs": 139154
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 158,
+            "jobId": "e3bddf2d-480c-4d69-b5a1-ad28c98cd1ef",
+            "payload": {
+              "completed": 1,
+              "total": 1,
+              "fraction": 1
+            }
+          },
+          {
+            "event": "job.completed",
+            "seq": 159,
+            "jobId": "e3bddf2d-480c-4d69-b5a1-ad28c98cd1ef",
+            "payload": {}
+          }
+        ],
+        "eventCounts": {
+          "job.created": 1,
+          "entity.resolved": 1,
+          "plan.created": 1,
+          "track.started": 1,
+          "variant.selected": 1,
+          "download.started": 1,
+          "track.progress": 148,
+          "download.completed": 1,
+          "metadata.written": 1,
+          "validation.completed": 1,
+          "job.progress": 1,
+          "job.completed": 1
+        },
+        "progressByTrack": {
+          "1": {
+            "count": 148,
+            "first": {
+              "seq": 7,
+              "bytes": 15211
+            },
+            "last": {
+              "seq": 157,
+              "bytes": 3340329
+            }
+          }
+        },
+        "privacyPassed": true,
+        "stderrBytes": 0,
+        "jobId": "e3bddf2d-480c-4d69-b5a1-ad28c98cd1ef",
+        "firstProgress": {
+          "event": "track.progress",
+          "seq": 7,
+          "jobId": "e3bddf2d-480c-4d69-b5a1-ad28c98cd1ef",
+          "trackKey": "1",
+          "payload": {
+            "bytes": 15211,
+            "fraction": 0.004553743059441151,
+            "speed": 14825.536062378167,
+            "eta": 224283.15482216817
+          }
+        },
+        "code": 0,
+        "signal": null,
+        "finishedAt": "2026-10-15T16:49:09.355Z"
+      }
+    }
+  ],
+  "toolDigest": "sha256:48f7e52314d79ecc0e3b3a7af5374be01c46c68c78a9b4db7e5e7432a7cb35b8",
+  "sourceDigest": "sha256:25a6a43bde2aa78ac3f5d74f533cec434ff0173d87859dbf0dfcaf78c0fdea07",
+  "sourceFileCount": 306,
+  "gitHead": "b57db587ca4d70173fba6a495fb4c76337250227",
+  "sources": {
+    "track": "https://music.yandex.com/album/38818449/track/144356630",
+    "album": "https://music.yandex.com/album/38818449",
+    "playlist": "https://music.yandex.com/playlists/25aab07f-3871-1014-b10c-9662be09d800"
+  },
+  "signalProbe": {
+    "args": [
+      "docs/research/step-027-acceptance/signal-probe.mjs"
+    ],
+    "startedAt": "2026-10-15T16:46:41.476Z",
+    "events": [
+      {
+        "kind": "result",
+        "status": "paused"
+      }
+    ],
+    "eventCounts": {
+      "track.progress": 1,
+      "result": 1
+    },
+    "progressByTrack": {
+      "1": {
+        "count": 1,
+        "first": {
+          "seq": 1,
+          "bytes": 300000
+        },
+        "last": {
+          "seq": 1,
+          "bytes": 300000
+        }
+      }
+    },
+    "privacyPassed": true,
+    "stderrBytes": 0,
+    "firstProgress": {
+      "event": "track.progress",
+      "seq": 1,
+      "trackKey": "1",
+      "payload": {
+        "bytes": 300000
+      }
+    },
+    "signalAt": "2026-10-15T16:46:41.609Z",
+    "signalBytes": 300000,
+    "code": 4,
+    "signal": null,
+    "finishedAt": "2026-10-15T16:46:41.613Z"
+  },
+  "cliBuildDigest": "sha256:baf25c74bd54a0198b182a947cab7907f7e338a3a340ce92b0062e179abb0484",
+  "providerBuildDigest": "sha256:5735d8e8a815af0cd697ff31852b30eda7d7383a42084a02ac5e96db00329c0a",
+  "account": {
+    "authorized": true,
+    "exitCode": 0
+  },
+  "initialFreeBytes": 240576372736,
+  "doctorAttempts": [
+    {
+      "exitCode": 0,
+      "available": true,
+      "privacyPassed": true,
+      "schemaVersion": "1.1.0",
+      "credentialBackend": "native-keyring",
+      "configurationConfirmed": false,
+      "checks": {
+        "runtime": {
+          "status": "ok"
+        },
+        "credentialStore": {
+          "status": "ok"
+        },
+        "provider": {
+          "status": "ok"
+        },
+        "auth": {
+          "status": "ok"
+        },
+        "account": {
+          "status": "ok"
+        },
+        "metadata": {
+          "status": "ok"
+        },
+        "audioVariants": {
+          "status": "ok"
+        },
+        "manifestStore": {
+          "status": "ok"
+        },
+        "filesystem": {
+          "status": "ok"
+        },
+        "ffmpeg": {
+          "status": "ok"
+        },
+        "tokenPermissions": {
+          "status": "skipped",
+          "code": "NOT_APPLICABLE"
+        }
+      },
+      "attempt": 1,
+      "finishedAt": "2026-10-15T16:48:56.433Z"
+    }
+  ],
+  "doctor": {
+    "exitCode": 0,
+    "available": true,
+    "privacyPassed": true,
+    "schemaVersion": "1.1.0",
+    "credentialBackend": "native-keyring",
+    "configurationConfirmed": false,
+    "checks": {
+      "runtime": {
+        "status": "ok"
+      },
+      "credentialStore": {
+        "status": "ok"
+      },
+      "provider": {
+        "status": "ok"
+      },
+      "auth": {
+        "status": "ok"
+      },
+      "account": {
+        "status": "ok"
+      },
+      "metadata": {
+        "status": "ok"
+      },
+      "audioVariants": {
+        "status": "ok"
+      },
+      "manifestStore": {
+        "status": "ok"
+      },
+      "filesystem": {
+        "status": "ok"
+      },
+      "ffmpeg": {
+        "status": "ok"
+      },
+      "tokenPermissions": {
+        "status": "skipped",
+        "code": "NOT_APPLICABLE"
+      }
+    }
+  },
+  "failureCode": "DOWNLOAD_DID_NOT_PAUSE",
+  "finishedAt": "2026-10-15T16:49:09.356Z",
+  "passedCycles": 3,
+  "validatedFiles": 3
+}

@@ -20,6 +20,13 @@ import {
 export const directory = path.dirname(fileURLToPath(import.meta.url));
 export const root = path.resolve(directory, '../../..');
 export const defaultReportBase = () => process.cwd();
+const supportedSourceHosts = new Set([
+  'music.yandex.ru',
+  'music.yandex.by',
+  'music.yandex.kz',
+  'music.yandex.com',
+  'music.yandex.uz',
+]);
 const sha = (bytes) => crypto.createHash('sha256').update(bytes).digest('hex');
 const safeCode = (code) =>
   typeof code === 'string' && /^[A-Z][A-Z0-9_]{0,70}$/.test(code)
@@ -47,6 +54,24 @@ export function retryableDoctor(fact) {
     failed.every((check) => check.code === 'NETWORK_ERROR')
   );
 }
+/** Обе стадии приёмки используют домены штатного provider, без отдельного ограничения .ru. */
+function assertSourceUrl(text) {
+  let url;
+  try {
+    url = new URL(text);
+  } catch {
+    throw new Error('INVALID_SOURCE_URL');
+  }
+  assert(
+    url.protocol === 'https:' &&
+      supportedSourceHosts.has(url.hostname) &&
+      !url.username &&
+      !url.password &&
+      privacyCheck(text),
+    'INVALID_SOURCE_URL',
+  );
+}
+
 /** Ссылки принадлежат проверяющему аккаунту; в комплекте нет заранее выбранной коллекции. */
 export async function resolveSources(sources, kinds, ask) {
   const labels = {
@@ -61,20 +86,7 @@ export async function resolveSources(sources, kinds, ask) {
       (typeof sources?.[kind] === 'string' && sources[kind].trim()) ||
       (await ask(labels[kind]));
     const text = value.trim();
-    let url;
-    try {
-      url = new URL(text);
-    } catch {
-      throw new Error('INVALID_SOURCE_URL');
-    }
-    assert(
-      url.protocol === 'https:' &&
-        url.hostname === 'music.yandex.ru' &&
-        !url.username &&
-        !url.password &&
-        privacyCheck(text),
-      'INVALID_SOURCE_URL',
-    );
+    assertSourceUrl(text);
     resolved[kind] = text;
   }
   return resolved;
@@ -777,11 +789,7 @@ export async function main(
       };
     };
     for (const kind of options.kinds) {
-      assert(
-        typeof config.sources[kind] === 'string' &&
-          config.sources[kind].startsWith('https://music.yandex.ru/'),
-        'INVALID_SOURCE_URL',
-      );
+      assertSourceUrl(config.sources[kind]);
       for (let iteration = 1; iteration <= options.cycles; iteration++) {
         const cycle = {
           kind,
