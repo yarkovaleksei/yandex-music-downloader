@@ -247,6 +247,48 @@ test('пустой config запрашивает три ссылки прове�
   );
 });
 
+for (const host of [
+  'music.yandex.ru',
+  'music.yandex.by',
+  'music.yandex.kz',
+  'music.yandex.com',
+  'music.yandex.uz',
+]) {
+  test(`приёмка принимает track/album/playlist и «Мне нравится» на ${host}`, async () => {
+    const sources = {
+      track: `https://${host}/album/100/track/200?utm_source=share`,
+      album: `https://${host}/album/100`,
+      playlist: `https://${host}/playlists/00000000-0000-4000-8000-000000000001`,
+    };
+    const ask = async () => {
+      throw new Error('UNEXPECTED_PROMPT');
+    };
+    assert.deepEqual(
+      await resolveSources(sources, Object.keys(sources), ask),
+      sources,
+    );
+    sources.playlist = `https://${host}/playlists/lk.00000000-0000-4000-8000-000000000001`;
+    assert.deepEqual(await resolveSources(sources, ['playlist'], ask), {
+      playlist: sources.playlist,
+    });
+  });
+}
+
+test('приёмка не принимает подмену домена, credentials и секретные query-параметры', async () => {
+  for (const track of [
+    'https://music.yandex.com.evil.example/track/200',
+    'https://music.yandex.com@evil.example/track/200',
+    'https://name:password@music.yandex.com/track/200',
+    'https://music.yandex.com/track/200?token=private',
+    'http://music.yandex.com/track/200',
+  ]) {
+    await assert.rejects(
+      resolveSources({ track }, ['track'], async () => ''),
+      /INVALID_SOURCE_URL/,
+    );
+  }
+});
+
 test('doctor повторяется только при NETWORK_ERROR с пройденной privacy проверкой', () => {
   assert.equal(
     retryableDoctor({

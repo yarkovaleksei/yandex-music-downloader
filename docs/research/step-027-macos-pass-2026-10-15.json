@@ -1,0 +1,5276 @@
+{
+  "schema": 1,
+  "step": "STEP-027",
+  "runnerVersion": 2,
+  "startedAt": "2026-10-15T17:13:13.616Z",
+  "platform": {
+    "os": "darwin",
+    "architecture": "arm64",
+    "release": "25.6.0",
+    "node": "v24.21.0"
+  },
+  "mode": "full",
+  "status": "PASS",
+  "checks": [],
+  "cycles": [
+    {
+      "kind": "track",
+      "iteration": 1,
+      "startedAt": "2026-10-15T17:13:14.832Z",
+      "pass": true,
+      "download": {
+        "args": [
+          "track",
+          "https://music.yandex.com/album/38818449/track/144356630",
+          "--json",
+          "--quality",
+          "best",
+          "--concurrency",
+          "1",
+          "--output",
+          "~/music-downloader-macos/music-downloader-check-2eLng2/track-1"
+        ],
+        "startedAt": "2026-10-15T17:13:14.832Z",
+        "events": [
+          {
+            "event": "job.created",
+            "seq": 1,
+            "jobId": "9f65d100-e014-4dfd-8339-6ea3e8f24789",
+            "payload": {}
+          },
+          {
+            "event": "entity.resolved",
+            "seq": 2,
+            "jobId": "9f65d100-e014-4dfd-8339-6ea3e8f24789",
+            "payload": {}
+          },
+          {
+            "event": "plan.created",
+            "seq": 3,
+            "jobId": "9f65d100-e014-4dfd-8339-6ea3e8f24789",
+            "payload": {}
+          },
+          {
+            "event": "track.started",
+            "seq": 4,
+            "jobId": "9f65d100-e014-4dfd-8339-6ea3e8f24789",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 5,
+            "jobId": "9f65d100-e014-4dfd-8339-6ea3e8f24789",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 6,
+            "jobId": "9f65d100-e014-4dfd-8339-6ea3e8f24789",
+            "trackKey": "1",
+            "payload": {}
+          }
+        ],
+        "eventCounts": {
+          "job.created": 1,
+          "entity.resolved": 1,
+          "plan.created": 1,
+          "track.started": 1,
+          "variant.selected": 1,
+          "download.started": 1,
+          "track.progress": 17
+        },
+        "progressByTrack": {
+          "1": {
+            "count": 17,
+            "first": {
+              "seq": 7,
+              "bytes": 15209
+            },
+            "last": {
+              "seq": 23,
+              "bytes": 293737
+            }
+          }
+        },
+        "privacyPassed": true,
+        "stderrBytes": 0,
+        "jobId": "9f65d100-e014-4dfd-8339-6ea3e8f24789",
+        "firstProgress": {
+          "event": "track.progress",
+          "seq": 7,
+          "jobId": "9f65d100-e014-4dfd-8339-6ea3e8f24789",
+          "trackKey": "1",
+          "payload": {
+            "bytes": 15209,
+            "fraction": 0.004553144316023961
+          }
+        },
+        "signalAt": "2026-10-15T17:13:15.891Z",
+        "signalBytes": 277353,
+        "code": 4,
+        "signal": null,
+        "finishedAt": "2026-10-15T17:13:15.956Z"
+      },
+      "before": {
+        "counts": {
+          "completed": 0,
+          "skipped": 0,
+          "failed": 0,
+          "paused": 1,
+          "unavailable": 0,
+          "queued": 0
+        },
+        "completedFiles": [],
+        "partialFiles": [
+          {
+            "trackKey": "1",
+            "bytes": 293737,
+            "manifestBytes": 293737
+          }
+        ]
+      },
+      "manifestPrivacyBefore": true,
+      "resume": {
+        "args": [
+          "resume",
+          "9f65d100-e014-4dfd-8339-6ea3e8f24789",
+          "--json",
+          "--concurrency",
+          "1"
+        ],
+        "startedAt": "2026-10-15T17:13:15.959Z",
+        "events": [
+          {
+            "event": "download.started",
+            "seq": 1,
+            "jobId": "9f65d100-e014-4dfd-8339-6ea3e8f24789",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 187,
+            "jobId": "9f65d100-e014-4dfd-8339-6ea3e8f24789",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 188,
+            "jobId": "9f65d100-e014-4dfd-8339-6ea3e8f24789",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 189,
+            "jobId": "9f65d100-e014-4dfd-8339-6ea3e8f24789",
+            "trackKey": "1",
+            "payload": {
+              "durationMs": 139154
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 191,
+            "jobId": "9f65d100-e014-4dfd-8339-6ea3e8f24789",
+            "payload": {
+              "completed": 1,
+              "total": 1,
+              "fraction": 1
+            }
+          },
+          {
+            "event": "job.completed",
+            "seq": 192,
+            "jobId": "9f65d100-e014-4dfd-8339-6ea3e8f24789",
+            "payload": {}
+          }
+        ],
+        "eventCounts": {
+          "download.started": 1,
+          "track.progress": 186,
+          "download.completed": 1,
+          "metadata.written": 1,
+          "validation.completed": 1,
+          "job.progress": 1,
+          "job.completed": 1
+        },
+        "progressByTrack": {
+          "1": {
+            "count": 186,
+            "first": {
+              "seq": 2,
+              "bytes": 293737
+            },
+            "last": {
+              "seq": 190,
+              "bytes": 3340329
+            }
+          }
+        },
+        "privacyPassed": true,
+        "stderrBytes": 0,
+        "jobId": "9f65d100-e014-4dfd-8339-6ea3e8f24789",
+        "firstProgress": {
+          "event": "track.progress",
+          "seq": 2,
+          "jobId": "9f65d100-e014-4dfd-8339-6ea3e8f24789",
+          "trackKey": "1",
+          "payload": {
+            "bytes": 293737,
+            "fraction": 0.08793654756761983
+          }
+        },
+        "code": 0,
+        "signal": null,
+        "finishedAt": "2026-10-15T17:13:17.321Z"
+      },
+      "after": {
+        "counts": {
+          "completed": 1,
+          "skipped": 0,
+          "failed": 0,
+          "paused": 0,
+          "unavailable": 0,
+          "queued": 0
+        },
+        "total": 1,
+        "files": [
+          {
+            "trackKey": "1",
+            "file": "track-1/Peaceful Melody, soave lofi - This Is What You Came For.mp3",
+            "bytes": 3382838,
+            "sha256": "25472ef1b31698f606feabad87f33c8b5c32993660032edc7df4e18c3b7e26ab",
+            "mtimeNs": "1792084397284540243",
+            "inode": "140210389",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 139154
+            },
+            "tags": {
+              "title": "This Is What You Came For",
+              "artist": "Peaceful Melody; soave lofi",
+              "album": "This Is What You Came For",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 41139
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "manifestPrivacyAfter": true,
+      "preservedCompleted": true,
+      "noRepeatedCompletedDownloads": true,
+      "partsRemaining": 0,
+      "referencedPartsRemaining": 0,
+      "failedAttemptCount": 0,
+      "playlistSidecars": [],
+      "finishedAt": "2026-10-15T17:13:17.335Z"
+    },
+    {
+      "kind": "track",
+      "iteration": 2,
+      "startedAt": "2026-10-15T17:13:17.336Z",
+      "pass": true,
+      "download": {
+        "args": [
+          "track",
+          "https://music.yandex.com/album/38818449/track/144356630",
+          "--json",
+          "--quality",
+          "best",
+          "--concurrency",
+          "1",
+          "--output",
+          "~/music-downloader-macos/music-downloader-check-2eLng2/track-2"
+        ],
+        "startedAt": "2026-10-15T17:13:17.337Z",
+        "events": [
+          {
+            "event": "job.created",
+            "seq": 1,
+            "jobId": "c57e4fcd-1a71-4731-b54f-cca5380ec8cd",
+            "payload": {}
+          },
+          {
+            "event": "entity.resolved",
+            "seq": 2,
+            "jobId": "c57e4fcd-1a71-4731-b54f-cca5380ec8cd",
+            "payload": {}
+          },
+          {
+            "event": "plan.created",
+            "seq": 3,
+            "jobId": "c57e4fcd-1a71-4731-b54f-cca5380ec8cd",
+            "payload": {}
+          },
+          {
+            "event": "track.started",
+            "seq": 4,
+            "jobId": "c57e4fcd-1a71-4731-b54f-cca5380ec8cd",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 5,
+            "jobId": "c57e4fcd-1a71-4731-b54f-cca5380ec8cd",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 6,
+            "jobId": "c57e4fcd-1a71-4731-b54f-cca5380ec8cd",
+            "trackKey": "1",
+            "payload": {}
+          }
+        ],
+        "eventCounts": {
+          "job.created": 1,
+          "entity.resolved": 1,
+          "plan.created": 1,
+          "track.started": 1,
+          "variant.selected": 1,
+          "download.started": 1,
+          "track.progress": 14
+        },
+        "progressByTrack": {
+          "1": {
+            "count": 14,
+            "first": {
+              "seq": 7,
+              "bytes": 15211
+            },
+            "last": {
+              "seq": 20,
+              "bytes": 310123
+            }
+          }
+        },
+        "privacyPassed": true,
+        "stderrBytes": 0,
+        "jobId": "c57e4fcd-1a71-4731-b54f-cca5380ec8cd",
+        "firstProgress": {
+          "event": "track.progress",
+          "seq": 7,
+          "jobId": "c57e4fcd-1a71-4731-b54f-cca5380ec8cd",
+          "trackKey": "1",
+          "payload": {
+            "bytes": 15211,
+            "fraction": 0.004553743059441151
+          }
+        },
+        "signalAt": "2026-10-15T17:13:18.206Z",
+        "signalBytes": 277355,
+        "code": 4,
+        "signal": null,
+        "finishedAt": "2026-10-15T17:13:18.256Z"
+      },
+      "before": {
+        "counts": {
+          "completed": 0,
+          "skipped": 0,
+          "failed": 0,
+          "paused": 1,
+          "unavailable": 0,
+          "queued": 0
+        },
+        "completedFiles": [],
+        "partialFiles": [
+          {
+            "trackKey": "1",
+            "bytes": 310123,
+            "manifestBytes": 310123
+          }
+        ]
+      },
+      "manifestPrivacyBefore": true,
+      "resume": {
+        "args": [
+          "resume",
+          "c57e4fcd-1a71-4731-b54f-cca5380ec8cd",
+          "--json",
+          "--concurrency",
+          "1"
+        ],
+        "startedAt": "2026-10-15T17:13:18.258Z",
+        "events": [
+          {
+            "event": "download.started",
+            "seq": 1,
+            "jobId": "c57e4fcd-1a71-4731-b54f-cca5380ec8cd",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 187,
+            "jobId": "c57e4fcd-1a71-4731-b54f-cca5380ec8cd",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 188,
+            "jobId": "c57e4fcd-1a71-4731-b54f-cca5380ec8cd",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 189,
+            "jobId": "c57e4fcd-1a71-4731-b54f-cca5380ec8cd",
+            "trackKey": "1",
+            "payload": {
+              "durationMs": 139154
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 191,
+            "jobId": "c57e4fcd-1a71-4731-b54f-cca5380ec8cd",
+            "payload": {
+              "completed": 1,
+              "total": 1,
+              "fraction": 1
+            }
+          },
+          {
+            "event": "job.completed",
+            "seq": 192,
+            "jobId": "c57e4fcd-1a71-4731-b54f-cca5380ec8cd",
+            "payload": {}
+          }
+        ],
+        "eventCounts": {
+          "download.started": 1,
+          "track.progress": 186,
+          "download.completed": 1,
+          "metadata.written": 1,
+          "validation.completed": 1,
+          "job.progress": 1,
+          "job.completed": 1
+        },
+        "progressByTrack": {
+          "1": {
+            "count": 186,
+            "first": {
+              "seq": 2,
+              "bytes": 310123
+            },
+            "last": {
+              "seq": 190,
+              "bytes": 3340329
+            }
+          }
+        },
+        "privacyPassed": true,
+        "stderrBytes": 0,
+        "jobId": "c57e4fcd-1a71-4731-b54f-cca5380ec8cd",
+        "firstProgress": {
+          "event": "track.progress",
+          "seq": 2,
+          "jobId": "c57e4fcd-1a71-4731-b54f-cca5380ec8cd",
+          "trackKey": "1",
+          "payload": {
+            "bytes": 310123,
+            "fraction": 0.09284205238466031
+          }
+        },
+        "code": 0,
+        "signal": null,
+        "finishedAt": "2026-10-15T17:13:19.827Z"
+      },
+      "after": {
+        "counts": {
+          "completed": 1,
+          "skipped": 0,
+          "failed": 0,
+          "paused": 0,
+          "unavailable": 0,
+          "queued": 0
+        },
+        "total": 1,
+        "files": [
+          {
+            "trackKey": "1",
+            "file": "track-2/Peaceful Melody, soave lofi - This Is What You Came For.mp3",
+            "bytes": 3382838,
+            "sha256": "25472ef1b31698f606feabad87f33c8b5c32993660032edc7df4e18c3b7e26ab",
+            "mtimeNs": "1792084399791792960",
+            "inode": "140210426",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 139154
+            },
+            "tags": {
+              "title": "This Is What You Came For",
+              "artist": "Peaceful Melody; soave lofi",
+              "album": "This Is What You Came For",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 41139
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "manifestPrivacyAfter": true,
+      "preservedCompleted": true,
+      "noRepeatedCompletedDownloads": true,
+      "partsRemaining": 0,
+      "referencedPartsRemaining": 0,
+      "failedAttemptCount": 0,
+      "playlistSidecars": [],
+      "finishedAt": "2026-10-15T17:13:19.832Z"
+    },
+    {
+      "kind": "track",
+      "iteration": 3,
+      "startedAt": "2026-10-15T17:13:19.833Z",
+      "pass": true,
+      "download": {
+        "args": [
+          "track",
+          "https://music.yandex.com/album/38818449/track/144356630",
+          "--json",
+          "--quality",
+          "best",
+          "--concurrency",
+          "1",
+          "--output",
+          "~/music-downloader-macos/music-downloader-check-2eLng2/track-3"
+        ],
+        "startedAt": "2026-10-15T17:13:19.834Z",
+        "events": [
+          {
+            "event": "job.created",
+            "seq": 1,
+            "jobId": "b28a1978-f49f-43eb-9f3f-6e3afcf8e292",
+            "payload": {}
+          },
+          {
+            "event": "entity.resolved",
+            "seq": 2,
+            "jobId": "b28a1978-f49f-43eb-9f3f-6e3afcf8e292",
+            "payload": {}
+          },
+          {
+            "event": "plan.created",
+            "seq": 3,
+            "jobId": "b28a1978-f49f-43eb-9f3f-6e3afcf8e292",
+            "payload": {}
+          },
+          {
+            "event": "track.started",
+            "seq": 4,
+            "jobId": "b28a1978-f49f-43eb-9f3f-6e3afcf8e292",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 5,
+            "jobId": "b28a1978-f49f-43eb-9f3f-6e3afcf8e292",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 6,
+            "jobId": "b28a1978-f49f-43eb-9f3f-6e3afcf8e292",
+            "trackKey": "1",
+            "payload": {}
+          }
+        ],
+        "eventCounts": {
+          "job.created": 1,
+          "entity.resolved": 1,
+          "plan.created": 1,
+          "track.started": 1,
+          "variant.selected": 1,
+          "download.started": 1,
+          "track.progress": 19
+        },
+        "progressByTrack": {
+          "1": {
+            "count": 19,
+            "first": {
+              "seq": 7,
+              "bytes": 15211
+            },
+            "last": {
+              "seq": 25,
+              "bytes": 392043
+            }
+          }
+        },
+        "privacyPassed": true,
+        "stderrBytes": 0,
+        "jobId": "b28a1978-f49f-43eb-9f3f-6e3afcf8e292",
+        "firstProgress": {
+          "event": "track.progress",
+          "seq": 7,
+          "jobId": "b28a1978-f49f-43eb-9f3f-6e3afcf8e292",
+          "trackKey": "1",
+          "payload": {
+            "bytes": 15211,
+            "fraction": 0.004553743059441151
+          }
+        },
+        "signalAt": "2026-10-15T17:13:21.901Z",
+        "signalBytes": 277355,
+        "code": 4,
+        "signal": null,
+        "finishedAt": "2026-10-15T17:13:21.960Z"
+      },
+      "before": {
+        "counts": {
+          "completed": 0,
+          "skipped": 0,
+          "failed": 0,
+          "paused": 1,
+          "unavailable": 0,
+          "queued": 0
+        },
+        "completedFiles": [],
+        "partialFiles": [
+          {
+            "trackKey": "1",
+            "bytes": 392043,
+            "manifestBytes": 392043
+          }
+        ]
+      },
+      "manifestPrivacyBefore": true,
+      "resume": {
+        "args": [
+          "resume",
+          "b28a1978-f49f-43eb-9f3f-6e3afcf8e292",
+          "--json",
+          "--concurrency",
+          "1"
+        ],
+        "startedAt": "2026-10-15T17:13:21.962Z",
+        "events": [
+          {
+            "event": "download.started",
+            "seq": 1,
+            "jobId": "b28a1978-f49f-43eb-9f3f-6e3afcf8e292",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 182,
+            "jobId": "b28a1978-f49f-43eb-9f3f-6e3afcf8e292",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 183,
+            "jobId": "b28a1978-f49f-43eb-9f3f-6e3afcf8e292",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 184,
+            "jobId": "b28a1978-f49f-43eb-9f3f-6e3afcf8e292",
+            "trackKey": "1",
+            "payload": {
+              "durationMs": 139154
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 186,
+            "jobId": "b28a1978-f49f-43eb-9f3f-6e3afcf8e292",
+            "payload": {
+              "completed": 1,
+              "total": 1,
+              "fraction": 1
+            }
+          },
+          {
+            "event": "job.completed",
+            "seq": 187,
+            "jobId": "b28a1978-f49f-43eb-9f3f-6e3afcf8e292",
+            "payload": {}
+          }
+        ],
+        "eventCounts": {
+          "download.started": 1,
+          "track.progress": 181,
+          "download.completed": 1,
+          "metadata.written": 1,
+          "validation.completed": 1,
+          "job.progress": 1,
+          "job.completed": 1
+        },
+        "progressByTrack": {
+          "1": {
+            "count": 181,
+            "first": {
+              "seq": 2,
+              "bytes": 392043
+            },
+            "last": {
+              "seq": 185,
+              "bytes": 3340329
+            }
+          }
+        },
+        "privacyPassed": true,
+        "stderrBytes": 0,
+        "jobId": "b28a1978-f49f-43eb-9f3f-6e3afcf8e292",
+        "firstProgress": {
+          "event": "track.progress",
+          "seq": 2,
+          "jobId": "b28a1978-f49f-43eb-9f3f-6e3afcf8e292",
+          "trackKey": "1",
+          "payload": {
+            "bytes": 392043,
+            "fraction": 0.11736658275277674
+          }
+        },
+        "code": 0,
+        "signal": null,
+        "finishedAt": "2026-10-15T17:13:22.876Z"
+      },
+      "after": {
+        "counts": {
+          "completed": 1,
+          "skipped": 0,
+          "failed": 0,
+          "paused": 0,
+          "unavailable": 0,
+          "queued": 0
+        },
+        "total": 1,
+        "files": [
+          {
+            "trackKey": "1",
+            "file": "track-3/Peaceful Melody, soave lofi - This Is What You Came For.mp3",
+            "bytes": 3382838,
+            "sha256": "25472ef1b31698f606feabad87f33c8b5c32993660032edc7df4e18c3b7e26ab",
+            "mtimeNs": "1792084402839423438",
+            "inode": "140210463",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 139154
+            },
+            "tags": {
+              "title": "This Is What You Came For",
+              "artist": "Peaceful Melody; soave lofi",
+              "album": "This Is What You Came For",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 41139
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "manifestPrivacyAfter": true,
+      "preservedCompleted": true,
+      "noRepeatedCompletedDownloads": true,
+      "partsRemaining": 0,
+      "referencedPartsRemaining": 0,
+      "failedAttemptCount": 0,
+      "playlistSidecars": [],
+      "finishedAt": "2026-10-15T17:13:22.883Z"
+    },
+    {
+      "kind": "album",
+      "iteration": 1,
+      "startedAt": "2026-10-15T17:13:22.883Z",
+      "pass": true,
+      "download": {
+        "args": [
+          "album",
+          "https://music.yandex.ru/album/27856013",
+          "--json",
+          "--quality",
+          "best",
+          "--concurrency",
+          "1",
+          "--output",
+          "~/music-downloader-macos/music-downloader-check-2eLng2/album-1"
+        ],
+        "startedAt": "2026-10-15T17:13:22.884Z",
+        "events": [
+          {
+            "event": "job.created",
+            "seq": 1,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "payload": {}
+          },
+          {
+            "event": "entity.resolved",
+            "seq": 2,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "payload": {}
+          },
+          {
+            "event": "plan.created",
+            "seq": 3,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "payload": {}
+          },
+          {
+            "event": "track.started",
+            "seq": 4,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 5,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 6,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 280,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 281,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 282,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "trackKey": "1",
+            "payload": {
+              "durationMs": 223138
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 284,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "payload": {
+              "completed": 1,
+              "total": 9,
+              "fraction": 0.1111111111111111
+            }
+          },
+          {
+            "event": "track.started",
+            "seq": 285,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 286,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 287,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "trackKey": "2",
+            "payload": {}
+          }
+        ],
+        "eventCounts": {
+          "job.created": 1,
+          "entity.resolved": 1,
+          "plan.created": 1,
+          "track.started": 2,
+          "variant.selected": 2,
+          "download.started": 2,
+          "track.progress": 289,
+          "download.completed": 1,
+          "metadata.written": 1,
+          "validation.completed": 1,
+          "job.progress": 1
+        },
+        "progressByTrack": {
+          "1": {
+            "count": 274,
+            "first": {
+              "seq": 7,
+              "bytes": 15205
+            },
+            "last": {
+              "seq": 283,
+              "bytes": 5355938
+            }
+          },
+          "2": {
+            "count": 15,
+            "first": {
+              "seq": 288,
+              "bytes": 15209
+            },
+            "last": {
+              "seq": 302,
+              "bytes": 293737
+            }
+          }
+        },
+        "privacyPassed": true,
+        "stderrBytes": 0,
+        "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+        "firstProgress": {
+          "event": "track.progress",
+          "seq": 7,
+          "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+          "trackKey": "1",
+          "payload": {
+            "bytes": 15205,
+            "fraction": 0.002838905155362142
+          }
+        },
+        "signalAt": "2026-10-15T17:13:25.007Z",
+        "signalBytes": 277353,
+        "code": 4,
+        "signal": null,
+        "finishedAt": "2026-10-15T17:13:25.056Z"
+      },
+      "before": {
+        "counts": {
+          "completed": 1,
+          "skipped": 0,
+          "failed": 0,
+          "paused": 1,
+          "unavailable": 0,
+          "queued": 7
+        },
+        "completedFiles": [
+          {
+            "trackKey": "1",
+            "file": "album-1/melancholia/01 - Три дня дождя - Вдох.mp3",
+            "bytes": 5378716,
+            "sha256": "bea847186ef94ae88eea5b4e29f3594c730e0f4484bbec0500b0accc8402918a",
+            "mtimeNs": "1792084404400776424",
+            "inode": "140210491",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 223138
+            },
+            "tags": {
+              "title": "Вдох",
+              "artist": "Три дня дождя",
+              "album": "melancholia",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 21446
+                }
+              ]
+            }
+          }
+        ],
+        "partialFiles": [
+          {
+            "trackKey": "2",
+            "bytes": 293737,
+            "manifestBytes": 293737
+          }
+        ]
+      },
+      "manifestPrivacyBefore": true,
+      "resume": {
+        "args": [
+          "resume",
+          "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+          "--json",
+          "--concurrency",
+          "1"
+        ],
+        "startedAt": "2026-10-15T17:13:25.069Z",
+        "events": [
+          {
+            "event": "download.started",
+            "seq": 1,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 248,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 249,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 250,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "trackKey": "2",
+            "payload": {
+              "durationMs": 180010
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 252,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "payload": {
+              "completed": 2,
+              "total": 9,
+              "fraction": 0.2222222222222222
+            }
+          },
+          {
+            "event": "track.started",
+            "seq": 253,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "trackKey": "3",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 254,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "trackKey": "3",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 255,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "trackKey": "3",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 465,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "trackKey": "3",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 466,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "trackKey": "3",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 467,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "trackKey": "3",
+            "payload": {
+              "durationMs": 189832
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 469,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "payload": {
+              "completed": 3,
+              "total": 9,
+              "fraction": 0.3333333333333333
+            }
+          },
+          {
+            "event": "track.started",
+            "seq": 470,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "trackKey": "4",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 471,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "trackKey": "4",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 472,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "trackKey": "4",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 756,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "trackKey": "4",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 757,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "trackKey": "4",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 758,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "trackKey": "4",
+            "payload": {
+              "durationMs": 236251
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 760,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "payload": {
+              "completed": 4,
+              "total": 9,
+              "fraction": 0.4444444444444444
+            }
+          },
+          {
+            "event": "track.started",
+            "seq": 761,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "trackKey": "5",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 762,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "trackKey": "5",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 763,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "trackKey": "5",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 959,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "trackKey": "5",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 960,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "trackKey": "5",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 961,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "trackKey": "5",
+            "payload": {
+              "durationMs": 156003
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 963,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "payload": {
+              "completed": 5,
+              "total": 9,
+              "fraction": 0.5555555555555556
+            }
+          },
+          {
+            "event": "track.started",
+            "seq": 964,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "trackKey": "6",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 965,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "trackKey": "6",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 966,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "trackKey": "6",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 1212,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "trackKey": "6",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 1213,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "trackKey": "6",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 1214,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "trackKey": "6",
+            "payload": {
+              "durationMs": 201613
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 1216,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "payload": {
+              "completed": 6,
+              "total": 9,
+              "fraction": 0.6666666666666666
+            }
+          },
+          {
+            "event": "track.started",
+            "seq": 1217,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "trackKey": "7",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 1218,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "trackKey": "7",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 1219,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "trackKey": "7",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 1495,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "trackKey": "7",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 1496,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "trackKey": "7",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 1497,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "trackKey": "7",
+            "payload": {
+              "durationMs": 207621
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 1499,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "payload": {
+              "completed": 7,
+              "total": 9,
+              "fraction": 0.7777777777777778
+            }
+          },
+          {
+            "event": "track.started",
+            "seq": 1500,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "trackKey": "8",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 1501,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "trackKey": "8",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 1502,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "trackKey": "8",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 1672,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "trackKey": "8",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 1673,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "trackKey": "8",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 1674,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "trackKey": "8",
+            "payload": {
+              "durationMs": 154149
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 1676,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "payload": {
+              "completed": 8,
+              "total": 9,
+              "fraction": 0.8888888888888888
+            }
+          },
+          {
+            "event": "track.started",
+            "seq": 1677,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "trackKey": "9",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 1678,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "trackKey": "9",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 1679,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "trackKey": "9",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 1882,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "trackKey": "9",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 1883,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "trackKey": "9",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 1884,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "trackKey": "9",
+            "payload": {
+              "durationMs": 186096
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 1886,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "payload": {
+              "completed": 9,
+              "total": 9,
+              "fraction": 1
+            }
+          },
+          {
+            "event": "job.completed",
+            "seq": 1887,
+            "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+            "payload": {}
+          }
+        ],
+        "eventCounts": {
+          "download.started": 8,
+          "track.progress": 1832,
+          "download.completed": 8,
+          "metadata.written": 8,
+          "validation.completed": 8,
+          "job.progress": 8,
+          "track.started": 7,
+          "variant.selected": 7,
+          "job.completed": 1
+        },
+        "progressByTrack": {
+          "2": {
+            "count": 247,
+            "first": {
+              "seq": 2,
+              "bytes": 293737
+            },
+            "last": {
+              "seq": 251,
+              "bytes": 4320862
+            }
+          },
+          "3": {
+            "count": 210,
+            "first": {
+              "seq": 256,
+              "bytes": 15205
+            },
+            "last": {
+              "seq": 468,
+              "bytes": 4556591
+            }
+          },
+          "4": {
+            "count": 284,
+            "first": {
+              "seq": 473,
+              "bytes": 15201
+            },
+            "last": {
+              "seq": 759,
+              "bytes": 5670661
+            }
+          },
+          "5": {
+            "count": 196,
+            "first": {
+              "seq": 764,
+              "bytes": 15205
+            },
+            "last": {
+              "seq": 962,
+              "bytes": 3744705
+            }
+          },
+          "6": {
+            "count": 246,
+            "first": {
+              "seq": 967,
+              "bytes": 15201
+            },
+            "last": {
+              "seq": 1215,
+              "bytes": 4839340
+            }
+          },
+          "7": {
+            "count": 276,
+            "first": {
+              "seq": 1220,
+              "bytes": 15205
+            },
+            "last": {
+              "seq": 1498,
+              "bytes": 4983536
+            }
+          },
+          "8": {
+            "count": 170,
+            "first": {
+              "seq": 1503,
+              "bytes": 15210
+            },
+            "last": {
+              "seq": 1675,
+              "bytes": 3700192
+            }
+          },
+          "9": {
+            "count": 203,
+            "first": {
+              "seq": 1680,
+              "bytes": 15211
+            },
+            "last": {
+              "seq": 1885,
+              "bytes": 4466938
+            }
+          }
+        },
+        "privacyPassed": true,
+        "stderrBytes": 0,
+        "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+        "firstProgress": {
+          "event": "track.progress",
+          "seq": 2,
+          "jobId": "af7ba881-fba8-4657-9b34-9274a3bc6dfc",
+          "trackKey": "2",
+          "payload": {
+            "bytes": 293737,
+            "fraction": 0.0679811111764273
+          }
+        },
+        "code": 0,
+        "signal": null,
+        "finishedAt": "2026-10-15T17:13:40.555Z"
+      },
+      "after": {
+        "counts": {
+          "completed": 9,
+          "skipped": 0,
+          "failed": 0,
+          "paused": 0,
+          "unavailable": 0,
+          "queued": 0
+        },
+        "total": 9,
+        "files": [
+          {
+            "trackKey": "1",
+            "file": "album-1/melancholia/01 - Три дня дождя - Вдох.mp3",
+            "bytes": 5378716,
+            "sha256": "bea847186ef94ae88eea5b4e29f3594c730e0f4484bbec0500b0accc8402918a",
+            "mtimeNs": "1792084404400776424",
+            "inode": "140210491",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 223138
+            },
+            "tags": {
+              "title": "Вдох",
+              "artist": "Три дня дождя",
+              "album": "melancholia",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 21446
+                }
+              ]
+            }
+          },
+          {
+            "trackKey": "2",
+            "file": "album-1/melancholia/02 - Три дня дождя - Ненавижу быть собой.mp3",
+            "bytes": 4343668,
+            "sha256": "f63a94dd3ccb03b2a67c4c634f328190202034f3909ce3f4348c5c19590abd73",
+            "mtimeNs": "1792084406477979327",
+            "inode": "140210518",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 180010
+            },
+            "tags": {
+              "title": "Ненавижу быть собой",
+              "artist": "Три дня дождя",
+              "album": "melancholia",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 21446
+                }
+              ]
+            }
+          },
+          {
+            "trackKey": "3",
+            "file": "album-1/melancholia/03 - Три дня дождя, LYRIQ - Еле дыша.mp3",
+            "bytes": 4579383,
+            "sha256": "66de5047b0aab0e56e232c674f929a61843727cb1f884f7bb3217887540e80fb",
+            "mtimeNs": "1792084408512059615",
+            "inode": "140210531",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 189832
+            },
+            "tags": {
+              "title": "Еле дыша",
+              "artist": "Три дня дождя; LYRIQ",
+              "album": "melancholia",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 21446
+                }
+              ]
+            }
+          },
+          {
+            "trackKey": "4",
+            "file": "album-1/melancholia/04 - Три дня дождя, MONA - Прощание.mp3",
+            "bytes": 5693453,
+            "sha256": "2edede9552f4869a8b78b30f28d1b979aefc55364bd6cf24547bf315be3c0d0e",
+            "mtimeNs": "1792084410451650476",
+            "inode": "140210543",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 236251
+            },
+            "tags": {
+              "title": "Прощание",
+              "artist": "Три дня дождя; MONA",
+              "album": "melancholia",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 21446
+                }
+              ]
+            }
+          },
+          {
+            "trackKey": "5",
+            "file": "album-1/melancholia/05 - Три дня дождя - Иду за тобой.mp3",
+            "bytes": 3767497,
+            "sha256": "be2e378dcd19f664f87e45a1c012b78a9139f5927ed217093d33e7ebd1ea5bff",
+            "mtimeNs": "1792084412319279050",
+            "inode": "140210558",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 156003
+            },
+            "tags": {
+              "title": "Иду за тобой",
+              "artist": "Три дня дождя",
+              "album": "melancholia",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 21446
+                }
+              ]
+            }
+          },
+          {
+            "trackKey": "6",
+            "file": "album-1/melancholia/06 - Три дня дождя - За край.mp3",
+            "bytes": 4862123,
+            "sha256": "59d05371db850390fe3f53e1eda62a5b15e1f19e2f0af02fccff8952cd3036f9",
+            "mtimeNs": "1792084414357261625",
+            "inode": "140210570",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 201613
+            },
+            "tags": {
+              "title": "За край",
+              "artist": "Три дня дождя",
+              "album": "melancholia",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 21446
+                }
+              ]
+            }
+          },
+          {
+            "trackKey": "7",
+            "file": "album-1/melancholia/07 - Три дня дождя, тринадцать карат - Аутоагрессия.mp3",
+            "bytes": 5006363,
+            "sha256": "6a0e79f473980b3591dd4ea85d7bba578e586957e5f8d7df81d86bd6a4ed91a0",
+            "mtimeNs": "1792084416505175401",
+            "inode": "140210585",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 207621
+            },
+            "tags": {
+              "title": "Аутоагрессия",
+              "artist": "Три дня дождя; тринадцать карат",
+              "album": "melancholia",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 21446
+                }
+              ]
+            }
+          },
+          {
+            "trackKey": "8",
+            "file": "album-1/melancholia/08 - Три дня дождя - На виду.mp3",
+            "bytes": 3722975,
+            "sha256": "da99d52fcc6b4be2bee6fc3d13be32ab28d850575fda6102069fd2b73a22e3ff",
+            "mtimeNs": "1792084418466847862",
+            "inode": "140210598",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 154149
+            },
+            "tags": {
+              "title": "На виду",
+              "artist": "Три дня дождя",
+              "album": "melancholia",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 21446
+                }
+              ]
+            }
+          },
+          {
+            "trackKey": "9",
+            "file": "album-1/melancholia/09 - Три дня дождя - Слаб.mp3",
+            "bytes": 4489716,
+            "sha256": "02a234798654ea5121d4ce42f66655071027b0c388cbaee029c66c0e70837ebf",
+            "mtimeNs": "1792084420504029064",
+            "inode": "140210610",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 186096
+            },
+            "tags": {
+              "title": "Слаб",
+              "artist": "Три дня дождя",
+              "album": "melancholia",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 21446
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "manifestPrivacyAfter": true,
+      "preservedCompleted": true,
+      "noRepeatedCompletedDownloads": true,
+      "partsRemaining": 0,
+      "referencedPartsRemaining": 0,
+      "failedAttemptCount": 0,
+      "playlistSidecars": [],
+      "finishedAt": "2026-10-15T17:13:40.607Z"
+    },
+    {
+      "kind": "album",
+      "iteration": 2,
+      "startedAt": "2026-10-15T17:13:40.608Z",
+      "pass": true,
+      "download": {
+        "args": [
+          "album",
+          "https://music.yandex.ru/album/27856013",
+          "--json",
+          "--quality",
+          "best",
+          "--concurrency",
+          "1",
+          "--output",
+          "~/music-downloader-macos/music-downloader-check-2eLng2/album-2"
+        ],
+        "startedAt": "2026-10-15T17:13:40.608Z",
+        "events": [
+          {
+            "event": "job.created",
+            "seq": 1,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "payload": {}
+          },
+          {
+            "event": "entity.resolved",
+            "seq": 2,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "payload": {}
+          },
+          {
+            "event": "plan.created",
+            "seq": 3,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "payload": {}
+          },
+          {
+            "event": "track.started",
+            "seq": 4,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 5,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 6,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 260,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 261,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 262,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "trackKey": "1",
+            "payload": {
+              "durationMs": 223138
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 264,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "payload": {
+              "completed": 1,
+              "total": 9,
+              "fraction": 0.1111111111111111
+            }
+          },
+          {
+            "event": "track.started",
+            "seq": 265,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "track.started",
+            "seq": 266,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "trackKey": "3",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 267,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "trackKey": "3",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 268,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "trackKey": "3",
+            "payload": {}
+          }
+        ],
+        "eventCounts": {
+          "job.created": 1,
+          "entity.resolved": 1,
+          "plan.created": 1,
+          "track.started": 3,
+          "variant.selected": 2,
+          "download.started": 2,
+          "track.progress": 270,
+          "download.completed": 1,
+          "metadata.written": 1,
+          "validation.completed": 1,
+          "job.progress": 1
+        },
+        "progressByTrack": {
+          "1": {
+            "count": 254,
+            "first": {
+              "seq": 7,
+              "bytes": 15205
+            },
+            "last": {
+              "seq": 263,
+              "bytes": 5355938
+            }
+          },
+          "3": {
+            "count": 16,
+            "first": {
+              "seq": 269,
+              "bytes": 15205
+            },
+            "last": {
+              "seq": 284,
+              "bytes": 293733
+            }
+          }
+        },
+        "privacyPassed": true,
+        "stderrBytes": 0,
+        "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+        "firstProgress": {
+          "event": "track.progress",
+          "seq": 7,
+          "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+          "trackKey": "1",
+          "payload": {
+            "bytes": 15205,
+            "fraction": 0.002838905155362142
+          }
+        },
+        "signalAt": "2026-10-15T17:13:43.635Z",
+        "signalBytes": 277349,
+        "code": 4,
+        "signal": null,
+        "finishedAt": "2026-10-15T17:13:43.705Z"
+      },
+      "before": {
+        "counts": {
+          "completed": 1,
+          "skipped": 0,
+          "failed": 0,
+          "paused": 1,
+          "unavailable": 0,
+          "queued": 6
+        },
+        "completedFiles": [
+          {
+            "trackKey": "1",
+            "file": "album-2/melancholia/01 - Три дня дождя - Вдох.mp3",
+            "bytes": 5378716,
+            "sha256": "bea847186ef94ae88eea5b4e29f3594c730e0f4484bbec0500b0accc8402918a",
+            "mtimeNs": "1792084422085903900",
+            "inode": "140210638",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 223138
+            },
+            "tags": {
+              "title": "Вдох",
+              "artist": "Три дня дождя",
+              "album": "melancholia",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 21446
+                }
+              ]
+            }
+          }
+        ],
+        "partialFiles": [
+          {
+            "trackKey": "3",
+            "bytes": 293733,
+            "manifestBytes": 293733
+          }
+        ]
+      },
+      "manifestPrivacyBefore": true,
+      "resume": {
+        "args": [
+          "resume",
+          "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+          "--json",
+          "--concurrency",
+          "1"
+        ],
+        "startedAt": "2026-10-15T17:13:43.721Z",
+        "events": [
+          {
+            "event": "track.started",
+            "seq": 1,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 2,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 3,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 199,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 200,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 201,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "trackKey": "2",
+            "payload": {
+              "durationMs": 180010
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 203,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "payload": {
+              "completed": 2,
+              "total": 9,
+              "fraction": 0.2222222222222222
+            }
+          },
+          {
+            "event": "download.started",
+            "seq": 204,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "trackKey": "3",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 463,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "trackKey": "3",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 464,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "trackKey": "3",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 465,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "trackKey": "3",
+            "payload": {
+              "durationMs": 189832
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 467,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "payload": {
+              "completed": 3,
+              "total": 9,
+              "fraction": 0.3333333333333333
+            }
+          },
+          {
+            "event": "track.started",
+            "seq": 468,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "trackKey": "4",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 469,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "trackKey": "4",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 470,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "trackKey": "4",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 775,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "trackKey": "4",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 776,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "trackKey": "4",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 777,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "trackKey": "4",
+            "payload": {
+              "durationMs": 236251
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 779,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "payload": {
+              "completed": 4,
+              "total": 9,
+              "fraction": 0.4444444444444444
+            }
+          },
+          {
+            "event": "track.started",
+            "seq": 780,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "trackKey": "5",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 781,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "trackKey": "5",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 782,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "trackKey": "5",
+            "payload": {}
+          },
+          {
+            "event": "track.started",
+            "seq": 783,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "trackKey": "6",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 784,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "trackKey": "6",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 785,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "trackKey": "6",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 1027,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "trackKey": "6",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 1028,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "trackKey": "6",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 1029,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "trackKey": "6",
+            "payload": {
+              "durationMs": 201613
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 1031,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "payload": {
+              "completed": 5,
+              "total": 9,
+              "fraction": 0.5555555555555556
+            }
+          },
+          {
+            "event": "track.started",
+            "seq": 1032,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "trackKey": "7",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 1033,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "trackKey": "7",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 1034,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "trackKey": "7",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 1282,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "trackKey": "7",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 1283,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "trackKey": "7",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 1284,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "trackKey": "7",
+            "payload": {
+              "durationMs": 207621
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 1286,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "payload": {
+              "completed": 6,
+              "total": 9,
+              "fraction": 0.6666666666666666
+            }
+          },
+          {
+            "event": "track.started",
+            "seq": 1287,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "trackKey": "8",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 1288,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "trackKey": "8",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 1289,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "trackKey": "8",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 1467,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "trackKey": "8",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 1468,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "trackKey": "8",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 1469,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "trackKey": "8",
+            "payload": {
+              "durationMs": 154149
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 1471,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "payload": {
+              "completed": 7,
+              "total": 9,
+              "fraction": 0.7777777777777778
+            }
+          },
+          {
+            "event": "track.started",
+            "seq": 1472,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "trackKey": "9",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 1473,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "trackKey": "9",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 1474,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "trackKey": "9",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 1475,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "trackKey": "5",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 1662,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "trackKey": "5",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 1663,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "trackKey": "5",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 1664,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "trackKey": "5",
+            "payload": {
+              "durationMs": 156003
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 1666,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "payload": {
+              "completed": 8,
+              "total": 9,
+              "fraction": 0.8888888888888888
+            }
+          },
+          {
+            "event": "download.started",
+            "seq": 1667,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "trackKey": "9",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 1890,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "trackKey": "9",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 1891,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "trackKey": "9",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 1892,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "trackKey": "9",
+            "payload": {
+              "durationMs": 186096
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 1894,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "payload": {
+              "completed": 9,
+              "total": 9,
+              "fraction": 1
+            }
+          },
+          {
+            "event": "job.completed",
+            "seq": 1895,
+            "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+            "payload": {}
+          }
+        ],
+        "eventCounts": {
+          "track.started": 7,
+          "variant.selected": 7,
+          "download.started": 10,
+          "track.progress": 1838,
+          "download.completed": 8,
+          "metadata.written": 8,
+          "validation.completed": 8,
+          "job.progress": 8,
+          "job.completed": 1
+        },
+        "progressByTrack": {
+          "2": {
+            "count": 196,
+            "first": {
+              "seq": 4,
+              "bytes": 15210
+            },
+            "last": {
+              "seq": 202,
+              "bytes": 4320862
+            }
+          },
+          "3": {
+            "count": 259,
+            "first": {
+              "seq": 205,
+              "bytes": 293733
+            },
+            "last": {
+              "seq": 466,
+              "bytes": 4556591
+            }
+          },
+          "4": {
+            "count": 305,
+            "first": {
+              "seq": 471,
+              "bytes": 15201
+            },
+            "last": {
+              "seq": 778,
+              "bytes": 5670661
+            }
+          },
+          "5": {
+            "count": 187,
+            "first": {
+              "seq": 1476,
+              "bytes": 15205
+            },
+            "last": {
+              "seq": 1665,
+              "bytes": 3744705
+            }
+          },
+          "6": {
+            "count": 242,
+            "first": {
+              "seq": 786,
+              "bytes": 15201
+            },
+            "last": {
+              "seq": 1030,
+              "bytes": 4839340
+            }
+          },
+          "7": {
+            "count": 248,
+            "first": {
+              "seq": 1035,
+              "bytes": 15205
+            },
+            "last": {
+              "seq": 1285,
+              "bytes": 4983536
+            }
+          },
+          "8": {
+            "count": 178,
+            "first": {
+              "seq": 1290,
+              "bytes": 15209
+            },
+            "last": {
+              "seq": 1470,
+              "bytes": 3700192
+            }
+          },
+          "9": {
+            "count": 223,
+            "first": {
+              "seq": 1668,
+              "bytes": 15209
+            },
+            "last": {
+              "seq": 1893,
+              "bytes": 4466938
+            }
+          }
+        },
+        "privacyPassed": true,
+        "stderrBytes": 0,
+        "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+        "firstProgress": {
+          "event": "track.progress",
+          "seq": 4,
+          "jobId": "c79a5e7e-347f-4290-9299-a22172f0a6c4",
+          "trackKey": "2",
+          "payload": {
+            "bytes": 15210,
+            "fraction": 0.0035201309368362147
+          }
+        },
+        "code": 0,
+        "signal": null,
+        "finishedAt": "2026-10-15T17:13:53.446Z"
+      },
+      "after": {
+        "counts": {
+          "completed": 9,
+          "skipped": 0,
+          "failed": 0,
+          "paused": 0,
+          "unavailable": 0,
+          "queued": 0
+        },
+        "total": 9,
+        "files": [
+          {
+            "trackKey": "1",
+            "file": "album-2/melancholia/01 - Три дня дождя - Вдох.mp3",
+            "bytes": 5378716,
+            "sha256": "bea847186ef94ae88eea5b4e29f3594c730e0f4484bbec0500b0accc8402918a",
+            "mtimeNs": "1792084422085903900",
+            "inode": "140210638",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 223138
+            },
+            "tags": {
+              "title": "Вдох",
+              "artist": "Три дня дождя",
+              "album": "melancholia",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 21446
+                }
+              ]
+            }
+          },
+          {
+            "trackKey": "2",
+            "file": "album-2/melancholia/02 - Три дня дождя - Ненавижу быть собой.mp3",
+            "bytes": 4343668,
+            "sha256": "f63a94dd3ccb03b2a67c4c634f328190202034f3909ce3f4348c5c19590abd73",
+            "mtimeNs": "1792084425084084355",
+            "inode": "140210673",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 180010
+            },
+            "tags": {
+              "title": "Ненавижу быть собой",
+              "artist": "Три дня дождя",
+              "album": "melancholia",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 21446
+                }
+              ]
+            }
+          },
+          {
+            "trackKey": "3",
+            "file": "album-2/melancholia/03 - Три дня дождя, LYRIQ - Еле дыша.mp3",
+            "bytes": 4579383,
+            "sha256": "66de5047b0aab0e56e232c674f929a61843727cb1f884f7bb3217887540e80fb",
+            "mtimeNs": "1792084425850973885",
+            "inode": "140210682",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 189832
+            },
+            "tags": {
+              "title": "Еле дыша",
+              "artist": "Три дня дождя; LYRIQ",
+              "album": "melancholia",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 21446
+                }
+              ]
+            }
+          },
+          {
+            "trackKey": "4",
+            "file": "album-2/melancholia/04 - Три дня дождя, MONA - Прощание.mp3",
+            "bytes": 5693453,
+            "sha256": "2edede9552f4869a8b78b30f28d1b979aefc55364bd6cf24547bf315be3c0d0e",
+            "mtimeNs": "1792084426830346533",
+            "inode": "140210694",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 236251
+            },
+            "tags": {
+              "title": "Прощание",
+              "artist": "Три дня дождя; MONA",
+              "album": "melancholia",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 21446
+                }
+              ]
+            }
+          },
+          {
+            "trackKey": "5",
+            "file": "album-2/melancholia/05 - Три дня дождя - Иду за тобой.mp3",
+            "bytes": 3767497,
+            "sha256": "be2e378dcd19f664f87e45a1c012b78a9139f5927ed217093d33e7ebd1ea5bff",
+            "mtimeNs": "1792084432628144809",
+            "inode": "140210752",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 156003
+            },
+            "tags": {
+              "title": "Иду за тобой",
+              "artist": "Три дня дождя",
+              "album": "melancholia",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 21446
+                }
+              ]
+            }
+          },
+          {
+            "trackKey": "6",
+            "file": "album-2/melancholia/06 - Три дня дождя - За край.mp3",
+            "bytes": 4862123,
+            "sha256": "59d05371db850390fe3f53e1eda62a5b15e1f19e2f0af02fccff8952cd3036f9",
+            "mtimeNs": "1792084428360940681",
+            "inode": "140210712",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 201613
+            },
+            "tags": {
+              "title": "За край",
+              "artist": "Три дня дождя",
+              "album": "melancholia",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 21446
+                }
+              ]
+            }
+          },
+          {
+            "trackKey": "7",
+            "file": "album-2/melancholia/07 - Три дня дождя, тринадцать карат - Аутоагрессия.mp3",
+            "bytes": 5006363,
+            "sha256": "6a0e79f473980b3591dd4ea85d7bba578e586957e5f8d7df81d86bd6a4ed91a0",
+            "mtimeNs": "1792084429599969431",
+            "inode": "140210726",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 207621
+            },
+            "tags": {
+              "title": "Аутоагрессия",
+              "artist": "Три дня дождя; тринадцать карат",
+              "album": "melancholia",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 21446
+                }
+              ]
+            }
+          },
+          {
+            "trackKey": "8",
+            "file": "album-2/melancholia/08 - Три дня дождя - На виду.mp3",
+            "bytes": 3722975,
+            "sha256": "da99d52fcc6b4be2bee6fc3d13be32ab28d850575fda6102069fd2b73a22e3ff",
+            "mtimeNs": "1792084430560400436",
+            "inode": "140210738",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 154149
+            },
+            "tags": {
+              "title": "На виду",
+              "artist": "Три дня дождя",
+              "album": "melancholia",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 21446
+                }
+              ]
+            }
+          },
+          {
+            "trackKey": "9",
+            "file": "album-2/melancholia/09 - Три дня дождя - Слаб.mp3",
+            "bytes": 4489716,
+            "sha256": "02a234798654ea5121d4ce42f66655071027b0c388cbaee029c66c0e70837ebf",
+            "mtimeNs": "1792084433393668425",
+            "inode": "140210760",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 186096
+            },
+            "tags": {
+              "title": "Слаб",
+              "artist": "Три дня дождя",
+              "album": "melancholia",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 21446
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "manifestPrivacyAfter": true,
+      "preservedCompleted": true,
+      "noRepeatedCompletedDownloads": true,
+      "partsRemaining": 0,
+      "referencedPartsRemaining": 0,
+      "failedAttemptCount": 3,
+      "playlistSidecars": [],
+      "finishedAt": "2026-10-15T17:13:53.495Z"
+    },
+    {
+      "kind": "album",
+      "iteration": 3,
+      "startedAt": "2026-10-15T17:13:53.496Z",
+      "pass": true,
+      "download": {
+        "args": [
+          "album",
+          "https://music.yandex.ru/album/27856013",
+          "--json",
+          "--quality",
+          "best",
+          "--concurrency",
+          "1",
+          "--output",
+          "~/music-downloader-macos/music-downloader-check-2eLng2/album-3"
+        ],
+        "startedAt": "2026-10-15T17:13:53.497Z",
+        "events": [
+          {
+            "event": "job.created",
+            "seq": 1,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "payload": {}
+          },
+          {
+            "event": "entity.resolved",
+            "seq": 2,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "payload": {}
+          },
+          {
+            "event": "plan.created",
+            "seq": 3,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "payload": {}
+          },
+          {
+            "event": "track.started",
+            "seq": 4,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 5,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 6,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 258,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 259,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 260,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "trackKey": "1",
+            "payload": {
+              "durationMs": 223138
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 262,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "payload": {
+              "completed": 1,
+              "total": 9,
+              "fraction": 0.1111111111111111
+            }
+          },
+          {
+            "event": "track.started",
+            "seq": 263,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 264,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 265,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "track.started",
+            "seq": 266,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "trackKey": "3",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 267,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "trackKey": "3",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 268,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "trackKey": "3",
+            "payload": {}
+          }
+        ],
+        "eventCounts": {
+          "job.created": 1,
+          "entity.resolved": 1,
+          "plan.created": 1,
+          "track.started": 3,
+          "variant.selected": 3,
+          "download.started": 3,
+          "track.progress": 268,
+          "download.completed": 1,
+          "metadata.written": 1,
+          "validation.completed": 1,
+          "job.progress": 1
+        },
+        "progressByTrack": {
+          "1": {
+            "count": 252,
+            "first": {
+              "seq": 7,
+              "bytes": 15205
+            },
+            "last": {
+              "seq": 261,
+              "bytes": 5355938
+            }
+          },
+          "3": {
+            "count": 16,
+            "first": {
+              "seq": 269,
+              "bytes": 15205
+            },
+            "last": {
+              "seq": 284,
+              "bytes": 375653
+            }
+          }
+        },
+        "privacyPassed": true,
+        "stderrBytes": 0,
+        "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+        "firstProgress": {
+          "event": "track.progress",
+          "seq": 7,
+          "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+          "trackKey": "1",
+          "payload": {
+            "bytes": 15205,
+            "fraction": 0.002838905155362142
+          }
+        },
+        "signalAt": "2026-10-15T17:13:56.718Z",
+        "signalBytes": 277349,
+        "code": 4,
+        "signal": null,
+        "finishedAt": "2026-10-15T17:13:56.788Z"
+      },
+      "before": {
+        "counts": {
+          "completed": 1,
+          "skipped": 0,
+          "failed": 0,
+          "paused": 1,
+          "unavailable": 0,
+          "queued": 6
+        },
+        "completedFiles": [
+          {
+            "trackKey": "1",
+            "file": "album-3/melancholia/01 - Три дня дождя - Вдох.mp3",
+            "bytes": 5378716,
+            "sha256": "bea847186ef94ae88eea5b4e29f3594c730e0f4484bbec0500b0accc8402918a",
+            "mtimeNs": "1792084434854328740",
+            "inode": "140210785",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 223138
+            },
+            "tags": {
+              "title": "Вдох",
+              "artist": "Три дня дождя",
+              "album": "melancholia",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 21446
+                }
+              ]
+            }
+          }
+        ],
+        "partialFiles": [
+          {
+            "trackKey": "3",
+            "bytes": 375653,
+            "manifestBytes": 375653
+          }
+        ]
+      },
+      "manifestPrivacyBefore": true,
+      "resume": {
+        "args": [
+          "resume",
+          "e72c6156-b831-4c60-966d-12b1bbbe097d",
+          "--json",
+          "--concurrency",
+          "1"
+        ],
+        "startedAt": "2026-10-15T17:13:56.806Z",
+        "events": [
+          {
+            "event": "track.started",
+            "seq": 1,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 2,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 3,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 198,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 199,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 200,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "trackKey": "2",
+            "payload": {
+              "durationMs": 180010
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 202,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "payload": {
+              "completed": 2,
+              "total": 9,
+              "fraction": 0.2222222222222222
+            }
+          },
+          {
+            "event": "download.started",
+            "seq": 203,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "trackKey": "3",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 457,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "trackKey": "3",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 458,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "trackKey": "3",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 459,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "trackKey": "3",
+            "payload": {
+              "durationMs": 189832
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 461,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "payload": {
+              "completed": 3,
+              "total": 9,
+              "fraction": 0.3333333333333333
+            }
+          },
+          {
+            "event": "track.started",
+            "seq": 462,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "trackKey": "4",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 463,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "trackKey": "4",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 464,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "trackKey": "4",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 795,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "trackKey": "4",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 796,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "trackKey": "4",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 797,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "trackKey": "4",
+            "payload": {
+              "durationMs": 236251
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 799,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "payload": {
+              "completed": 4,
+              "total": 9,
+              "fraction": 0.4444444444444444
+            }
+          },
+          {
+            "event": "track.started",
+            "seq": 800,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "trackKey": "5",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 801,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "trackKey": "5",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 802,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "trackKey": "5",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 985,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "trackKey": "5",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 986,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "trackKey": "5",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 987,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "trackKey": "5",
+            "payload": {
+              "durationMs": 156003
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 989,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "payload": {
+              "completed": 5,
+              "total": 9,
+              "fraction": 0.5555555555555556
+            }
+          },
+          {
+            "event": "track.started",
+            "seq": 990,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "trackKey": "6",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 991,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "trackKey": "6",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 992,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "trackKey": "6",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 1237,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "trackKey": "6",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 1238,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "trackKey": "6",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 1239,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "trackKey": "6",
+            "payload": {
+              "durationMs": 201613
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 1241,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "payload": {
+              "completed": 6,
+              "total": 9,
+              "fraction": 0.6666666666666666
+            }
+          },
+          {
+            "event": "track.started",
+            "seq": 1242,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "trackKey": "7",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 1243,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "trackKey": "7",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 1244,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "trackKey": "7",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 1508,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "trackKey": "7",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 1509,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "trackKey": "7",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 1510,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "trackKey": "7",
+            "payload": {
+              "durationMs": 207621
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 1512,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "payload": {
+              "completed": 7,
+              "total": 9,
+              "fraction": 0.7777777777777778
+            }
+          },
+          {
+            "event": "track.started",
+            "seq": 1513,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "trackKey": "8",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 1514,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "trackKey": "8",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 1515,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "trackKey": "8",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 1684,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "trackKey": "8",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 1685,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "trackKey": "8",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 1686,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "trackKey": "8",
+            "payload": {
+              "durationMs": 154149
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 1688,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "payload": {
+              "completed": 8,
+              "total": 9,
+              "fraction": 0.8888888888888888
+            }
+          },
+          {
+            "event": "track.started",
+            "seq": 1689,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "trackKey": "9",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 1690,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "trackKey": "9",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 1691,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "trackKey": "9",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 1902,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "trackKey": "9",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 1903,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "trackKey": "9",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 1904,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "trackKey": "9",
+            "payload": {
+              "durationMs": 186096
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 1906,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "payload": {
+              "completed": 9,
+              "total": 9,
+              "fraction": 1
+            }
+          },
+          {
+            "event": "job.completed",
+            "seq": 1907,
+            "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+            "payload": {}
+          }
+        ],
+        "eventCounts": {
+          "track.started": 7,
+          "variant.selected": 7,
+          "download.started": 8,
+          "track.progress": 1852,
+          "download.completed": 8,
+          "metadata.written": 8,
+          "validation.completed": 8,
+          "job.progress": 8,
+          "job.completed": 1
+        },
+        "progressByTrack": {
+          "2": {
+            "count": 195,
+            "first": {
+              "seq": 4,
+              "bytes": 15209
+            },
+            "last": {
+              "seq": 201,
+              "bytes": 4320862
+            }
+          },
+          "3": {
+            "count": 254,
+            "first": {
+              "seq": 204,
+              "bytes": 375653
+            },
+            "last": {
+              "seq": 460,
+              "bytes": 4556591
+            }
+          },
+          "4": {
+            "count": 331,
+            "first": {
+              "seq": 465,
+              "bytes": 15201
+            },
+            "last": {
+              "seq": 798,
+              "bytes": 5670661
+            }
+          },
+          "5": {
+            "count": 183,
+            "first": {
+              "seq": 803,
+              "bytes": 15205
+            },
+            "last": {
+              "seq": 988,
+              "bytes": 3744705
+            }
+          },
+          "6": {
+            "count": 245,
+            "first": {
+              "seq": 993,
+              "bytes": 15201
+            },
+            "last": {
+              "seq": 1240,
+              "bytes": 4839340
+            }
+          },
+          "7": {
+            "count": 264,
+            "first": {
+              "seq": 1245,
+              "bytes": 15205
+            },
+            "last": {
+              "seq": 1511,
+              "bytes": 4983536
+            }
+          },
+          "8": {
+            "count": 169,
+            "first": {
+              "seq": 1516,
+              "bytes": 15209
+            },
+            "last": {
+              "seq": 1687,
+              "bytes": 3700192
+            }
+          },
+          "9": {
+            "count": 211,
+            "first": {
+              "seq": 1692,
+              "bytes": 15209
+            },
+            "last": {
+              "seq": 1905,
+              "bytes": 4466938
+            }
+          }
+        },
+        "privacyPassed": true,
+        "stderrBytes": 0,
+        "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+        "firstProgress": {
+          "event": "track.progress",
+          "seq": 4,
+          "jobId": "e72c6156-b831-4c60-966d-12b1bbbe097d",
+          "trackKey": "2",
+          "payload": {
+            "bytes": 15209,
+            "fraction": 0.0035198995015346475
+          }
+        },
+        "code": 0,
+        "signal": null,
+        "finishedAt": "2026-10-15T17:14:04.442Z"
+      },
+      "after": {
+        "counts": {
+          "completed": 9,
+          "skipped": 0,
+          "failed": 0,
+          "paused": 0,
+          "unavailable": 0,
+          "queued": 0
+        },
+        "total": 9,
+        "files": [
+          {
+            "trackKey": "1",
+            "file": "album-3/melancholia/01 - Три дня дождя - Вдох.mp3",
+            "bytes": 5378716,
+            "sha256": "bea847186ef94ae88eea5b4e29f3594c730e0f4484bbec0500b0accc8402918a",
+            "mtimeNs": "1792084434854328740",
+            "inode": "140210785",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 223138
+            },
+            "tags": {
+              "title": "Вдох",
+              "artist": "Три дня дождя",
+              "album": "melancholia",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 21446
+                }
+              ]
+            }
+          },
+          {
+            "trackKey": "2",
+            "file": "album-3/melancholia/02 - Три дня дождя - Ненавижу быть собой.mp3",
+            "bytes": 4343668,
+            "sha256": "f63a94dd3ccb03b2a67c4c634f328190202034f3909ce3f4348c5c19590abd73",
+            "mtimeNs": "1792084437985987284",
+            "inode": "140210823",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 180010
+            },
+            "tags": {
+              "title": "Ненавижу быть собой",
+              "artist": "Три дня дождя",
+              "album": "melancholia",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 21446
+                }
+              ]
+            }
+          },
+          {
+            "trackKey": "3",
+            "file": "album-3/melancholia/03 - Три дня дождя, LYRIQ - Еле дыша.mp3",
+            "bytes": 4579383,
+            "sha256": "66de5047b0aab0e56e232c674f929a61843727cb1f884f7bb3217887540e80fb",
+            "mtimeNs": "1792084438641955866",
+            "inode": "140210831",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 189832
+            },
+            "tags": {
+              "title": "Еле дыша",
+              "artist": "Три дня дождя; LYRIQ",
+              "album": "melancholia",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 21446
+                }
+              ]
+            }
+          },
+          {
+            "trackKey": "4",
+            "file": "album-3/melancholia/04 - Три дня дождя, MONA - Прощание.mp3",
+            "bytes": 5693453,
+            "sha256": "2edede9552f4869a8b78b30f28d1b979aefc55364bd6cf24547bf315be3c0d0e",
+            "mtimeNs": "1792084439624183385",
+            "inode": "140210843",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 236251
+            },
+            "tags": {
+              "title": "Прощание",
+              "artist": "Три дня дождя; MONA",
+              "album": "melancholia",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 21446
+                }
+              ]
+            }
+          },
+          {
+            "trackKey": "5",
+            "file": "album-3/melancholia/05 - Три дня дождя - Иду за тобой.mp3",
+            "bytes": 3767497,
+            "sha256": "be2e378dcd19f664f87e45a1c012b78a9139f5927ed217093d33e7ebd1ea5bff",
+            "mtimeNs": "1792084440458890000",
+            "inode": "140210855",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 156003
+            },
+            "tags": {
+              "title": "Иду за тобой",
+              "artist": "Три дня дождя",
+              "album": "melancholia",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 21446
+                }
+              ]
+            }
+          },
+          {
+            "trackKey": "6",
+            "file": "album-3/melancholia/06 - Три дня дождя - За край.mp3",
+            "bytes": 4862123,
+            "sha256": "59d05371db850390fe3f53e1eda62a5b15e1f19e2f0af02fccff8952cd3036f9",
+            "mtimeNs": "1792084441395797824",
+            "inode": "140210866",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 201613
+            },
+            "tags": {
+              "title": "За край",
+              "artist": "Три дня дождя",
+              "album": "melancholia",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 21446
+                }
+              ]
+            }
+          },
+          {
+            "trackKey": "7",
+            "file": "album-3/melancholia/07 - Три дня дождя, тринадцать карат - Аутоагрессия.mp3",
+            "bytes": 5006363,
+            "sha256": "6a0e79f473980b3591dd4ea85d7bba578e586957e5f8d7df81d86bd6a4ed91a0",
+            "mtimeNs": "1792084442353683873",
+            "inode": "140210877",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 207621
+            },
+            "tags": {
+              "title": "Аутоагрессия",
+              "artist": "Три дня дождя; тринадцать карат",
+              "album": "melancholia",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 21446
+                }
+              ]
+            }
+          },
+          {
+            "trackKey": "8",
+            "file": "album-3/melancholia/08 - Три дня дождя - На виду.mp3",
+            "bytes": 3722975,
+            "sha256": "da99d52fcc6b4be2bee6fc3d13be32ab28d850575fda6102069fd2b73a22e3ff",
+            "mtimeNs": "1792084443296758733",
+            "inode": "140210891",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 154149
+            },
+            "tags": {
+              "title": "На виду",
+              "artist": "Три дня дождя",
+              "album": "melancholia",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 21446
+                }
+              ]
+            }
+          },
+          {
+            "trackKey": "9",
+            "file": "album-3/melancholia/09 - Три дня дождя - Слаб.mp3",
+            "bytes": 4489716,
+            "sha256": "02a234798654ea5121d4ce42f66655071027b0c388cbaee029c66c0e70837ebf",
+            "mtimeNs": "1792084444396124818",
+            "inode": "140210902",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 186096
+            },
+            "tags": {
+              "title": "Слаб",
+              "artist": "Три дня дождя",
+              "album": "melancholia",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 21446
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "manifestPrivacyAfter": true,
+      "preservedCompleted": true,
+      "noRepeatedCompletedDownloads": true,
+      "partsRemaining": 0,
+      "referencedPartsRemaining": 0,
+      "failedAttemptCount": 1,
+      "playlistSidecars": [],
+      "finishedAt": "2026-10-15T17:14:04.491Z"
+    },
+    {
+      "kind": "playlist",
+      "iteration": 1,
+      "startedAt": "2026-10-15T17:14:04.492Z",
+      "pass": true,
+      "download": {
+        "args": [
+          "playlist",
+          "https://music.yandex.com/playlists/25aab07f-3871-1014-b10c-9662be09d800",
+          "--json",
+          "--quality",
+          "best",
+          "--concurrency",
+          "1",
+          "--output",
+          "~/music-downloader-macos/music-downloader-check-2eLng2/playlist-1"
+        ],
+        "startedAt": "2026-10-15T17:14:04.494Z",
+        "events": [
+          {
+            "event": "job.created",
+            "seq": 1,
+            "jobId": "fc9746d6-b3fa-4bb8-9aee-32637e4a879d",
+            "payload": {}
+          },
+          {
+            "event": "entity.resolved",
+            "seq": 2,
+            "jobId": "fc9746d6-b3fa-4bb8-9aee-32637e4a879d",
+            "payload": {}
+          },
+          {
+            "event": "plan.created",
+            "seq": 3,
+            "jobId": "fc9746d6-b3fa-4bb8-9aee-32637e4a879d",
+            "payload": {}
+          },
+          {
+            "event": "track.started",
+            "seq": 4,
+            "jobId": "fc9746d6-b3fa-4bb8-9aee-32637e4a879d",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 5,
+            "jobId": "fc9746d6-b3fa-4bb8-9aee-32637e4a879d",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 6,
+            "jobId": "fc9746d6-b3fa-4bb8-9aee-32637e4a879d",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 163,
+            "jobId": "fc9746d6-b3fa-4bb8-9aee-32637e4a879d",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 164,
+            "jobId": "fc9746d6-b3fa-4bb8-9aee-32637e4a879d",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 165,
+            "jobId": "fc9746d6-b3fa-4bb8-9aee-32637e4a879d",
+            "trackKey": "1",
+            "payload": {
+              "durationMs": 139154
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 167,
+            "jobId": "fc9746d6-b3fa-4bb8-9aee-32637e4a879d",
+            "payload": {
+              "completed": 1,
+              "total": 2,
+              "fraction": 0.5
+            }
+          },
+          {
+            "event": "track.started",
+            "seq": 168,
+            "jobId": "fc9746d6-b3fa-4bb8-9aee-32637e4a879d",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 169,
+            "jobId": "fc9746d6-b3fa-4bb8-9aee-32637e4a879d",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 170,
+            "jobId": "fc9746d6-b3fa-4bb8-9aee-32637e4a879d",
+            "trackKey": "2",
+            "payload": {}
+          }
+        ],
+        "eventCounts": {
+          "job.created": 1,
+          "entity.resolved": 1,
+          "plan.created": 1,
+          "track.started": 2,
+          "variant.selected": 2,
+          "download.started": 2,
+          "track.progress": 171,
+          "download.completed": 1,
+          "metadata.written": 1,
+          "validation.completed": 1,
+          "job.progress": 1
+        },
+        "progressByTrack": {
+          "1": {
+            "count": 157,
+            "first": {
+              "seq": 7,
+              "bytes": 15211
+            },
+            "last": {
+              "seq": 166,
+              "bytes": 3340329
+            }
+          },
+          "2": {
+            "count": 14,
+            "first": {
+              "seq": 171,
+              "bytes": 15205
+            },
+            "last": {
+              "seq": 184,
+              "bytes": 375653
+            }
+          }
+        },
+        "privacyPassed": true,
+        "stderrBytes": 0,
+        "jobId": "fc9746d6-b3fa-4bb8-9aee-32637e4a879d",
+        "firstProgress": {
+          "event": "track.progress",
+          "seq": 7,
+          "jobId": "fc9746d6-b3fa-4bb8-9aee-32637e4a879d",
+          "trackKey": "1",
+          "payload": {
+            "bytes": 15211,
+            "fraction": 0.004553743059441151
+          }
+        },
+        "signalAt": "2026-10-15T17:14:08.423Z",
+        "signalBytes": 277349,
+        "code": 4,
+        "signal": null,
+        "finishedAt": "2026-10-15T17:14:08.497Z"
+      },
+      "before": {
+        "counts": {
+          "completed": 1,
+          "skipped": 0,
+          "failed": 0,
+          "paused": 1,
+          "unavailable": 0,
+          "queued": 0
+        },
+        "completedFiles": [
+          {
+            "trackKey": "1",
+            "file": "playlist-1/Тест/01 - Peaceful Melody, soave lofi - This Is What You Came For.mp3",
+            "bytes": 3382838,
+            "sha256": "25472ef1b31698f606feabad87f33c8b5c32993660032edc7df4e18c3b7e26ab",
+            "mtimeNs": "1792084446704725525",
+            "inode": "140210928",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 139154
+            },
+            "tags": {
+              "title": "This Is What You Came For",
+              "artist": "Peaceful Melody; soave lofi",
+              "album": "This Is What You Came For",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 41139
+                }
+              ]
+            }
+          }
+        ],
+        "partialFiles": [
+          {
+            "trackKey": "2",
+            "bytes": 375653,
+            "manifestBytes": 375653
+          }
+        ]
+      },
+      "manifestPrivacyBefore": true,
+      "resume": {
+        "args": [
+          "resume",
+          "fc9746d6-b3fa-4bb8-9aee-32637e4a879d",
+          "--json",
+          "--concurrency",
+          "1"
+        ],
+        "startedAt": "2026-10-15T17:14:08.511Z",
+        "events": [
+          {
+            "event": "download.started",
+            "seq": 1,
+            "jobId": "fc9746d6-b3fa-4bb8-9aee-32637e4a879d",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 173,
+            "jobId": "fc9746d6-b3fa-4bb8-9aee-32637e4a879d",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 174,
+            "jobId": "fc9746d6-b3fa-4bb8-9aee-32637e4a879d",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 175,
+            "jobId": "fc9746d6-b3fa-4bb8-9aee-32637e4a879d",
+            "trackKey": "2",
+            "payload": {
+              "durationMs": 134008
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 177,
+            "jobId": "fc9746d6-b3fa-4bb8-9aee-32637e4a879d",
+            "payload": {
+              "completed": 2,
+              "total": 2,
+              "fraction": 1
+            }
+          }
+        ],
+        "eventCounts": {
+          "download.started": 1,
+          "track.progress": 172,
+          "download.completed": 1,
+          "metadata.written": 1,
+          "validation.completed": 1,
+          "job.progress": 1
+        },
+        "progressByTrack": {
+          "2": {
+            "count": 172,
+            "first": {
+              "seq": 2,
+              "bytes": 375653
+            },
+            "last": {
+              "seq": 176,
+              "bytes": 3216822
+            }
+          }
+        },
+        "privacyPassed": true,
+        "stderrBytes": 0,
+        "jobId": "fc9746d6-b3fa-4bb8-9aee-32637e4a879d",
+        "firstProgress": {
+          "event": "track.progress",
+          "seq": 2,
+          "jobId": "fc9746d6-b3fa-4bb8-9aee-32637e4a879d",
+          "trackKey": "2",
+          "payload": {
+            "bytes": 375653,
+            "fraction": 0.1167776768500091
+          }
+        },
+        "code": 0,
+        "signal": null,
+        "finishedAt": "2026-10-15T17:14:09.917Z"
+      },
+      "after": {
+        "counts": {
+          "completed": 2,
+          "skipped": 0,
+          "failed": 0,
+          "paused": 0,
+          "unavailable": 0,
+          "queued": 0
+        },
+        "total": 2,
+        "files": [
+          {
+            "trackKey": "1",
+            "file": "playlist-1/Тест/01 - Peaceful Melody, soave lofi - This Is What You Came For.mp3",
+            "bytes": 3382838,
+            "sha256": "25472ef1b31698f606feabad87f33c8b5c32993660032edc7df4e18c3b7e26ab",
+            "mtimeNs": "1792084446704725525",
+            "inode": "140210928",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 139154
+            },
+            "tags": {
+              "title": "This Is What You Came For",
+              "artist": "Peaceful Melody; soave lofi",
+              "album": "This Is What You Came For",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 41139
+                }
+              ]
+            }
+          },
+          {
+            "trackKey": "2",
+            "file": "playlist-1/Тест/02 - Pokesh - Ameno.mp3",
+            "bytes": 3270804,
+            "sha256": "81b0315426d88bc8b34f658a52fd49e285a72367ce7e4bf3069acf55faeb8cdb",
+            "mtimeNs": "1792084449870630652",
+            "inode": "140210955",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 134008
+            },
+            "tags": {
+              "title": "Ameno",
+              "artist": "Pokesh",
+              "album": "Ameno",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 52678
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "manifestPrivacyAfter": true,
+      "preservedCompleted": true,
+      "noRepeatedCompletedDownloads": true,
+      "partsRemaining": 0,
+      "referencedPartsRemaining": 0,
+      "failedAttemptCount": 0,
+      "playlistSidecars": [
+        {
+          "file": "playlist-1/Тест/Тест.m3u8",
+          "entries": 2
+        }
+      ],
+      "finishedAt": "2026-10-15T17:14:09.929Z"
+    },
+    {
+      "kind": "playlist",
+      "iteration": 2,
+      "startedAt": "2026-10-15T17:14:09.931Z",
+      "pass": true,
+      "download": {
+        "args": [
+          "playlist",
+          "https://music.yandex.com/playlists/25aab07f-3871-1014-b10c-9662be09d800",
+          "--json",
+          "--quality",
+          "best",
+          "--concurrency",
+          "1",
+          "--output",
+          "~/music-downloader-macos/music-downloader-check-2eLng2/playlist-2"
+        ],
+        "startedAt": "2026-10-15T17:14:09.932Z",
+        "events": [
+          {
+            "event": "job.created",
+            "seq": 1,
+            "jobId": "64b31cb6-8ffe-4c43-94f8-15c9f88ef848",
+            "payload": {}
+          },
+          {
+            "event": "entity.resolved",
+            "seq": 2,
+            "jobId": "64b31cb6-8ffe-4c43-94f8-15c9f88ef848",
+            "payload": {}
+          },
+          {
+            "event": "plan.created",
+            "seq": 3,
+            "jobId": "64b31cb6-8ffe-4c43-94f8-15c9f88ef848",
+            "payload": {}
+          },
+          {
+            "event": "track.started",
+            "seq": 4,
+            "jobId": "64b31cb6-8ffe-4c43-94f8-15c9f88ef848",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 5,
+            "jobId": "64b31cb6-8ffe-4c43-94f8-15c9f88ef848",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 6,
+            "jobId": "64b31cb6-8ffe-4c43-94f8-15c9f88ef848",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 166,
+            "jobId": "64b31cb6-8ffe-4c43-94f8-15c9f88ef848",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 167,
+            "jobId": "64b31cb6-8ffe-4c43-94f8-15c9f88ef848",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 168,
+            "jobId": "64b31cb6-8ffe-4c43-94f8-15c9f88ef848",
+            "trackKey": "1",
+            "payload": {
+              "durationMs": 139154
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 170,
+            "jobId": "64b31cb6-8ffe-4c43-94f8-15c9f88ef848",
+            "payload": {
+              "completed": 1,
+              "total": 2,
+              "fraction": 0.5
+            }
+          },
+          {
+            "event": "track.started",
+            "seq": 171,
+            "jobId": "64b31cb6-8ffe-4c43-94f8-15c9f88ef848",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 172,
+            "jobId": "64b31cb6-8ffe-4c43-94f8-15c9f88ef848",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 173,
+            "jobId": "64b31cb6-8ffe-4c43-94f8-15c9f88ef848",
+            "trackKey": "2",
+            "payload": {}
+          }
+        ],
+        "eventCounts": {
+          "job.created": 1,
+          "entity.resolved": 1,
+          "plan.created": 1,
+          "track.started": 2,
+          "variant.selected": 2,
+          "download.started": 2,
+          "track.progress": 174,
+          "download.completed": 1,
+          "metadata.written": 1,
+          "validation.completed": 1,
+          "job.progress": 1
+        },
+        "progressByTrack": {
+          "1": {
+            "count": 160,
+            "first": {
+              "seq": 7,
+              "bytes": 15211
+            },
+            "last": {
+              "seq": 169,
+              "bytes": 3340329
+            }
+          },
+          "2": {
+            "count": 14,
+            "first": {
+              "seq": 174,
+              "bytes": 15205
+            },
+            "last": {
+              "seq": 187,
+              "bytes": 293733
+            }
+          }
+        },
+        "privacyPassed": true,
+        "stderrBytes": 0,
+        "jobId": "64b31cb6-8ffe-4c43-94f8-15c9f88ef848",
+        "firstProgress": {
+          "event": "track.progress",
+          "seq": 7,
+          "jobId": "64b31cb6-8ffe-4c43-94f8-15c9f88ef848",
+          "trackKey": "1",
+          "payload": {
+            "bytes": 15211,
+            "fraction": 0.004553743059441151
+          }
+        },
+        "signalAt": "2026-10-15T17:14:11.717Z",
+        "signalBytes": 277349,
+        "code": 4,
+        "signal": null,
+        "finishedAt": "2026-10-15T17:14:11.784Z"
+      },
+      "before": {
+        "counts": {
+          "completed": 1,
+          "skipped": 0,
+          "failed": 0,
+          "paused": 1,
+          "unavailable": 0,
+          "queued": 0
+        },
+        "completedFiles": [
+          {
+            "trackKey": "1",
+            "file": "playlist-2/Тест/01 - Peaceful Melody, soave lofi - This Is What You Came For.mp3",
+            "bytes": 3382838,
+            "sha256": "25472ef1b31698f606feabad87f33c8b5c32993660032edc7df4e18c3b7e26ab",
+            "mtimeNs": "1792084451065358039",
+            "inode": "140210982",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 139154
+            },
+            "tags": {
+              "title": "This Is What You Came For",
+              "artist": "Peaceful Melody; soave lofi",
+              "album": "This Is What You Came For",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 41139
+                }
+              ]
+            }
+          }
+        ],
+        "partialFiles": [
+          {
+            "trackKey": "2",
+            "bytes": 293733,
+            "manifestBytes": 293733
+          }
+        ]
+      },
+      "manifestPrivacyBefore": true,
+      "resume": {
+        "args": [
+          "resume",
+          "64b31cb6-8ffe-4c43-94f8-15c9f88ef848",
+          "--json",
+          "--concurrency",
+          "1"
+        ],
+        "startedAt": "2026-10-15T17:14:11.794Z",
+        "events": [
+          {
+            "event": "download.started",
+            "seq": 1,
+            "jobId": "64b31cb6-8ffe-4c43-94f8-15c9f88ef848",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 178,
+            "jobId": "64b31cb6-8ffe-4c43-94f8-15c9f88ef848",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 179,
+            "jobId": "64b31cb6-8ffe-4c43-94f8-15c9f88ef848",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 180,
+            "jobId": "64b31cb6-8ffe-4c43-94f8-15c9f88ef848",
+            "trackKey": "2",
+            "payload": {
+              "durationMs": 134008
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 182,
+            "jobId": "64b31cb6-8ffe-4c43-94f8-15c9f88ef848",
+            "payload": {
+              "completed": 2,
+              "total": 2,
+              "fraction": 1
+            }
+          },
+          {
+            "event": "job.completed",
+            "seq": 183,
+            "jobId": "64b31cb6-8ffe-4c43-94f8-15c9f88ef848",
+            "payload": {}
+          }
+        ],
+        "eventCounts": {
+          "download.started": 1,
+          "track.progress": 177,
+          "download.completed": 1,
+          "metadata.written": 1,
+          "validation.completed": 1,
+          "job.progress": 1,
+          "job.completed": 1
+        },
+        "progressByTrack": {
+          "2": {
+            "count": 177,
+            "first": {
+              "seq": 2,
+              "bytes": 293733
+            },
+            "last": {
+              "seq": 181,
+              "bytes": 3216822
+            }
+          }
+        },
+        "privacyPassed": true,
+        "stderrBytes": 0,
+        "jobId": "64b31cb6-8ffe-4c43-94f8-15c9f88ef848",
+        "firstProgress": {
+          "event": "track.progress",
+          "seq": 2,
+          "jobId": "64b31cb6-8ffe-4c43-94f8-15c9f88ef848",
+          "trackKey": "2",
+          "payload": {
+            "bytes": 293733,
+            "fraction": 0.09131154910032324
+          }
+        },
+        "code": 0,
+        "signal": null,
+        "finishedAt": "2026-10-15T17:14:12.688Z"
+      },
+      "after": {
+        "counts": {
+          "completed": 2,
+          "skipped": 0,
+          "failed": 0,
+          "paused": 0,
+          "unavailable": 0,
+          "queued": 0
+        },
+        "total": 2,
+        "files": [
+          {
+            "trackKey": "1",
+            "file": "playlist-2/Тест/01 - Peaceful Melody, soave lofi - This Is What You Came For.mp3",
+            "bytes": 3382838,
+            "sha256": "25472ef1b31698f606feabad87f33c8b5c32993660032edc7df4e18c3b7e26ab",
+            "mtimeNs": "1792084451065358039",
+            "inode": "140210982",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 139154
+            },
+            "tags": {
+              "title": "This Is What You Came For",
+              "artist": "Peaceful Melody; soave lofi",
+              "album": "This Is What You Came For",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 41139
+                }
+              ]
+            }
+          },
+          {
+            "trackKey": "2",
+            "file": "playlist-2/Тест/02 - Pokesh - Ameno.mp3",
+            "bytes": 3270804,
+            "sha256": "81b0315426d88bc8b34f658a52fd49e285a72367ce7e4bf3069acf55faeb8cdb",
+            "mtimeNs": "1792084452648516457",
+            "inode": "140211007",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 134008
+            },
+            "tags": {
+              "title": "Ameno",
+              "artist": "Pokesh",
+              "album": "Ameno",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 52678
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "manifestPrivacyAfter": true,
+      "preservedCompleted": true,
+      "noRepeatedCompletedDownloads": true,
+      "partsRemaining": 0,
+      "referencedPartsRemaining": 0,
+      "failedAttemptCount": 0,
+      "playlistSidecars": [
+        {
+          "file": "playlist-2/Тест/Тест.m3u8",
+          "entries": 2
+        }
+      ],
+      "finishedAt": "2026-10-15T17:14:12.700Z"
+    },
+    {
+      "kind": "playlist",
+      "iteration": 3,
+      "startedAt": "2026-10-15T17:14:12.702Z",
+      "pass": true,
+      "download": {
+        "args": [
+          "playlist",
+          "https://music.yandex.com/playlists/25aab07f-3871-1014-b10c-9662be09d800",
+          "--json",
+          "--quality",
+          "best",
+          "--concurrency",
+          "1",
+          "--output",
+          "~/music-downloader-macos/music-downloader-check-2eLng2/playlist-3"
+        ],
+        "startedAt": "2026-10-15T17:14:12.704Z",
+        "events": [
+          {
+            "event": "job.created",
+            "seq": 1,
+            "jobId": "cbe97a81-882d-410d-bad3-d5a81e493403",
+            "payload": {}
+          },
+          {
+            "event": "entity.resolved",
+            "seq": 2,
+            "jobId": "cbe97a81-882d-410d-bad3-d5a81e493403",
+            "payload": {}
+          },
+          {
+            "event": "plan.created",
+            "seq": 3,
+            "jobId": "cbe97a81-882d-410d-bad3-d5a81e493403",
+            "payload": {}
+          },
+          {
+            "event": "track.started",
+            "seq": 4,
+            "jobId": "cbe97a81-882d-410d-bad3-d5a81e493403",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 5,
+            "jobId": "cbe97a81-882d-410d-bad3-d5a81e493403",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 6,
+            "jobId": "cbe97a81-882d-410d-bad3-d5a81e493403",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 160,
+            "jobId": "cbe97a81-882d-410d-bad3-d5a81e493403",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 161,
+            "jobId": "cbe97a81-882d-410d-bad3-d5a81e493403",
+            "trackKey": "1",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 162,
+            "jobId": "cbe97a81-882d-410d-bad3-d5a81e493403",
+            "trackKey": "1",
+            "payload": {
+              "durationMs": 139154
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 164,
+            "jobId": "cbe97a81-882d-410d-bad3-d5a81e493403",
+            "payload": {
+              "completed": 1,
+              "total": 2,
+              "fraction": 0.5
+            }
+          },
+          {
+            "event": "track.started",
+            "seq": 165,
+            "jobId": "cbe97a81-882d-410d-bad3-d5a81e493403",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "variant.selected",
+            "seq": 166,
+            "jobId": "cbe97a81-882d-410d-bad3-d5a81e493403",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "download.started",
+            "seq": 167,
+            "jobId": "cbe97a81-882d-410d-bad3-d5a81e493403",
+            "trackKey": "2",
+            "payload": {}
+          }
+        ],
+        "eventCounts": {
+          "job.created": 1,
+          "entity.resolved": 1,
+          "plan.created": 1,
+          "track.started": 2,
+          "variant.selected": 2,
+          "download.started": 2,
+          "track.progress": 169,
+          "download.completed": 1,
+          "metadata.written": 1,
+          "validation.completed": 1,
+          "job.progress": 1
+        },
+        "progressByTrack": {
+          "1": {
+            "count": 154,
+            "first": {
+              "seq": 7,
+              "bytes": 15211
+            },
+            "last": {
+              "seq": 163,
+              "bytes": 3340329
+            }
+          },
+          "2": {
+            "count": 15,
+            "first": {
+              "seq": 168,
+              "bytes": 15205
+            },
+            "last": {
+              "seq": 182,
+              "bytes": 342885
+            }
+          }
+        },
+        "privacyPassed": true,
+        "stderrBytes": 0,
+        "jobId": "cbe97a81-882d-410d-bad3-d5a81e493403",
+        "firstProgress": {
+          "event": "track.progress",
+          "seq": 7,
+          "jobId": "cbe97a81-882d-410d-bad3-d5a81e493403",
+          "trackKey": "1",
+          "payload": {
+            "bytes": 15211,
+            "fraction": 0.004553743059441151
+          }
+        },
+        "signalAt": "2026-10-15T17:14:16.909Z",
+        "signalBytes": 277349,
+        "code": 4,
+        "signal": null,
+        "finishedAt": "2026-10-15T17:14:16.974Z"
+      },
+      "before": {
+        "counts": {
+          "completed": 1,
+          "skipped": 0,
+          "failed": 0,
+          "paused": 1,
+          "unavailable": 0,
+          "queued": 0
+        },
+        "completedFiles": [
+          {
+            "trackKey": "1",
+            "file": "playlist-3/Тест/01 - Peaceful Melody, soave lofi - This Is What You Came For.mp3",
+            "bytes": 3382838,
+            "sha256": "25472ef1b31698f606feabad87f33c8b5c32993660032edc7df4e18c3b7e26ab",
+            "mtimeNs": "1792084455229275750",
+            "inode": "140211033",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 139154
+            },
+            "tags": {
+              "title": "This Is What You Came For",
+              "artist": "Peaceful Melody; soave lofi",
+              "album": "This Is What You Came For",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 41139
+                }
+              ]
+            }
+          }
+        ],
+        "partialFiles": [
+          {
+            "trackKey": "2",
+            "bytes": 342885,
+            "manifestBytes": 342885
+          }
+        ]
+      },
+      "manifestPrivacyBefore": true,
+      "resume": {
+        "args": [
+          "resume",
+          "cbe97a81-882d-410d-bad3-d5a81e493403",
+          "--json",
+          "--concurrency",
+          "1"
+        ],
+        "startedAt": "2026-10-15T17:14:16.989Z",
+        "events": [
+          {
+            "event": "download.started",
+            "seq": 1,
+            "jobId": "cbe97a81-882d-410d-bad3-d5a81e493403",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "download.completed",
+            "seq": 177,
+            "jobId": "cbe97a81-882d-410d-bad3-d5a81e493403",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "metadata.written",
+            "seq": 178,
+            "jobId": "cbe97a81-882d-410d-bad3-d5a81e493403",
+            "trackKey": "2",
+            "payload": {}
+          },
+          {
+            "event": "validation.completed",
+            "seq": 179,
+            "jobId": "cbe97a81-882d-410d-bad3-d5a81e493403",
+            "trackKey": "2",
+            "payload": {
+              "durationMs": 134008
+            }
+          },
+          {
+            "event": "job.progress",
+            "seq": 181,
+            "jobId": "cbe97a81-882d-410d-bad3-d5a81e493403",
+            "payload": {
+              "completed": 2,
+              "total": 2,
+              "fraction": 1
+            }
+          }
+        ],
+        "eventCounts": {
+          "download.started": 1,
+          "track.progress": 176,
+          "download.completed": 1,
+          "metadata.written": 1,
+          "validation.completed": 1,
+          "job.progress": 1
+        },
+        "progressByTrack": {
+          "2": {
+            "count": 176,
+            "first": {
+              "seq": 2,
+              "bytes": 342885
+            },
+            "last": {
+              "seq": 180,
+              "bytes": 3216822
+            }
+          }
+        },
+        "privacyPassed": true,
+        "stderrBytes": 0,
+        "jobId": "cbe97a81-882d-410d-bad3-d5a81e493403",
+        "firstProgress": {
+          "event": "track.progress",
+          "seq": 2,
+          "jobId": "cbe97a81-882d-410d-bad3-d5a81e493403",
+          "trackKey": "2",
+          "payload": {
+            "bytes": 342885,
+            "fraction": 0.10659122575013476
+          }
+        },
+        "code": 0,
+        "signal": null,
+        "finishedAt": "2026-10-15T17:14:17.850Z"
+      },
+      "after": {
+        "counts": {
+          "completed": 2,
+          "skipped": 0,
+          "failed": 0,
+          "paused": 0,
+          "unavailable": 0,
+          "queued": 0
+        },
+        "total": 2,
+        "files": [
+          {
+            "trackKey": "1",
+            "file": "playlist-3/Тест/01 - Peaceful Melody, soave lofi - This Is What You Came For.mp3",
+            "bytes": 3382838,
+            "sha256": "25472ef1b31698f606feabad87f33c8b5c32993660032edc7df4e18c3b7e26ab",
+            "mtimeNs": "1792084455229275750",
+            "inode": "140211033",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 139154
+            },
+            "tags": {
+              "title": "This Is What You Came For",
+              "artist": "Peaceful Melody; soave lofi",
+              "album": "This Is What You Came For",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 41139
+                }
+              ]
+            }
+          },
+          {
+            "trackKey": "2",
+            "file": "playlist-3/Тест/02 - Pokesh - Ameno.mp3",
+            "bytes": 3270804,
+            "sha256": "81b0315426d88bc8b34f658a52fd49e285a72367ce7e4bf3069acf55faeb8cdb",
+            "mtimeNs": "1792084457800891429",
+            "inode": "140211058",
+            "variant": {
+              "codec": "mp3",
+              "container": "mp3",
+              "bitrate": 192
+            },
+            "validation": {
+              "durationMs": 134008
+            },
+            "tags": {
+              "title": "Ameno",
+              "artist": "Pokesh",
+              "album": "Ameno",
+              "pictures": [
+                {
+                  "format": "image/jpeg",
+                  "bytes": 52678
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "manifestPrivacyAfter": true,
+      "preservedCompleted": true,
+      "noRepeatedCompletedDownloads": true,
+      "partsRemaining": 0,
+      "referencedPartsRemaining": 0,
+      "failedAttemptCount": 0,
+      "playlistSidecars": [
+        {
+          "file": "playlist-3/Тест/Тест.m3u8",
+          "entries": 2
+        }
+      ],
+      "finishedAt": "2026-10-15T17:14:17.861Z"
+    }
+  ],
+  "toolDigest": "sha256:48f7e52314d79ecc0e3b3a7af5374be01c46c68c78a9b4db7e5e7432a7cb35b8",
+  "sourceDigest": "sha256:25a6a43bde2aa78ac3f5d74f533cec434ff0173d87859dbf0dfcaf78c0fdea07",
+  "sourceFileCount": 306,
+  "gitHead": "b57db587ca4d70173fba6a495fb4c76337250227",
+  "sources": {
+    "track": "https://music.yandex.com/album/38818449/track/144356630",
+    "album": "https://music.yandex.ru/album/27856013",
+    "playlist": "https://music.yandex.com/playlists/25aab07f-3871-1014-b10c-9662be09d800"
+  },
+  "preparationSkipped": true,
+  "signalProbe": {
+    "args": [
+      "docs/research/step-027-acceptance/signal-probe.mjs"
+    ],
+    "startedAt": "2026-10-15T17:13:13.660Z",
+    "events": [
+      {
+        "kind": "result",
+        "status": "paused"
+      }
+    ],
+    "eventCounts": {
+      "track.progress": 1,
+      "result": 1
+    },
+    "progressByTrack": {
+      "1": {
+        "count": 1,
+        "first": {
+          "seq": 1,
+          "bytes": 300000
+        },
+        "last": {
+          "seq": 1,
+          "bytes": 300000
+        }
+      }
+    },
+    "privacyPassed": true,
+    "stderrBytes": 0,
+    "firstProgress": {
+      "event": "track.progress",
+      "seq": 1,
+      "trackKey": "1",
+      "payload": {
+        "bytes": 300000
+      }
+    },
+    "signalAt": "2026-10-15T17:13:13.793Z",
+    "signalBytes": 300000,
+    "code": 4,
+    "signal": null,
+    "finishedAt": "2026-10-15T17:13:13.797Z"
+  },
+  "cliBuildDigest": "sha256:baf25c74bd54a0198b182a947cab7907f7e338a3a340ce92b0062e179abb0484",
+  "providerBuildDigest": "sha256:5735d8e8a815af0cd697ff31852b30eda7d7383a42084a02ac5e96db00329c0a",
+  "account": {
+    "authorized": true,
+    "exitCode": 0
+  },
+  "initialFreeBytes": 240211144704,
+  "doctorAttempts": [
+    {
+      "exitCode": 0,
+      "available": true,
+      "privacyPassed": true,
+      "schemaVersion": "1.1.0",
+      "credentialBackend": "native-keyring",
+      "configurationConfirmed": false,
+      "checks": {
+        "runtime": {
+          "status": "ok"
+        },
+        "credentialStore": {
+          "status": "ok"
+        },
+        "provider": {
+          "status": "ok"
+        },
+        "auth": {
+          "status": "ok"
+        },
+        "account": {
+          "status": "ok"
+        },
+        "metadata": {
+          "status": "ok"
+        },
+        "audioVariants": {
+          "status": "ok"
+        },
+        "manifestStore": {
+          "status": "ok"
+        },
+        "filesystem": {
+          "status": "ok"
+        },
+        "ffmpeg": {
+          "status": "ok"
+        },
+        "tokenPermissions": {
+          "status": "skipped",
+          "code": "NOT_APPLICABLE"
+        }
+      },
+      "attempt": 1,
+      "finishedAt": "2026-10-15T17:13:14.831Z"
+    }
+  ],
+  "doctor": {
+    "exitCode": 0,
+    "available": true,
+    "privacyPassed": true,
+    "schemaVersion": "1.1.0",
+    "credentialBackend": "native-keyring",
+    "configurationConfirmed": false,
+    "checks": {
+      "runtime": {
+        "status": "ok"
+      },
+      "credentialStore": {
+        "status": "ok"
+      },
+      "provider": {
+        "status": "ok"
+      },
+      "auth": {
+        "status": "ok"
+      },
+      "account": {
+        "status": "ok"
+      },
+      "metadata": {
+        "status": "ok"
+      },
+      "audioVariants": {
+        "status": "ok"
+      },
+      "manifestStore": {
+        "status": "ok"
+      },
+      "filesystem": {
+        "status": "ok"
+      },
+      "ffmpeg": {
+        "status": "ok"
+      },
+      "tokenPermissions": {
+        "status": "skipped",
+        "code": "NOT_APPLICABLE"
+      }
+    }
+  },
+  "sourceDigestAfter": "sha256:25a6a43bde2aa78ac3f5d74f533cec434ff0173d87859dbf0dfcaf78c0fdea07",
+  "ownerGo": "PENDING",
+  "finishedAt": "2026-10-15T17:14:17.904Z",
+  "passedCycles": 9,
+  "validatedFiles": 36
+}

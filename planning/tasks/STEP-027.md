@@ -1,7 +1,7 @@
 ---
 schema: 1
 id: STEP-027
-status: planned
+status: completed
 type: audit
 priority: critical
 phase: hardening
@@ -185,21 +185,24 @@ Brief §47–§48 запрещает начинать UI до подтвержд
 
 
 
+
+
+
 <!-- VERIFICATION-EVIDENCE:START -->
-- Verification run: 2026-10-14T13:11:54Z
-- Status: MANUAL_REQUIRED
+- Verification run: 2026-10-15T17:27:49Z
+- Status: PASS
 - Automated resumed: false
-- Git head: b57db587ca4d70173fba6a495fb4c76337250227
-- Worktree hash: sha256:32d81342638c89bd9484c7b705f84a41bacc654edee19466a76824da8efab9a9
+- Git head: 8837b4b20b6205a9ef6b591965cdc9275dd736bf
+- Worktree hash: sha256:022395ec8992380c75c0c0a6a9405095d018cff4fed12b469c60fd3c5b0033ea
 - Verification contract basis: sha256:5d0cee68c1ded438de858f1d963bb66aefcf4b0283187dd52ac2646943c30b5a
-- Subject git head: b57db587ca4d70173fba6a495fb4c76337250227
-- Subject worktree hash: sha256:cab016373cc9a5547c429e72cd00bb3eba5d3fd0cbf0a7cfeb3040ea4c7ec75c
+- Subject git head: 8837b4b20b6205a9ef6b591965cdc9275dd736bf
+- Subject worktree hash: sha256:5c67f32505e3d025374f0250f88861b7c5633f42dde5f3aa8b3f8141ef86c11d
 
 ### Automated verification
 - Command: node packages/testing/scripts/run-yarn.mjs run lint
   - Status: PASS
   - Exit code: 0
-  - Duration ms: 9126
+  - Duration ms: 10387
   - stdout sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
   - stderr sha256: f59ba696a15507a8febe0f9ea94ac75ccc5411952df61ee4cb3c971b47b6bc12
   - stdout bytes: 0
@@ -207,7 +210,7 @@ Brief §47–§48 запрещает начинать UI до подтвержд
 - Command: node packages/testing/scripts/run-yarn.mjs run typecheck
   - Status: PASS
   - Exit code: 0
-  - Duration ms: 3668
+  - Duration ms: 4172
   - stdout sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
   - stderr sha256: ffbfd8ec2bfcf3e8f0e99a93f081f695da2de832eba56c5ae6943a4052680411
   - stdout bytes: 0
@@ -215,15 +218,15 @@ Brief §47–§48 запрещает начинать UI до подтвержд
 - Command: node packages/testing/scripts/run-yarn.mjs test
   - Status: PASS
   - Exit code: 0
-  - Duration ms: 8194
-  - stdout sha256: e0b6d4774f4b2c9256aa93f9cac8e93923f8cd9df4f9251e9eaeb0e8a18d0256
-  - stderr sha256: cb0b18d88e666b8bfd4728bce6c03bae76ffc88caef9f33a0147678a8f85ebeb
-  - stdout bytes: 12600
+  - Duration ms: 9029
+  - stdout sha256: 8ed5b0ef3f2c45c4e7aec7c26d29b8aae52c45703cd794005c4e5194abd72306
+  - stderr sha256: 5f70aa703cfbd4583b59ce30c815778233780f0a11654b237759b703d2040805
+  - stdout bytes: 12275
   - stderr bytes: 2527
 - Command: node packages/testing/scripts/run-yarn.mjs build
   - Status: PASS
   - Exit code: 0
-  - Duration ms: 414
+  - Duration ms: 465
   - stdout sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
   - stderr sha256: 0157d8afc3a7265ca4e7c585e12c0dad6c6e3b575b60dd6b58851567da7c61d3
   - stdout bytes: 0
@@ -239,7 +242,7 @@ Brief §47–§48 запрещает начинать UI до подтвержд
 - Command: node packages/testing/scripts/verify-step-026-coverage.mjs
   - Status: PASS
   - Exit code: 0
-  - Duration ms: 63
+  - Duration ms: 64
   - stdout sha256: 174f8131fdad4e33968eaff63b4b341e99ba25557cd3db6a15af3a52040c2e3a
   - stderr sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
   - stdout bytes: 110
@@ -248,17 +251,17 @@ Brief §47–§48 запрещает начинать UI до подтвержд
   - Status: PASS
   - Exit code: 0
   - Duration ms: 164
-  - stdout sha256: 4cffacb0ca38bb6ee92d1f51b49334cd1d4365ac88a6bf0e9f8abed0233c0b59
+  - stdout sha256: 14ca994df33e0fbc1685ae9cfbabdd78e2794cc775bb2418172c49dc4a7fc9bc
   - stderr sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-  - stdout bytes: 680
+  - stdout bytes: 681
   - stderr bytes: 0
 - Command: python3 .harness/tools/validate.py --mode manual
   - Status: PASS
   - Exit code: 0
-  - Duration ms: 4819
-  - stdout sha256: 359c3612e5ba95ae1031ea2f5327f81fc413ab6eb60d7c651704b0b5ded7350d
+  - Duration ms: 6027
+  - stdout sha256: 8fc6b6196515f46af156ddfbc23d00aab37a69a3dd1f5ae89976e552f9ce3a26
   - stderr sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-  - stdout bytes: 2048
+  - stdout bytes: 2049
   - stderr bytes: 0
 
 ### Product verification
@@ -266,11 +269,14 @@ Brief §47–§48 запрещает начинать UI до подтвержд
 
 ### Manual verification
 - Check: Матрица REQ-043: на одной принятой ревизии выполнить на реальных Linux, macOS и Windows по три последовательных успешных CLI end-to-end прогона каждого track/album/playlist, каждый с interruption и resume. Проверить конечные файлы, validation, metadata, quality, terminal status и сохранение completed при resume; зафиксировать ОС, runtime, безопасные команды, порядок, exit codes, результаты и классификацию сбоев. Отсутствие платформы, mock/CI build или старый provider smoke не заменяет реальную ячейку.
-  - Status: PENDING
+  - Status: PASS
+  - Observed: "Одна product source revision25a6 и одинаковые CLI/provider builds: Linux9/9, Windows9/9, macOS9/9, 96 validated файлов. Финальные исходные reports и программная проверка каждого partial/pause/resume/preservation/privacy/sidecar: planning/audits/AUDIT-20261015T171627Z.md."
 - Check: Покрытие brief §47–48: отдельное актуальное evidence auth/quality/retry/resume/metadata, provider abstraction/queue/validation/mock и doctor API incompatibility без runtime crash; healthy doctor на каждой ОС. Проверить отсутствие токена/cookies/Authorization/ключей/signed URL в сохраняемых logs/events/manifest/отчёте. Существующие offline тесты не заменяют обязательную real CLI матрицу; no-token test:provider SKIP не является real API PASS.
-  - Status: PENDING
+  - Status: PASS
+  - Observed: "Все brief47–48 критерии сопоставлены с актуальным real evidence трёх ОС и existing offline cases того же product subject. Auth/native-keyring/healthy doctor/quality/metadata/validation/privacy подтверждены reports; retry и API incompatibility — supporting integration tests. Таблица: planning/audits/AUDIT-20261015T171627Z.md."
 - Check: Отчёт STEP-027: каждый пункт brief §47–48 и REQ-043 связан с актуальным evidence; H-001 реальная матрица и H-002 полнота go/no-go проверены. Все дефекты приложения и незакрытые пункты имеют blocker/корректирующий STEP/OQ; явное решение пользователя go с датой и принятой ревизией допускается только при отсутствии blockers. No-go или pending сохраняет STEP не completed и запрет desktop.
-  - Status: PENDING
+  - Status: PASS
+  - Observed: "Полный checklist brief47–48/REQ043 и матрица27/27 подтверждены; технических blockers нет. 2026-10-15 Europe/Moscow пользователь прямо подтвердил: Go — принять и разрешить переход к desktop. Приняты source25a6 и одинаковые CLI/provider builds. Итоговый PASS report planning/audits/AUDIT-20261015T172147Z.md; технический checklist planning/audits/AUDIT-20261015T171627Z.md."
 <!-- VERIFICATION-EVIDENCE:END -->
 
 Generated verification block записывает deterministic runner. Дополнительные semantic observations можно хранить вне generated markers.
@@ -303,6 +309,13 @@ Source `sha256:5c90380eae10221e52a38e324dd55a1e4d1cce19fd0246c20bb616b2308a6ed2`
 
 - По явному поручению владельца подготовлен отдельный `STEP-027-macos.zip` в корне, с инструкцией и launcher без системного Node: официальные Node24.21.0 darwin-arm64/x64 уже внутри, checksum проверяется перед извлечением, private runtime/кеши/отчёты внутри комплекта. [Audit подготовки](../audits/AUDIT-20261014T134419Z.md), [полные факты](../../docs/research/step-027-macos-package-2026-10-14.json). 28 helper/launcher tests PASS; чистая распаковка в Unicode/space path дала real private-Corepack immutable install и lint/typecheck/test/build PASS на Linux. OS adapters и Mach-O→Linux Node подмена использованы только в тестовой копии; native macOS не заявляется. Source25a6/toolddde и прежние18/27 остаются актуальны; реальные macOS9/9 и owner go pending.
 
+
+- Финальная приёмка 2026-10-15: [macOS report](../../docs/research/step-027-macos-pass-2026-10-15.json) подтвердил track/album/playlist по 3/3 на том же source25a6, с совпадающими CLI/provider builds и source до/после. Итоговая матрица Linux9/9 + Windows9/9 + macOS9/9 = 27/27, 96 проверенных файлов, physical interruption/resume, completed preservation, validation/metadata/artwork/privacy/M3U8 PASS. [Полный технический checklist](../audits/AUDIT-20261015T171627Z.md) покрывает brief §47–48; supporting preparation macOS 7/7 и canonical automated Verification 8/8 PASS. Domain-only исправление research runner проверено 34/34 helper/launcher tests; product sources и lockfile не менялись.
+- После предъявления полного результата владелец явно ответил «Go — принять и разрешить переход к desktop» 2026-10-15 (Europe/Moscow). [Итоговый PASS audit и решение GO](../audits/AUDIT-20261015T172147Z.md) закрывают прежние MACOS_REAL_MATRIX_PENDING и OWNER_GO_PENDING. Предыдущие failed/partial attempts сохранены как история и не добавляются к итоговым 27 циклам.
+- При записи последнего manual proof повторная каноническая проверка дала один непостоянный failure playlist retry/M3U8: [исходный результат](../../docs/research/step-027-canonical-verification-attempt-2026-10-15.json). Предыдущий полный test был PASS; диагностический неизменённый запуск `node packages/testing/scripts/run-yarn.mjs test --project @music-downloader/application src/playlist.integration.test.ts --no-file-parallelism --reporter=verbose` завершился exit 0, 5/5 PASS. Тест читает M3U8 после наблюдения `getJob().status=completed`, тогда как manager пишет playlist после terminal track states и до отдельного `job.completed`; различие границ допускает окно чтения старого sidecar и является вероятной причиной непостоянного assertion. Product/test code и таймауты не менялись, исправление неизвестной причины не заявляется. Итоговый канонический результат задаёт generated Verification выше; failed попытка не скрывается и не считается PASS.
+
+
+
 ## Blocker / Failure reason
 
-MACOS_REAL_MATRIX_PENDING: на текущем source sha256:25a6a43bde2aa78ac3f5d74f533cec434ff0173d87859dbf0dfcaf78c0fdea07 Linux9/9 и Windows9/9 PASS, macOS0/9 pending. Матрица18/27, 60validated audio files; full offline supporting checks текущей версии прошли, account/doctor/privacy/physical interruption/resume подтверждены на Linux/Windows. Прежний Windows corrective STEP-052 completed с независимым review PASS. OwnerGo PENDING; macOS ранее отложен владельцем. Desktop gate закрыт до macOS PASS и явного go. Следующий шаг — полный runner на macOS и STEP RUN STEP-027 с его report.
+Нет. Реальная матрица 27/27 PASS на принятом source sha256:25a6a43bde2aa78ac3f5d74f533cec434ff0173d87859dbf0dfcaf78c0fdea07; владелец дал явное go 2026-10-15 (Europe/Moscow). Итоговый report: planning/audits/AUDIT-20261015T172147Z.md.
