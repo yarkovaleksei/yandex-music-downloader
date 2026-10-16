@@ -17,6 +17,7 @@ steps:
   - STEP-034
   - STEP-035
   - STEP-036
+  - STEP-054
 ---
 
 # ADR-014 — SQLite persistence, общий каталог состояния и миграции

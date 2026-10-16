@@ -4,13 +4,14 @@
 
 ## Summary
 
-- total: 53
+- total: 54
 - completed: 44
+- in_progress: 1
 - planned: 9
 
 ## In progress
 
-—
+STEP-054
 
 ## Blocked
 
@@ -18,7 +19,7 @@
 
 ## Next unblocked work
 
-STEP-029, STEP-053
+STEP-053
 
 ## Recent completed
 

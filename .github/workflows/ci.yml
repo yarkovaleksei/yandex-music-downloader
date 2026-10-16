@@ -153,7 +153,7 @@ jobs:
     timeout-minutes: 20
 
     # Стратегия матрицы.
-    # Пример: 3 ОС × 2 версии Node.js = 6 вариантов.
+    # Пример: 4 runner images × 2 версии Node.js = 8 вариантов.
     strategy:
       # Не отменять остальные варианты при падении одного, чтобы видеть все платформы сразу.
       # Пример: падение Windows не скрывает результат macOS.
@@ -162,11 +162,12 @@ jobs:
       # Пример: os × node.
       matrix:
         # Закреплённые runner images для проверки кросс-ОС особенностей файловой системы.
-        # Пример: Linux, Windows, macOS.
+        # Пример: Linux, Windows, macOS arm64, macOS x64 (Intel).
         os:
           - ubuntu-24.04
           - windows-2025
           - macos-15
+          - macos-15-intel
         # Поддерживаемые версии Node.js: нижняя граница engines и верхняя LTS.
         # Пример: 22.13.0 и 24.
         node:
@@ -201,6 +202,15 @@ jobs:
           # Версия Node.js текущего варианта матрицы.
           # Пример: "22.13.0".
           node-version: ${{ matrix.node }}
+
+      # Платформа и архитектура runtime варианта; подтверждает x64 на macos-15-intel.
+      # Пример: "darwin" и "x64".
+      - name: Show runtime platform
+        # Две отдельные команды без кавычек одинаково работают в bash и pwsh.
+        # Пример: вывод "darwin", затем "x64".
+        run: |
+          node -p process.platform
+          node -p process.arch
 
       # Отображаемое имя шага кэша зависимостей.
       # Пример: "Cache Yarn and Corepack".

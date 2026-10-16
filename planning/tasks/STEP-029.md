@@ -6,8 +6,9 @@ type: implementation
 priority: medium
 phase: desktop
 depends_on:
-  - STEP-028
   - STEP-018
+  - STEP-028
+  - STEP-054
 requirements:
   - REQ-033
 adrs:
