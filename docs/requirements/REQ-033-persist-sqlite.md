@@ -6,8 +6,10 @@ source: brief
 steps:
   - STEP-028
   - STEP-029
+  - STEP-032
 adrs:
   - ADR-014
+  - ADR-017
 ---
 
 # REQ-033 — [PERSISTENCE] SQLite и миграции для desktop

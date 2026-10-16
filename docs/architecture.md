@@ -110,7 +110,7 @@ Metadata contract развивается [ADR-011](adr/ADR-011-shared-metadata-c
 
 ## Deployment / runtime assumptions
 
-- Node.js `>=22.13.0 <25`, TypeScript `strict`, Yarn 4 workspaces с `nodeLinker: node-modules` (ADR-008).
+- Node.js `>=22.14.0 <25` (ADR-008; нижняя граница Node-API 10 — ADR-017), TypeScript `strict`, Yarn 4 workspaces с `nodeLinker: node-modules` (ADR-008).
 - CLI запускается локально; desktop — Electron для Windows x64, macOS arm64/x64, Linux x64; дистрибутивы, подписание и автообновление — этап packaging (ADR STEP-034).
 - Electron-процессы: main, application host (`utilityProcess`), preload, renderer (ADR-015). Каталог состояния общий для CLI и desktop — `resolveStateDirectory()`; Electron `userData` не хранит доменное состояние (ADR-014).
 - Native-модули (`better-sqlite3`, `@napi-rs/keyring`) используют Node-API. Их работа в Electron должна быть доказана платформенно (STEP-030); при несовместимости — blocker и новый ADR, без fallback.

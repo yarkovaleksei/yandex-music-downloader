@@ -9,6 +9,7 @@ depends_on:
   - STEP-031
   - STEP-025
 requirements:
+  - REQ-033
   - REQ-051
   - REQ-052
 adrs:
@@ -52,7 +53,8 @@ plan:
 
 ### Conditional
 
-- Нет.
+- `packages/persistence/**` — миграция схемы SQLite следующей версии для settings и безопасной диагностики provider (ADR-014, REQ-033) и их store.
+- `packages/shared/**` — минимальные порты и DTO settings/диагностики без секретов.
 
 ### Forbidden
 

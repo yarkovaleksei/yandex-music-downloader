@@ -42,7 +42,7 @@ CI-матрица тестов на PR запускает существующи
 
 ## Context
 
-[ADR-014](../../docs/adr/ADR-014-sqlite-persistence.md) требует, чтобы STEP-029 доказал загрузку `better-sqlite3` и тесты persistence на Node.js для Windows x64, macOS arm64/x64 и Linux x64. Текущая матрица `.github/workflows/ci.yml` покрывает `ubuntu-24.04`, `windows-2025` и `macos-15` (arm64), а macOS x64 в ней нет. REQ-045 называет macOS x64 целевой платформой. Mutation policy STEP-029 не включает `.github/**`, поэтому владелец продукта решил вынести runner в отдельный STEP — prerequisite STEP-029.
+[ADR-014](../../docs/adr/ADR-014-sqlite-persistence.md) требует, чтобы STEP-029 доказал загрузку `better-sqlite3` и тесты persistence на Node.js для Windows x64, macOS arm64/x64 и Linux x64. Текущая матрица `.github/workflows/ci.yml` покрывает `ubuntu-24.04`, `windows-2025` и `macos-15` (arm64), а macOS x64 в ней нет. REQ-045 называет macOS x64 целевой платформой. Mutation policy STEP-029 не включает `.github/**`, поэтому владелец продукта решил вынести runner в отдельный STEP. Изначально он был prerequisite STEP-029; после блокировки CI биллингом (см. Blocker) STEP-029 подтверждает платформы ручным набором и от STEP-054 не зависит.
 
 ## Scope
 
@@ -130,4 +130,4 @@ Generated verification block записывает deterministic runner. Допо
 
 ## Blocker / Failure reason
 
-—
+2026-10-16: изменение `ci.yml` опубликовано в [PR #30](https://github.com/yarkovaleksei/yandex-music-downloader/pull/30), но GitHub не запустил Windows/macOS jobs: «recent account payments have failed or your spending limit needs to be increased» (run 38926508109). Владелец восстановит биллинг не раньше 2026-11-07; manual Verification (прогон CI) отложена до этого. По решению владельца STEP-029 подтверждает платформы ручным прогоном и от STEP-054 больше не зависит.

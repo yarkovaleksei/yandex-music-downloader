@@ -143,7 +143,7 @@ jobs:
   # Пример: `test` используется в required checks (6 вариантов).
   test:
     # Отображаемое имя варианта матрицы в GitHub UI.
-    # Пример: "Test (ubuntu-24.04, Node.js 22.13.0)".
+    # Пример: "Test (ubuntu-24.04, Node.js 22.14.0)".
     name: Test (${{ matrix.os }}, Node.js ${{ matrix.node }})
     # Только Linux runner настраивается переменной; Windows и macOS берутся из матрицы.
     # Пример: Linux — CI_LINUX_RUNS_ON, Windows — windows-2025, macOS — macos-15.
@@ -169,9 +169,9 @@ jobs:
           - macos-15
           - macos-15-intel
         # Поддерживаемые версии Node.js: нижняя граница engines и верхняя LTS.
-        # Пример: 22.13.0 и 24.
+        # Пример: 22.14.0 и 24.
         node:
-          - "22.13.0"
+          - "22.14.0"
           - "24"
 
     # Последовательность шагов job; ни один шаг не использует continue-on-error.
@@ -200,7 +200,7 @@ jobs:
         # Пример: версия из матрицы.
         with:
           # Версия Node.js текущего варианта матрицы.
-          # Пример: "22.13.0".
+          # Пример: "22.14.0".
           node-version: ${{ matrix.node }}
 
       # Платформа и архитектура runtime варианта; подтверждает x64 на macos-15-intel.
@@ -227,10 +227,10 @@ jobs:
             .yarn/cache
             .cache/corepack
           # Ключ кэша: ОС, версия Node.js и хеш lockfile.
-          # Пример: Windows-node22.13.0-yarn-<hash>.
+          # Пример: Windows-node22.14.0-yarn-<hash>.
           key: ${{ runner.os }}-node${{ matrix.node }}-yarn-${{ hashFiles('yarn.lock') }}
           # Частичное восстановление при изменении lockfile.
-          # Пример: Windows-node22.13.0-yarn-.
+          # Пример: Windows-node22.14.0-yarn-.
           restore-keys: |
             ${{ runner.os }}-node${{ matrix.node }}-yarn-
 

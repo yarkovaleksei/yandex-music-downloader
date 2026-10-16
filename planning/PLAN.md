@@ -32,10 +32,10 @@
 | STEP-026 | Интеграционный набор headless-сценариев | hardening | high | completed | STEP-019, STEP-022, STEP-021, STEP-023, STEP-025 | REQ-042, REQ-005, REQ-020 |
 | STEP-027 | Приёмка headless MVP и gate перехода к UI | audit | critical | completed | STEP-026, STEP-011 | REQ-043 |
 | STEP-028 | ADR: SQLite, модель безопасности Electron и IPC | adr | medium | completed | STEP-027 | REQ-033, REQ-046, REQ-047 |
-| STEP-029 | SQLite persistence и миграции | implementation | medium | planned | STEP-018, STEP-028, STEP-054 | REQ-033 |
+| STEP-029 | SQLite persistence и миграции | implementation | medium | planned | STEP-018, STEP-028, STEP-055 | REQ-033 |
 | STEP-030 | Desktop shell: Electron, React, MUI, typed IPC, secure storage | implementation | medium | planned | STEP-028, STEP-018, STEP-029 | REQ-045, REQ-046, REQ-047, REQ-048 |
 | STEP-031 | UX: предпросмотр URL, загрузки, прогресс и уведомления | implementation | medium | planned | STEP-030 | REQ-049, REQ-050 |
-| STEP-032 | UX: History, Settings, Account и Diagnostics | implementation | medium | planned | STEP-031, STEP-025 | REQ-051, REQ-052 |
+| STEP-032 | UX: History, Settings, Account и Diagnostics | implementation | medium | planned | STEP-031, STEP-025 | REQ-033, REQ-051, REQ-052 |
 | STEP-033 | E2E-тест desktop | hardening | medium | planned | STEP-031, STEP-032 | REQ-053 |
 | STEP-034 | ADR: кроссплатформенная упаковка | adr | low | planned | STEP-033 | REQ-054, REQ-055 |
 | STEP-035 | Дистрибутивы и release CI | implementation | low | planned | STEP-034 | REQ-054, REQ-045, REQ-041 |
@@ -58,3 +58,4 @@
 | STEP-052 | Платформа M3U8 writer по умолчанию и переносимость тестов | bugfix | critical | completed | STEP-022 | REQ-028, REQ-043, REQ-044 |
 | STEP-053 | Синхронизировать описание принятого headless MVP | documentation | medium | planned | STEP-027, STEP-024 | — |
 | STEP-054 | macOS x64 в CI-матрице тестов | implementation | medium | in_progress | — | REQ-041, REQ-045 |
+| STEP-055 | Нижняя граница Node.js 22.14.0 | implementation | medium | completed | — | REQ-040 |

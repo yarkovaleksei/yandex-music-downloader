@@ -148,7 +148,7 @@ function supportedNode(version: string): boolean {
   return (
     major !== undefined &&
     minor !== undefined &&
-    (major > 22 || (major === 22 && minor >= 13)) &&
+    (major > 22 || (major === 22 && minor >= 14)) &&
     major < 25
   );
 }

@@ -2,12 +2,12 @@
 /**
  * Автоматическая проверка acceptance STEP-001 в изолированных копиях.
  *
- * Владелец: STEP-001 (toolchain). Для каждой версии Node.js (22.13.0 и 24) создаётся
+ * Владелец: STEP-001 (toolchain). Для каждой версии Node.js (22.14.0 и 24) создаётся
  * отдельная чистая копия текущего рабочего дерева (`git ls-files -co --exclude-standard`,
  * без .git, node_modules, dist и кешей), в ней выполняются установка, quality-проверки и
  * негативные сценарии. Оригинальное дерево не изменяется (проверяется хешами).
  *
- * Node.js 22.13.0 и 24 должны быть установлены заранее (nvm install выполняется отдельно);
+ * Node.js 22.14.0 и 24 должны быть установлены заранее (nvm install выполняется отдельно);
  * при отсутствии версии результат FAIL с точной причиной, без skip. Нужен доступ к npm registry.
  * Проверено только на Linux; платформенную матрицу ведёт STEP-002.
  */
@@ -22,7 +22,7 @@ const projectRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   '../../..',
 );
-const requestedVersions = ['22.13.0', '24'];
+const requestedVersions = ['22.14.0', '24'];
 const failures = [];
 
 const log = (line = '') => process.stdout.write(`${line}\n`);
