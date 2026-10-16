@@ -1,15 +1,15 @@
 import { fork, spawnSync } from 'node:child_process';
-import { createHash } from 'node:crypto';
 import { once } from 'node:events';
-import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import { mkdtemp, readdir, readFile, rm } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { beforeAll, describe, expect, it } from 'vitest';
+import { createApplication } from '@music-downloader/application';
 import {
   isJobEvent,
   isCommandResult,
-  type JobManifestV1,
+  type MusicProvider,
 } from '@music-downloader/application/contracts';
 
 const fixture = fileURLToPath(
@@ -97,18 +97,34 @@ function owner(root: string, stateDir: string, crash: boolean, argv: string[]) {
   };
 }
 
-async function expireDeadLease(stateDir: string, jobId: string) {
-  const directory = createHash('sha256').update(jobId).digest('hex');
-  const target = path.join(stateDir, directory, 'lease.json');
-  const lease = JSON.parse(await readFile(target, 'utf8'));
-  await writeFile(
-    target,
-    JSON.stringify({ ...lease, heartbeatAt: '2000-01-01T00:00:00.000Z' }),
+/** PRN-002: байты базы, WAL, SHM и резервных копий SQLite store (STEP-029). */
+async function stateDatabaseBytes(stateDir: string): Promise<string[]> {
+  const files = (await readdir(stateDir)).filter((name) =>
+    name.startsWith('state.sqlite3'),
+  );
+  expect(files).toContain('state.sqlite3');
+  return Promise.all(
+    files.map(async (name) =>
+      (await readFile(path.join(stateDir, name))).toString('latin1'),
+    ),
   );
 }
 
+/** Наблюдатель только читает job: provider не вызывается. */
+const readOnlyProvider = {} as MusicProvider;
+
+async function partFiles(directory: string): Promise<string[]> {
+  const entries = await readdir(directory, {
+    recursive: true,
+    withFileTypes: true,
+  });
+  return entries
+    .filter((entry) => entry.isFile() && entry.name.endsWith('.part'))
+    .map((entry) => path.join(entry.parentPath, entry.name));
+}
+
 describe('STEP-026: CLI crash resume', () => {
-  it('CLI crash resume запускает новый process с реальным FileManifestStore', async () => {
+  it('CLI crash resume запускает новый process с реальным SQLite store', async () => {
     const root = await mkdtemp(path.join(os.tmpdir(), 'step-026-cli-'));
     const stateDir = path.join(root, 'state');
     let first;
@@ -124,20 +140,35 @@ describe('STEP-026: CLI crash resume', () => {
         path.join(root, 'music'),
       ]);
       const prefix = await first.wait('prefix');
-      const manifests = first.messages
-        .filter((message) => message.type === 'manifest')
-        .map((message) => JSON.parse(String(message.text)) as JobManifestV1);
-      const jobId = manifests.at(-1)!.jobId;
+      const jobId = String(prefix.jobId);
       expect(prefix.bytes).toBe(32);
-      expect(manifests.at(-1)!.tracks[0]!.status).toBe('completed');
       expect(await readFile(String(prefix.partPath))).toEqual(
         sample.subarray(0, 32),
       );
-      const firstResult = manifests.at(-1)!.tracks[0]!.resultPath!;
+      const firstResult = String(prefix.firstResult);
       const firstBytes = await readFile(firstResult);
       first.child.kill('SIGKILL');
       await first.exited;
-      await expireDeadLease(stateDir, jobId);
+      // WAL убитого процесса не прошёл checkpoint: проверяем и его байты.
+      const crashedState = await stateDatabaseBytes(stateDir);
+      // Реальное устаревание: heartbeat старше 30 с и процесс-владелец отсутствует.
+      const observer = createApplication({
+        stateDir,
+        providerOverride: readOnlyProvider,
+      });
+      try {
+        await expect
+          .poll(
+            async () => {
+              const job = await observer.getJob(jobId);
+              return job.kind === 'result' ? job.data?.status : job.kind;
+            },
+            { timeout: 45_000, interval: 500 },
+          )
+          .not.toBe('running');
+      } finally {
+        await observer.shutdown();
+      }
       second = owner(root, stateDir, false, [
         'resume',
         jobId,
@@ -162,39 +193,33 @@ describe('STEP-026: CLI crash resume', () => {
             Number(message.offset) === 32,
         ),
       ).toBe(true);
-      expect(
-        [...first.messages, ...second.messages].filter(
-          (message) => message.type === 'manifest',
-        ),
-      ).not.toHaveLength(0);
-      const allSnapshots = [...first.messages, ...second.messages]
-        .filter((message) => message.type === 'manifest')
-        .map((message) => String(message.text));
-      const final = JSON.parse(allSnapshots.at(-1)!) as JobManifestV1;
-      expect(final.tracks.map((entry) => entry.status)).toEqual([
-        'completed',
-        'completed',
-      ]);
+      const reader = createApplication({
+        stateDir,
+        providerOverride: readOnlyProvider,
+      });
+      let final;
+      try {
+        final = await reader.getJob(jobId);
+      } finally {
+        await reader.shutdown();
+      }
+      expect(final).toMatchObject({
+        kind: 'result',
+        data: {
+          status: 'completed',
+          tracks: [{ status: 'completed' }, { status: 'completed' }],
+        },
+      });
+      if (final.kind !== 'result' || final.data === null)
+        throw new Error('Итоговое состояние job не прочитано.');
       expect(await readFile(firstResult)).toEqual(firstBytes);
-      for (const entry of final.tracks) {
+      for (const entry of final.data.tracks) {
         expect(audioPayload(await readFile(entry.resultPath!))).toEqual(
           audioPayload(sample),
         );
-        await expect(readFile(entry.partPath!)).rejects.toMatchObject({
-          code: 'ENOENT',
-        });
       }
-      const directory = createHash('sha256').update(jobId).digest('hex');
-      const finalText = await readFile(
-        path.join(stateDir, directory, 'manifest.json'),
-        'utf8',
-      );
-      expect(JSON.parse(finalText)).toEqual(final);
-      expect(
-        JSON.parse(
-          await readFile(path.join(stateDir, directory, 'lease.json'), 'utf8'),
-        ).releasedAt,
-      ).toEqual(expect.any(String));
+      expect(await partFiles(path.join(root, 'music'))).toEqual([]);
+      const finalState = await stateDatabaseBytes(stateDir);
       const logFile = await readFile(
         path.join(root, 'diagnostics.jsonl'),
         'utf8',
@@ -217,10 +242,6 @@ describe('STEP-026: CLI crash resume', () => {
           ),
         ).toBe(true);
         expect(records.some(isJobEvent)).toBe(true);
-        expect(
-          processOwner.messages.filter((message) => message.type === 'manifest')
-            .length,
-        ).toBeGreaterThan(1);
       }
       for (const surface of [
         first.stdout(),
@@ -228,8 +249,8 @@ describe('STEP-026: CLI crash resume', () => {
         second.stdout(),
         second.stderr(),
         logFile,
-        finalText,
-        ...allSnapshots,
+        ...crashedState,
+        ...finalState,
       ]) {
         expect(surface).not.toContain(token);
         expect(surface).not.toContain(signedUrl);
@@ -246,5 +267,5 @@ describe('STEP-026: CLI crash resume', () => {
       }
       await rm(root, { recursive: true, force: true });
     }
-  }, 40_000);
+  }, 120_000);
 });

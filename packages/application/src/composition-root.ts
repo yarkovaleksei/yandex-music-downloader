@@ -22,8 +22,8 @@ import { createMetadataWriter } from '@music-downloader/metadata';
 import {
   CliCredentialStore,
   FileCacheStore,
-  FileManifestStore,
   resolveStateDirectory,
+  SqliteManifestStore,
 } from '@music-downloader/persistence';
 import {
   DOCTOR_CANARY_TRACK_ID,
@@ -58,7 +58,13 @@ export function createApplication(
         ? {}
         : { sink: createFileSink(logging.filePath) }),
     });
-  const store = adapters.manifestStore ?? new FileManifestStore({ stateDir });
+  // Default store — SQLite (ADR-014): открывается лениво при первом обращении,
+  // поэтому auth/account базу не открывают; закрывает его только shutdown фасада.
+  const defaultStore =
+    adapters.manifestStore === undefined
+      ? new SqliteManifestStore({ stateDir })
+      : undefined;
+  const store = adapters.manifestStore ?? defaultStore!;
   // providerOverride полностью исключает native keyring и browser/device-auth bootstrap.
   const credentialStore =
     adapters.providerOverride === undefined
@@ -133,6 +139,15 @@ export function createApplication(
       collectDiagnostics({
         provider,
         manifestStore: store,
+        ...(defaultStore === undefined
+          ? { storeBackend: 'injected' }
+          : {
+              storeBackend: 'sqlite',
+              // doctor не создаёт отсутствующую базу и не выполняет миграции.
+              manifestStoreProbe: async () => {
+                defaultStore.inspect();
+              },
+            }),
         ...(credentialStore === undefined
           ? {}
           : { providerHealth: () => probeCredentials(credentialStore) }),
@@ -151,6 +166,9 @@ export function createApplication(
     logger,
     diagnostics,
     debug: logging?.debug === true,
+    ...(defaultStore === undefined
+      ? {}
+      : { closeStore: () => defaultStore.close() }),
   });
 }
 

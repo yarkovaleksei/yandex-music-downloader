@@ -2,7 +2,6 @@ import { createHash, randomUUID } from 'node:crypto';
 import { AsyncLocalStorage } from 'node:async_hooks';
 import { mkdir, readdir } from 'node:fs/promises';
 import path from 'node:path';
-import os from 'node:os';
 import {
   decodeManifest,
   encodeManifest,
@@ -22,12 +21,17 @@ import {
 import { readJsonIfPresent, writeAtomicJson } from './atomic-json.js';
 import { ControlInbox } from './control-inbox.js';
 import { NativeJobLock } from './native-job-lock.js';
-import { currentLeaseIdentity, probeLease } from './process-identity.js';
+import { currentLeaseIdentity } from './process-identity.js';
+import {
+  assertReclaimable,
+  heartbeatIntervalMs,
+  isProgressOnly,
+  leaseTimeoutMs,
+  observeLeaseState,
+  observedLeaseFrom,
+  progressFlushIntervalMs,
+} from './lease-policy.js';
 import { resolveStateDirectory } from './state-directory.js';
-
-const leaseTimeoutMs = 30_000;
-const heartbeatIntervalMs = 5_000;
-const progressFlushIntervalMs = 250;
 
 function jobDirectory(root: string, jobId: string): string {
   return path.join(root, createHash('sha256').update(jobId).digest('hex'));
@@ -35,37 +39,6 @@ function jobDirectory(root: string, jobId: string): string {
 
 function leaseFrom(value: string): LeaseRecord {
   return JSON.parse(value) as LeaseRecord;
-}
-
-/** Проверка только для наблюдения: повреждение не означает отсутствие аренды (STEP-043). */
-function observedLeaseFrom(value: string): LeaseRecord {
-  let record: unknown;
-  try {
-    record = JSON.parse(value);
-  } catch {
-    throw new ValidationError();
-  }
-  if (typeof record !== 'object' || record === null || Array.isArray(record))
-    throw new ValidationError();
-  const lease = record as Record<string, unknown>;
-  const text = (key: string) =>
-    typeof lease[key] === 'string' && lease[key].length > 0;
-  const timestamp = (key: string) =>
-    text(key) && Number.isFinite(Date.parse(lease[key] as string));
-  if (
-    !Number.isInteger(lease.pid) ||
-    (lease.pid as number) <= 0 ||
-    !Number.isInteger(lease.generation) ||
-    (lease.generation as number) <= 0 ||
-    !text('hostname') ||
-    !text('processStartedAt') ||
-    !text('ownerToken') ||
-    !timestamp('acquiredAt') ||
-    !timestamp('heartbeatAt') ||
-    (lease.releasedAt !== undefined && !timestamp('releasedAt'))
-  )
-    throw new ValidationError();
-  return record as LeaseRecord;
 }
 
 /** Файловый adapter хранит namespace каждого job отдельно и сериализует owner mutations. */
@@ -89,15 +62,10 @@ export class FileManifestStore implements ManifestStore {
       const raw = await readJsonIfPresent(
         path.join(jobDirectory(this.root, jobId), 'lease.json'),
       );
-      if (raw === undefined) return 'inactive';
-      const lease = observedLeaseFrom(raw);
-      if (lease.releasedAt !== undefined) return 'inactive';
-      if (lease.hostname !== os.hostname()) return 'unknown';
-      if (Date.now() - Date.parse(lease.heartbeatAt) <= leaseTimeoutMs)
-        return 'active';
-      const probe = await probeLease(lease);
-      if (probe === 'same') return 'active';
-      return probe === 'unknown' ? 'unknown' : 'inactive';
+      return await observeLeaseState(
+        raw === undefined ? undefined : observedLeaseFrom(raw),
+        { now: Date.now(), timeoutMs: leaseTimeoutMs },
+      );
     } catch (error) {
       // Внутренний cause может содержать OS paths/данные; публичный отказ их не переносит.
       if (error instanceof ValidationError) throw new ValidationError();
@@ -171,11 +139,12 @@ export class FileManifestStore implements ManifestStore {
       const leasePath = path.join(directory, 'lease.json');
       const priorText = await readJsonIfPresent(leasePath);
       if (priorText !== undefined)
-        await this.assertReclaimable(
+        await assertReclaimable(
           leaseFrom(priorText),
           identity,
           options.forceForeignLease === true,
           options.expectedGeneration,
+          { now: Date.now(), timeoutMs: leaseTimeoutMs },
         );
       const manifest = await this.read(jobId);
       if (manifest === undefined)
@@ -241,28 +210,6 @@ export class FileManifestStore implements ManifestStore {
     return undefined;
   }
 
-  private async assertReclaimable(
-    lease: LeaseRecord,
-    identity: LeaseIdentity,
-    forceForeign: boolean,
-    expectedGeneration: number | undefined,
-  ): Promise<void> {
-    if (lease.releasedAt !== undefined) return;
-    if (lease.hostname !== identity.hostname) {
-      if (forceForeign && expectedGeneration === lease.generation) return;
-      throw new ValidationError(
-        new Error('Аренда другого хоста снимается только явной командой.'),
-      );
-    }
-    if (Date.now() - Date.parse(lease.heartbeatAt) <= leaseTimeoutMs)
-      throw new ValidationError(new Error('Аренда задания ещё активна.'));
-    const probe = await probeLease(lease);
-    if (probe === 'same' || probe === 'unknown')
-      throw new ValidationError(
-        new Error('Невозможно безопасно снять аренду задания.'),
-      );
-  }
-
   private async saveSnapshot(
     directory: string,
     manifest: JobManifestV1,
@@ -314,7 +261,7 @@ class FileLeaseSession implements LeaseSession {
   }
   public async save(manifest: JobManifestV1): Promise<void> {
     this.assertAccepting();
-    if (this.isProgressOnly(manifest)) {
+    if (isProgressOnly(this.manifest, manifest)) {
       return this.serial(async () => {
         await this.assertOwner();
         this.manifest = manifest;
@@ -454,25 +401,6 @@ class FileLeaseSession implements LeaseSession {
     const pending = this.pendingProgress;
     this.pendingProgress = undefined;
     await this.persist(pending);
-  }
-  private isProgressOnly(next: JobManifestV1): boolean {
-    const withoutBytes = (manifest: JobManifestV1) =>
-      JSON.stringify({
-        ...manifest,
-        tracks: manifest.tracks.map((track) => ({
-          ...track,
-          partial:
-            track.partial === undefined
-              ? undefined
-              : { ...track.partial, bytes: 0 },
-        })),
-      });
-    return (
-      withoutBytes(this.manifest) === withoutBytes(next) &&
-      JSON.stringify(
-        this.manifest.tracks.map((track) => track.partial?.bytes),
-      ) !== JSON.stringify(next.tracks.map((track) => track.partial?.bytes))
-    );
   }
   private serial<T>(operation: () => Promise<T>): Promise<T> {
     const result = this.queue.then(() => {

@@ -37,6 +37,8 @@ export class ApplicationFacade implements ApplicationApi {
       logger: Logger;
       diagnostics: () => Promise<DiagnosticsDto>;
       debug: boolean;
+      /** Закрывает только default store, созданный composition root. */
+      closeStore?: () => Promise<void>;
     },
   ) {}
 
@@ -158,8 +160,13 @@ export class ApplicationFacade implements ApplicationApi {
       'shutdown',
       this.deps.logger,
       async () => {
-        await this.deps.jobs.shutdown();
-        this.deps.events.close();
+        try {
+          await this.deps.jobs.shutdown();
+          this.deps.events.close();
+        } finally {
+          // Store закрывается после освобождения аренд; повторное открытие запрещено.
+          await this.deps.closeStore?.();
+        }
         return null;
       },
       this.deps.debug,

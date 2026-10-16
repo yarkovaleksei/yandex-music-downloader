@@ -34,4 +34,30 @@ describe('вывод', () => {
     );
     expect(lines.join('\n')).toContain('безопасный stack');
   });
+
+  it('подсказывает обновление при STATE_SCHEMA_UNSUPPORTED', () => {
+    const lines: string[] = [];
+    writeRecord(
+      {
+        json: false,
+        stdout: () => undefined,
+        stderr: (line) => lines.push(line),
+      },
+      {
+        schemaVersion: 1,
+        kind: 'error',
+        command: 'jobs',
+        error: {
+          code: 'VALIDATION_ERROR',
+          message: 'Данные не прошли проверку.',
+          retryable: false,
+          details: { reason: 'STATE_SCHEMA_UNSUPPORTED' },
+        },
+      },
+    );
+    expect(lines).toEqual([
+      'VALIDATION_ERROR: Данные не прошли проверку.',
+      'База состояния создана более новой версией приложения; обновите music-downloader.',
+    ]);
+  });
 });

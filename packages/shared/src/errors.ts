@@ -61,8 +61,15 @@ export class ProviderError extends DomainError {
   }
 }
 
+/**
+ * STATE_SCHEMA_UNSUPPORTED — база состояния создана более новой версией приложения
+ * (@link docs/adr/ADR-014-sqlite-persistence.md, planning/tasks/STEP-029.md).
+ */
 export type CommandRefusalReason =
-  'JOB_NOT_FOUND' | 'LEASE_HELD_BY_OTHER_OWNER' | 'OWNER_ACK_TIMEOUT';
+  | 'JOB_NOT_FOUND'
+  | 'LEASE_HELD_BY_OTHER_OWNER'
+  | 'OWNER_ACK_TIMEOUT'
+  | 'STATE_SCHEMA_UNSUPPORTED';
 
 /**
  * @link planning/tasks/STEP-045.md Причина дополняет существующий код только в DTO команды.

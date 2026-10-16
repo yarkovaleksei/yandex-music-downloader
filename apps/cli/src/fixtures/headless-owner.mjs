@@ -1,5 +1,4 @@
-import fsPromises, { readFile } from 'node:fs/promises';
-import { syncBuiltinESMExports } from 'node:module';
+import { readdir, readFile, stat } from 'node:fs/promises';
 import http from 'node:http';
 import https from 'node:https';
 import path from 'node:path';
@@ -17,7 +16,6 @@ const sample = new Uint8Array(
     ),
   ),
 );
-const snapshots = [];
 const token = 'step-026-token-marker';
 const signedUrl =
   'https://cdn.example.test/audio?signature=step-026-signature-marker';
@@ -32,22 +30,31 @@ const rejectNetwork = () => {
 globalThis.fetch = rejectNetwork;
 http.request = rejectNetwork;
 https.request = rejectNetwork;
-const originalRename = fsPromises.rename;
-// PRN-002: наблюдение после настоящего rename захватывает и отложенные progress snapshots.
-// Установка до import сохраняет штатное хранилище без запрещённой зависимости CLI → persistence.
-fsPromises.rename = async (temporary, target) => {
-  await originalRename(temporary, target);
-  if (path.basename(target) === 'manifest.json') {
-    snapshots.push(await readFile(target, 'utf8'));
-    process.send?.({ type: 'manifest', text: snapshots.at(-1) });
+
+/** STEP-029: SQLite store скрыт за application; prefix ищется по файлам вывода. */
+async function partFiles(directory) {
+  const found = [];
+  let entries;
+  try {
+    entries = await readdir(directory, { withFileTypes: true });
+  } catch (error) {
+    if (error.code === 'ENOENT') return found;
+    throw error;
   }
-};
-syncBuiltinESMExports();
+  for (const entry of entries) {
+    const target = path.join(directory, entry.name);
+    if (entry.isDirectory()) found.push(...(await partFiles(target)));
+    else if (entry.name.endsWith('.part')) found.push(target);
+  }
+  return found;
+}
 
 try {
   const { createApplication } = await import('@music-downloader/application');
   const { runCli } = await import('../../dist/runner.js');
   let prefixSent = false;
+  let jobId;
+  let observer;
   const provider = {
     authenticate: async () => ({ id: 'offline', displayName: 'Offline' }),
     getAccount: async () => {
@@ -102,30 +109,37 @@ try {
               prefixSent = true;
               controller.enqueue(sample.subarray(offset, offset + 32));
               // Поток открыт раньше записи: сигнал crash разрешён только после completed первого и prefix на диске.
+              // Состояние наблюдается через отдельный facade application, без импорта persistence.
+              observer ??= createApplication({
+                stateDir,
+                providerOverride: provider,
+                cache: { ttlMs: 0 },
+              });
               const deadline = Date.now() + 10_000;
               while (Date.now() < deadline) {
-                const manifest = JSON.parse(snapshots.at(-1) ?? '{}');
-                const entry = manifest.tracks?.find(
-                  (item) => item.trackKey === '2',
-                );
-                if (
-                  manifest.tracks?.[0]?.status === 'completed' &&
-                  entry?.partPath !== undefined
-                ) {
-                  try {
-                    const bytes = await readFile(entry.partPath);
-                    if (bytes.length === 32) {
+                const job =
+                  jobId === undefined
+                    ? undefined
+                    : await observer.getJob(jobId);
+                const first =
+                  job?.kind === 'result' ? job.data?.tracks[0] : undefined;
+                if (first?.status === 'completed') {
+                  for (const partPath of await partFiles(
+                    path.join(root, 'music'),
+                  )) {
+                    const bytes = (await stat(partPath)).size;
+                    if (bytes === 32) {
                       process.send?.({
                         type: 'prefix',
                         id,
                         offset,
-                        bytes: bytes.length,
-                        partPath: entry.partPath,
+                        bytes,
+                        partPath,
+                        jobId,
+                        firstResult: first.resultPath,
                       });
                       return;
                     }
-                  } catch (error) {
-                    if (error.code !== 'ENOENT') throw error;
                   }
                 }
                 await new Promise((resolve) => setTimeout(resolve, 20));
@@ -155,6 +169,12 @@ try {
     homedir: () => root,
     stdout: (line) => {
       stdout.push(line);
+      try {
+        const record = JSON.parse(line);
+        if (record.event === 'job.created') jobId = record.jobId;
+      } catch {
+        // Не-JSON строки не несут jobId.
+      }
       process.stdout.write(`${line}\n`);
       process.send?.({ type: 'stdout', line });
     },
@@ -190,14 +210,11 @@ try {
     code,
     stdout,
     stderr,
-    snapshots,
     networkRequests,
   });
   process.exitCode = code;
 } finally {
-  fsPromises.rename = originalRename;
   globalThis.fetch = originalFetch;
   http.request = originalHttpRequest;
   https.request = originalHttpsRequest;
-  syncBuiltinESMExports();
 }

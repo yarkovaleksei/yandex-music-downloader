@@ -12,6 +12,10 @@
   "dependencies": {
     "@music-downloader/shared": "workspace:*",
     "@napi-rs/keyring": "2.1.0",
+    "better-sqlite3": "13.0.3",
     "fs-native-extensions": "1.5.1"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "9.6.0"
   }
 }

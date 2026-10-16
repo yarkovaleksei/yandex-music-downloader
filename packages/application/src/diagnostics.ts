@@ -3,6 +3,7 @@ import path from 'node:path';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import {
+  CommandRefusalError,
   normalizeDomainError,
   type DiagnosticsDto,
   type ManifestStore,
@@ -31,6 +32,9 @@ export interface DiagnosticRuntimeOptions {
 export async function collectDiagnostics(input: {
   readonly provider: MusicProvider;
   readonly manifestStore: ManifestStore;
+  /** Read-only проверка default SQLite store; иначе проверяется list() переданного store. */
+  readonly manifestStoreProbe?: () => Promise<void>;
+  readonly storeBackend?: 'sqlite' | 'injected';
   readonly providerHealth?: () => Promise<
     | 'available'
     | 'absent'
@@ -116,7 +120,9 @@ export async function collectDiagnostics(input: {
     }
   }
   checks.manifestStore = checkOutcome(
-    await isolated(() => input.manifestStore.list()),
+    await isolated<unknown>(
+      input.manifestStoreProbe ?? (() => input.manifestStore.list()),
+    ),
   );
   checks.filesystem = checkOutcome(
     await isolated(() => filesystem(input.runtime)),
@@ -132,7 +138,7 @@ export async function collectDiagnostics(input: {
   );
   return {
     available,
-    backend: 'file-manifest-store',
+    backend: input.storeBackend ?? 'injected',
     configuration: {
       schemaVersion: input.providerSchemaVersion,
       credentialBackend:
@@ -172,6 +178,12 @@ function checkOutcome(value: Outcome<unknown>): Check {
       };
 }
 function errorCode(error: unknown): string {
+  // Несовместимая схема базы показывается закрытой причиной, без путей (STEP-029).
+  if (
+    error instanceof CommandRefusalError &&
+    error.reason === 'STATE_SCHEMA_UNSUPPORTED'
+  )
+    return error.reason;
   return normalizeDomainError(error).code;
 }
 async function filesystem(runtime: DiagnosticRuntimeOptions): Promise<void> {

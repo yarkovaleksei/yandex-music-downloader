@@ -10,6 +10,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import {
   currentLeaseIdentity,
   FileManifestStore,
+  SqliteManifestStore,
 } from '@music-downloader/persistence';
 import { DomainError } from '@music-downloader/shared';
 import type {
@@ -140,6 +141,7 @@ describe('STEP-045: команды двух application с общим stateDir',
     | undefined;
   let retryTrace: NativeRetryTrace | undefined;
   let retryTraceSpy: { mockRestore(): void } | undefined;
+  let observer: SqliteManifestStore | undefined;
 
   afterEach(async () => {
     try {
@@ -147,6 +149,9 @@ describe('STEP-045: команды двух application с общим stateDir',
       await appB?.shutdown();
       await running;
     } finally {
+      // База закрывается до удаления каталога: Windows не удаляет открытый файл.
+      await observer?.close();
+      observer = undefined;
       retryTraceSpy?.mockRestore();
       retryTraceSpy = undefined;
       retryTrace = undefined;
@@ -169,7 +174,8 @@ describe('STEP-045: команды двух application с общим stateDir',
       });
     root = await mkdtemp(path.join(os.tmpdir(), 'application-refusal-'));
     const stateDir = path.join(root, 'state');
-    const store = new FileManifestStore({ stateDir });
+    const store = new SqliteManifestStore({ stateDir });
+    observer = store;
     const provider: MusicProvider = {
       ...downloads(),
       openAudioStream: async () => ({
@@ -439,7 +445,7 @@ describe('STEP-049: shutdown закрывающегося manager', () => {
   it('ждёт удерживаемый release после terminal resume и освобождает lease один раз', async () => {
     const root = await mkdtemp(path.join(os.tmpdir(), 'application-close-'));
     const stateDir = path.join(root, 'state');
-    const store = new FileManifestStore({ stateDir });
+    const store = new SqliteManifestStore({ stateDir });
     let seed: ReturnType<typeof createApplication> | undefined;
     let resumed: ReturnType<typeof createApplication> | undefined;
     let jobId: string;
@@ -522,6 +528,7 @@ describe('STEP-049: shutdown закрывающегося manager', () => {
       releaseSession?.();
       await seed?.shutdown();
       await resumed?.shutdown();
+      await store.close();
       await rm(root, { recursive: true, force: true });
     }
   }, 15_000);
@@ -850,6 +857,7 @@ describe('ApplicationApi: интеграция публичного фасада
     let jobId: string | undefined;
     let first: ReturnType<typeof createApplication> | undefined;
     let secondFacade: ReturnType<typeof createApplication> | undefined;
+    let observerStore: SqliteManifestStore | undefined;
     let resumed: ReturnType<typeof createApplication> | undefined;
     let started!: () => void;
     let releaseThirdChunk!: () => void;
@@ -898,9 +906,10 @@ describe('ApplicationApi: интеграция публичного фасада
       });
       await startedStream;
       expect(jobId).toBeDefined();
-      const observer = new FileManifestStore({
+      const observer = new SqliteManifestStore({
         stateDir: path.join(root, 'state'),
       });
+      observerStore = observer;
       await expect
         .poll(async () => (await observer.read(jobId!))?.tracks[0]?.partPath, {
           timeout: 5_000,
@@ -957,7 +966,12 @@ describe('ApplicationApi: интеграция публичного фасада
       expect(await readFile(paused!.tracks[0]!.partPath!)).toEqual(
         Buffer.from(validMp3.slice(0, 3)),
       );
+      // STEP-029: shutdown закрыл default store первого facade без скрытого переоткрытия.
       await expect(first.getJob(jobId!)).resolves.toMatchObject({
+        kind: 'error',
+        error: { code: 'VALIDATION_ERROR' },
+      });
+      await expect(secondFacade.getJob(jobId!)).resolves.toMatchObject({
         kind: 'result',
         data: { status: 'paused' },
       });
@@ -1002,6 +1016,7 @@ describe('ApplicationApi: интеграция публичного фасада
       await first?.shutdown();
       await resumed?.shutdown();
       await secondFacade?.shutdown();
+      await observerStore?.close();
       await rm(root, { recursive: true, force: true });
     }
   }, 15_000);
@@ -1212,7 +1227,7 @@ describe('ApplicationApi: интеграция публичного фасада
       path.join(os.tmpdir(), 'application-checkpoint-'),
     );
     const stateDir = path.join(root, 'state');
-    const store = new FileManifestStore({ stateDir });
+    const store = new SqliteManifestStore({ stateDir });
     const facades: ReturnType<typeof createApplication>[] = [];
     const source = {
       provider: 'mock',
@@ -1307,6 +1322,7 @@ describe('ApplicationApi: интеграция публичного фасада
       }
     } finally {
       await Promise.all(facades.map((facade) => facade.shutdown()));
+      await store.close();
       await rm(root, { recursive: true, force: true });
     }
   }, 15_000);

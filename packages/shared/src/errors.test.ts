@@ -20,6 +20,7 @@ describe('DomainError', () => {
     ['JOB_NOT_FOUND', 'VALIDATION_ERROR'],
     ['LEASE_HELD_BY_OTHER_OWNER', 'VALIDATION_ERROR'],
     ['OWNER_ACK_TIMEOUT', 'DOWNLOAD_ERROR'],
+    ['STATE_SCHEMA_UNSUPPORTED', 'VALIDATION_ERROR'],
   ] as const)(
     'сохраняет безопасный базовый JSON для причины %s',
     (reason, code) => {
