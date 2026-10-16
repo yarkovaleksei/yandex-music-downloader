@@ -32,3 +32,5 @@ ADR фиксирует **устойчивое архитектурное реш�
 - [ADR-009](ADR-009-yandex-adapter-strategy.md) — Стратегия Yandex adapter и runtime-валидации (accepted)
 - [ADR-010](ADR-010-cli-auth-and-secure-storage.md) — Device Authorization и защищённое CLI credential storage (accepted)
 - [ADR-011](ADR-011-shared-metadata-contract.md) — Жанр и доступность в shared metadata contract (accepted; owning STEP-038/039)
+- [ADR-012](ADR-012-audio-metadata-library.md) — Библиотека записи аудиометаданных (accepted; owning STEP-020/021)
+- [ADR-013](ADR-013-optional-ffmpeg.md) — Опциональный FFmpeg без обязательного bundling (accepted; owning STEP-020)

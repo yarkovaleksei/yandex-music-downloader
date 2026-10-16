@@ -56,3 +56,4 @@
 | STEP-050 | Диагностика PERMISSION_DENIED в Windows CI PR #17 | bugfix | critical | completed | STEP-044, STEP-045, STEP-049 | REQ-012, REQ-032, REQ-041, REQ-042 |
 | STEP-051 | Загрузка коллекции «Мне нравится» по ссылке lk.UUID | bugfix | critical | completed | STEP-007, STEP-009, STEP-019 | REQ-006, REQ-007, REQ-009 |
 | STEP-052 | Платформа M3U8 writer по умолчанию и переносимость тестов | bugfix | critical | completed | STEP-022 | REQ-028, REQ-043, REQ-044 |
+| STEP-053 | Синхронизировать описание принятого headless MVP | documentation | medium | planned | STEP-027, STEP-024 | — |
