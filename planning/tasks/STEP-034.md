@@ -10,7 +10,9 @@ depends_on:
 requirements:
   - REQ-054
   - REQ-055
-adrs: []
+adrs:
+  - ADR-014
+  - ADR-015
 architecture_refs:
   - "docs/architecture.md#deployment-runtime-assumptions"
 risk_flags:

@@ -9,7 +9,9 @@ depends_on:
   - STEP-035
 requirements:
   - REQ-055
-adrs: []
+adrs:
+  - ADR-014
+  - ADR-015
 architecture_refs:
   - "docs/architecture.md#deployment-runtime-assumptions"
   - "docs/architecture.md#security-boundaries"

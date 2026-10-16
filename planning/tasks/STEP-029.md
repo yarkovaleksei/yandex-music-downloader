@@ -12,6 +12,7 @@ requirements:
   - REQ-033
 adrs:
   - ADR-004
+  - ADR-014
 architecture_refs:
   - "docs/architecture.md#data-state-model"
 risk_flags:

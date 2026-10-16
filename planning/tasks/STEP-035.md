@@ -11,7 +11,9 @@ requirements:
   - REQ-054
   - REQ-045
   - REQ-041
-adrs: []
+adrs:
+  - ADR-014
+  - ADR-015
 architecture_refs:
   - "docs/architecture.md#deployment-runtime-assumptions"
 risk_flags:

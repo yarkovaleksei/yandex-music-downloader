@@ -10,7 +10,9 @@ depends_on:
 requirements:
   - REQ-049
   - REQ-050
-adrs: []
+adrs:
+  - ADR-015
+  - ADR-016
 architecture_refs:
   - "docs/architecture.md#основные-потоки"
 risk_flags:

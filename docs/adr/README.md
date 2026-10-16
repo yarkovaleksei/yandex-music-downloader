@@ -34,3 +34,6 @@ ADR фиксирует **устойчивое архитектурное реш�
 - [ADR-011](ADR-011-shared-metadata-contract.md) — Жанр и доступность в shared metadata contract (accepted; owning STEP-038/039)
 - [ADR-012](ADR-012-audio-metadata-library.md) — Библиотека записи аудиометаданных (accepted; owning STEP-020/021)
 - [ADR-013](ADR-013-optional-ffmpeg.md) — Опциональный FFmpeg без обязательного bundling (accepted; owning STEP-020)
+- [ADR-014](ADR-014-sqlite-persistence.md) — SQLite persistence, общий каталог состояния и миграции (accepted; owning STEP-028/029)
+- [ADR-015](ADR-015-electron-security-model.md) — Модель безопасности Electron, топология процессов и desktop secure storage (accepted; owning STEP-028/030; решает OQ-010)
+- [ADR-016](ADR-016-desktop-ipc-contract.md) — Typed IPC contract `DesktopApi` (accepted; owning STEP-028/030)
