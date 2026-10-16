@@ -111,6 +111,8 @@ def candidate_source(root: Path) -> tuple[str, str]:
             }
         ),
     )
+    write(root, ".harness/tools/update-artifact-canary.py",
+          'import json\nprint(json.dumps({"status":"PASS","count":16}))\n')
     candidate = commit_all(root, "candidate")
     return stable, candidate
 
@@ -203,6 +205,8 @@ def baseline_project(
     mutate_project_owned: bool = False,
     mode: str = "reload_completed",
     release: str = "0.11.2",
+    fail_self_tests: bool = False,
+    fail_blocked_dag: bool = False,
 ) -> str:
     root.mkdir()
     init_repo(root)
@@ -236,7 +240,23 @@ print(json.dumps({"status":"PASS","command":sys.argv[1]}))
 """,
     )
     write(root, ".harness/tools/validate.py", "raise SystemExit(0)\n")
-    write(root, ".harness/tools/run-self-tests.py", "raise SystemExit(0)\n")
+    write(root, ".harness/tools/dependency-evidence-self-test.py",
+          f"raise SystemExit({1 if fail_blocked_dag else 0})\n")
+    if fail_self_tests:
+        # Synthetic stdout matches public run-self-tests.py --json.
+        # The failure must expose safe test names but not diagnostic prose.
+        write(
+            root, ".harness/tools/run-self-tests.py",
+            "import json\n"
+            "print(json.dumps({"
+            "'status': 'FAIL', 'count': 2, "
+            "'results': ["
+            "{'test': 'portable-resume-self-test.py', 'status': 'FAIL', 'exitCode': 1}, "
+            "{'test': '../PRIVATE-self-test.py', 'status': 'FAIL', 'exitCode': 1}"
+            "]}))\nraise SystemExit(1)\n",
+        )
+    else:
+        write(root, ".harness/tools/run-self-tests.py", "raise SystemExit(0)\n")
     write(root, "planning/reviews/TEMPLATE.md", "project-owned review template\n")
     write(root, "planning/init-reviews/INIT-REVIEW-1.md", "immutable init report\n")
     write(root, "docs/adr/ADR-001.md", "accepted decision\n")
@@ -307,6 +327,22 @@ def main() -> int:
         assert direct_pass["status"] == "PASS", direct_pass
         assert any(stage["result"] == "UPDATED" for stage in direct_pass["stages"] if stage["id"].startswith("apply-")), direct_pass
 
+        broken_matrix = root / "broken-matrix-source"
+        run(["git", "clone", "--quiet", str(source), str(broken_matrix)], cwd=root)
+        git(broken_matrix, "config", "user.name", "test")
+        git(broken_matrix, "config", "user.email", "test@example.invalid")
+        write(broken_matrix, ".harness/tools/update-artifact-canary.py", "raise SystemExit(1)\n")
+        bad_matrix_sha = commit_all(broken_matrix, "failed artifact matrix")
+        rejected_matrix = invoke(root, direct, direct_sha, broken_matrix, bad_matrix_sha, expect=1)
+        assert rejected_matrix["reasonCode"] == "ARTIFACT_MATRIX_FAILED", rejected_matrix
+
+        # Ошибка workload #340 обязана блокировать initialized qualification.
+        blocked_dag = root / "blocked-dag-failure"
+        blocked_sha = baseline_project(blocked_dag, fail_blocked_dag=True)
+        rejected = invoke(root, blocked_dag, blocked_sha, source, candidate, expect=1)
+        assert rejected["reasonCode"] == "POST_UPDATE_GATE_FAILED", rejected
+        assert rejected["message"] == "blocked-dependency-dag", rejected
+
         # Обязательное условие нового release gate: canary не может быть
         # на позапрошлом релизе и выдавать multi-hop за предыдущий stable.
         obsolete = root / "outdated-canary"
@@ -325,6 +361,18 @@ def main() -> int:
         stalled_sha = baseline_project(stalled, mode="stalled_reload")
         stalled_result = invoke(root, stalled, stalled_sha, source, candidate, expect=1)
         assert stalled_result["reasonCode"] == "RELOAD_DID_NOT_ADVANCE", stalled_result
+
+        # A broken downstream suite reports only safe machine test names.
+        # It must not leak an arbitrary path/secret from a failure result.
+        broken_tests = root / "failed-tests-baseline"
+        broken_sha = baseline_project(broken_tests, fail_self_tests=True)
+        diagnosed = invoke(root, broken_tests, broken_sha, source, candidate, expect=1)
+        assert diagnosed["reasonCode"] == "POST_UPDATE_GATE_FAILED", diagnosed
+        detail = next(x for x in diagnosed["stages"] if x["id"] == "self-tests")
+        assert detail["failedSelfTests"] == [
+            {"test": "portable-resume-self-test.py", "status": "FAIL", "exitCode": 1}
+        ], detail
+        assert "PRIVATE" not in str(diagnosed), diagnosed
 
         bad = root / "bad-baseline"
         bad_sha = baseline_project(bad, mutate_project_owned=True)

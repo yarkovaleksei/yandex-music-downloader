@@ -6,8 +6,8 @@
     "description": "Режим относится к собственной обработке канонической команды; вызванные ею дочерние команды учитываются отдельно."
   },
   "summary": {
-    "total": 32,
-    "none": 14,
+    "total": 34,
+    "none": 16,
     "required": 16,
     "conditional": 2
   },
@@ -473,7 +473,7 @@
       "command": "HARNESS UPDATE CHECK",
       "domain": "HARNESS",
       "operation": "UPDATE CHECK",
-      "summary": "Проверить доступный путь обновления Harness без внесения изменений.",
+      "summary": "Проверить прямое обновление служебных файлов к latest или указанной версии.",
       "documentation": ".harness/docs/COMMANDS.md#command-harness-update-check",
       "dispatch": {
         "kind": "deterministic",
@@ -483,9 +483,8 @@
         "mode": "none",
         "modelWork": [],
         "deterministicWork": [
-          "Построение маршрута обновления",
-          "Проверка версий, владения файлами и возможных конфликтов",
-          "Предварительная проверка без изменения проекта"
+          "Разрешение current и final target по immutable tags без цепочки релизов",
+          "Проверка владения, трёхстороннего слияния и целостности служебных файлов без чтения рабочих артефактов"
         ],
         "fastPaths": []
       }
@@ -494,7 +493,7 @@
       "command": "HARNESS UPDATE APPLY",
       "domain": "HARNESS",
       "operation": "UPDATE APPLY",
-      "summary": "Применить допустимое обновление Harness.",
+      "summary": "Одной транзакцией обновить служебные файлы к latest или указанной версии.",
       "documentation": ".harness/docs/COMMANDS.md#command-harness-update-apply",
       "dispatch": {
         "kind": "deterministic",
@@ -504,10 +503,9 @@
         "mode": "none",
         "modelWork": [],
         "deterministicWork": [
-          "Пошаговое применение обновления",
-          "Трёхстороннее слияние разрешённых файлов",
-          "Откат при ошибке",
-          "Проверка результата и обновление состояния версии"
+          "Разрешение current и final target по immutable tags без цепочки релизов",
+          "Проверка владения, трёхстороннего слияния и целостности служебных файлов без чтения рабочих артефактов",
+          "Атомарная установка final target и откат при ошибке; reload только перед следующей рабочей командой"
         ],
         "fastPaths": []
       }
@@ -585,6 +583,45 @@
         "modelWork": [],
         "deterministicWork": [
           "Сбор фактически применяемой конфигурации и её источников"
+        ],
+        "fastPaths": []
+      }
+    },
+    {
+      "command": "HARNESS CLEANUP CHECK",
+      "domain": "HARNESS",
+      "operation": "CLEANUP CHECK",
+      "summary": "Показать временные каталоги, доступные для удаления, и причины сохранения остальных.",
+      "documentation": ".harness/docs/COMMANDS.md#command-harness-cleanup-check",
+      "dispatch": {
+        "kind": "deterministic",
+        "handler": "harness-cleanup-check"
+      },
+      "reasoning": {
+        "mode": "none",
+        "modelWork": [],
+        "deterministicWork": [
+          "Проверка владельца, завершения, ссылок и безопасного пути временных файлов"
+        ],
+        "fastPaths": []
+      }
+    },
+    {
+      "command": "HARNESS CLEANUP APPLY",
+      "domain": "HARNESS",
+      "operation": "CLEANUP APPLY",
+      "summary": "Повторно проверить и удалить временные каталоги доказанно завершённой работы.",
+      "documentation": ".harness/docs/COMMANDS.md#command-harness-cleanup-apply",
+      "dispatch": {
+        "kind": "deterministic",
+        "handler": "harness-cleanup-apply"
+      },
+      "reasoning": {
+        "mode": "none",
+        "modelWork": [],
+        "deterministicWork": [
+          "Проверка владельца, завершения, ссылок и безопасного пути временных файлов",
+          "Удаление с повторной проверкой под общим execution lock"
         ],
         "fastPaths": []
       }

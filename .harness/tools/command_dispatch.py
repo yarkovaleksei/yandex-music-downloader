@@ -37,6 +37,7 @@ from execution_status import (
     load_status,
     resolve_execution,
     normalize_single_command,
+    portable_plan_recheck_proven,
     resolve_root,
     running_command_for,
     stamp_review_expectation,
@@ -56,10 +57,12 @@ from harness_ux import (
     step_list,
     step_show,
 )
+from local_cleanup import cleanup, temporary_directory
 from planning_contract import step_completion_proof
 from step_context import build_step_context
 from step_next import resolve_step_action, resolve_step_next
-from verification import run_step_verification, write_verification_evidence
+from verification import run_step_verification, write_verification_evidence, verification_freshness
+from operational_reports import COMMAND_KINDS, operational_completion_blocker
 from fix_delta import capture_fix, complete_fix, review_scope, request_full_review, FixDeltaError
 
 
@@ -283,7 +286,7 @@ def _verification_before_completion(
                 verification = {
                     **verification,
                     "status": "BLOCKED",
-                    "reasonCode": "EVIDENCE_WRITE_FAILED",
+                    "reasonCode": getattr(exc, "code", "EVIDENCE_WRITE_FAILED"),
                     "message": str(exc),
                 }
 
@@ -446,6 +449,7 @@ def _semantic_handoff(
             "completionBinding": "executionId",
         },
     }
+    result["temporaryDirectory"] = temporary_directory(root, str(execution["executionId"]))
     current_state = execution.get("current")
     recovery_context = (
         current_state.get("context")
@@ -553,7 +557,7 @@ def _finish_machine_result(
         )
         return _dispatch_running(root, root_execution, root_command)
 
-    return _terminal(completed, resolved, result=result)
+    return _terminal(root, completed, resolved, result=result)
 
 
 def _git_push_after_commit_fast_path(
@@ -703,6 +707,8 @@ def _deterministic_handler(
         return harness_status(root)
     if handler == "harness-doctor":
         return harness_doctor(root)
+    if handler in {"harness-cleanup-check", "harness-cleanup-apply"}:
+        return cleanup(root, apply=handler == "harness-cleanup-apply")
     if handler == "harness-config":
         return harness_config(root)
     if handler == "project-status":
@@ -747,6 +753,8 @@ def _deterministic_handler(
                 "kind": "reload-and-repeat",
                 "command": route["command"],
             }
+        elif engine_status == "UPDATED" and raw.get("reloadRequired"):
+            result["nextAction"] = {"kind": "reload-runtime", "command": None}
         elif engine_status == "UPDATED" or bool(raw.get("repositoryMutated")):
             # NO_UPDATE может всё же завершить deferred pre-INIT project-owned
             # template alignment после обязательного reload. Release ref при
@@ -809,6 +817,7 @@ def _deterministic_handler(
 
 
 def _terminal(
+    root: Path,
     execution: dict[str, Any],
     resolved: dict[str, Any],
     *,
@@ -825,6 +834,8 @@ def _terminal(
         value["result"] = result
     if resolved.get("notExecuted") is not None:
         value["notExecuted"] = resolved.get("notExecuted")
+    if value["status"] == "DONE":
+        value["cleanup"] = cleanup(root, apply=True)
     return value
 
 
@@ -865,8 +876,14 @@ def _dispatch_running(
     )
 
 
-def start_dispatch(root: Path, raw_command: str) -> dict[str, Any]:
-    """Начать explicit user command и вернуть result либо semantic handoff."""
+def start_dispatch(
+    root: Path,
+    raw_command: str,
+    *,
+    require_fresh_clone: bool = False,
+    expected_git_head: str | None = None,
+) -> dict[str, Any]:
+    """Начать explicit command; portable mode разрешён только для нового STEP PLAN."""
     table = _table(root)
     structural = validate_command_text(raw_command, table)
     if not structural.get("valid"):
@@ -878,6 +895,22 @@ def start_dispatch(root: Path, raw_command: str) -> dict[str, Any]:
         }
 
     normalized = list(structural.get("normalized") or [])
+    if require_fresh_clone:
+        # Portable adoption допускает только новую локальную PLAN, не
+        # пропускает CTS и не запускает STEP IMPLEMENT / GIT операции.
+        command = parse_canonical_command(normalized[0], table) if len(normalized) == 1 else {}
+        if command.get("domain") != "STEP" or command.get("operation") != "PLAN":
+            return {
+                "schemaVersion": SCHEMA_VERSION,
+                "status": "BLOCKED",
+                "reasonCode": "PORTABLE_COMMAND_NOT_ALLOWED",
+            }
+    if normalized in (["HARNESS CLEANUP CHECK"], ["HARNESS CLEANUP APPLY"]):
+        # CHECK не регистрирует execution и не создаёт lock/state. APPLY
+        # сам держит общий lock вместе с повторной проверкой каждого кандидата.
+        result = _deterministic_handler(root, normalized[0])
+        return {"schemaVersion": SCHEMA_VERSION, "status": "DONE" if result["status"] == "PASS" else "BLOCKED",
+                "rootCommand": normalized[0], "executionId": None, "command": None, "result": result}
     if normalized == ["HARNESS RESUME"]:
         return resume_dispatch(root)
     if normalized == ["STEP NEXT"]:
@@ -903,7 +936,7 @@ def start_dispatch(root: Path, raw_command: str) -> dict[str, Any]:
     # recovery. Если root уже running, сначала reconcile durable checkpoints
     # через существующий mutating RESUME path, а не создаём новый child-root.
     # Это одинаково важно для STEP RUN и explicit STEP chains.
-    if normalized and all(cmd.startswith("STEP ") for cmd in normalized):
+    if not require_fresh_clone and normalized and all(cmd.startswith("STEP ") for cmd in normalized):
         root_command = " > ".join(normalized)
         if _active_execution(root, root_command) is not None:
             return resume_dispatch(root, root_command)
@@ -946,7 +979,11 @@ def start_dispatch(root: Path, raw_command: str) -> dict[str, Any]:
             }
 
     try:
-        execution = start_execution(root, raw_command)
+        execution = start_execution(
+            root, raw_command,
+            require_fresh_clone=require_fresh_clone,
+            expected_git_head=expected_git_head,
+        )
     except (OSError, ValueError) as exc:
         value = {
             "schemaVersion": SCHEMA_VERSION,
@@ -1132,6 +1169,31 @@ def complete_dispatch(
                 "message": f"current running command is {running!r}, not {normalized_command!r}",
             }
 
+        # Между semantic handoff и complete могла завершиться другая invocation
+        # того же STEP. Перед дорогой Verification ещё раз сверяем authority:
+        # stale IMPLEMENT не имеет права переписывать уже успешный Evidence.
+        command_route = route_command(root, command)
+        if (
+            active is not None
+            and command_route.get("domain") == "STEP"
+            and command_route.get("operation") in {"IMPLEMENT", "FIX", "REVIEW"}
+        ):
+            checkpoint = resolve_execution(root, active)
+            if (
+                checkpoint.get("status") != "RESUME"
+                or checkpoint.get("command") != normalized_command
+            ):
+                return {
+                    "schemaVersion": SCHEMA_VERSION,
+                    "status": "BLOCKED",
+                    "rootCommand": root_command,
+                    "executionId": execution_id,
+                    "command": command,
+                    "reasonCode": checkpoint.get("reasonCode", "RECOVERY_CONFLICT"),
+                    "remediation": checkpoint.get("remediation"),
+                    "message": "Execution changed before semantic completion; Evidence was not rewritten.",
+                }
+
         early = _step_run_completion_gate(root, root_command, command, result)
         if early is not None:
             return early
@@ -1147,14 +1209,86 @@ def complete_dispatch(
         if early is not None:
             return early
 
-        execution = complete_command(
-            root,
-            root_command,
-            command,
-            result,
-            expected_execution_id=execution_id,
-            details=completion_details,
-        )
+        # Не оставляем окно между публикацией Verification и фиксацией SUCCESS.
+        # Lock reentrant: complete_command использует ту же state transaction.
+        with execution_state_lock(root):
+            completed_route = route_command(root, command)
+            if (
+                result in {"SUCCESS", "PASS"}
+                and completed_route.get("domain") == "STEP"
+                and completed_route.get("operation") == "PLAN"
+            ):
+                live = _active_execution(root, root_command)
+                if (
+                    live is not None
+                    and live.get("executionId") == execution_id
+                    and portable_plan_recheck_proven(root, live) is False
+                ):
+                    return {
+                        "schemaVersion": SCHEMA_VERSION,
+                        "status": "BLOCKED",
+                        "rootCommand": root_command,
+                        "command": command,
+                        "reasonCode": "PORTABLE_PLAN_RECHECK_REQUIRED",
+                        "message": "New independent planning review has not been proven",
+                    }
+            # Отчёты PROJECT RECONCILE, STEP AUDIT, RELEASE CHECK и SKILL FIND
+            # являются обязательным terminal evidence, но не все SUCCESS
+            # требуют reports. После handoff writer оставил validated receipt
+            # в ЭТОЙ running execution; проверяем его повторно под status lock.
+            if (
+                result in {"SUCCESS", "PASS"}
+                and (completed_route.get("domain"), completed_route.get("operation"))
+                in COMMAND_KINDS
+            ):
+                live_report_owner = _active_execution(root, root_command)
+                if (
+                    live_report_owner is None
+                    or live_report_owner.get("executionId") != execution_id
+                ):
+                    return {
+                        "schemaVersion": SCHEMA_VERSION,
+                        "status": "BLOCKED",
+                        "rootCommand": root_command,
+                        "command": command,
+                        "reasonCode": "STALE_SEMANTIC_RESULT",
+                        "message": "current report owner is not this execution",
+                    }
+                blocker = operational_completion_blocker(
+                    root, live_report_owner, command,
+                )
+                if blocker is not None:
+                    return {
+                        "schemaVersion": SCHEMA_VERSION,
+                        "status": "BLOCKED",
+                        "rootCommand": root_command,
+                        "executionId": execution_id,
+                        "command": command,
+                        **blocker,
+                    }
+            if (
+                result in {"SUCCESS", "PASS"}
+                and completed_route.get("domain") == "STEP"
+                and completed_route.get("operation") in {"IMPLEMENT", "FIX"}
+            ):
+                fresh = verification_freshness(root, str(completed_route["target"]))
+                if not fresh.get("fresh"):
+                    return {
+                        "schemaVersion": SCHEMA_VERSION,
+                        "status": "BLOCKED",
+                        "rootCommand": root_command,
+                        "command": command,
+                        "reasonCode": fresh.get("reasonCode", "VERIFICATION_EVIDENCE_STALE"),
+                        "verificationFreshness": fresh,
+                    }
+            execution = complete_command(
+                root,
+                root_command,
+                command,
+                result,
+                expected_execution_id=execution_id,
+                details=completion_details,
+            )
         # Mark the FIX delta usable only after successful Verification and
         # accepted execution completion; never after BLOCKED/manual pending.
         completed_route = route_command(root, command)
@@ -1240,7 +1374,7 @@ def complete_dispatch(
                 **({"remediation": getattr(exc, "details").get("remediation")} if isinstance(getattr(exc, "details", None), dict) and getattr(exc, "details").get("remediation") else {}),
             }
 
-    return _terminal(execution, resolved)
+    return _terminal(root, execution, resolved)
 
 
 def resume_dispatch(
@@ -1256,9 +1390,44 @@ def resume_dispatch(
                 **selection,
             }
         root_command = str(selection["rootCommand"])
+        if selection.get("portable") is True:
+            # Между read-only выбором и dispatch Git мог измениться. Проверяем
+            # published handoff второй раз; старый executionId не импортируем.
+            from portable_resume import portable_resume_candidate
+
+            current = portable_resume_candidate(root)
+            if (
+                current.get("status") != "PASS"
+                or current.get("command") != root_command
+                or current.get("sourceHandoff") != selection.get("sourceHandoff")
+                or current.get("publicationHead") != selection.get("publicationHead")
+            ):
+                return {
+                    "schemaVersion": SCHEMA_VERSION,
+                    "status": "BLOCKED",
+                    "reasonCode": current.get("reasonCode", "PORTABLE_HANDOFF_CHANGED"),
+                    "message": "Portable handoff changed before execution start",
+                }
+            # Сохраняем local-only authority: exact fresh-clone check выполняется
+            # под execution state lock, одновременно с записью новой invocation.
+            result = start_dispatch(
+                root, root_command, require_fresh_clone=True,
+                expected_git_head=current["publicationHead"],
+            )
+            if result.get("status") != "SEMANTIC":
+                return result
+            result["portableAdoption"] = {
+                "sourceHandoff": current["sourceHandoff"],
+                "reasonCode": "PORTABLE_REPLAN_REQUIRED",
+                "importedExecution": False,
+                "externalSideEffectsExecuted": False,
+            }
+            return result
 
     resolved = resolve_root(root, root_command)
     if resolved.get("status") not in {"RESUME", "NEXT"} or not resolved.get("command"):
+        if resolved.get("status") == "DONE":
+            resolved["cleanup"] = cleanup(root, apply=True)
         return {
             "schemaVersion": SCHEMA_VERSION,
             **resolved,

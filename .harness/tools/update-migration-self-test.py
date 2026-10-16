@@ -21,7 +21,6 @@ from harness_config import (
 from harness_update import (
     UpdateError,
     WorkingTree,
-    _align_preinit_templates_after_reload,
 )
 from planning_contract import step_completion_proof
 from project_migration import legacy_manual_bypass_allowed, legacy_schema_pending, migrate_project
@@ -137,6 +136,12 @@ def test_routing(root: Path) -> None:
         supported_route[0] == "v0.6.0" and supported_route[-1] == canonical["latest"],
         f"supported v0.6.0 update route is broken: {supported_route}",
     )
+
+    if canonical.get("strategy") == "direct":
+        for edge in canonical["transitions"]:
+            require(edge["to"] == canonical["latest"] and edge["reloadRequired"],
+                    "direct catalog must have exactly one installation per entry")
+        return
 
     route, edges = route_to_latest(canonical, "v0.4.0")
     require(route[:3] == ["v0.4.0", "v0.4.1", "v0.4.2"], f"legacy bridge prefix changed: {route}")
@@ -434,7 +439,7 @@ None.
 
 
 def test_preinit_release_template_alignment() -> None:
-    """Safe old-release drift aligns after reload; user drift never overwrites."""
+    """Explicit project template alignment preserves user customization."""
     with tempfile.TemporaryDirectory(prefix="harness-preinit-template-alignment-") as tmp:
         root = Path(tmp)
         source = repo_root()
@@ -530,48 +535,6 @@ def test_preinit_release_template_alignment() -> None:
             "initialized project template was aligned by updater",
         )
 
-        # Updater-specific deferred alignment is transactional around target
-        # validator: successful postcondition keeps exact baseline, failure
-        # restores the old release template byte-for-byte.
-        manifest_path.write_text(
-            preinit_manifest_text(source),
-            encoding="utf-8",
-        )
-        review_path.write_text(old_release_review, encoding="utf-8")
-        validator_path = root / ".harness/tools/validate.py"
-        validator_path.parent.mkdir(parents=True, exist_ok=True)
-        validator_path.write_text(
-            "#!/usr/bin/env python3\nraise SystemExit(0)\n",
-            encoding="utf-8",
-        )
-        aligned = _align_preinit_templates_after_reload(
-            root,
-            WorkingTree(root),
-        )
-        require("planning/reviews/TEMPLATE.md" in aligned, aligned)
-        require(review_path.read_text(encoding="utf-8") == REVIEW_TEMPLATE, aligned)
-
-        review_path.write_text(old_release_review, encoding="utf-8")
-        before_failed_postcondition = review_path.read_bytes()
-        validator_path.write_text(
-            "#!/usr/bin/env python3\n"
-            "print('synthetic target postcondition failure')\n"
-            "raise SystemExit(1)\n",
-            encoding="utf-8",
-        )
-        try:
-            _align_preinit_templates_after_reload(
-                root,
-                WorkingTree(root),
-            )
-        except UpdateError as exc:
-            require(exc.code == "POSTCONDITION_FAILED", (exc.code, exc))
-        else:
-            raise AssertionError("failed target validator did not rollback alignment")
-        require(
-            review_path.read_bytes() == before_failed_postcondition,
-            "failed deferred alignment did not restore old template bytes",
-        )
 
 
 def test_project_owned_migration() -> None:
@@ -1160,16 +1123,64 @@ def test_release_metadata(root: Path) -> None:
     require(lock["release"] == release, "lock release must match manifest release")
     require(lock["source"]["ref"] == f"v{release}", "lock source.ref must match manifest release")
 
-    # В каноническом source repository release snapshot не может содержать
-    # source.commit: SHA самого release commit появляется только после commit/tag.
-    # В пользовательском project lock этот pin, наоборот, корректен и записывается
-    # updater/adoption после разрешения реально существующего immutable tag.
-    source_repository = lock["source"].get("repository")
-    if os.environ.get("GITHUB_REPOSITORY") == source_repository:
+    # Этот self-test работает и внутри установленного downstream checkout.
+    # GITHUB_REPOSITORY является metadata ВНЕШНЕГО workflow и может указывать
+    # на ai-development-harness-template даже при запуске в release-canary.
+    # Поэтому нельзя по этой переменной требовать отсутствия source.commit.
+    # В установленном проекте updater ДОЛЖЕН записать exact source commit;
+    # release snapshot проверяется отдельно scripts/release.py verify в
+    # maintainer-tools, где контекст подготовки известен достоверно.
+    pinned = lock["source"].get("commit")
+    if pinned is not None:
         require(
-            "commit" not in lock["source"],
-            "canonical release snapshot lock must not contain source.commit",
+            isinstance(pinned, str)
+            and re.fullmatch(r"[0-9a-fA-F]{40}|[0-9a-fA-F]{64}", pinned) is not None,
+            "installed source.commit must be an exact 40/64 hex Git object ID",
         )
+
+
+def test_release_metadata_initialized_downstream() -> None:
+    """CI GITHUB_REPOSITORY must not reinterpret installed lock as source.
+
+    A disposable initialized project may run self-tests under the Harness
+    workflow environment. Updater legitimately records the source commit.
+    """
+    from unittest.mock import patch
+
+    with tempfile.TemporaryDirectory(prefix="harness-updated-lock-test-") as td:
+        root = Path(td)
+        original = repo_root()
+        for relative in (
+            ".harness/manifest.yaml",
+            ".harness/harness.lock.json",
+            ".harness/harness-update-graph.json",
+            ".harness/harness-update.toml",
+        ):
+            destination = root / relative
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            destination.write_bytes((original / relative).read_bytes())
+
+        lock_path = root / ".harness/harness.lock.json"
+        installed = json.loads(lock_path.read_text(encoding="utf-8"))
+        installed["source"]["commit"] = "a" * 40
+        lock_path.write_text(json.dumps(installed), encoding="utf-8")
+
+        with patch.dict(
+            os.environ,
+            {"GITHUB_REPOSITORY": "ai-development-harness/ai-development-harness-template"},
+        ):
+            # These bytes are a valid installed-project pin, not a release
+            # self-pin. Test the exact environment of release canary CI.
+            test_release_metadata(root)
+
+        installed["source"]["commit"] = "invalid-pin"
+        lock_path.write_text(json.dumps(installed), encoding="utf-8")
+        try:
+            test_release_metadata(root)
+        except AssertionError as exc:
+            require("installed source.commit" in str(exc), str(exc))
+        else:
+            raise AssertionError("invalid installed source.commit was accepted")
 
 
 # Releases до v0.8.2 поставляют update engine без журнала и с defects
@@ -1203,8 +1214,12 @@ def bridge_edge_errors(graph: dict) -> list[str]:
 
 def test_bridge_release_gate(root: Path) -> None:
     graph = load_json(update_manifest_path(root))
-    errors = bridge_edge_errors(graph)
-    require(not errors, "; ".join(errors))
+    if graph.get("strategy") == "direct":
+        require(all(edge["to"] == graph["latest"] and edge["reloadRequired"]
+                    for edge in graph["transitions"]), "direct catalog contains intermediate hop")
+    else:
+        errors = bridge_edge_errors(graph)
+        require(not errors, "; ".join(errors))
 
     def edge(source: str, target: str, *, kind: str = "bridge", reload: bool = True) -> dict:
         return {"transitions": [{"from": source, "to": target, "kind": kind, "reloadRequired": reload, "reason": "journaled engine"}]}
@@ -1214,6 +1229,34 @@ def test_bridge_release_gate(root: Path) -> None:
     require(bridge_edge_errors(edge("v0.8.1", "v0.8.2", kind="standard", reload=False)), "gate accepted non-bridge v0.8.1 -> v0.8.2 edge")
     require(bridge_edge_errors(edge("v0.8.0", "v0.9.0")), "gate accepted v0.8.0 edge that skips v0.8.1")
     require(not bridge_edge_errors(edge("v0.8.1", "v0.8.2")), "gate rejected valid v0.8.2 bridge edge")
+
+
+def test_blocked_dag_hotfix_route(root: Path) -> None:
+    """#340: v0.11.6 не запускает дефектный target validator v0.12.0/1."""
+    from harness_update import _route, _validate_graph
+
+    graph = load_json(update_manifest_path(root))
+    latest, outgoing = _validate_graph(graph, r"^v\d+\.\d+\.\d+$")
+    route = _route("v0.11.6", latest, outgoing)
+    if graph.get("strategy") == "direct":
+        for installed in ("v0.11.6", "v0.12.0", "v0.12.1"):
+            direct = _route(installed, latest, outgoing)
+            require(len(direct) == 1 and direct[0].target == latest,
+                    f"{installed} must directly reach latest")
+        return
+    require(bool(route), "missing recovery route from v0.11.6")
+    require(route[0].target == "v0.12.2", "v0.11.6 must enter fixed validator v0.12.2")
+    require(route[0].reload_required, "v0.11.6 hotfix transition requires reload")
+    require(not any(hop.target in {"v0.12.0", "v0.12.1"} for hop in route),
+            "recovery route must skip broken target validators")
+    for installed in ("v0.12.0", "v0.12.1"):
+        installed_route = _route(installed, latest, outgoing)
+        require(installed_route[0].target == "v0.12.2",
+                f"{installed} must update directly to the hotfix")
+        require(installed_route[0].reload_required,
+                f"{installed} hotfix transition requires reload")
+        require(not any(hop.target in {"v0.12.0", "v0.12.1"} for hop in installed_route),
+                f"{installed} route must skip broken target validators")
 
 
 def main() -> int:
@@ -1227,7 +1270,9 @@ def main() -> int:
         ("template schema bump migration", test_template_schema_bump),
         ("legacy migration is lossless", test_legacy_migration_lossless),
         ("release metadata", lambda: test_release_metadata(root)),
+        ("installed release metadata under Harness Actions", test_release_metadata_initialized_downstream),
         ("journaled-engine bridge release gate", lambda: test_bridge_release_gate(root)),
+        ("BLOCKED DAG hotfix recovery route", lambda: test_blocked_dag_hotfix_route(root)),
     ]
     for name, test in tests:
         test()

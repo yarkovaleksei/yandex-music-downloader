@@ -360,12 +360,40 @@ def step_completion_proof(
     step_id: str,
     *,
     extra_legacy_review_pins: dict[str, str] | None = None,
+    _historical: bool = False,
+    _ancestors: frozenset[str] = frozenset(),
+    _proof_cache: dict[tuple[str, frozenset[str] | None], dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
     """Вернуть type-specific proof prerequisite completion.
 
     Это structural proof. review_contract.py дополнительно доказывает корректность
     самого immutable report и reviewed revision.
     """
+    # Кеш живёт только в пределах одной проверки. Proof без найденного цикла
+    # не зависит от пути обхода — даже если он BLOCKED. Только цикл требует
+    # отдельного ключа для каждого ancestry (не скрываем dependency-cycle).
+    # Файлового state или второго источника истины здесь нет.
+    if _proof_cache is None:
+        _proof_cache = {}
+
+    # Back-edge важнее кеша: цикл не превращается в ложный PASS.
+    if step_id in _ancestors:
+        reasons = [f"dependency-cycle:{step_id}"]
+        snapshot = {
+            "step_id": step_id, "type": None, "status": None,
+            "review": None, "evidence_hash": None, "reasons": reasons,
+        }
+        return {
+            "complete": False, "reasons": reasons,
+            "snapshot": snapshot, "proof_hash": stable_hash(snapshot),
+        }
+
+    cached = _proof_cache.get((step_id, None))
+    if cached is None:
+        cached = _proof_cache.get((step_id, _ancestors))
+    if cached is not None:
+        return cached
+
     task = read_task(root, step_id)
     meta = task["frontmatter"]
     step_type = meta.get("type")
@@ -436,6 +464,43 @@ def step_completion_proof(
         elif trusted.get("verdict") != "PASS":
             reasons.append("latest trusted review verdict is not PASS")
         else:
+            # Исторический PASS доказывает конкретный semantic contract.
+            # REQ/ADR/OQ/STEP/PRN change после REVIEW не превращает прежнее
+            # достижение в новое разрешение для зависимых executions.
+            # Legacy reports без contract_basis сохраняют migration semantics;
+            # они не притворяются новым review и требуют обычных guards.
+            source = trusted.get("document")
+            report_meta = (
+                source.get("frontmatter", {})
+                if isinstance(source, dict) else {}
+            )
+            reviewed_basis = report_meta.get("contract_basis")
+            reviewed_deps = report_meta.get("dependency_completion_basis")
+            # Старый современный REVIEW мог иметь semantic contract_basis, но
+            # не фиксировать зависимые proofs. Нельзя доказать, что он был
+            # проведён после текущего upstream REVIEW. Legacy отчёты без
+            # contract_basis сохраняют отдельные migration semantics.
+            if dependency_ids(task) and _valid_sha256(reviewed_basis):
+                if not _valid_sha256(reviewed_deps) and (
+                    not _historical or report_meta.get("reviewed_subject_content_hash") is not None
+                ):
+                    reasons.append(f"completion-dependency-proof-missing:{step_id}")
+                elif not _historical:
+                    current_deps = dependency_completion_basis(
+                        root, step_id, _ancestors=_ancestors,
+                        _proof_cache=_proof_cache,
+                        extra_legacy_review_pins=extra_legacy_review_pins,
+                    )
+                    if current_deps != reviewed_deps:
+                        reasons.append(f"completion-dependency-proof-stale:{step_id}")
+            if not _historical and _valid_sha256(reviewed_basis):
+                try:
+                    current_basis = planning_context_basis(root, step_id)
+                except (OSError, ValueError) as exc:
+                    reasons.append(f"completion-contract-unavailable:{step_id}:{exc}")
+                else:
+                    if current_basis != reviewed_basis:
+                        reasons.append(f"completion-contract-stale:{step_id}")
             review_path = _repo_relative(root, trusted["path"])
             review_snapshot = {
                 "path": review_path,
@@ -447,6 +512,30 @@ def step_completion_proof(
         if not evidence:
             reasons.append("step has no durable Evidence")
 
+    # Завершённая зависимость действительна для текущего downstream STEP
+    # только если её собственные requirements/architecture остаются доказаны.
+    # План downstream не связывается с lifecycle dependency (PLAN можно
+    # готовить раньше), проверка относится только к execution/evidence gates.
+    if complete:
+        ancestry = _ancestors | {step_id}
+        for dep_id in dependency_ids(task):
+            try:
+                dep_proof = step_completion_proof(
+                    root,
+                    dep_id,
+                    extra_legacy_review_pins=extra_legacy_review_pins,
+                    _historical=_historical,
+                    _ancestors=ancestry,
+                    _proof_cache=_proof_cache,
+                )
+            except (OSError, ValueError) as exc:
+                reasons.append(f"dependency-unprovable:{dep_id}:{exc}")
+                continue
+            if not dep_proof["complete"]:
+                reasons.append(
+                    f"dependency-incomplete:{dep_id}:" + "; ".join(dep_proof["reasons"])
+                )
+
     snapshot = {
         "step_id": step_id,
         "type": step_type,
@@ -455,12 +544,59 @@ def step_completion_proof(
         "evidence_hash": content_hash(task["sections"].get("Evidence", "")),
         "reasons": reasons,
     }
-    return {
+    proof = {
         "complete": not reasons,
         "reasons": reasons,
         "snapshot": snapshot,
         "proof_hash": stable_hash(snapshot),
     }
+    # Исторический REVIEW или stale contract дают BLOCKED независимо от пути.
+    # Ключ с ancestry для каждого такого отказа повторно обходит общий подграф
+    # на каждом маршруте DAG и приводит к экспоненциальному числу чтений (#340).
+    # Только найденный цикл зависит от пути; учитываем и вложенные причины.
+    path_dependent = any("dependency-cycle:" in reason for reason in reasons)
+    _proof_cache[(step_id, _ancestors if path_dependent else None)] = proof
+    return proof
+
+
+def dependency_completion_basis(
+    root: Path,
+    step_id: str,
+    *,
+    _ancestors: frozenset[str] = frozenset(),
+    _proof_cache: dict[tuple[str, frozenset[str] | None], dict[str, Any]] | None = None,
+    extra_legacy_review_pins: dict[str, str] | None = None,
+) -> str | None:
+    """Durable fingerprint upstream completion proofs at REVIEW time.
+
+    Planning context intentionally tracks dependency *contract*, not its
+    completion lifecycle. This independent proof basis is required only when
+    the STEP declares dependencies, so unrelated STEP evidence remains stable.
+    Each dependency proof uses the existing canonical step_completion_proof;
+    historical reports without this field retain legacy semantics.
+    """
+    task = read_task(root, step_id)
+    dependencies = sorted(set(dependency_ids(task)))
+    if not dependencies:
+        return None
+    if _proof_cache is None:
+        _proof_cache = {}
+    records: list[dict[str, Any]] = []
+    for dep_id in dependencies:
+        try:
+            proof = step_completion_proof(
+                root, dep_id, _ancestors=_ancestors | {step_id},
+                _proof_cache=_proof_cache,
+                extra_legacy_review_pins=extra_legacy_review_pins,
+            )
+        except (OSError, ValueError) as exc:
+            records.append({"step": dep_id, "status": "unprovable", "reason": str(exc)})
+        else:
+            records.append({
+                "step": dep_id, "complete": proof["complete"],
+                "proof_hash": proof["proof_hash"],
+            })
+    return stable_hash({"schemaVersion": 1, "dependencyProofs": records})
 
 
 def planning_context_snapshot(root: Path, step_id: str) -> dict[str, Any]:
@@ -1082,7 +1218,8 @@ def _validate_task(root: Path, step_id: str, task: dict[str, Any], errors: list[
             expected_content = None
         stored_basis = plan.get("context_basis")
         stored_content = plan.get("content_hash")
-        if expected_basis is not None and stored_basis != expected_basis:
+        if (expected_basis is not None and stored_basis != expected_basis
+                and meta.get("status") != "completed"):
             message = f"{prefix}: ready plan context_basis is stale"
             if warnings is None:
                 errors.append(message)
@@ -1121,19 +1258,17 @@ def _validate_task(root: Path, step_id: str, task: dict[str, Any], errors: list[
                         f"{prefix}: plan.reviewed_report does not point to matching PASS report"
                     )
 
-    # completed — это не самостоятельное доказательство выполнения. Canonical
-    # lifecycle разрешён только вместе с type-specific durable completion proof:
-    # Evidence, accepted ADR и/или trusted PASS review в зависимости от STEP type.
+    # Исторический lifecycle проверяется отдельно от разрешения новой работы.
+    # Общий validator используется commit/push/CI и не должен требовать повторной
+    # приёмки всей истории после изменения общего контекста (#345, #346).
     if meta.get("status") == "completed":
         try:
-            proof = step_completion_proof(root, step_id)
+            proof = historical_completion_projection_proof(root, step_id)
         except (DocumentError, ConfigError, OSError, ValueError) as exc:
             errors.append(f"{prefix}: cannot prove completed lifecycle: {exc}")
         else:
             for reason in proof["reasons"]:
-                errors.append(
-                    f"{prefix}: completed STEP completion proof failed: {reason}"
-                )
+                errors.append(f"{prefix}: completed STEP completion proof failed: {reason}")
 
 
 # Open Question validator: ID/status/affects targets и обязательные sections.
@@ -1203,6 +1338,26 @@ def _validate_open_questions(root: Path, errors: list[str]) -> None:
 # Сканирует STEP files, проверяет каждый contract, затем dependency cycles, OQ
 # и semantic review history. allow_legacy используется только migration flow.
 # ---------------------------------------------------------------------------
+def historical_completion_projection_proof(
+    root: Path,
+    step_id: str,
+    *,
+    extra_legacy_review_pins: dict[str, str] | None = None,
+) -> dict[str, Any]:
+    """Проверить принятую историю без разрешения нового execution.
+
+    Один type-specific механизм сохраняет trust, Evidence, Verification и циклы.
+    Историческая проверка не сравнивает принятый контекст с сегодняшним и не
+    требует metadata, которой ещё не было у старого writer. Кеш каждого вызова
+    изолирован от строгого runtime proof; его hash и prerequisites не меняются.
+    """
+    return step_completion_proof(
+        root, step_id,
+        extra_legacy_review_pins=extra_legacy_review_pins,
+        _historical=True,
+    )
+
+
 def validate_planning_contracts(
     root: Path,
     *,
@@ -1332,6 +1487,8 @@ __all__ = [
     "canonical_adr_path",
     "canonical_requirement_path",
     "dependency_ids",
+    "dependency_completion_basis",
+    "historical_completion_projection_proof",
     "init_review_basis",
     "latest_matching_init_review",
     "latest_matching_planning_review",

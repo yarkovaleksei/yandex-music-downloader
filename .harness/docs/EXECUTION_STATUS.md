@@ -2,7 +2,7 @@
 
 Execution Status — локальный crash-safe слой, который фиксирует фактическое выполнение **всех** canonical Harness-команд между session/runtime interruptions.
 
-Исключение: `HARNESS RESUME` — управляющая команда над уже существующим состоянием выполнения. Она не создаёт новое корневое выполнение и работает только тогда, когда существует ровно одна безопасная точка продолжения.
+Исключение: `HARNESS RESUME` — управляющая команда, сама не создающая root execution с этим именем. При обычном локальном восстановлении продолжает существующее выполнение. При единственном подтверждённом portable handoff в совершенно новом clone создаёт **новую локальную root execution `STEP PLAN`** (не импортируя старую invocation и её side effects). Подробнее: [PORTABLE_RESUME.md](PORTABLE_RESUME.md).
 
 Он не добавляет новых пользовательских команд и не создаёт вторую state machine.
 
@@ -261,6 +261,52 @@ temporary file
 ```
 
 Partial JSON после process crash не считается нормальным состоянием.
+
+При первой записи state Harness создаёт локальный маркер
+`.harness/.execution-checkpoint-known` **за пределами**
+`.harness/local`. Маркер игнорируется Git и не переносится в новые
+checkout. Благодаря ему исчезновение каталога `.harness/local` или
+`.harness/local/execution` после прежней работы не выглядит как
+«проект никогда не выполнял команды». В этом случае результат —
+`EXECUTION_STATE_UNAVAILABLE`, а не новая пустая история.
+
+Если первый процесс завершился между созданием маркера и публикацией JSON,
+продолжение также блокируется до диагностики. Это сознательная fail-closed
+политика: недоказанный fresh start опаснее, чем дополнительная проверка.
+**Не удаляй маркер автоматически** при отсутствии JSON; сначала восстанови
+состояние или сверяй внешние side effects.
+
+### Проверка checkpoint перед продолжением (#285)
+
+Состояние нельзя считать отсутствующим только потому, что `Path.is_file()`
+вернул `False`: тот же результат бывает при dangling symlink, подмене
+JSON-файла каталогом и отдельных ошибках доступа. Перед чтением и повторной
+записью Harness проверяет тип файла и служебных каталогов через `lstat`.
+Новый запуск с пустым execution state допускается **только если путь
+достоверно отсутствует**, без symlink-подмен в его родительских каталогах.
+
+| Состояние | Что делает Harness |
+| --- | --- |
+| Новый проект, checkpoint действительно отсутствует | Начинает с пустого operational state |
+| Существующий, валидный schema v2 | Восстанавливает execution и recovery proofs |
+| Валидный legacy schema v1 | Проверяет, мигрирует через atomic replace |
+| Битый/обрезанный JSON, неверные поля | `EXECUTION_STATE_CORRUPTED`, исходные байты сохраняются |
+| Неизвестная версия schema, symlink, каталог вместо файла/lock | `EXECUTION_STATE_INCOMPATIBLE`, автоматическая перезапись запрещена |
+| Ошибка чтения/доступа к storage | `EXECUTION_STATE_UNAVAILABLE`, **не считается новой сессией** |
+| Изменился semantic intent или недоказанный side effect | По-прежнему применяются существующие intent/recovery guards; новый формат checkpoint не вводится |
+
+Прямой вызов `save_status()` также валидирует существующий checkpoint
+перед заменой. При сбое до `os.replace` предыдущий файл остаётся byte-for-byte
+неизменным; временный файл удаляется. Ни одна из этих проверок не
+привязывает STEP к конкретному runtime и не требует от пользователя
+переносить сессии между Claude Code и Codex.
+
+**При проблеме:** устранить причину отсутствия доступа либо восстановить
+достоверный checkpoint из резервной копии, предварительно сохранив
+повреждённый файл для диагностики. Не удалять `execution-status.json`
+автоматически и не перезапускать неизвестные mutation-команды вслепую.
+Если исходное состояние восстановить невозможно, внешние side effects
+нужно сверить с фактическим Git/provider state по existing recovery contract.
 
 ## Child/next command внутри одной execution
 
@@ -526,3 +572,56 @@ new independent command
 ## Side-effect checkpoint
 
 Mutation-команды могут хранить optional `current.context.sideEffect` по contract из [`SIDE_EFFECT_RECOVERY.md`](SIDE_EFFECT_RECOVERY.md). Это bounded per-attempt proof, а не новый журнал и не command transition state. CTS остаётся source of truth для переходов; execution state отвечает за resume invocation; checkpoint нужен только для reconciliation внешнего side effect после interruption.
+
+
+## Portable Resume между двумя компьютерами (#302)
+
+`HARNESS RESUME` в новом clone не переносит ни identity прежней invocation, ни локальные Verification/side-effect proofs. После строгой Git-проверки команда создаёт только собственную новую `STEP PLAN`, которая заново проходит обязательный независимый planning review. Git HEAD должен быть точным publication commit. Последующие product-коммиты (даже с неизменным STEP) требуют нового handoff. Тестируется на реальных двух клонах в `portable-resume-matrix-self-test.py`. Подробнее: [PORTABLE_RESUME.md](PORTABLE_RESUME.md).
+
+
+## Согласование зависшего STEP с уже завершённым lifecycle
+
+Если локальная execution осталась на `STEP IMPLEMENT`, `STEP FIX` или
+`STEP REVIEW`, но сам STEP позднее был завершён отдельными canonical
+invocations, обычный `RESUME` не должен повторно запускать реализацию и
+перезаписывать Verification Evidence.
+
+Общий resolver сначала сопоставляет локальный checkpoint с canonical STEP.
+Статус `completed` **сам по себе недостаточен**: нужны успешный
+`step_completion_proof`, свежая Verification для текущего Git/контракта и
+актуальный schema-valid REVIEW с `PASS` по коду и Completion Contract.
+
+- Для однородной цепочки команд **того же STEP** подтверждённое завершение
+  позволяет закрыть старый root с reasonCode `STEP_ALREADY_COMPLETED`,
+  сохранив execution identity и recovery provenance в локальном состоянии.
+- Если proof отсутствует, Verification устарела или последний review не PASS,
+  возвращается `BLOCKED` с кодом
+  `COMPLETED_STEP_RECOVERY_CONFLICT`. Нельзя исправлять конфликт повторным
+  `complete SUCCESS` или ручным удалением execution-status.
+- Смешанные цепочки (другой STEP, Git и прочие операции) не считаются
+  завершёнными на основании одного STEP. Нужна отдельная сверка невыполненных
+  команд.
+- Незавершённый STEP с неизменённым Intent Basis по-прежнему может
+  возобновляться как обычно.
+- `STEP NEXT` проверяет этот результат **без записи** состояния. Записывающий
+  `HARNESS RESUME` применяет согласование под существующей блокировкой.
+
+Для новых Evidence учитывается SHA-256 **содержимого** проверяемых файлов,
+а не SHA Git-коммита. Обычный commit, squash merge или rebase при одинаковом
+содержимом не заставляют повторять Verification. Изменение проверенного кода,
+конфигурации или входных документов меняет этот отпечаток и блокирует
+переиспользование PASS. Независимый REVIEW также должен доказать совпадение
+содержимого — одного завершённого статуса STEP недостаточно.
+
+Старые Evidence и REVIEW без content hash остаются действительными по прежней
+точной проверке revision. Если после squash её уже нельзя доказать, Harness
+возвращает понятный BLOCKED, а не выдаёт предположительный PASS. Невозможно
+достоверно восстановить полное содержимое проверенных до коммита файлов из
+старого хэша разницы рабочего дерева.
+
+
+## Временные рабочие файлы
+
+Semantic handoff выдаёт `temporaryDirectory`: `.harness/local/tmp/<executionId>/`. При resume путь сохраняется. Это место для удаляемых snapshots/scripts/logs, а не для durable Evidence или recovery proofs. Завершение отдельного STEP PLAN/IMPLEMENT не означает завершения всего STEP. Cleaner использует существующий completion proof; без него данные сохраняются. См. [LOCAL_CLEANUP.md](LOCAL_CLEANUP.md).
+
+`HARNESS CLEANUP CHECK/APPLY` не регистрируют отдельную execution. CHECK не пишет ничего; APPLY координирует удаление существующим execution lock.
