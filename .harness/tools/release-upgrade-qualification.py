@@ -497,6 +497,21 @@ def qualify(
                 mirror,
             )
             _clone_baseline(baseline_project, exact_baseline, work)
+            # Execute the matrix from the exact candidate, never the host checkout.
+            engine = temp / "candidate-engine"
+            _clone_baseline(candidate_source, exact_candidate, engine)
+            matrix, matrix_item = _stage("artifact-state-matrix", [
+                sys.executable, str(engine / ".harness/tools/update-artifact-canary.py"),
+                "--baseline-project", str(work), "--source-mirror", str(mirror),
+                "--target", candidate_tag,
+            ], cwd=engine)
+            stages.append(matrix_item)
+            if matrix.returncode != 0:
+                raise QualificationError("ARTIFACT_MATRIX_FAILED", "artifact-state-matrix")
+            matrix_item["result"] = _json_result(matrix, "artifact-state-matrix")
+            if matrix_item["result"].get("status") != "PASS":
+                raise QualificationError("ARTIFACT_MATRIX_FAILED", "artifact-state-matrix")
+
 
             first, first_applied = _apply_until_settled(
                 work,
@@ -525,16 +540,62 @@ def qualify(
                     "validate",
                     [sys.executable, ".harness/tools/validate.py", "--mode", "manual"],
                 ),
+                # Отдельное evidence для #340: initialized upgrade проверяется
+                # также на разветвлённом BLOCKED DAG с историческими REVIEW.
+                # Full suite ниже сохраняется; линейной PASS-цепочки мало.
+                (
+                    "blocked-dependency-dag",
+                    [sys.executable, ".harness/tools/dependency-evidence-self-test.py"],
+                ),
                 (
                     "self-tests",
-                    [sys.executable, ".harness/tools/run-self-tests.py"],
+                    [sys.executable, ".harness/tools/run-self-tests.py", "--json"],
                 ),
             ]
             for stage_id, command in checks:
                 proc, item = _stage(stage_id, command, cwd=work)
+
+                # On failures expose only canonical test names/statuses,
+                # never raw stdout/stderr (which may contain project secrets).
+                # run-self-tests.py --json is an existing deterministic CLI.
+                if stage_id == "self-tests":
+                    try:
+                        details = json.loads(proc.stdout)
+                    except json.JSONDecodeError:
+                        details = None
+                    if isinstance(details, dict) and isinstance(details.get("results"), list):
+                        failed = []
+                        for record in details["results"]:
+                            if not isinstance(record, dict) or record.get("status") == "PASS":
+                                continue
+                            name = record.get("test")
+                            status = record.get("status")
+                            exit_code = record.get("exitCode")
+                            if not (isinstance(name, str)
+                                    and re.fullmatch(r"[A-Za-z0-9_-]+-self-test\.py", name)):
+                                continue
+                            if status not in {"FAIL", "TIMEOUT"}:
+                                continue
+                            if isinstance(exit_code, bool) or (
+                                exit_code is not None and not isinstance(exit_code, int)
+                            ):
+                                continue
+                            failed.append({
+                                "test": name, "status": status, "exitCode": exit_code,
+                            })
+                        item["testCount"] = details.get("count")
+                        item["failedSelfTests"] = failed[:100]
+
                 stages.append(item)
                 if proc.returncode != 0:
-                    raise QualificationError("POST_UPDATE_GATE_FAILED", stage_id)
+                    suffix = ""
+                    if stage_id == "self-tests" and item.get("failedSelfTests"):
+                        suffix = ": " + ", ".join(
+                            record["test"] for record in item["failedSelfTests"]
+                        )
+                    raise QualificationError(
+                        "POST_UPDATE_GATE_FAILED", stage_id + suffix,
+                    )
 
             protected_after = _capture_protected(work)
             if protected_after != protected_before:

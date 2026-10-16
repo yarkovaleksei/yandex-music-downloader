@@ -18,7 +18,7 @@
 
 ## Next unblocked work
 
-STEP-028
+—
 
 ## Recent completed
 

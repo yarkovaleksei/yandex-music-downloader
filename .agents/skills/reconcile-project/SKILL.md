@@ -37,6 +37,7 @@ Migration:
 
 1. Сравни code/config/migrations/tests с canonical REQ, Accepted ADR, active Project Principles, architecture refs, STEP, evidence и schema-valid review reports. Цель — найти **repository-wide cross-artifact drift**, а не сравнивать разные repositories.
 2. Для stale/changed contracts используй `python3 .harness/tools/impact-analysis.py --step STEP-NNN --json` или `--changed ARTIFACT-ID --json`; не пересчитывай staleness reasoning-ом.
+Исторический PASS completed STEP сохраняется при изменении общего контекста и отсутствии поздней metadata. Не назначай массовый PLAN/REVIEW ради обновления Harness: current eligibility проверяется при новом consumer intent. Реальный текущий defect оформляй отдельным finding с corrective owner.
 3. Классифицируй найденное по canonical owner:
    - deterministic projection/command-syntax drift, который можно безопасно пересобрать;
    - substantive product/contract drift, требующий corrective STEP;
@@ -60,6 +61,11 @@ Migration:
    ```bash
    python3 .harness/tools/validate.py --mode manual
    ```
-9. Substantive gaps превращай в corrective STEP. Итоговый reconcile/audit report сохраняй в configured `protocol.auditDirectory` с YAML frontmatter `schema: 1`.
+9. Substantive gaps превращай в corrective STEP. Итоговый audit report обязателен даже при отсутствии drift. Модель передаёт только **semantic payload** с `scope: "project"` и секциями из configured audit `TEMPLATE.md`, включая конкретные находки, evidence и corrective actions. Канонические `schema/kind/mode/created_at`, H1 и имя файла **не создавай вручную**. Пример payload и правила секций: `.harness/docs/REPORTING.md`.
+10. Передай payload в deterministic writer с **точным** `executionId` текущего handoff:
+    ```bash
+    python3 .harness/tools/semantic-writer.py audit-report --execution-id '<executionId>' --payload-file '<local-json-or->'
+    ```
+    Writer сам использует configured `protocol.auditDirectory/TEMPLATE.md`, создаёт immutable `AUDIT-<UTC>.md`, проверяет `report_contract.py` и сохраняет execution-bound receipt. При `BLOCKED` не отправляй `complete SUCCESS`. При `PASS` передай штатному dispatcher `SUCCESS` именно для этой execution: Core перепроверит receipt, SHA-256 и scope до terminal success. Найденный drift — **содержимое валидного аудита**, не ошибка schema: его нельзя скрывать и не нужно выдавать за отсутствие отчёта.
 
 Нельзя заявлять «drift отсутствует», пока migration/check-command-references/validator не выполнены либо их BLOCKED состояние не раскрыто в Evidence.
