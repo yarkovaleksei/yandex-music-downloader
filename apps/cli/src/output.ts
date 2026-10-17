@@ -21,6 +21,11 @@ export function writeRecord(output: Output, record: CommandResult): void {
     output.stderr(`${record.error.code}: ${record.error.message}`);
     if (record.error.code === 'AUTH_ERROR')
       output.stderr('Выполните music-downloader auth.');
+    // @link docs/adr/ADR-014-sqlite-persistence.md: downgrade базы не поддерживается.
+    if (record.error.details?.reason === 'STATE_SCHEMA_UNSUPPORTED')
+      output.stderr(
+        'База состояния создана более новой версией приложения; обновите music-downloader.',
+      );
     const stack = record.error.details?.debug?.stack;
     if (output.debug === true && stack !== undefined) output.stderr(stack);
   } else if (record.command === 'account' && record.data === null)

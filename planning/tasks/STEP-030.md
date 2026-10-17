@@ -17,6 +17,9 @@ requirements:
 adrs:
   - ADR-001
   - ADR-007
+  - ADR-014
+  - ADR-015
+  - ADR-016
 architecture_refs:
   - "docs/architecture.md#основные-компоненты-границы"
   - "docs/architecture.md#security-boundaries"

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Обёртка для ручного запуска автоматической проверки STEP-001
-# (packages/testing/scripts/verify-step-001.mjs). Версии Node.js 22.13.0 и 24
+# (packages/testing/scripts/verify-step-001.mjs). Версии Node.js 22.14.0 и 24
 # должны быть установлены заранее; nvm install здесь не выполняется.
 set -Eeuo pipefail
 

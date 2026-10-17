@@ -6,7 +6,9 @@ source: brief
 steps:
   - STEP-028
   - STEP-030
-adrs: []
+adrs:
+  - ADR-015
+  - ADR-016
 ---
 
 # REQ-046 — [DESKTOP] Модель безопасности Electron и typed IPC

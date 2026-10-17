@@ -12,6 +12,7 @@ requirements:
 steps:
   - STEP-001
   - STEP-037
+  - STEP-055
 ---
 
 # ADR-008 — Yarn workspaces для monorepo

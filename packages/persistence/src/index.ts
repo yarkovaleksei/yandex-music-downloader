@@ -1,6 +1,11 @@
 export const persistencePackage = '@music-downloader/persistence';
 
 export * from './file-manifest-store.js';
+export { SqliteManifestStore } from './sqlite-manifest-store.js';
+export type { SqliteManifestStoreOptions } from './sqlite-manifest-store.js';
+export type { SqliteMigration } from './sqlite-migrations.js';
+export { sqliteMigrations } from './sqlite-migrations.js';
+export { stateDatabaseFile } from './sqlite-database.js';
 export * from './process-identity.js';
 export * from './state-directory.js';
 

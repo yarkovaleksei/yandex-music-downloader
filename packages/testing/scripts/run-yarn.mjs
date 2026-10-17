@@ -17,7 +17,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const minNode = [22, 13, 0];
+const minNode = [22, 14, 0];
 const maxNodeExclusive = [25, 0, 0];
 
 /** Корень рабочей копии: packages/testing/scripts -> три уровня вверх. */
@@ -34,7 +34,7 @@ function compareVersions(left, right) {
   return 0;
 }
 
-/** Проверяет Node.js в диапазоне `>=22.13.0 <25`; иначе выбрасывает Error. */
+/** Проверяет Node.js в диапазоне `>=22.14.0 <25` (ADR-008, ADR-017); иначе выбрасывает Error. */
 export function assertNodeSupported(version = process.versions.node) {
   const parts = version.split('.').map(Number);
   if (
@@ -42,7 +42,7 @@ export function assertNodeSupported(version = process.versions.node) {
     compareVersions(parts, maxNodeExclusive) >= 0
   ) {
     throw new Error(
-      `Node.js ${version} не поддерживается: требуется >=22.13.0 <25 (ADR-008).`,
+      `Node.js ${version} не поддерживается: требуется >=22.14.0 <25 (ADR-008, ADR-017).`,
     );
   }
 }

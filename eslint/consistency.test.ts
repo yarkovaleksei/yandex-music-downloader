@@ -8,6 +8,7 @@ import {
   expandTestGlobs,
   expandTestIncludeGlobs,
   isTestFile,
+  nodeRange,
   testFileSuffixes,
   workspacePackages,
 } from './boundaries.config.mjs';
@@ -130,7 +131,8 @@ describe('workspace', () => {
 describe('Yarn и политика окружения', () => {
   it('Node, packageManager с sha512 и отсутствие npm-артефактов', () => {
     const root_ = json('package.json');
-    expect(root_.engines.node).toBe('>=22.13.0 <25');
+    expect(nodeRange.min).toBe('22.14.0');
+    expect(root_.engines.node).toBe(`>=${nodeRange.min} <25`);
     expect(root_.packageManager).toMatch(
       /^yarn@4\.18\.1\+sha512\.[0-9a-f]{128}$/,
     );
@@ -368,7 +370,7 @@ describe('docs/development.md', () => {
 
   it('содержит фактические версии, пакеты и честные ограничения', () => {
     expect(docs).toContain('yarn@4.18.1');
-    expect(docs).toContain('>=22.13.0 <25');
+    expect(docs).toContain(`>=${nodeRange.min} <25`);
     for (const pkg of workspacePackages) expect(docs).toContain(pkg.name);
     expect(docs).toMatch(/не проверя\S* подпис/);
     expect(docs).not.toMatch(/Node\.js 20/);
@@ -376,5 +378,47 @@ describe('docs/development.md', () => {
     expect(docs).toContain('run-yarn.mjs');
     expect(docs).toContain('STEP-001');
     expect(docs).toContain('ADR-001');
+  });
+});
+
+// @link planning/tasks/STEP-055.md Нижняя граница Node.js 22.14.0 (ADR-017)
+// закреплена во всех местах; устаревшая 22.13 нигде не остаётся.
+describe('Диапазон Node.js по ADR-017', () => {
+  const range = `>=${nodeRange.min} <25`;
+  const places: ReadonlyArray<readonly [string, string]> = [
+    ['docs/development.md', range],
+    ['docs/architecture.md', range],
+    ['docs/requirements/REQ-040-tool-ts-quality.md', range],
+    ['packages/testing/scripts/run-yarn.mjs', range],
+    ['packages/testing/scripts/verify-toolchain.mjs', range],
+    ['packages/testing/scripts/verify-step-001.mjs', nodeRange.min],
+    ['packages/testing/scripts/verify-step-001-manual.sh', nodeRange.min],
+    ['.github/workflows/ci.yml', `- "${nodeRange.min}"`],
+  ];
+
+  it.each(places)(
+    '%s содержит новую границу и не содержит 22.13',
+    (file, value) => {
+      const text = read(file);
+      expect(text).toContain(value);
+      expect(text).not.toContain('22.13');
+    },
+  );
+
+  it('run-yarn отклоняет версии вне диапазона и принимает его границы', async () => {
+    // Вычисляемый specifier: у .mjs-скрипта нет деклараций типов (TS7016).
+    const specifier = new URL(
+      '../packages/testing/scripts/run-yarn.mjs',
+      import.meta.url,
+    ).href;
+    const runYarn = (await import(specifier)) as {
+      assertNodeSupported(version: string): void;
+    };
+    for (const version of ['22.14.0', '24.21.0'])
+      expect(() => runYarn.assertNodeSupported(version)).not.toThrow();
+    for (const version of ['22.13.9', '25.0.0'])
+      expect(() => runYarn.assertNodeSupported(version)).toThrow(
+        />=22\.14\.0 <25/,
+      );
   });
 });

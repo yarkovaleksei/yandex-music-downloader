@@ -5,8 +5,8 @@
  * `STEP-001` — локальное ужесточение этого STEP, которое не является требованием ADR.
  */
 
-/** Диапазон Node.js по ADR-008. */
-export const nodeRange = { min: '22.13.0', maxExclusive: '25.0.0' };
+/** Диапазон Node.js по ADR-008; нижняя граница 22.14.0 (Node-API 10) по ADR-017. */
+export const nodeRange = { min: '22.14.0', maxExclusive: '25.0.0' };
 
 /** Расширения исходников, к которым применяются boundary rules. */
 export const sourceExtensions = ['ts', 'tsx', 'mts', 'cts', 'js', 'mjs', 'cjs'];

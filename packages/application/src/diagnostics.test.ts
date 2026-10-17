@@ -44,7 +44,7 @@ describe('doctor application', () => {
       canaryTrackId: '2224197',
       runtime: {
         outputDirectory: '/tmp',
-        nodeVersion: '22.13.0',
+        nodeVersion: '22.14.0',
         filesystemProbe: async () => {},
         runFfmpeg: async () => {},
       },
@@ -68,7 +68,7 @@ describe('doctor application', () => {
       canaryTrackId: '2224197',
       runtime: {
         outputDirectory: '/tmp',
-        nodeVersion: '22.13.0',
+        nodeVersion: '22.14.0',
         filesystemProbe: async () => {},
         runFfmpeg: async () => {
           throw new Error('not installed');
@@ -88,7 +88,7 @@ describe('doctor application', () => {
       canaryTrackId: '2224197',
       runtime: {
         outputDirectory: '/tmp',
-        nodeVersion: '22.13.0',
+        nodeVersion: '22.14.0',
         filesystemProbe: async () => {},
         runFfmpeg: async () => {},
       },
@@ -96,5 +96,31 @@ describe('doctor application', () => {
     expect(report.available).toBe(false);
     expect(JSON.stringify(report)).not.toContain('secret-account');
     expect(JSON.stringify(report)).toContain('QUALITY_UNAVAILABLE');
+  });
+
+  // @link planning/tasks/STEP-055.md Граница runtime в doctor по ADR-017.
+  it.each([
+    ['22.13.1', 'failed'],
+    ['22.14.0', 'ok'],
+  ] as const)('runtime %s → %s', async (nodeVersion, status) => {
+    const report = await collectDiagnostics({
+      provider: provider(),
+      manifestStore: manifests,
+      providerHealth: async () => 'available',
+      providerSchemaVersion: '1.1.0',
+      canaryTrackId: '2224197',
+      runtime: {
+        outputDirectory: '/tmp',
+        nodeVersion,
+        filesystemProbe: async () => {},
+        runFfmpeg: async () => {},
+      },
+    });
+    const { checks } = report.configuration as {
+      readonly checks: Record<string, { status: string; code?: string }>;
+    };
+    expect(checks.runtime?.status).toBe(status);
+    if (status === 'failed')
+      expect(checks.runtime?.code).toBe('UNSUPPORTED_RUNTIME');
   });
 });

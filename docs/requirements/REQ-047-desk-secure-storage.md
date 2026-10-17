@@ -6,7 +6,8 @@ source: brief
 steps:
   - STEP-028
   - STEP-030
-adrs: []
+adrs:
+  - ADR-015
 ---
 
 # REQ-047 — [DESKTOP] Токен в системном secure storage
