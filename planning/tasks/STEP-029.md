@@ -261,6 +261,14 @@ ADR-014 требует доказать загрузку `better-sqlite3` и т�
 
 Generated verification block записывает deterministic runner. Дополнительные semantic observations можно хранить вне generated markers.
 
+### Windows x64 — Evidence зафиксировано 2026-10-17
+
+- Пользователь передал [отчёт Windows x64](../../packages/persistence/platform-check/reports/report-win32-x64.json), сохранённый без изменения байтов. SHA-256: `ed4989280c4b0f462284b93b87adf46bdc0ff9613cdfd24df639e8e14504ee75`. Дата выше — дата фиксации Evidence; дата прогона, точная команда запуска и exit code в JSON не указаны.
+- Итог отчёта — `PASS`: `platform=win32`, `arch=x64`, `proc_translated=false`, Node.js `24.21.0`, Node-API `10`, SQLite `3.53.4`, `better-sqlite3 13.0.3`, binding `prebuilds/win32-x64`. Все 9 применимых проверок — `PASS`: `binding`, `crud`, `migrations`, `lease_two_process`, `concurrent_reclaim`, `stale_connection`, `newer_schema`, `corrupt_database`, `secret_marker`; `posix_permissions=SKIP` ожидаемо для Windows.
+- Идентичность набора из `kitManifest`: `buildId=20261016T180517Z-736c1a1279a2`, `gitHead=736c1a1279a244e54b601b8df5c995a7a89b1a7f`, `treeClean=true`; SHA-256 `dist`: `e234ccf4d6dddb6f96034e554ac085c54c9ea5d7384f95af1db231251822f280`, `yarn.lock`: `ad1cca929594ca580914e68e77bfdffc0ed1587da0ab6ea6fcf08292e81b944b`.
+- Локальная сверка через Python `zipfile`/`hashlib` подтвердила совпадение `kitManifest` с Windows-архивом в `.cache/platform-check/`, пересчитанного хеша `dist` из `persistence` и `shared` в архиве и хеша `yarn.lock`. Команда `git diff --name-only 736c1a1279a244e54b601b8df5c995a7a89b1a7f HEAD -- packages/persistence/src packages/shared/src yarn.lock` не показала изменений. Это проверка соответствия переданного отчёта набору и текущим исходникам, а не повторный Windows-прогон.
+- Ожидаются отчёты коллеги для macOS arm64 и macOS x64. Эта запись не завершает всю ручную Verification и не закрывает STEP.
+
 ## Blocker / Failure reason
 
 —
