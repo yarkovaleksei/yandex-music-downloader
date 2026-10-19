@@ -1,0 +1,56 @@
+{
+  "schema": 1,
+  "status": "PASS",
+  "platform": "darwin",
+  "arch": "x64",
+  "proc_translated": true,
+  "binding": "prebuilds/darwin-x64",
+  "versions": {
+    "node": "24.21.0",
+    "napi": "10",
+    "sqlite": "3.53.4",
+    "betterSqlite3": "13.0.3"
+  },
+  "checks": {
+    "binding": {
+      "status": "PASS"
+    },
+    "crud": {
+      "status": "PASS"
+    },
+    "migrations": {
+      "status": "PASS"
+    },
+    "lease_two_process": {
+      "status": "PASS"
+    },
+    "concurrent_reclaim": {
+      "status": "PASS"
+    },
+    "stale_connection": {
+      "status": "PASS"
+    },
+    "newer_schema": {
+      "status": "PASS"
+    },
+    "corrupt_database": {
+      "status": "PASS"
+    },
+    "posix_permissions": {
+      "status": "PASS"
+    },
+    "secret_marker": {
+      "status": "PASS"
+    }
+  },
+  "kitManifest": {
+    "buildId": "20261016T180517Z-736c1a1279a2",
+    "gitHead": "736c1a1279a244e54b601b8df5c995a7a89b1a7f",
+    "treeClean": true,
+    "node": "24.21.0",
+    "sha256": {
+      "dist": "e234ccf4d6dddb6f96034e554ac085c54c9ea5d7384f95af1db231251822f280",
+      "yarnLock": "ad1cca929594ca580914e68e77bfdffc0ed1587da0ab6ea6fcf08292e81b944b"
+    }
+  }
+}
