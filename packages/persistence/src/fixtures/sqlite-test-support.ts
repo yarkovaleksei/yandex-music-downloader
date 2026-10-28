@@ -9,7 +9,7 @@ import {
 
 /** Тестовая v2: аддитивная колонка, чтения v1 продолжают работать. */
 export const additiveV2: readonly SqliteMigration[] = [
-  ...sqliteMigrations,
+  sqliteMigrations[0]!,
   {
     version: 2,
     up: (db) => db.exec('ALTER TABLE jobs ADD COLUMN note TEXT'),
@@ -18,7 +18,7 @@ export const additiveV2: readonly SqliteMigration[] = [
 
 /** Тестовая v2, ломающая чтения v1: колонка manifest переименована. */
 export const breakingV2: readonly SqliteMigration[] = [
-  ...sqliteMigrations,
+  sqliteMigrations[0]!,
   {
     version: 2,
     up: (db) =>

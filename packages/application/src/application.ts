@@ -1,5 +1,7 @@
 import type {
-  ApplicationApi,
+  DesktopApplicationApi,
+  DesktopSettings,
+  DesktopStateStore,
   Account,
   DiagnosticsDto,
   DownloadRequest,
@@ -28,7 +30,7 @@ function referenceDto(reference: MediaReference): MediaReference {
 }
 
 /** Transport-neutral facade не раскрывает provider, store или runtime adapters. */
-export class ApplicationFacade implements ApplicationApi {
+export class ApplicationFacade implements DesktopApplicationApi {
   public constructor(
     private readonly deps: {
       provider: MusicProvider;
@@ -37,6 +39,9 @@ export class ApplicationFacade implements ApplicationApi {
       logger: Logger;
       diagnostics: () => Promise<DiagnosticsDto>;
       debug: boolean;
+      desktopState: DesktopStateStore;
+      desktop: boolean;
+      snapshotEnabled: boolean;
       /** Закрывает только default store, созданный composition root. */
       closeStore?: () => Promise<void>;
     },
@@ -92,7 +97,19 @@ export class ApplicationFacade implements ApplicationApi {
     return command(
       'createDownload',
       this.deps.logger,
-      () => this.deps.jobs.create(request),
+      () => {
+        if (!this.deps.snapshotEnabled) return this.deps.jobs.create(request);
+        // CLI сохраняет свои прежние значения, не читая desktop defaults (REQ-051).
+        const settings = this.deps.desktop
+          ? this.deps.desktopState.settings()
+          : undefined;
+        const effective = {
+          ...request,
+          overwrite: request.overwrite ?? settings?.overwrite ?? false,
+          naming: settings?.naming ?? ('collection' as const),
+        };
+        return this.deps.jobs.create(effective, effective);
+      },
       this.deps.debug,
     );
   }
@@ -155,6 +172,72 @@ export class ApplicationFacade implements ApplicationApi {
       this.deps.debug,
     );
   }
+  public getSettings() {
+    return command(
+      'getSettings',
+      this.deps.logger,
+      async () => this.deps.desktopState.settings(),
+      this.deps.debug,
+    );
+  }
+  public saveSettings(value: DesktopSettings) {
+    return command(
+      'saveSettings',
+      this.deps.logger,
+      async () => {
+        this.deps.desktopState.saveSettings(value);
+        return this.deps.desktopState.settings();
+      },
+      this.deps.debug,
+    );
+  }
+  public history() {
+    return command(
+      'history',
+      this.deps.logger,
+      () => this.deps.jobs.history(),
+      this.deps.debug,
+    );
+  }
+  public hideHistory(jobId: string) {
+    return command(
+      'hideHistory',
+      this.deps.logger,
+      () => this.deps.jobs.hideHistory(jobId),
+      this.deps.debug,
+    );
+  }
+  public replay(jobId: string) {
+    return command(
+      'replay',
+      this.deps.logger,
+      () => this.deps.jobs.replay(jobId),
+      this.deps.debug,
+    );
+  }
+  public lastDiagnostics() {
+    return command(
+      'lastDiagnostics',
+      this.deps.logger,
+      async () => this.deps.desktopState.diagnostics(),
+      this.deps.debug,
+    );
+  }
+  public refreshDiagnostics() {
+    return command(
+      'refreshDiagnostics',
+      this.deps.logger,
+      async () => {
+        const value = {
+          checkedAt: new Date().toISOString(),
+          diagnostics: await this.deps.diagnostics(),
+        };
+        this.deps.desktopState.saveDiagnostics(value);
+        return this.deps.desktopState.diagnostics()!;
+      },
+      this.deps.debug,
+    );
+  }
   public shutdown() {
     return command(
       'shutdown',
@@ -166,6 +249,7 @@ export class ApplicationFacade implements ApplicationApi {
         } finally {
           // Store закрывается после освобождения аренд; повторное открытие запрещено.
           await this.deps.closeStore?.();
+          this.deps.desktopState.close();
         }
         return null;
       },

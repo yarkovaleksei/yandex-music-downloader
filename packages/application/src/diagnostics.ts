@@ -23,7 +23,8 @@ type Outcome<T> =
 export interface DiagnosticRuntimeOptions {
   readonly outputDirectory: string;
   readonly nodeVersion?: string;
-  readonly runFfmpeg?: () => Promise<void>;
+  readonly ffmpegPath?: string;
+  readonly runFfmpeg?: (executable?: string) => Promise<void>;
   readonly filesystemProbe?: (directory: string) => Promise<void>;
 }
 
@@ -201,9 +202,10 @@ async function filesystem(runtime: DiagnosticRuntimeOptions): Promise<void> {
 }
 async function ffmpegCheck(runtime: DiagnosticRuntimeOptions): Promise<Check> {
   try {
-    if (runtime.runFfmpeg !== undefined) await runtime.runFfmpeg();
+    if (runtime.runFfmpeg !== undefined)
+      await runtime.runFfmpeg(runtime.ffmpegPath ?? 'ffmpeg');
     else
-      await promisify(execFile)('ffmpeg', ['-version'], {
+      await promisify(execFile)(runtime.ffmpegPath ?? 'ffmpeg', ['-version'], {
         timeout: 5_000,
         windowsHide: true,
       });

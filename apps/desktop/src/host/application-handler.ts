@@ -1,4 +1,8 @@
-import type { ApplicationApi } from '@music-downloader/shared';
+import type {
+  ApplicationApi,
+  DesktopApplicationApi,
+  DesktopSettings,
+} from '@music-downloader/shared';
 import { parseInput } from '../contract/desktop-api.js';
 import type { Method } from '../contract/desktop-api.js';
 import { failure, safeResult } from '../contract/result.js';
@@ -11,6 +15,7 @@ export async function executeApplication(
 ): Promise<unknown> {
   try {
     let result: unknown;
+    const desktop = api as DesktopApplicationApi;
     switch (method) {
       case 'authenticate':
         result = await api.authenticate();
@@ -53,6 +58,27 @@ export async function executeApplication(
         break;
       case 'diagnostics':
         result = await api.diagnostics();
+        break;
+      case 'getSettings':
+        result = await desktop.getSettings();
+        break;
+      case 'saveSettings':
+        result = await desktop.saveSettings(payload as DesktopSettings);
+        break;
+      case 'history':
+        result = await desktop.history();
+        break;
+      case 'hideHistory':
+        result = await desktop.hideHistory(parseInput(method, payload).jobId);
+        break;
+      case 'replay':
+        result = await desktop.replay(parseInput(method, payload).jobId);
+        break;
+      case 'lastDiagnostics':
+        result = await desktop.lastDiagnostics();
+        break;
+      case 'refreshDiagnostics':
+        result = await desktop.refreshDiagnostics();
         break;
       case 'shutdown':
         result = await api.shutdown();

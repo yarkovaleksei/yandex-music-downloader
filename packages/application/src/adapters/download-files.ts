@@ -1,6 +1,7 @@
 import { readFile, rename, stat } from 'node:fs/promises';
 import {
   buildPartPath,
+  buildAlbumLayout,
   buildPlaylistLayout,
   buildTrackLayout,
   discardPart,
@@ -9,6 +10,7 @@ import {
   writeM3u8,
   writeStreamToPart,
 } from '@music-downloader/core-filesystem';
+import type { NamingPreset } from '@music-downloader/shared';
 import type { DownloadFiles } from '@music-downloader/core-downloader';
 import type { TargetPlatform } from '@music-downloader/core-filesystem';
 
@@ -27,7 +29,9 @@ async function size(target: string): Promise<number | undefined> {
 }
 
 /** Реальный filesystem adapter использует algorithms core, не дублируя sanitizer и writer. */
-export function createDownloadFiles(): DownloadFiles {
+export function createDownloadFiles(
+  naming: (jobId: string) => NamingPreset | undefined = () => undefined,
+): DownloadFiles {
   return {
     paths(manifest, trackKey, variant) {
       const track = manifest.plan.tracks.find(
@@ -35,8 +39,26 @@ export function createDownloadFiles(): DownloadFiles {
       );
       if (track === undefined)
         throw new Error('Трек отсутствует в плане задания.');
+      // Preset album использует готовый sanitizer/layout; произвольных шаблонов нет.
+      const albumPath =
+        naming(manifest.jobId) === 'album' && manifest.source.kind === 'album'
+          ? buildAlbumLayout(
+              {
+                id: manifest.source.id,
+                title: manifest.plan.title,
+                artists: manifest.plan.tracks[0]?.track.artists ?? [],
+                tracks: manifest.plan.tracks.map((item) => item.track),
+              },
+              {
+                root: manifest.destination,
+                platform,
+                extensionOf: () => variant.container,
+              },
+            ).tracks.find((item) => item.index === track.position - 1)?.path
+          : undefined;
       const resultPath =
-        manifest.plan.source.kind !== 'playlist' &&
+        albumPath ??
+        (manifest.plan.source.kind !== 'playlist' &&
         manifest.plan.tracks.length === 1
           ? buildTrackLayout(track.track, variant.container, {
               root: manifest.destination,
@@ -56,7 +78,7 @@ export function createDownloadFiles(): DownloadFiles {
                 platform,
                 extensionOf: () => variant.container,
               },
-            ).tracks.find((item) => item.index === track.position - 1)?.path;
+            ).tracks.find((item) => item.index === track.position - 1)?.path);
       if (resultPath === undefined)
         throw new Error('Путь трека отсутствует в layout плана.');
       return {

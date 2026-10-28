@@ -14,6 +14,10 @@ import {
   DownloadError,
   CommandRefusalError,
   type DownloadRequest,
+  type DesktopStateStore,
+  type EffectiveDownload,
+  type HistoryEntry,
+  ValidationError,
   type JobManifestV1,
   type JobSnapshot,
   type ManifestStore,
@@ -84,9 +88,13 @@ export class Jobs {
       'store' | 'provider' | 'events'
     >,
     private readonly events: ApplicationEvents,
+    private readonly desktopState?: DesktopStateStore,
   ) {}
 
-  public async create(request: DownloadRequest): Promise<JobSnapshot> {
+  public async create(
+    request: DownloadRequest,
+    effective?: EffectiveDownload,
+  ): Promise<JobSnapshot> {
     const plan = await planFor(this.provider, request.source);
     const now = new Date().toISOString();
     const manifest: JobManifestV1 = {
@@ -110,6 +118,9 @@ export class Jobs {
       updatedAt: now,
     };
     await this.store.create(manifest);
+    // REQ-051: отказ снимка запрещает запуск manager; defaults не заменяют исходные параметры.
+    if (effective !== undefined)
+      this.desktopState!.saveSnapshot(manifest.jobId, effective);
     for (const event of [
       'job.created',
       'entity.resolved',
@@ -160,6 +171,78 @@ export class Jobs {
     );
   }
 
+  public async history(): Promise<readonly HistoryEntry[]> {
+    const hidden = new Set(this.desktopState?.hidden() ?? []);
+    const entries: HistoryEntry[] = [];
+    for (const manifest of await this.store.list()) {
+      if (hidden.has(manifest.jobId)) continue;
+      const status = (await snapshot(this.store, manifest)).status;
+      if (
+        !['completed', 'completed_with_errors', 'failed', 'cancelled'].includes(
+          status,
+        )
+      )
+        continue;
+      const effective = this.effective(manifest);
+      const sizes = manifest.tracks.map((track) =>
+        ['completed', 'skipped'].includes(track.status)
+          ? track.postProcessing?.size
+          : undefined,
+      );
+      entries.push({
+        jobId: manifest.jobId,
+        source: manifest.source,
+        title: manifest.plan.title,
+        artists: [
+          ...new Set(
+            manifest.plan.tracks.flatMap(
+              (track) =>
+                track.track.artists?.map((artist) => artist.name) ?? [],
+            ),
+          ),
+        ],
+        count: manifest.tracks.length,
+        bytes:
+          sizes.length > 0 && sizes.every((size) => size !== undefined)
+            ? sizes.reduce<number>((sum, size) => sum + (size ?? 0), 0)
+            : null,
+        completedAt: manifest.updatedAt,
+        replayAvailable: effective !== null,
+        replayReason:
+          effective === null
+            ? 'Исходные настройки старого задания неизвестны. Повторная загрузка недоступна.'
+            : null,
+      });
+    }
+    return entries.sort((a, b) => b.completedAt.localeCompare(a.completedAt));
+  }
+  public async hideHistory(jobId: string): Promise<null> {
+    if (!(await this.history()).some((entry) => entry.jobId === jobId))
+      throw new ValidationError();
+    this.desktopState!.hide(jobId);
+    return null;
+  }
+  public async replay(jobId: string): Promise<JobSnapshot> {
+    const manifest = await this.store.read(jobId);
+    const effective = manifest === undefined ? null : this.effective(manifest);
+    if (effective === null) throw new ValidationError();
+    return this.create(effective, effective);
+  }
+  private effective(manifest: JobManifestV1): EffectiveDownload | null {
+    const value = this.desktopState?.snapshot(manifest.jobId);
+    // Исходные source/quality/destination не берутся из renderer или текущих defaults.
+    if (
+      !value ||
+      value.source.provider !== manifest.source.provider ||
+      value.source.kind !== manifest.source.kind ||
+      value.source.id !== manifest.source.id ||
+      value.destination !== manifest.destination ||
+      value.quality !== manifest.quality
+    )
+      return null;
+    return value;
+  }
+
   public async shutdown(): Promise<void> {
     await Promise.all(
       [...this.managers.entries()].map(async ([jobId, manager]) =>
@@ -172,6 +255,7 @@ export class Jobs {
   private manager(jobId: string, overwrite?: boolean) {
     const current = this.managers.get(jobId);
     if (current !== undefined) return current;
+    const effective = this.desktopState?.snapshot(jobId);
     const manager = createDownloadManager(
       {
         ...this.dependencies,
@@ -182,7 +266,9 @@ export class Jobs {
           publish: this.events.publish,
         },
       },
-      overwrite === undefined ? {} : { overwrite },
+      (effective?.overwrite ?? overwrite) === undefined
+        ? {}
+        : { overwrite: effective?.overwrite ?? overwrite },
     );
     this.managers.set(jobId, manager);
     return manager;

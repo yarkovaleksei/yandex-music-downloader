@@ -32,12 +32,16 @@ const { SqliteManifestStore, sqliteMigrations } =
   await import('../../dist/index.js');
 // Тестовая аддитивная v2: та же, что в unit-тестах миграций.
 const additiveV2 = [
-  ...sqliteMigrations,
+  sqliteMigrations[0],
   { version: 2, up: (db) => db.exec('ALTER TABLE jobs ADD COLUMN note TEXT') },
 ];
 const store = new SqliteManifestStore({
   stateDir,
-  ...(mode === 'migrate' ? { migrations: additiveV2 } : {}),
+  ...(mode === 'migrate'
+    ? { migrations: additiveV2 }
+    : mode === 'stale-writer'
+      ? { migrations: sqliteMigrations.slice(0, 1) }
+      : {}),
   ...(mode === 'barrier'
     ? {
         beforeLeaseCas: async () => {

@@ -1,0 +1,67 @@
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - heading "Yandex Music Downloader" [level=3] [ref=e187]
+    - button [ref=e188] [cursor=pointer]
+    - button [ref=e189] [cursor=pointer]
+    - button "История" [ref=e190] [cursor=pointer]
+    - button "Настройки" [ref=e191] [cursor=pointer]
+    - button "Аккаунт" [ref=e192] [cursor=pointer]
+    - button "Диагностика" [ref=e193] [cursor=pointer]
+    - generic [ref=e23] [cursor=pointer]:
+      - switch "Тёмная тема" [ref=e194]
+      - generic [ref=e29]: Тёмная тема
+    - separator [ref=e30]
+    - paragraph [ref=e31]: Вы вошли как Тестовый пользователь
+    - button "Выйти" [ref=e195] [cursor=pointer]
+  - main [ref=e33]:
+    - generic [ref=e34]:
+      - generic [ref=e35]: Приложение подключено
+      - generic [ref=e49]:
+        - heading "История загрузок" [level=1] [ref=e196]
+        - paragraph [ref=e51]: Ваша коллекция загруженной музыки
+        - generic [ref=e52]:
+          - generic [ref=e53]:
+            - generic: Поиск в истории
+            - generic [ref=e54]:
+              - textbox "Поиск в истории" [ref=e197]
+              - group [aria-hidden]:
+                - generic: Поиск в истории
+          - generic [ref=e56]:
+            - generic [ref=e57]: Тип
+            - generic [ref=e58]:
+              - combobox "Тип" [active] [ref=e198] [cursor=pointer]: Трек
+              - textbox [aria-hidden]: track
+              - group [aria-hidden]:
+                - generic: Тип
+          - generic [ref=e60]:
+            - generic [ref=e61]: Период
+            - generic [ref=e62]:
+              - combobox "Период" [ref=e199] [cursor=pointer]: За всё время
+              - textbox [aria-hidden]: all
+              - group [aria-hidden]:
+                - generic: Период
+        - paragraph [ref=e64]: "Найдено: 1"
+        - table [ref=e66]:
+          - rowgroup [ref=e67]:
+            - row [ref=e200]:
+              - columnheader "Название" [ref=e201]
+              - columnheader "Тип" [ref=e202]
+              - columnheader "Треки / размер" [ref=e203]
+              - columnheader "Дата" [ref=e204]
+              - columnheader "Действия" [ref=e205]
+          - rowgroup [ref=e74]:
+            - row [ref=e206]:
+              - cell [ref=e207]:
+                - paragraph [ref=e92]: Сияй
+                - paragraph [ref=e93]: Тестовая группа
+              - cell "Трек" [ref=e208]
+              - cell [ref=e209]:
+                - text: 1 треков
+                - paragraph [ref=e98]: 12.4 МБ
+              - cell "27.10.2026" [ref=e210]
+              - cell [ref=e211]:
+                - generic [ref=e101]:
+                  - button "Скачать снова" [ref=e212] [cursor=pointer]
+                  - button "Открыть папку" [ref=e213] [cursor=pointer]
+                  - button "Убрать из истории" [ref=e214] [cursor=pointer]
+        - generic [ref=e120]: Удаление записи из истории сохраняет аудиофайлы на диске.

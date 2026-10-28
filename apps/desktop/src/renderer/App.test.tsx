@@ -12,6 +12,7 @@ import {
 import { afterEach, expect, it, vi } from 'vitest';
 import type {
   ApplicationResult,
+  DesktopSettings,
   JobSnapshot,
   MediaReference,
   PreviewDto,
@@ -20,6 +21,15 @@ import type { DesktopApi, DesktopEvent } from '../contract/desktop-api.js';
 import { App } from './App.js';
 import { useDownloads } from './useDownloads.js';
 
+const defaultDesktopSettings: DesktopSettings = {
+  outputDirectory: null,
+  quality: 'best',
+  concurrency: 4,
+  naming: 'collection',
+  overwrite: false,
+  ffmpegPath: null,
+  logging: 'info',
+};
 const result = <T,>(data: T): ApplicationResult<T> => ({
   schemaVersion: 1,
   kind: 'result',
@@ -76,6 +86,7 @@ function mockApi(kind: MediaReference['kind'] = 'playlist') {
     ],
   };
   const api = {
+    getSettings: vi.fn(async () => result(defaultDesktopSettings)),
     account: vi.fn(async () => result(null)),
     authenticate: vi.fn(async () =>
       result({ id: 'a', displayName: 'Пользователь' }),
@@ -465,3 +476,58 @@ it('createDownload с AUTH_REQUIRED без job.completed показывает о
   );
   expect(mock.mocks.createDownload).toHaveBeenCalledTimes(1);
 });
+
+it.each(['VALIDATION_ERROR', 'OUTCOME_UNKNOWN'] as const)(
+  'F-002/ADR-016: App сохраняет предупреждение replay %s на History и перечитывает очередь без повтора',
+  async (code) => {
+    const { api, mocks } = mockApi();
+    const history = vi.fn(async () =>
+      result([
+        {
+          jobId: 'saved',
+          source,
+          title: 'Сохранённый плейлист',
+          artists: ['Автор'],
+          count: 1,
+          bytes: null,
+          completedAt: '2026-01-01T00:00:00Z',
+          replayAvailable: true,
+          replayReason: null,
+        },
+      ]),
+    );
+    const replay = vi.fn(
+      async () =>
+        ({
+          schemaVersion: 1,
+          kind: 'error',
+          command: 'replay',
+          error: {
+            code,
+            message: 'Повторная загрузка отклонена.',
+            retryable: false,
+          },
+        }) as const,
+    );
+    render(<App api={{ ...api, history, replay }} />);
+    fireEvent.click(screen.getByRole('button', { name: 'История' }));
+    await screen.findByText('Сохранённый плейлист');
+    const refreshes = mocks.listJobs.mock.calls.length;
+    fireEvent.click(screen.getByRole('button', { name: 'Скачать снова' }));
+    await screen.findByText(
+      code === 'OUTCOME_UNKNOWN'
+        ? /Исход операции неизвестен/
+        : 'Повторная загрузка отклонена.',
+    );
+    await waitFor(() =>
+      expect(mocks.listJobs.mock.calls.length).toBeGreaterThan(refreshes),
+    );
+    await waitFor(() => expect(history).toHaveBeenCalledTimes(2));
+    expect(
+      screen.getByRole('heading', { name: 'История загрузок' }),
+    ).toBeTruthy();
+    expect(screen.queryByRole('heading', { name: 'Загрузки' })).toBeNull();
+    expect(replay).toHaveBeenCalledExactlyOnceWith({ jobId: 'saved' });
+    expect(mocks.createDownload).not.toHaveBeenCalled();
+  },
+);

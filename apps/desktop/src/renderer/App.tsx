@@ -26,6 +26,7 @@ import HomeRounded from '@mui/icons-material/HomeRounded';
 import FolderOpenRounded from '@mui/icons-material/FolderOpenRounded';
 import type {
   Account,
+  DesktopSettings,
   JsonObject,
   PreviewDto,
   QualityPreference,
@@ -34,6 +35,10 @@ import type {
   DesktopApi,
   DirectorySelection,
 } from '../contract/desktop-api.js';
+import { History } from './History.js';
+import { Settings } from './Settings.js';
+import { Account as AccountPage } from './Account.js';
+import { Diagnostics } from './Diagnostics.js';
 import { Downloads } from './Downloads.js';
 import { useDownloads } from './useDownloads.js';
 import { darkTheme, theme } from './theme.js';
@@ -69,7 +74,9 @@ export function App({ api = window.desktopApi }: { api?: DesktopApi }) {
   const [account, setAccount] = useState<Account | null>(null);
   const [authBusy, setAuthBusy] = useState(false);
   const [authNotice, setAuthNotice] = useState('');
-  const [page, setPage] = useState<'home' | 'downloads'>('home');
+  const [page, setPage] = useState<
+    'home' | 'downloads' | 'history' | 'settings' | 'account' | 'diagnostics'
+  >('home');
   const [dark, setDark] = useState(false);
   const [url, setUrl] = useState('');
   const [preview, setPreview] = useState<PreviewDto>();
@@ -78,10 +85,30 @@ export function App({ api = window.desktopApi }: { api?: DesktopApi }) {
   const [quality, setQuality] = useState<QualityPreference>();
   const [qualityOpen, setQualityOpen] = useState(false);
   const [directory, setDirectory] = useState<DirectorySelection>();
+  const [settings, setSettings] = useState<DesktopSettings>();
+  const [accountRevision, setAccountRevision] = useState(0);
   const [creating, setCreating] = useState(false);
   const request = useRef(0);
   const downloads = useDownloads(api);
   const { setNotice } = downloads;
+  async function refreshSettings() {
+    const result = await api.getSettings();
+    if (result.kind === 'result') {
+      setSettings(result.data);
+      if (result.data.outputDirectory)
+        setDirectory((previous) =>
+          previous?.directoryRef.startsWith('dir:')
+            ? previous
+            : {
+                directoryRef: 'default-output',
+                displayPath: result.data.outputDirectory!,
+              },
+        );
+    }
+  }
+  useEffect(() => {
+    void refreshSettings();
+  }, [api]);
   useEffect(() => {
     async function refreshAccount() {
       const result = await api.account();
@@ -94,7 +121,7 @@ export function App({ api = window.desktopApi }: { api?: DesktopApi }) {
       if (event.event === 'host.status' && event.connected)
         void refreshAccount();
     });
-  }, [api, setNotice]);
+  }, [api, setNotice, accountRevision]);
   async function authenticate() {
     setAuthBusy(true);
     try {
@@ -126,7 +153,12 @@ export function App({ api = window.desktopApi }: { api?: DesktopApi }) {
       else {
         setPreview(result.data);
         setQuality(
-          result.data.qualities?.find((item) => item.available > 0)?.preference,
+          result.data.qualities?.find(
+            (item) =>
+              item.preference === settings?.quality && item.available > 0,
+          )?.preference ??
+            result.data.qualities?.find((item) => item.available > 0)
+              ?.preference,
         );
       }
     } finally {
@@ -205,6 +237,22 @@ export function App({ api = window.desktopApi }: { api?: DesktopApi }) {
             Загрузки{' '}
             {downloads.jobs.length > 0 ? `(${downloads.jobs.length})` : ''}
           </Button>
+          {(
+            [
+              ['history', 'История'],
+              ['settings', 'Настройки'],
+              ['account', 'Аккаунт'],
+              ['diagnostics', 'Диагностика'],
+            ] as const
+          ).map(([key, label]) => (
+            <Button
+              key={key}
+              variant={page === key ? 'contained' : 'text'}
+              onClick={() => setPage(key)}
+            >
+              {label}
+            </Button>
+          ))}
           <Box sx={{ flex: 1 }} />
           <FormControlLabel
             control={
@@ -269,7 +317,24 @@ export function App({ api = window.desktopApi }: { api?: DesktopApi }) {
                 {downloads.notice.message}
               </Alert>
             )}
-            {page === 'downloads' ? (
+            {page === 'history' ? (
+              <History
+                api={api}
+                onReplay={(succeeded) => {
+                  void downloads.refresh();
+                  if (succeeded) setPage('downloads');
+                }}
+              />
+            ) : page === 'settings' ? (
+              <Settings api={api} onSaved={() => void refreshSettings()} />
+            ) : page === 'account' ? (
+              <AccountPage
+                api={api}
+                onChanged={() => setAccountRevision((value) => value + 1)}
+              />
+            ) : page === 'diagnostics' ? (
+              <Diagnostics api={api} />
+            ) : page === 'downloads' ? (
               <Downloads {...downloads} />
             ) : (
               <>

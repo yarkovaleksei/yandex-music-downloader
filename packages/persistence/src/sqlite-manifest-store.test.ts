@@ -12,6 +12,7 @@ import {
   type LeaseState,
 } from '@music-downloader/shared';
 import * as processIdentity from './process-identity.js';
+import { sqliteMigrations } from './sqlite-migrations.js';
 import { SqliteManifestStore } from './sqlite-manifest-store.js';
 import {
   additiveV2,
@@ -463,7 +464,9 @@ describe('SqliteManifestStore', () => {
   it('соединение, открытое до миграции, после неё не пишет и сообщает несовместимость', async () => {
     const directory = await temporaryStateDir('sqlite-stale-writer-');
     try {
-      const old = storeAt(directory);
+      const old = storeAt(directory, {
+        migrations: sqliteMigrations.slice(0, 1),
+      });
       await old.create(manifestFixture('before'));
       const session = await old.acquire('before', {
         recover: async (item) => item,
@@ -491,7 +494,9 @@ describe('SqliteManifestStore', () => {
   it('старое соединение сообщает несовместимость при чтении после ломающей v2', async () => {
     const directory = await temporaryStateDir('sqlite-stale-reader-');
     try {
-      const old = storeAt(directory);
+      const old = storeAt(directory, {
+        migrations: sqliteMigrations.slice(0, 1),
+      });
       await old.create(manifestFixture('job'));
       expect(await old.read('job')).toBeDefined();
       const newer = storeAt(directory, { migrations: breakingV2 });
@@ -509,7 +514,9 @@ describe('SqliteManifestStore', () => {
       const directory = await temporaryStateDir('sqlite-modes-');
       try {
         const stateDir = path.join(directory, 'state');
-        const store = storeAt(stateDir);
+        const store = storeAt(stateDir, {
+          migrations: sqliteMigrations.slice(0, 1),
+        });
         await store.create(manifestFixture('job'));
         const mode = async (name: string) =>
           (await stat(path.join(stateDir, name))).mode & 0o777;
@@ -543,7 +550,9 @@ describe('SqliteManifestStore', () => {
     const directory = await temporaryStateDir('sqlite-secret-');
     const marker = 'step-029-secret-marker';
     try {
-      const store = storeAt(directory);
+      const store = storeAt(directory, {
+        migrations: sqliteMigrations.slice(0, 1),
+      });
       const base = manifestFixture('job');
       await store.create({
         ...base,

@@ -18,3 +18,7 @@ export {
   credentialService,
 } from './cli-credential-store.js';
 export type { CredentialProfile } from './cli-credential-store.js';
+export {
+  SqliteDesktopStateStore,
+  safeDiagnostics,
+} from './desktop-state-store.js';

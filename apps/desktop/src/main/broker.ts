@@ -1,8 +1,13 @@
+import type {
+  ApplicationResult,
+  DesktopSettings,
+} from '@music-downloader/shared';
 import { methods, parseInput } from '../contract/desktop-api.js';
 import type { Input, Method } from '../contract/desktop-api.js';
 import { failure, safeResult, success } from '../contract/result.js';
 import type { DirectoryRegistry } from './directory-registry.js';
 export interface BrokerActions {
+  readonly selectFfmpeg?: () => Promise<string | undefined>;
   readonly selectDirectory: () => Promise<string | undefined>;
   readonly showItemInFolder: (
     jobId: string,
@@ -27,6 +32,51 @@ export async function invokeBroker(
       const directory = await actions.selectDirectory();
       return success(method, directory ? directories.add(directory) : null);
     }
+    if (method === 'selectFfmpeg') {
+      const file = await actions.selectFfmpeg?.();
+      return success(method, file ? directories.addExecutable(file) : null);
+    }
+    if (method === 'saveSettings') {
+      const request = input as Input<'saveSettings'>;
+      if (
+        (request.directoryRef !== undefined &&
+          request.directoryRef !== 'default-output' &&
+          !directories.resolve(request.directoryRef)) ||
+        (typeof request.ffmpegRef === 'string' &&
+          !directories.resolve(request.ffmpegRef))
+      )
+        return failure(method, 'VALIDATION_ERROR');
+      const previous = (await host(
+        'getSettings',
+        undefined,
+      )) as ApplicationResult<DesktopSettings>;
+      if (previous.kind !== 'result') return safeResult(previous, method);
+      const outputDirectory =
+        request.directoryRef === undefined ||
+        request.directoryRef === 'default-output'
+          ? previous.data.outputDirectory
+          : directories.resolve(request.directoryRef);
+      const ffmpegPath =
+        request.ffmpegRef === undefined
+          ? previous.data.ffmpegPath
+          : request.ffmpegRef === null
+            ? null
+            : directories.resolve(request.ffmpegRef);
+      if (outputDirectory === undefined || ffmpegPath === undefined)
+        return failure(method, 'VALIDATION_ERROR');
+      return safeResult(
+        await host(method, {
+          quality: request.quality,
+          concurrency: request.concurrency,
+          naming: request.naming,
+          overwrite: request.overwrite,
+          logging: request.logging,
+          outputDirectory,
+          ffmpegPath,
+        }),
+        method,
+      );
+    }
     if (method === 'showItemInFolder') {
       const request = input as { jobId: string; trackKey?: string };
       return (await actions.showItemInFolder(request.jobId, request.trackKey))
@@ -50,7 +100,18 @@ export async function invokeBroker(
       return failure(method, 'VALIDATION_ERROR');
     if (method === 'createDownload') {
       const request = input as Input<'createDownload'>;
-      const destination = directories.resolve(request.directoryRef);
+      // Reserved ref разрешается заново из trusted host settings даже после restart main.
+      const settings =
+        request.directoryRef === 'default-output'
+          ? ((await host(
+              'getSettings',
+              undefined,
+            )) as ApplicationResult<DesktopSettings>)
+          : undefined;
+      const destination =
+        settings?.kind === 'result'
+          ? settings.data.outputDirectory
+          : directories.resolve(request.directoryRef);
       if (!destination) return failure(method, 'VALIDATION_ERROR');
       const rest = {
         source: request.source,

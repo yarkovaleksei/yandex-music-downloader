@@ -1,0 +1,47 @@
+- generic [ref=f4e3]:
+  - complementary [ref=f4e4]:
+    - heading "Yandex Music Downloader" [level=3] [ref=f4e9]
+    - button [ref=f4e10] [cursor=pointer]
+    - button [ref=f4e14] [cursor=pointer]
+    - button "История" [active] [ref=f4e18] [cursor=pointer]
+    - button "Настройки" [ref=f4e19] [cursor=pointer]
+    - button "Аккаунт" [ref=f4e20] [cursor=pointer]
+    - button "Диагностика" [ref=f4e21] [cursor=pointer]
+    - generic [ref=f4e23] [cursor=pointer]:
+      - switch "Тёмная тема" [ref=f4e26]
+      - generic [ref=f4e29]: Тёмная тема
+    - separator [ref=f4e30]
+    - paragraph [ref=f4e31]: Вы вошли как Тестовый пользователь
+    - button "Выйти" [ref=f4e32] [cursor=pointer]
+  - main [ref=f4e33]:
+    - generic [ref=f4e34]:
+      - generic [ref=f4e35]: Приложение подключено
+      - generic [ref=f4e49]:
+        - heading "История загрузок" [level=1] [ref=f4e50]
+        - paragraph [ref=f4e51]: Ваша коллекция загруженной музыки
+        - generic [ref=f4e52]:
+          - generic [ref=f4e53]:
+            - generic: Поиск в истории
+            - generic [ref=f4e54]:
+              - textbox "Поиск в истории" [ref=f4e55]
+              - group [aria-hidden]:
+                - generic: Поиск в истории
+          - generic [ref=f4e56]:
+            - generic [ref=f4e57]: Тип
+            - generic [ref=f4e58]:
+              - combobox "Тип" [ref=f4e59] [cursor=pointer]: Все типы
+              - textbox [aria-hidden]: all
+              - group [aria-hidden]:
+                - generic: Тип
+          - generic [ref=f4e60]:
+            - generic [ref=f4e61]: Период
+            - generic [ref=f4e62]:
+              - combobox "Период" [ref=f4e63] [cursor=pointer]: За всё время
+              - textbox [aria-hidden]: all
+              - group [aria-hidden]:
+                - generic: Период
+        - paragraph [ref=f4e64]: "Найдено: 0"
+        - generic [ref=f4e65]:
+          - heading "Пока ничего не найдено" [level=2] [ref=f4e68]
+          - paragraph [ref=f4e69]: Завершённые загрузки появятся здесь
+        - generic [ref=f4e70]: Удаление записи из истории сохраняет аудиофайлы на диске.

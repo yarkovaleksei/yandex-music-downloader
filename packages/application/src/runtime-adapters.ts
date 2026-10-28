@@ -4,6 +4,7 @@ import type {
   AuthInteraction,
   CredentialStore,
   DiagnosticsDto,
+  DesktopStateStore,
   ManifestStore,
   MusicProvider,
 } from '@music-downloader/shared';
@@ -24,6 +25,7 @@ export interface RuntimeAdapters {
   readonly clientProfile?: 'cli' | 'desktop';
   readonly stateDir?: string;
   readonly manifestStore?: ManifestStore;
+  readonly desktopStateStore?: DesktopStateStore;
   readonly credentialStore?: CredentialStore;
   readonly authInteraction?: AuthInteraction;
   readonly providerOverride?: MusicProvider;

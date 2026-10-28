@@ -1,6 +1,9 @@
 import { z } from 'zod';
 import type {
   Account,
+  DesktopSettings,
+  HistoryEntry,
+  SavedDiagnostics,
   ApplicationResult,
   DiagnosticsDto,
   JobEvent,
@@ -18,7 +21,11 @@ export const referenceSchema = z.strictObject({
 });
 const jobInput = z.strictObject({ jobId: id });
 const referenceInput = z.strictObject({ source: referenceSchema });
-const directoryRef = z.string().regex(/^dir:[a-f0-9-]{36}$/);
+const directoryRef = z.union([
+  z.literal('default-output'),
+  z.string().regex(/^dir:[a-f0-9-]{36}$/),
+]);
+const executableRef = z.string().regex(/^exe:[a-f0-9-]{36}$/);
 
 /** Единственная таблица методов/каналов ADR-016; схемы закрыты для лишних полей. */
 export const methods = {
@@ -46,6 +53,25 @@ export const methods = {
   listJobs: { input: empty, executor: 'host' },
   getJob: { input: jobInput, executor: 'host' },
   diagnostics: { input: empty, executor: 'host' },
+  getSettings: { input: empty, executor: 'host' },
+  saveSettings: {
+    input: z.strictObject({
+      quality: z.enum(['best', 'lossless', 'high', 'normal']),
+      concurrency: z.number().int().min(1).max(8),
+      naming: z.enum(['collection', 'album']),
+      overwrite: z.boolean(),
+      logging: z.enum(['error', 'warn', 'info', 'debug', 'trace']),
+      directoryRef: directoryRef.optional(),
+      ffmpegRef: executableRef.nullable().optional(),
+    }),
+    executor: 'host',
+  },
+  history: { input: empty, executor: 'host' },
+  hideHistory: { input: jobInput, executor: 'host' },
+  replay: { input: jobInput, executor: 'host' },
+  lastDiagnostics: { input: empty, executor: 'host' },
+  refreshDiagnostics: { input: empty, executor: 'host' },
+  selectFfmpeg: { input: empty, executor: 'main' },
   selectDirectory: { input: empty, executor: 'main' },
   showItemInFolder: {
     input: z.strictObject({ jobId: id, trackKey: id.optional() }),
@@ -77,6 +103,17 @@ export interface Results {
   listJobs: readonly JobSnapshot[];
   getJob: JobSnapshot | null;
   diagnostics: DiagnosticsDto;
+  getSettings: DesktopSettings;
+  saveSettings: DesktopSettings;
+  history: readonly HistoryEntry[];
+  hideHistory: null;
+  replay: JobSnapshot;
+  lastDiagnostics: SavedDiagnostics | null;
+  refreshDiagnostics: SavedDiagnostics;
+  selectFfmpeg: {
+    readonly executableRef: string;
+    readonly displayPath: string;
+  } | null;
   selectDirectory: DirectorySelection | null;
   showItemInFolder: null;
   openExternal: null;

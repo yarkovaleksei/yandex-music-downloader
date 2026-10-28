@@ -115,6 +115,14 @@ void app.whenReady().then(async () => {
     window,
     directories,
     {
+      selectFfmpeg: async () => {
+        if (!window) return undefined;
+        const result = await dialog.showOpenDialog(window, {
+          title: 'Выберите FFmpeg для диагностики',
+          properties: ['openFile'],
+        });
+        return result.canceled ? undefined : result.filePaths[0];
+      },
       selectDirectory: async () => {
         if (!window) return undefined;
         const result = await dialog.showOpenDialog(window, {

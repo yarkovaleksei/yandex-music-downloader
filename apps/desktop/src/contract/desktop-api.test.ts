@@ -23,6 +23,20 @@ const samples: Record<Method, unknown> = {
   listJobs: undefined,
   getJob: { jobId: '1' },
   diagnostics: undefined,
+  getSettings: undefined,
+  saveSettings: {
+    quality: 'best',
+    concurrency: 4,
+    naming: 'collection',
+    overwrite: false,
+    logging: 'info',
+  },
+  history: undefined,
+  hideHistory: { jobId: '1' },
+  replay: { jobId: '1' },
+  lastDiagnostics: undefined,
+  refreshDiagnostics: undefined,
+  selectFfmpeg: undefined,
   selectDirectory: undefined,
   showItemInFolder: { jobId: '1' },
   openExternal: { url: 'https://music.yandex.ru/' },
@@ -172,4 +186,130 @@ describe('DesktopApi ADR-016', () => {
       ),
     ).not.toContain('fixture-secret');
   });
+});
+
+it('REQ-052/ADR-016: main разрешает settings refs из диалога, а default-output восстанавливается из host после restart', async () => {
+  const dirs = new DirectoryRegistry();
+  const selected = dirs.add('/fixture/output');
+  const executable = dirs.addExecutable('/fixture/ffmpeg');
+  const settings = {
+    outputDirectory: '/persisted/output',
+    quality: 'best',
+    concurrency: 4,
+    naming: 'collection',
+    overwrite: false,
+    ffmpegPath: null,
+    logging: 'info',
+  };
+  const host = vi.fn(async (method: string, payload: unknown) =>
+    success(method, method === 'getSettings' ? settings : payload),
+  );
+  const actions = {
+    selectDirectory: async () => undefined,
+    selectFfmpeg: async () => '/fixture/ffmpeg',
+    showItemInFolder: async () => false,
+    openExternal: async () => undefined,
+  };
+  const input = {
+    quality: 'high',
+    concurrency: 2,
+    naming: 'album',
+    overwrite: true,
+    logging: 'warn',
+    directoryRef: selected.directoryRef,
+    ffmpegRef: executable.executableRef,
+  };
+  expect(
+    await invokeBroker('saveSettings', input, true, dirs, actions, host),
+  ).toMatchObject({ kind: 'result' });
+  expect(host).toHaveBeenLastCalledWith('saveSettings', {
+    quality: 'high',
+    concurrency: 2,
+    naming: 'album',
+    overwrite: true,
+    logging: 'warn',
+    outputDirectory: '/fixture/output',
+    ffmpegPath: '/fixture/ffmpeg',
+  });
+  host.mockClear();
+  expect(
+    await invokeBroker(
+      'createDownload',
+      { source, quality: 'best', directoryRef: 'default-output' },
+      true,
+      new DirectoryRegistry(),
+      actions,
+      host,
+    ),
+  ).toMatchObject({ kind: 'result' });
+  expect(host).toHaveBeenLastCalledWith('createDownload', {
+    source,
+    quality: 'best',
+    destination: '/persisted/output',
+  });
+  for (const ref of [
+    '/local/path',
+    'C:\\path',
+    '\\\\server\\share',
+    '//server/share',
+    'https://host/dav',
+    '\\\\?\\C:\\path',
+    '\\\\.\\device',
+    'dir:00000000-0000-0000-0000-000000000009',
+  ]) {
+    host.mockClear();
+    expect(
+      await invokeBroker(
+        'saveSettings',
+        { ...input, directoryRef: ref },
+        true,
+        dirs,
+        actions,
+        host,
+      ),
+    ).toMatchObject({ kind: 'error' });
+    expect(host).not.toHaveBeenCalled();
+  }
+  for (const ref of [
+    '/raw/ffmpeg',
+    '\\\\server\\ffmpeg',
+    'https://host/dav',
+    'exe:00000000-0000-0000-0000-000000000009',
+  ]) {
+    host.mockClear();
+    expect(
+      await invokeBroker(
+        'saveSettings',
+        { ...input, ffmpegRef: ref },
+        true,
+        dirs,
+        actions,
+        host,
+      ),
+    ).toMatchObject({ kind: 'error' });
+    expect(host).not.toHaveBeenCalled();
+  }
+});
+it('REQ-052: settings runtime schema отклоняет открытые шаблоны, concurrency вне диапазона и executable path', () => {
+  const input = {
+    quality: 'best',
+    concurrency: 4,
+    naming: 'collection',
+    overwrite: false,
+    logging: 'info',
+  };
+  for (const change of [
+    { concurrency: 0 },
+    { concurrency: 9 },
+    { concurrency: 1.5 },
+    { naming: '../../{title}' },
+    { quality: 'mp3' },
+    { logging: 'all' },
+    { ffmpegPath: '/usr/bin/ffmpeg' },
+    { outputDirectory: '/tmp' },
+  ])
+    expect(() => parseInput('saveSettings', { ...input, ...change })).toThrow();
+  expect(() =>
+    parseInput('replay', { jobId: '1', source, quality: 'best' }),
+  ).toThrow();
 });
