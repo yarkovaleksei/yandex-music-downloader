@@ -83,7 +83,7 @@ describe('strict-контракт всех tsconfig', () => {
 });
 
 describe('root solution и тестовая программа', () => {
-  it('tsconfig.json ссылается ровно на 15 workspace-пакетов', () => {
+  it('tsconfig.json ссылается ровно на 16 workspace-пакетов', () => {
     const solution = JSON.parse(
       fs.readFileSync(path.join(root, 'tsconfig.json'), 'utf8'),
     ) as {

@@ -32,7 +32,11 @@ export default defineConfig({
         test: {
           name: workspace.name,
           root: workspace.dir,
-          include: testFileSuffixes.map((suffix) => `src/**/*.${suffix}.ts`),
+          include: testFileSuffixes.flatMap((suffix) =>
+            workspace.dir === 'apps/desktop'
+              ? [`src/**/*.${suffix}.ts`, `src/**/*.${suffix}.tsx`]
+              : [`src/**/*.${suffix}.ts`],
+          ),
           env: testEnvironment,
         },
       })),

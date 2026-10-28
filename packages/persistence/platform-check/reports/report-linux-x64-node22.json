@@ -1,0 +1,47 @@
+{
+  "schema": 1,
+  "status": "PASS",
+  "platform": "linux",
+  "arch": "x64",
+  "proc_translated": false,
+  "binding": "prebuilds/linux-x64",
+  "versions": {
+    "node": "22.14.0",
+    "napi": "10",
+    "sqlite": "3.53.4",
+    "betterSqlite3": "13.0.3"
+  },
+  "checks": {
+    "binding": {
+      "status": "PASS"
+    },
+    "crud": {
+      "status": "PASS"
+    },
+    "migrations": {
+      "status": "PASS"
+    },
+    "lease_two_process": {
+      "status": "PASS"
+    },
+    "concurrent_reclaim": {
+      "status": "PASS"
+    },
+    "stale_connection": {
+      "status": "PASS"
+    },
+    "newer_schema": {
+      "status": "PASS"
+    },
+    "corrupt_database": {
+      "status": "PASS"
+    },
+    "posix_permissions": {
+      "status": "PASS"
+    },
+    "secret_marker": {
+      "status": "PASS"
+    }
+  },
+  "kitManifest": null
+}

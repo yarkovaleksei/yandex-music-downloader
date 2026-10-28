@@ -20,6 +20,8 @@ export interface RuntimeCacheOptions {
 
 /** Host передаёт только порты; Electron/CLI не попадают в переносимые DTO. */
 export interface RuntimeAdapters {
+  /** ADR-015: профиль выбирает отдельную запись keyring, сохраняя общий stateDir. */
+  readonly clientProfile?: 'cli' | 'desktop';
   readonly stateDir?: string;
   readonly manifestStore?: ManifestStore;
   readonly credentialStore?: CredentialStore;

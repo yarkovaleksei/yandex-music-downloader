@@ -313,16 +313,31 @@ describe('STEP-022: playlist M3U8 через публичное application API'
     );
 
     failedIds.delete('2');
-    await expect(api.retry(initial.data.jobId)).resolves.toMatchObject({
-      kind: 'result',
-      data: { status: 'running' },
+    // SQLite уже видит terminal-состояния треков до окончания записи M3U8.
+    // По контракту STEP-022 файл готов к job.completed, поэтому ждём событие.
+    let retryCompleted = false;
+    const unsubscribe = api.subscribe((event) => {
+      if (
+        event.jobId === initial.data.jobId &&
+        event.event === 'job.completed'
+      )
+        retryCompleted = true;
     });
-    await expect
-      .poll(() => api!.getJob(initial.data.jobId), {
-        timeout: 5_000,
-        interval: 20,
-      })
-      .toMatchObject({ kind: 'result', data: { status: 'completed' } });
+    try {
+      await expect(api.retry(initial.data.jobId)).resolves.toMatchObject({
+        kind: 'result',
+        data: { status: 'running' },
+      });
+      await expect
+        .poll(() => retryCompleted, { timeout: 5_000, interval: 20 })
+        .toBe(true);
+    } finally {
+      unsubscribe();
+    }
+    await expect(api.getJob(initial.data.jobId)).resolves.toMatchObject({
+      kind: 'result',
+      data: { status: 'completed' },
+    });
     await expect(readFile(playlistPath, 'utf8')).resolves.toBe(
       '01 - Автор - Первый трек.mp3\n02 - Автор - Второй трек.mp3\n03 - Автор - Третий трек.mp3\n',
     );

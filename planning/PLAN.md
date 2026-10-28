@@ -32,8 +32,8 @@
 | STEP-026 | Интеграционный набор headless-сценариев | hardening | high | completed | STEP-019, STEP-022, STEP-021, STEP-023, STEP-025 | REQ-042, REQ-005, REQ-020 |
 | STEP-027 | Приёмка headless MVP и gate перехода к UI | audit | critical | completed | STEP-026, STEP-011 | REQ-043 |
 | STEP-028 | ADR: SQLite, модель безопасности Electron и IPC | adr | medium | completed | STEP-027 | REQ-033, REQ-046, REQ-047 |
-| STEP-029 | SQLite persistence и миграции | implementation | medium | in_progress | STEP-018, STEP-028, STEP-055 | REQ-033 |
-| STEP-030 | Desktop shell: Electron, React, MUI, typed IPC, secure storage | implementation | medium | planned | STEP-028, STEP-018, STEP-029 | REQ-045, REQ-046, REQ-047, REQ-048 |
+| STEP-029 | SQLite persistence и миграции | implementation | medium | completed | STEP-018, STEP-028, STEP-055 | REQ-033 |
+| STEP-030 | Desktop shell: Electron, React, MUI, typed IPC, secure storage | implementation | medium | completed | STEP-028, STEP-018, STEP-029 | REQ-045, REQ-046, REQ-047, REQ-048 |
 | STEP-031 | UX: предпросмотр URL, загрузки, прогресс и уведомления | implementation | medium | planned | STEP-030 | REQ-049, REQ-050 |
 | STEP-032 | UX: History, Settings, Account и Diagnostics | implementation | medium | planned | STEP-031, STEP-025 | REQ-033, REQ-051, REQ-052 |
 | STEP-033 | E2E-тест desktop | hardening | medium | planned | STEP-031, STEP-032 | REQ-053 |

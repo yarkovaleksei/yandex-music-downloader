@@ -68,7 +68,8 @@ export function createApplication(
   // providerOverride полностью исключает native keyring и browser/device-auth bootstrap.
   const credentialStore =
     adapters.providerOverride === undefined
-      ? (adapters.credentialStore ?? new CliCredentialStore())
+      ? (adapters.credentialStore ??
+        new CliCredentialStore(undefined, adapters.clientProfile))
       : adapters.credentialStore;
   const provider =
     adapters.providerOverride ??

@@ -1,6 +1,6 @@
 # Разработка
 
-Документ описывает фактический toolchain, созданный STEP-001 по ADR-001 (слои и границы) и ADR-008 (Yarn workspaces). CI описан в разделе «CI/CD» (STEP-002); подключение Electron preload потребует отдельного bundler-решения в последующем STEP.
+Документ описывает фактический toolchain, созданный STEP-001 по ADR-001 (слои и границы) и ADR-008 (Yarn workspaces). CI описан в разделе «CI/CD» (STEP-002). Desktop workspace STEP-030 собирает main/application host через TypeScript, renderer через Vite, а sandbox preload — в один CommonJS bundle через esbuild.
 
 ## Prerequisites
 
@@ -45,12 +45,14 @@ yarn run format:check
 yarn test
 yarn run build
 yarn run format
+yarn run desktop
 ```
 
+- `yarn run desktop` — запускает собранную минимальную Electron-оболочку; перед первым запуском выполните `yarn run build`. Токен desktop хранится в отдельном системном keyring namespace; packaging и полные экраны принадлежат следующим STEP.
 - `yarn run lint` — два независимых прохода ESLint с `--max-warnings 0`: основной (`eslint.config.mjs`, качество кода) и архитектурный (`eslint.boundaries.config.mjs`, границы ADR-001) с `--no-inline-config`, поэтому директива в коде не снимает запрет границ.
 - `yarn run typecheck` — `tsc -b` по root solution (`tsconfig.json`, project references всех пакетов) и отдельная non-composite программа `tsconfig.tests.json`, которая включает все тесты, конфигурации и tooling-файлы TypeScript.
 - `yarn test` — Vitest, отдельный project на каждый workspace и project `tooling` для `eslint/**/*.test.ts`.
-- `yarn run build` — `tsc -b`; результат в `dist/` каждого пакета (игнорируется Git).
+- `yarn run build` — `tsc -b`, затем сборка desktop preload через esbuild и renderer через Vite; результат в `dist/` каждого пакета и приложения (игнорируется Git).
 - `yarn run format` / `yarn run format:check` — Prettier для `apps`, `packages`, `eslint`, корневых конфигураций, `.yarnrc.yml` и этого файла. Остальные документы, Harness и `planning/` не форматируются автоматически.
 
 ### Проверка provider на реальном API
@@ -65,7 +67,7 @@ yarn run format
 
 ## Workspace
 
-Workspace-пакеты (все `private`, ESM): `@music-downloader/shared`, `@music-downloader/core-downloader`, `@music-downloader/core-planner`, `@music-downloader/core-queue`, `@music-downloader/core-retry`, `@music-downloader/core-manifest`, `@music-downloader/core-filesystem`, `@music-downloader/core-validation`, `@music-downloader/provider-yandex-music`, `@music-downloader/metadata`, `@music-downloader/persistence`, `@music-downloader/application`, `@music-downloader/logging`, `@music-downloader/testing`, `@music-downloader/cli`. Всего 15; каталоги — `packages/shared`, `packages/core/*`, `packages/providers/yandex-music`, `packages/metadata`, `packages/persistence`, `packages/application`, `packages/logging`, `packages/testing`, `apps/cli`. STEP-003 добавил доменные типы, безопасные ошибки и контракт `MusicProvider` в `shared`, а также mock provider и fixtures в `testing`. Реализованные foundation/provider части описаны ниже; остальные production-возможности принадлежат отдельным STEP. Core, application и CLI реализованы в [STEP-017](../planning/tasks/STEP-017.md), [STEP-018](../planning/tasks/STEP-018.md) и [STEP-019](../planning/tasks/STEP-019.md); MVP acceptance gate [STEP-027](../planning/tasks/STEP-027.md) остаётся planned.
+Workspace-пакеты (все `private`, ESM): `@music-downloader/shared`, `@music-downloader/core-downloader`, `@music-downloader/core-planner`, `@music-downloader/core-queue`, `@music-downloader/core-retry`, `@music-downloader/core-manifest`, `@music-downloader/core-filesystem`, `@music-downloader/core-validation`, `@music-downloader/provider-yandex-music`, `@music-downloader/metadata`, `@music-downloader/persistence`, `@music-downloader/application`, `@music-downloader/logging`, `@music-downloader/testing`, `@music-downloader/cli`, `@music-downloader/desktop`. Всего 16; каталоги — `packages/shared`, `packages/core/*`, `packages/providers/yandex-music`, `packages/metadata`, `packages/persistence`, `packages/application`, `packages/logging`, `packages/testing`, `apps/cli`, `apps/desktop`. STEP-003 добавил доменные типы, безопасные ошибки и контракт `MusicProvider` в `shared`, а также mock provider и fixtures в `testing`. Реализованные foundation/provider части описаны ниже; остальные production-возможности принадлежат отдельным STEP. Core, application и CLI реализованы в [STEP-017](../planning/tasks/STEP-017.md), [STEP-018](../planning/tasks/STEP-018.md) и [STEP-019](../planning/tasks/STEP-019.md); MVP acceptance gate [STEP-027](../planning/tasks/STEP-027.md) остаётся planned.
 
 ### Реализованные foundation и provider
 

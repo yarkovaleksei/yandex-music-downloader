@@ -12,3 +12,9 @@ export * from './state-directory.js';
 export * from './cli-credential-store.js';
 export * from './cache-store.js';
 export * from './file-cache-store.js';
+
+export {
+  DESKTOP_CREDENTIAL_SERVICE,
+  credentialService,
+} from './cli-credential-store.js';
+export type { CredentialProfile } from './cli-credential-store.js';

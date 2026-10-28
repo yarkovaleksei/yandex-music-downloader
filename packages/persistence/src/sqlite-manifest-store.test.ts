@@ -404,6 +404,41 @@ describe('SqliteManifestStore', () => {
     }
   });
 
+  it('отказывает для новой WAL-схемы после аварии без checkpoint основного файла', async () => {
+    const directory = await temporaryStateDir('sqlite-newer-wal-');
+    try {
+      const file = path.join(directory, 'state.sqlite3');
+      // F-001: незакрытый writer оставляет committed-схему в WAL. Штатный close()
+      // до снимка скрыл бы checkpoint при отказе старого клиента (STEP-029).
+      const seed = spawnSync(
+        process.execPath,
+        [
+          '-e',
+          `const Database = require('better-sqlite3');
+           const db = new Database(process.argv[1]);
+           db.pragma('journal_mode = WAL');
+           db.pragma('wal_autocheckpoint = 0');
+           db.exec('CREATE TABLE future (value TEXT); PRAGMA user_version = 7;');
+           db.prepare('INSERT INTO future VALUES (?)').run('saved');
+           process.exit(0);`,
+          file,
+        ],
+        { cwd: import.meta.dirname, encoding: 'utf8' },
+      );
+      expect(seed.status, seed.stderr).toBe(0);
+      expect((await stat(`${file}-wal`)).size).toBeGreaterThan(0);
+      const before = await readFile(file);
+      const filesBefore = await databaseFiles(directory);
+      const store = storeAt(directory);
+      await expect(store.list()).rejects.toMatchObject(schemaRefusal);
+      await store.close();
+      expect(await readFile(file)).toEqual(before);
+      expect(await databaseFiles(directory)).toEqual(filesBefore);
+    } finally {
+      await cleanup(directory);
+    }
+  });
+
   it('отказывает для повреждённой базы без пересоздания и изменения файла', async () => {
     const directory = await temporaryStateDir('sqlite-corrupt-');
     try {

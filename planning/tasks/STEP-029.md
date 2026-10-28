@@ -1,7 +1,7 @@
 ---
 schema: 1
 id: STEP-029
-status: in_progress
+status: completed
 type: implementation
 priority: medium
 phase: desktop
@@ -259,6 +259,87 @@ ADR-014 требует доказать загрузку `better-sqlite3` и т�
 
 ## Evidence
 
+
+
+
+
+
+<!-- VERIFICATION-EVIDENCE:START -->
+- Verification run: 2026-10-27T10:01:09Z
+- Status: PASS
+- Automated resumed: false
+- Verification mode: full
+- Incremental executed checks: 5
+- Incremental reused checks: 0
+- Targeted feedback reused: 0
+- Incremental fallback reason: RISK_REQUIRES_FULL
+- Git head: 098947c0eb32ce77326267666cd58bde75f0db33
+- Worktree hash: sha256:74d3b9d8462e90664611d63e511c3f8d51dcfd7bf778cfbb00da157620d0be9d
+- Verification contract basis: sha256:eff51d7acbe90b8956d219687102a388f7e2d6b9db4731effd0854402b4e42f4
+- Verification context basis: sha256:17ace5f36c13d6882042d727461f81d192055936c65d40adb5bf2317a23b3350
+- Subject git head: 098947c0eb32ce77326267666cd58bde75f0db33
+- Subject worktree hash: sha256:8ce1c52ece9a9f29e6e809f2957d9d3abcf807cc0d9c68767f9cd8bb66280b0e
+- Subject content hash: sha256:481a1caf8ea265a32a8b44904d568a5fc1faa969ffde0af870c2346448863087
+
+### Automated verification
+- Command: node packages/testing/scripts/run-yarn.mjs install --immutable
+  - Status: PASS
+  - Exit code: 0
+  - Duration ms: 715
+  - stdout sha256: 0c7d7f2abeb68918dab9cd5906f6c7541cd5d9ce1a99b38f82d205d27b5e31ee
+  - stderr sha256: bfec6f0b0ed4e98041896996f31540ead1369fc6f4fe067199120753dc1e5ab2
+  - stdout bytes: 222
+  - stderr bytes: 36
+  - Provenance: executed
+- Command: npm run lint
+  - Status: PASS
+  - Exit code: 0
+  - Duration ms: 9079
+  - stdout sha256: a9abc4bc51d6729860fb000bf87c02e5a80cc830999d05e640c5651c7e3daa6a
+  - stderr sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  - stdout bytes: 147
+  - stderr bytes: 0
+  - Provenance: executed
+- Command: npm run typecheck
+  - Status: PASS
+  - Exit code: 0
+  - Duration ms: 3420
+  - stdout sha256: 73ad7967b0b62b903e0e14e90a6a3971d720cb1ab6b744714e6d2ef05dd89743
+  - stderr sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  - stdout bytes: 83
+  - stderr bytes: 0
+  - Provenance: executed
+- Command: npm test
+  - Status: PASS
+  - Exit code: 0
+  - Duration ms: 37249
+  - stdout sha256: 2eaa8eda6252fe41e7fd25f97edb5f0bb2afb2d24d48ee441b5bfd58a73d131e
+  - stderr sha256: 859b2b3296c25c93af0ca7d8b5a966caba426a815ed2060b12f444415cc24533
+  - stdout bytes: 13101
+  - stderr bytes: 4498
+  - Provenance: executed
+- Command: python3 .harness/tools/validate.py --mode manual
+  - Status: PASS
+  - Exit code: 0
+  - Duration ms: 4971
+  - stdout sha256: 4d1b1dc8e31394f023f65bed54ac48eeb5ffc56c09acff880027f318e778e49d
+  - stderr sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  - stdout bytes: 135
+  - stderr bytes: 0
+  - Provenance: executed
+
+### Product verification
+- none
+
+### Manual verification
+- Check: Тесты persistence и check.mjs проходят на Linux x64 под официальным Node.js 22.14.0 (нижняя граница ADR-017).
+  - Status: PASS
+  - Observed: "После исправления F-001 официальный Node.js 22.14.0 linux-x64 (SHA-256 архива сверён с nodejs.org SHASUMS256.txt: 69b09dba5c8dcb05c4e4273a4340db1005abeafe3927efda2bc5b249e80437ec). PATH указывает на этот runtime; node --version = v22.14.0. node node_modules/vitest/vitest.mjs run --project @music-downloader/persistence: exit 0, 15 файлов, 117 тестов PASS. node packages/persistence/platform-check/check.mjs --report-dir .harness/local/tmp/exec-ca3dead9d60b4067b6d2a2be4e050da2: exit 0, все 10 проверок PASS, включая новую WAL regression в newer_schema. Отчёт packages/persistence/platform-check/reports/report-linux-x64-node22.json, SHA-256 6dcbab1dfaa95de9ddbbd0668b056a7000749cf148016b2f919a0edcf0dd89c6."
+- Check: Владелец или коллега запускает самодостаточный набор платформенной проверки (встроенный Node.js, без установки зависимостей) на Windows x64, macOS arm64 и macOS x64 (Rosetta или Intel); отчёты `report-*.json` показывают platform/arch и PASS проверок SQLite store.
+  - Status: PASS
+  - Observed: "Пользователь передал новые отчёты после исправления F-001. Windows x64: report-win32-x64.json — 9 применимых PASS, posix_permissions SKIP, SHA-256 52964ab5e5df29a8748200cb13ce627f14a8337cf4ef38c6f6305d378938c54f. macOS arm64: report-darwin-arm64.json — 10 PASS, SHA-256 22dd530e5675ddbc2d44d60870efb39a0a02765d3e93a6deccf73cfff8d7ac00. macOS x64 Rosetta: report-darwin-x64-rosetta.json — 10 PASS, proc_translated=true, SHA-256 98af135387cabc9af9c37d8d248d36188176787115c70e8020b05f1658d44980. Все отчёты сохранены побайтно в packages/persistence/platform-check/reports/. Node.js 24.21.0, better-sqlite3 13.0.3, SQLite 3.53.4; newer_schema включает аварийный WAL и проверку отсутствия checkpoint при отказе. Все три kitManifest совпадают с manifest соответствующих архивов, buildId=20261026T144624Z-098947c0eb32, treeClean=false; SHA-256 dist=07b49aa37e0a320eef6cced3f1751dd3ddd6934dd115be7f72b88719315410a1, yarn.lock=ad1cca929594ca580914e68e77bfdffc0ed1587da0ab6ea6fcf08292e81b944b. Локальная сверка zipfile/hashlib подтвердила совпадение текущих dist persistence/shared, checker и yarn.lock с архивами, exit 0. Это проверка переданных отчётов, не повторный прогон Windows/macOS на Linux; дата запуска и exit code внешних прогонов в JSON не указаны."
+<!-- VERIFICATION-EVIDENCE:END -->
+
 Generated verification block записывает deterministic runner. Дополнительные semantic observations можно хранить вне generated markers.
 
 ### Windows x64 — Evidence зафиксировано 2026-10-17
@@ -276,6 +357,35 @@ Generated verification block записывает deterministic runner. Допо
 - Идентичность набора из `kitManifest` одинакова в обоих отчётах: `buildId=20261016T180517Z-736c1a1279a2`, `gitHead=736c1a1279a244e54b601b8df5c995a7a89b1a7f`, `treeClean=true`; SHA-256 `dist`: `e234ccf4d6dddb6f96034e554ac085c54c9ea5d7384f95af1db231251822f280`, `yarn.lock`: `ad1cca929594ca580914e68e77bfdffc0ed1587da0ab6ea6fcf08292e81b944b`.
 - Локальная сверка через Python `zipfile`/`hashlib` подтвердила совпадение обоих `kitManifest` с `.cache/platform-check/music-downloader-platform-check-macos.zip`. Хеш `dist` пересчитан по алгоритму `build-kit.py`: для `persistence`, затем `shared` в порядке сортировки файлов `dist/**/*.js` учтены имя модуля, относительный путь с нулевым разделителем и SHA-256 содержимого; результат совпал с manifest. Хеш текущего `yarn.lock` также совпал. На `HEAD=128d9429424ebec49ae10fc7c1258c45546a240a` команда `git diff --name-only 736c1a1279a244e54b601b8df5c995a7a89b1a7f HEAD -- packages/persistence/src packages/shared/src yarn.lock` завершилась с exit code `0` и пустым выводом.
 - Область Evidence — платформенный набор проверки SQLite store: arm64 нативно и x64 через Rosetta. Это не GUI-прогон и не нативный прогон на Intel Mac; локальная сверка на Linux проверяет соответствие отчётов набору и текущим исходникам, не повторяет macOS-прогон. Эти отчёты сами по себе не завершают всю ручную Verification и не закрывают STEP.
+
+
+
+
+### Исправление F-001 и новые платформенные наборы — 2026-10-26
+
+- Finding `F-001` из `REVIEW-20261026T144242Z.md` (`sha256:05579c55c570bd2a623dbbd8a467f5548d4816ebf7ca7f7ee44bf6ba353495a8`) исправлен в `sqlite-database.ts`: существующая база проверяется read-only до открытия writable-соединения, способного выполнить checkpoint при закрытии. Проверки версии внутри транзакций записи сохранены.
+- Прямой regression-тест `sqlite-manifest-store.test.ts` оставляет подтверждённую новую схему в WAL после завершения дочернего процесса без `close()`. До исправления тест завершился с exit code `1` из-за изменения байтов основной базы; после исправления команда `node node_modules/vitest/vitest.mjs run packages/persistence/src/sqlite-manifest-store.test.ts` завершилась с exit code `0`, 25 тестов PASS. Сценарий `newer_schema` в платформенном checker также проверяет сохранность основной базы и sidecars при таком отказе.
+- Свежий Linux x64 прогон на официальном Node.js `22.14.0`: `node node_modules/vitest/vitest.mjs run --project @music-downloader/persistence` — exit code `0`, 15 файлов / 117 тестов PASS; `node packages/persistence/platform-check/check.mjs --report-dir .harness/local/tmp/exec-ca3dead9d60b4067b6d2a2be4e050da2` — exit code `0`, все 10 проверок PASS. Отчёт сохранён в `packages/persistence/platform-check/reports/report-linux-x64-node22.json`; его SHA-256 `6dcbab1dfaa95de9ddbbd0668b056a7000749cf148016b2f919a0edcf0dd89c6`. Формат отчёта не включает дату, поэтому байты совпадают с прежним Linux-отчётом; свежий прогон подтверждён командами выше.
+- Команда `python3 packages/persistence/platform-check/build-kit.py --self-check-root /tmp` завершилась с exit code `0`. Оба распакованных архива прошли все 10 проверок локальным Linux Node.js. Общий `buildId=20261026T144624Z-098947c0eb32`, `treeClean=false`, SHA-256 `dist=07b49aa37e0a320eef6cced3f1751dd3ddd6934dd115be7f72b88719315410a1`, `yarn.lock=ad1cca929594ca580914e68e77bfdffc0ed1587da0ab6ea6fcf08292e81b944b`.
+- Архивы находятся в `.cache/platform-check/`: Windows x64 — SHA-256 `df424532592740f1137ff3463b475ffbc921cdd5080045b5b177c755dd76b92f`; macOS — SHA-256 `905854fb05458d783041ca90617d8b1c629ace654157476180a5f2c1b88f26e2`.
+- После явного разрешения пользователя оба архива скопированы в `/home/user/Документы/vbox_shared/`; `sha256sum` копий совпал с указанными значениями, exit code `0`.
+- Отчёты Windows/macOS от 17 и 19 октября остаются историческим Evidence прежней сборки и не подтверждают исправленный `dist`. Для завершения текущей Verification нужны новые `report-win32-x64.json`, `report-darwin-arm64.json` и `report-darwin-x64-rosetta.json` (либо x64 с Intel Mac) с указанным новым `buildId`. Linux-самопроверка архивов не заменяет эти прогоны.
+
+
+### macOS после исправления F-001 — Evidence зафиксировано 2026-10-27
+
+- Пользователь передал новые `report-darwin-arm64.json` и `report-darwin-x64-rosetta.json`; файлы сохранены побайтно в `packages/persistence/platform-check/reports/`. SHA-256 arm64: `22dd530e5675ddbc2d44d60870efb39a0a02765d3e93a6deccf73cfff8d7ac00`; x64 Rosetta: `98af135387cabc9af9c37d8d248d36188176787115c70e8020b05f1658d44980`. Дата выше — дата фиксации Evidence; точная дата запуска и exit code не указаны в JSON.
+- Оба отчёта показывают `PASS` всех 10 проверок, включая обновлённый `newer_schema` с аварийным WAL. arm64: `platform=darwin`, `arch=arm64`, `proc_translated=false`; x64 Rosetta: `platform=darwin`, `arch=x64`, `proc_translated=true`. В обоих Node.js `24.21.0`, SQLite `3.53.4`, `better-sqlite3 13.0.3`.
+- Локальная сверка Python `zipfile`/`hashlib` завершилась с exit code `0`: `kitManifest` обоих отчётов полностью совпал с manifest нового macOS-архива, `buildId=20261026T144624Z-098947c0eb32`. Байты `dist` persistence/shared и `check.mjs` в архиве совпали с текущими файлами, SHA-256 `dist=07b49aa37e0a320eef6cced3f1751dd3ddd6934dd115be7f72b88719315410a1`, текущий `yarn.lock` соответствует manifest.
+- Это принятие переданных отчётов и проверка их соответствия новой сборке, не повторный macOS-прогон на Linux. Для завершения ручной Verification остаётся Windows x64 с этим же новым `buildId`; старый Windows-отчёт относится к сборке до F-001 и не заменяет новый.
+
+### Windows x64 после исправления F-001 — Evidence зафиксировано 2026-10-27
+
+- Пользователь передал `report-win32-x64.json` из общей папки VirtualBox; файл сохранён побайтно в `packages/persistence/platform-check/reports/`. SHA-256: `52964ab5e5df29a8748200cb13ce627f14a8337cf4ef38c6f6305d378938c54f`. Дата выше — дата фиксации Evidence; точная дата запуска и exit code в JSON не указаны.
+- Итог `PASS`: `platform=win32`, `arch=x64`, `proc_translated=false`, binding `prebuilds/win32-x64`, Node.js `24.21.0`, SQLite `3.53.4`, `better-sqlite3 13.0.3`. Все 9 применимых проверок PASS, включая обновлённый `newer_schema` с аварийным WAL; `posix_permissions=SKIP` ожидаемо для Windows.
+- Сверка Python `zipfile`/`hashlib` завершилась с exit code `0`: `kitManifest` совпал с manifest Windows-архива, `buildId=20261026T144624Z-098947c0eb32`. Байты `dist` persistence/shared и checker в архиве совпали с текущими файлами; хеши `dist` и `yarn.lock` соответствуют manifest. Оба ранее принятых macOS-отчёта относятся к этой же исправленной сборке.
+- Это принятие переданного Windows-отчёта с проверкой его соответствия сборке, не повторный Windows-прогон на Linux. Вместе с новыми macOS-отчётами и локальным Linux-прогоном получены платформенные Evidence после исправления F-001; итог Verification устанавливает dispatcher, независимое повторное REVIEW ещё требуется.
+
 
 ## Blocker / Failure reason
 

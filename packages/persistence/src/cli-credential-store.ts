@@ -6,6 +6,17 @@ import {
 } from '@music-downloader/shared';
 
 export const CLI_CREDENTIAL_SERVICE = 'music-downloader.cli.yandex-music';
+export const DESKTOP_CREDENTIAL_SERVICE =
+  'music-downloader.desktop.yandex-music';
+export type CredentialProfile = 'cli' | 'desktop';
+
+/** ADR-015 разделяет авторизацию клиентов, сохраняя прежний namespace CLI. */
+export function credentialService(profile: CredentialProfile = 'cli'): string {
+  return profile === 'desktop'
+    ? DESKTOP_CREDENTIAL_SERVICE
+    : CLI_CREDENTIAL_SERVICE;
+}
+
 export const CLI_CREDENTIAL_ACCOUNT = 'current-user';
 
 export const cliCredentialEntryOptions = {
@@ -18,7 +29,9 @@ export interface NativeCredentialEntry {
   deleteCredential(): boolean;
 }
 
-export type NativeCredentialEntryFactory = () => NativeCredentialEntry;
+export type NativeCredentialEntryFactory = (
+  service: string,
+) => NativeCredentialEntry;
 
 /**
  * Хранит единственную CLI-запись в системном keyring текущего пользователя.
@@ -28,9 +41,12 @@ export class CliCredentialStore implements CredentialStore {
   private readonly entry?: NativeCredentialEntry;
   private readonly initializationError?: DownloadError | PermissionError;
 
-  public constructor(factory: NativeCredentialEntryFactory = defaultEntry) {
+  public constructor(
+    factory: NativeCredentialEntryFactory = createNativeCredentialEntry,
+    profile: CredentialProfile = 'cli',
+  ) {
     try {
-      this.entry = factory();
+      this.entry = factory(credentialService(profile));
     } catch (error) {
       this.initializationError = nativeStoreError(error);
     }
@@ -68,12 +84,11 @@ export class CliCredentialStore implements CredentialStore {
   }
 }
 
-function defaultEntry(): NativeCredentialEntry {
-  return new Entry(
-    CLI_CREDENTIAL_SERVICE,
-    CLI_CREDENTIAL_ACCOUNT,
-    cliCredentialEntryOptions,
-  );
+/** Параметризуемая native-запись; platform fixture использует отдельный test namespace. */
+export function createNativeCredentialEntry(
+  service: string,
+): NativeCredentialEntry {
+  return new Entry(service, CLI_CREDENTIAL_ACCOUNT, cliCredentialEntryOptions);
 }
 
 function nativeStoreError(error: unknown): DownloadError | PermissionError {

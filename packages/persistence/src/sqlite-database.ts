@@ -103,8 +103,9 @@ export function backupStateDatabase(
 }
 
 /**
- * Открывает базу для записи. Порядок важен: user_version читается до любой записи,
- * поэтому база более новой версии не изменяется (без WAL, миграций и копий).
+ * Открывает базу для записи только после read-only проверки совместимости.
+ * Закрытие writable-соединения способно выполнить checkpoint оставшегося WAL,
+ * поэтому отказ новой схеме должен произойти до него (STEP-029, F-001).
  */
 export function openStateDatabase(
   options: StateDatabaseOptions,
@@ -114,6 +115,7 @@ export function openStateDatabase(
   const file = stateDatabasePath(options.stateDir);
   let db: Database.Database | undefined;
   try {
+    inspectStateDatabase(options);
     prepareFiles(options.stateDir, file);
     db = new Database(file, { timeout: busyTimeoutMs });
     db.pragma(`busy_timeout = ${busyTimeoutMs}`);

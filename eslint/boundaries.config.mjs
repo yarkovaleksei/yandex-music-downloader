@@ -75,7 +75,7 @@ const coreNames = [
   'validation',
 ];
 
-/** 15 workspace-пакетов: имя, каталог и группа границ. */
+/** 16 workspace-пакетов: имя, каталог и группа границ. */
 export const workspacePackages = [
   { name: '@music-downloader/shared', dir: 'packages/shared', group: 'shared' },
   ...coreNames.map((name) => ({
@@ -114,6 +114,7 @@ export const workspacePackages = [
     group: 'testing',
   },
   { name: '@music-downloader/cli', dir: 'apps/cli', group: 'app' },
+  { name: '@music-downloader/desktop', dir: 'apps/desktop', group: 'app' },
 ];
 
 /** Префикс имён внутренних пакетов; неизвестное имя с этим префиксом закрыто по умолчанию. */

@@ -1,0 +1,17 @@
+{
+  "status": "FAIL",
+  "platform": "linux",
+  "arch": "x64",
+  "versions": {
+    "electron": "45.0.0",
+    "node": "24.22.0",
+    "napi": "10"
+  },
+  "isolation": {
+    "requireAbsent": true,
+    "processAbsent": true,
+    "ipcRendererAbsent": true,
+    "apiPresent": true
+  },
+  "code": "WINDOW_CAPTURE_FAILED"
+}
