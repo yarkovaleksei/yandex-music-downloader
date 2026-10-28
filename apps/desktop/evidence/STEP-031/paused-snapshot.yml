@@ -1,0 +1,36 @@
+- generic [ref=f4e3]:
+  - complementary [ref=f4e4]:
+    - heading "Yandex Music Downloader" [level=3] [ref=f4e9]
+    - button [ref=f4e10] [cursor=pointer]
+    - button [ref=f4e14] [cursor=pointer]
+    - generic [ref=f4e19] [cursor=pointer]:
+      - switch "Тёмная тема" [ref=f4e22]
+      - generic [ref=f4e25]: Тёмная тема
+    - separator [ref=f4e26]
+    - paragraph [ref=f4e27]: Вы вошли как Тестовый пользователь
+    - button "Выйти" [ref=f4e28] [cursor=pointer]
+  - main [ref=f4e29]:
+    - generic [ref=f4e30]:
+      - generic [ref=f4e31]: Приложение подключено
+      - generic [ref=f4e45]:
+        - heading "Загрузки" [level=1] [ref=f4e46]
+        - article [ref=f4e47]:
+          - generic [ref=f4e48]:
+            - generic [ref=f4e49]:
+              - heading "Плейлист · вечерний-вайб" [level=2] [ref=f4e50]
+              - paragraph [ref=f4e51]: Приостановлено
+            - paragraph [ref=f4e52]: 1 / 4 · 28%
+            - progressbar "Прогресс задания" [ref=f4e53]
+            - paragraph [ref=f4e56]: Трек 1 · Завершено
+            - generic [ref=f4e57]:
+              - paragraph [ref=f4e58]: Трек 2 · Загрузка · 54%
+              - progressbar "Прогресс трека 2" [ref=f4e59]
+              - generic [ref=f4e61]: 5 400 000 байт
+            - paragraph [ref=f4e65]: Трек 3 · В очереди
+            - paragraph [ref=f4e67]: Трек 4 · В очереди
+            - generic [ref=f4e68]:
+              - button "Приостановить" [disabled]
+              - button "Продолжить" [ref=f4e72] [cursor=pointer]
+              - button "Отменить" [ref=f4e70] [cursor=pointer]
+              - button "Повторить" [disabled]
+              - button "Показать в папке" [ref=f4e71] [cursor=pointer]

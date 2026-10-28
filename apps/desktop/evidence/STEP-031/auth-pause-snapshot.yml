@@ -1,0 +1,37 @@
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - heading "Yandex Music Downloader" [level=3] [ref=e9]
+    - button [ref=e10] [cursor=pointer]
+    - button [active] [ref=e14] [cursor=pointer]
+    - generic [ref=e19] [cursor=pointer]:
+      - switch "Тёмная тема" [ref=e22]
+      - generic [ref=e25]: Тёмная тема
+    - separator [ref=e26]
+    - paragraph [ref=e27]: Вы вошли как Тестовый пользователь
+    - button "Выйти" [ref=e28] [cursor=pointer]
+  - main [ref=e29]:
+    - generic [ref=e30]:
+      - generic [ref=e31]: Приложение подключено
+      - alert [ref=e34]:
+        - generic [ref=e38]: "Загрузка приостановлена: требуется повторный вход в аккаунт."
+        - button "Закрыть" [ref=e40] [cursor=pointer]
+      - generic [ref=e54]:
+        - heading "Загрузки" [level=1] [ref=e55]
+        - article [ref=e56]:
+          - generic [ref=e57]:
+            - generic [ref=e58]:
+              - heading "Плейлист · вечерний-вайб" [level=2] [ref=e59]
+              - paragraph [ref=e60]: Приостановлено
+            - paragraph [ref=e61]: 1 / 4 · 25%
+            - progressbar "Прогресс задания" [ref=e62]
+            - paragraph [ref=e64]: "Причина паузы: AUTH_REQUIRED"
+            - paragraph [ref=e66]: Трек 1 · Завершено
+            - paragraph [ref=e68]: Трек 2 · Прервано
+            - paragraph [ref=e70]: Трек 3 · В очереди
+            - paragraph [ref=e72]: Трек 4 · В очереди
+            - generic [ref=e73]:
+              - button "Приостановить" [disabled]
+              - button "Продолжить" [ref=e74] [cursor=pointer]
+              - button "Отменить" [ref=e75] [cursor=pointer]
+              - button "Повторить" [disabled]
+              - button "Показать в папке" [ref=e76] [cursor=pointer]

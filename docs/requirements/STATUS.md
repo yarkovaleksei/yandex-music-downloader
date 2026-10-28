@@ -52,8 +52,8 @@
 | [REQ-046](REQ-046-desk-security.md) | [DESKTOP] Модель безопасности Electron и typed IPC | completed | STEP-028, STEP-030 | sha256:6ed02e4a4013216b80251402ae01afe62f6a6ea194fa6fcd5a4c4c2db3cd7ea3, sha256:df511b2e702d0103758b40eb433c438125d0e5f636fb5452781e416b9a5583c0 |
 | [REQ-047](REQ-047-desk-secure-storage.md) | [DESKTOP] Токен в системном secure storage | completed | STEP-028, STEP-030 | sha256:6ed02e4a4013216b80251402ae01afe62f6a6ea194fa6fcd5a4c4c2db3cd7ea3, sha256:df511b2e702d0103758b40eb433c438125d0e5f636fb5452781e416b9a5583c0 |
 | [REQ-048](REQ-048-ui-stack.md) | [UI] Стек UI и соответствие брендбуку | completed | STEP-030 | sha256:df511b2e702d0103758b40eb433c438125d0e5f636fb5452781e416b9a5583c0 |
-| [REQ-049](REQ-049-ui-url-preview.md) | [UI] Вставка URL и предпросмотр до скачивания | planned | STEP-031 | — |
-| [REQ-050](REQ-050-ui-downloads.md) | [UI] Экран загрузок, прогресс и управление | planned | STEP-031 | — |
+| [REQ-049](REQ-049-ui-url-preview.md) | [UI] Вставка URL и предпросмотр до скачивания | completed | STEP-031 | sha256:b32f182a3913a8c6197682bfe78befd7e5c69b776e68c75fcbae31cef76f8a3c |
+| [REQ-050](REQ-050-ui-downloads.md) | [UI] Экран загрузок, прогресс и управление | completed | STEP-031 | sha256:b32f182a3913a8c6197682bfe78befd7e5c69b776e68c75fcbae31cef76f8a3c |
 | [REQ-051](REQ-051-ui-history.md) | [UI] Экран истории | planned | STEP-032 | — |
 | [REQ-052](REQ-052-ui-settings-account-diag.md) | [UI] Экраны Settings, Account и Diagnostics | planned | STEP-032 | — |
 | [REQ-053](REQ-053-ui-e2e.md) | [UI] End-to-end сценарий desktop | planned | STEP-033 | — |

@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "platform": "linux",
+  "arch": "x64",
+  "browser": "Google Chrome 156.0.8078.73",
+  "viewport": {
+    "width": 1440,
+    "height": 1000
+  },
+  "data": "synthetic mock DesktopApi",
+  "screenshots": {
+    "01-home-empty.png": "b26b3310665b8f072ba148b97d7a3e7ab6f1ed679b5155e687686fde3843db8a",
+    "02-playlist-preview.png": "938f68a110c2ec37307f86b248c478990f90160fe5855a7e1869ddd513abaf29",
+    "03-downloads-created.png": "f415fe0b3a1e02c989248a878f3bf8a16c89ee17990992fd969a91a36aa65437",
+    "03-downloads.png": "ff7aaed8305510b8f520eda8a0a5ae15e79f2fccd07c5167a571672adf8b67b6",
+    "07-home-dark.png": "d4453ed0db0cfb0e1a8200ad908e54116f380ca77a94661e194063f726b92c8a",
+    "08-quality-dialog.png": "2276366a766ad67eb434a07e9ba4f94d6835b94ab4fdea0de512053c1acdeb0a",
+    "09-notification-error.png": "36ed3d383bb6a4f8e60128c76a8d17f3648122c9a283451103200bbc200441d9",
+    "09-notification-success.png": "c516fa107fe927425a3c77f51eeb812bd580271bbf72c6ed6971eeedf6c6b635",
+    "09-notification-auth-pause.png": "f219d841a541506f43867a6edf9ec5f17638c89f31e2817147ef8d27f50086ce"
+  }
+}

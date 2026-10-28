@@ -48,7 +48,7 @@ yarn run format
 yarn run desktop
 ```
 
-- `yarn run desktop` — запускает собранную минимальную Electron-оболочку; перед первым запуском выполните `yarn run build`. Токен desktop хранится в отдельном системном keyring namespace; packaging и полные экраны принадлежат следующим STEP.
+- `yarn run desktop` — запускает Electron-приложение с экранами «Главная» и «Загрузки»: предпросмотр трека, альбома или плейлиста по URL, выбор качества с отображением покрытия и папки, явный запуск загрузки, прогресс, управление заданиями и уведомления из main process; перед первым запуском выполните `yarn run build`. Токен desktop хранится в отдельном системном keyring namespace; полные экраны History/Settings/Account/Diagnostics, packaging и платформенная квалификация остаются за рамками текущей поставки.
 - `yarn run lint` — два независимых прохода ESLint с `--max-warnings 0`: основной (`eslint.config.mjs`, качество кода) и архитектурный (`eslint.boundaries.config.mjs`, границы ADR-001) с `--no-inline-config`, поэтому директива в коде не снимает запрет границ.
 - `yarn run typecheck` — `tsc -b` по root solution (`tsconfig.json`, project references всех пакетов) и отдельная non-composite программа `tsconfig.tests.json`, которая включает все тесты, конфигурации и tooling-файлы TypeScript.
 - `yarn test` — Vitest, отдельный project на каждый workspace и project `tooling` для `eslint/**/*.test.ts`.
