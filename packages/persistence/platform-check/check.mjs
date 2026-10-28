@@ -327,13 +327,36 @@ const checks = {
   async newer_schema() {
     await withStateDir(async (stateDir, open) => {
       const file = path.join(stateDir, 'state.sqlite3');
-      const seed = new Database(file);
-      seed.exec('CREATE TABLE future (value TEXT); PRAGMA user_version = 99;');
-      seed.close();
+      // F-001: новый клиент завершается без close(), сохраняя committed-схему
+      // в WAL; отказ старого клиента не должен выполнить checkpoint (STEP-029).
+      const seed = spawnSync(
+        process.execPath,
+        [
+          '-e',
+          `const Database = require('better-sqlite3');
+           const db = new Database(process.argv[1]);
+           db.pragma('journal_mode = WAL');
+           db.pragma('wal_autocheckpoint = 0');
+           db.exec('CREATE TABLE future (value TEXT); PRAGMA user_version = 99;');
+           db.prepare('INSERT INTO future VALUES (?)').run('saved');
+           process.exit(0);`,
+          file,
+        ],
+        { cwd: here, encoding: 'utf8' },
+      );
+      expect(seed.status === 0, 'SEED_PROCESS');
+      expect(statSync(`${file}-wal`).size > 0, 'SEED_WAL');
       const before = readFileSync(file);
-      const refused = await rejection(open().list());
+      const filesBefore = databaseFiles(stateDir);
+      const store = open();
+      const refused = await rejection(store.list());
+      await store.close();
       expect(refused?.reason === 'STATE_SCHEMA_UNSUPPORTED', 'REFUSAL');
       expect(readFileSync(file).equals(before), 'FILE_CHANGED');
+      expect(
+        databaseFiles(stateDir).join(',') === filesBefore.join(','),
+        'SIDECARS_CHANGED',
+      );
       expect(
         !databaseFiles(stateDir).some((name) => name.includes('.bak')),
         'BACKUP_CREATED',

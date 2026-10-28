@@ -44,12 +44,12 @@
     }
   },
   "kitManifest": {
-    "buildId": "20261016T180517Z-736c1a1279a2",
-    "gitHead": "736c1a1279a244e54b601b8df5c995a7a89b1a7f",
-    "treeClean": true,
+    "buildId": "20261026T144624Z-098947c0eb32",
+    "gitHead": "098947c0eb32ce77326267666cd58bde75f0db33",
+    "treeClean": false,
     "node": "24.21.0",
     "sha256": {
-      "dist": "e234ccf4d6dddb6f96034e554ac085c54c9ea5d7384f95af1db231251822f280",
+      "dist": "07b49aa37e0a320eef6cced3f1751dd3ddd6934dd115be7f72b88719315410a1",
       "yarnLock": "ad1cca929594ca580914e68e77bfdffc0ed1587da0ab6ea6fcf08292e81b944b"
     }
   }

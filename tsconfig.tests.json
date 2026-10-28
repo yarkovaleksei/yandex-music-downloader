@@ -3,7 +3,9 @@
   "compilerOptions": {
     "composite": false,
     "noEmit": true,
-    "types": ["node"]
+    "types": ["node"],
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "jsx": "react-jsx"
   },
   "include": [
     "packages/**/src/**/*.test.ts",
@@ -23,6 +25,10 @@
     "eslint/**/*.ts",
     "eslint/**/*.d.mts",
     "*.d.mts",
-    "vitest.config.ts"
+    "vitest.config.ts",
+    "apps/**/src/**/*.test.tsx",
+    "apps/**/src/**/*.spec.tsx",
+    "apps/desktop/src/**/*.tsx",
+    "apps/desktop/src/renderer/global.d.ts"
   ]
 }

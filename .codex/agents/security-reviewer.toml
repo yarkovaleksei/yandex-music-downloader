@@ -1,10 +1,10 @@
 # Модель, используемая этой ролью.
-# Пример: "gpt-6-astra". Security review требует adversarial reasoning; экономить effort здесь не рекомендуется.
-model = "gpt-6-astra"
+# Пример: "gpt-6.1-sol". Security review требует adversarial reasoning; экономить effort здесь не рекомендуется.
+model = "gpt-6.1-sol"
 
 # Reasoning effort роли.
-# Пример: "max" для adversarial quality-first security review. Допустимые значения зависят от выбранной модели/Codex runtime.
-model_reasoning_effort = "max"
+# Пример: "high" для adversarial quality-first security review. Допустимые значения зависят от выбранной модели/Codex runtime.
+model_reasoning_effort = "high"
 
 # Доступ агента к файловой системе проекта.
 # Пример: "read-only". Read-only: security reviewer фиксирует findings, но не скрыто исправляет их.

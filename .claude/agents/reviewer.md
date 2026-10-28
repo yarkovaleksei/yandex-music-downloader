@@ -2,7 +2,7 @@
 name: reviewer
 description: Independently review a completed implementation for correctness, regressions, architecture and missing tests.
 model: opus
-effort: max
+effort: high
 permissionMode: plan
 ---
 

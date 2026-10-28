@@ -20,7 +20,8 @@
     "format:check": "prettier --check --ignore-path .prettierignore apps packages eslint \"*.{json,mjs,ts,mts}\" .yarnrc.yml docs/development.md",
     "test": "vitest run",
     "test:provider": "node packages/providers/yandex-music/test-live/run.mjs",
-    "build": "tsc -b"
+    "build": "tsc -b && node apps/desktop/scripts/build.mjs",
+    "desktop": "node apps/desktop/scripts/start.mjs"
   },
   "devDependencies": {
     "@eslint-community/eslint-plugin-eslint-comments": "4.8.1",

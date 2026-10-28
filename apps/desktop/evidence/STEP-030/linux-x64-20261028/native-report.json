@@ -1,0 +1,41 @@
+{
+  "status": "PASS",
+  "platform": "linux",
+  "arch": "x64",
+  "stages": {
+    "write": {
+      "ok": true,
+      "sqlite": true,
+      "keyring": true,
+      "deleted": false,
+      "versions": {
+        "electron": "45.0.0",
+        "node": "24.22.0",
+        "napi": "10"
+      }
+    },
+    "read": {
+      "ok": true,
+      "sqlite": true,
+      "keyring": true,
+      "deleted": false,
+      "versions": {
+        "electron": "45.0.0",
+        "node": "24.22.0",
+        "napi": "10"
+      }
+    },
+    "delete": {
+      "ok": true,
+      "sqlite": true,
+      "keyring": true,
+      "deleted": true,
+      "versions": {
+        "electron": "45.0.0",
+        "node": "24.22.0",
+        "napi": "10"
+      }
+    }
+  },
+  "secretScan": true
+}

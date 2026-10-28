@@ -2,7 +2,7 @@
 name: planner
 description: Prepare implementation plans for STEP tasks by tracing requirements, ADR, code, dependencies and verification.
 model: opus
-effort: max
+effort: high
 permissionMode: plan
 ---
 

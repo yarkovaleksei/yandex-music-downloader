@@ -51,10 +51,10 @@ function discoverPackageDirs(): string[] {
 }
 
 describe('workspace', () => {
-  it('обнаружены ровно 15 пакетов, совпадающих с таблицей по имени и каталогу', () => {
+  it('обнаружены ровно 16 пакетов, совпадающих с таблицей по имени и каталогу', () => {
     const discovered = discoverPackageDirs();
     expect(discovered).toEqual(workspacePackages.map((p) => p.dir).sort());
-    expect(discovered).toHaveLength(15);
+    expect(discovered).toHaveLength(16);
     for (const pkg of workspacePackages)
       expect(manifest(pkg.dir).name).toBe(pkg.name);
   });
@@ -266,14 +266,17 @@ describe('тестовые globs: единый источник', () => {
 
   it('tsconfig exclude/include пакетов совпадают с развёрнутыми globs', () => {
     for (const pkg of workspacePackages) {
+      const extensions = pkg.dir === 'apps/desktop' ? ['ts', 'tsx'] : ['ts'];
       expect(json(`${pkg.dir}/tsconfig.json`).exclude, pkg.dir).toEqual(
-        expanded,
+        pkg.dir === 'apps/desktop'
+          ? expandTestGlobs('src', extensions)
+          : expanded,
       );
-      expect(json(`${pkg.dir}/tsconfig.json`).include, pkg.dir).toEqual([
-        'src/**/*.ts',
-      ]);
+      expect(json(`${pkg.dir}/tsconfig.json`).include, pkg.dir).toEqual(
+        extensions.map((extension) => `src/**/*.${extension}`),
+      );
       expect(json(`${pkg.dir}/tsconfig.test.json`).include, pkg.dir).toEqual(
-        expandTestIncludeGlobs('src', ['ts']),
+        expandTestIncludeGlobs('src', extensions),
       );
     }
   });
@@ -319,7 +322,11 @@ describe('тестовые globs: единый источник', () => {
     for (const project of projects ?? []) {
       if (project.test.name !== 'tooling') {
         expect(project.test.include).toEqual(
-          testFileSuffixes.map((s) => `src/**/*.${s}.ts`),
+          testFileSuffixes.flatMap((s) =>
+            project.test.name === '@music-downloader/desktop'
+              ? [`src/**/*.${s}.ts`, `src/**/*.${s}.tsx`]
+              : [`src/**/*.${s}.ts`],
+          ),
         );
       }
     }

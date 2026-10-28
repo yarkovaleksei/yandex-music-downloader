@@ -14,7 +14,10 @@ import { sharedIgnores } from './eslint/ignores.mjs';
  */
 export function createQualityConfig(rootDirectory) {
   const testGlobs = expandTestGlobs('**');
-  const productionFiles = ['packages/**/src/**/*.ts', 'apps/*/src/**/*.ts'];
+  const productionFiles = [
+    'packages/**/src/**/*.ts',
+    'apps/*/src/**/*.{ts,tsx}',
+  ];
   return tseslint.config(
     { ignores: sharedIgnores },
     js.configs.recommended,

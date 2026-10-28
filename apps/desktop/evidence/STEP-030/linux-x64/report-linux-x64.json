@@ -1,0 +1,70 @@
+{
+  "schema": 1,
+  "kitManifest": null,
+  "status": "FAIL",
+  "platform": "linux",
+  "arch": "x64",
+  "build": {
+    "exitCode": 0,
+    "sourceHash": "de945e35bda0b0aa56e3a132ba6293787778b31f7201fe2751ab36f785f87c83",
+    "outputHash": "3603732633257866d1c76da634b24bf4dbf2089391b7e3c0ffa9e07a70b8a246"
+  },
+  "native": {
+    "status": "PASS",
+    "platform": "linux",
+    "arch": "x64",
+    "stages": {
+      "write": {
+        "ok": true,
+        "sqlite": true,
+        "keyring": true,
+        "deleted": false,
+        "versions": {
+          "electron": "45.0.0",
+          "node": "24.22.0",
+          "napi": "10"
+        }
+      },
+      "read": {
+        "ok": true,
+        "sqlite": true,
+        "keyring": true,
+        "deleted": false,
+        "versions": {
+          "electron": "45.0.0",
+          "node": "24.22.0",
+          "napi": "10"
+        }
+      },
+      "delete": {
+        "ok": true,
+        "sqlite": true,
+        "keyring": true,
+        "deleted": true,
+        "versions": {
+          "electron": "45.0.0",
+          "node": "24.22.0",
+          "napi": "10"
+        }
+      }
+    },
+    "secretScan": true
+  },
+  "window": {
+    "status": "FAIL",
+    "platform": "linux",
+    "arch": "x64",
+    "versions": {
+      "electron": "45.0.0",
+      "node": "24.22.0",
+      "napi": "10"
+    },
+    "isolation": {
+      "requireAbsent": true,
+      "processAbsent": true,
+      "ipcRendererAbsent": true,
+      "apiPresent": true
+    },
+    "code": "WINDOW_CAPTURE_FAILED"
+  }
+}

@@ -2,7 +2,7 @@
 name: architect
 description: Analyze durable architectural decisions, trade-offs, boundaries and ADR needs.
 model: opus
-effort: max
+effort: high
 permissionMode: plan
 ---
 

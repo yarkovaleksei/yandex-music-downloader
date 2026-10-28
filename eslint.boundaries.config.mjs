@@ -5,10 +5,16 @@
 import tseslint from 'typescript-eslint';
 import { sourceExtensions } from './eslint/boundaries.config.mjs';
 import boundaries from './eslint/boundaries-plugin.mjs';
+import desktopIpc from './eslint/desktop-ipc-rule.mjs';
 import { sharedIgnores } from './eslint/ignores.mjs';
 
 export default [
   { ignores: sharedIgnores },
+  {
+    files: ['apps/desktop/src/**/*.{ts,tsx,mjs}'],
+    plugins: { desktop: { rules: { ipc: desktopIpc } } },
+    rules: { 'desktop/ipc': 'error' },
+  },
   {
     files: [`**/*.{${sourceExtensions.join(',')}}`],
     plugins: { boundaries },
