@@ -1,10 +1,10 @@
 # Модель, используемая этой ролью.
-# Пример: "gpt-6-astra". Bootstrap требует связать идею, REQ, архитектуру и roadmap, поэтому default quality-first.
-model = "gpt-6-astra"
+# Пример: "gpt-6.1-sol". Bootstrap требует связать идею, REQ, архитектуру и roadmap, поэтому default quality-first.
+model = "gpt-6.1-sol"
 
 # Reasoning effort роли.
-# Пример: "max" для quality-first bootstrap. Допустимые значения зависят от выбранной модели/Codex runtime.
-model_reasoning_effort = "max"
+# Пример: "high" для quality-first bootstrap. Допустимые значения зависят от выбранной модели/Codex runtime.
+model_reasoning_effort = "high"
 
 # Доступ агента к файловой системе проекта.
 # Пример: "workspace-write". Workspace-write нужен только для bootstrap/documentation/planning, production code запрещён инструкцией.

@@ -1,10 +1,10 @@
 # Модель, используемая этой ролью.
-# Пример: "gpt-6-astra". Reviewer получает сильную модель, потому что поиск скрытых дефектов сложнее механической реализации.
-model = "gpt-6-astra"
+# Пример: "gpt-6.1-sol". Reviewer получает сильную модель, потому что поиск скрытых дефектов сложнее механической реализации.
+model = "gpt-6.1-sol"
 
 # Reasoning effort роли.
-# Пример: "max" для quality-first independent review. Допустимые значения зависят от выбранной модели/Codex runtime.
-model_reasoning_effort = "max"
+# Пример: "high" для quality-first independent review. Допустимые значения зависят от выбранной модели/Codex runtime.
+model_reasoning_effort = "high"
 
 # Доступ агента к файловой системе проекта.
 # Пример: "read-only". Read-only поддерживает независимость review от автора изменений.

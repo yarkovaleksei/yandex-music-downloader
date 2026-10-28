@@ -2,7 +2,7 @@
 name: initializer
 description: Bootstrap a new project from PROJECT_BRIEF.local.md into requirements, architecture, ADR and roadmap.
 model: opus
-effort: max
+effort: high
 permissionMode: default
 ---
 

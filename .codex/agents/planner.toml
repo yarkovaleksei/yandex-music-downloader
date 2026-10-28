@@ -1,10 +1,10 @@
 # Модель, используемая этой ролью.
-# Пример: "gpt-6-astra". Planner должен проследить dependencies/REQ/ADR/risks до mutation.
-model = "gpt-6-astra"
+# Пример: "gpt-6.1-sol". Planner должен проследить dependencies/REQ/ADR/risks до mutation.
+model = "gpt-6.1-sol"
 
 # Reasoning effort роли.
-# Пример: "max" для quality-first planning. Допустимые значения зависят от выбранной модели/Codex runtime.
-model_reasoning_effort = "max"
+# Пример: "high" для quality-first planning. Допустимые значения зависят от выбранной модели/Codex runtime.
+model_reasoning_effort = "high"
 
 # Доступ агента к файловой системе проекта.
 # Пример: "read-only". Read-only гарантирует отделение planning от implementation.

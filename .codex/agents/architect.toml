@@ -1,10 +1,10 @@
 # Модель, используемая этой ролью.
-# Пример: "gpt-6-astra". Архитектурный анализ требует сильной модели и повышенного reasoning.
-model = "gpt-6-astra"
+# Пример: "gpt-6.1-sol". Архитектурный анализ требует сильной модели и повышенного reasoning.
+model = "gpt-6.1-sol"
 
 # Reasoning effort роли.
-# Пример: "max" для quality-first architecture analysis. Допустимые значения зависят от выбранной модели/Codex runtime.
-model_reasoning_effort = "max"
+# Пример: "high" для quality-first architecture analysis. Допустимые значения зависят от выбранной модели/Codex runtime.
+model_reasoning_effort = "high"
 
 # Доступ агента к файловой системе проекта.
 # Пример: "read-only". Read-only: архитектор не должен сам воплощать решение в код.
