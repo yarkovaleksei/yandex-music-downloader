@@ -16,7 +16,7 @@ adrs:
 
 ## Requirement
 
-Любой импорт `@dvxch/yandex-music` и знание endpoint'ов Яндекс Музыки разрешены только внутри `packages/providers/yandex-music`. Нарушение границы блокируется ESLint boundary rule в CI.
+Любой импорт `@dvxch/yandex-music` и знание endpoint'ов Яндекс Музыки разрешены только внутри `packages/providers/yandex-music`. Нарушение границы блокируется ESLint boundary rule при локальном запуске lint.
 
 ## Rationale
 

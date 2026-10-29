@@ -21,12 +21,19 @@
     "test": "vitest run",
     "test:provider": "node packages/providers/yandex-music/test-live/run.mjs",
     "build": "tsc -b && node apps/desktop/scripts/build.mjs",
-    "desktop": "node apps/desktop/scripts/start.mjs"
+    "desktop": "node apps/desktop/scripts/start.mjs",
+    "package:local": "node apps/desktop/scripts/package.mjs --local",
+    "package:verify": "node apps/desktop/scripts/verify-package.mjs",
+    "package:smoke": "node apps/desktop/scripts/package-smoke.mjs",
+    "package:update-smoke": "node apps/desktop/scripts/package-update-smoke.mjs"
   },
   "devDependencies": {
+    "@electron/asar": "3.4.1",
+    "@electron/fuses": "1.8.0",
     "@eslint-community/eslint-plugin-eslint-comments": "4.8.1",
     "@eslint/js": "9.39.5",
     "@types/node": "22.20.5",
+    "electron-builder": "26.18.1",
     "eslint": "9.39.5",
     "globals": "16.5.0",
     "prettier": "3.9.9",

@@ -1,6 +1,6 @@
 # Разработка
 
-Документ описывает фактический toolchain, созданный STEP-001 по ADR-001 (слои и границы) и ADR-008 (Yarn workspaces). CI описан в разделе «CI/CD» (STEP-002). Desktop workspace STEP-030 собирает main/application host через TypeScript, renderer через Vite, а sandbox preload — в один CommonJS bundle через esbuild.
+Документ описывает фактический toolchain, созданный STEP-001 по ADR-001 (слои и границы) и ADR-008 (Yarn workspaces). Локальная политика проверок описана в разделе «CI/CD». Desktop workspace STEP-030 собирает main/application host через TypeScript, renderer через Vite, а sandbox preload — в один CommonJS bundle через esbuild.
 
 ## Prerequisites
 
@@ -54,6 +54,83 @@ yarn run desktop
 - `yarn test` — Vitest, отдельный project на каждый workspace и project `tooling` для `eslint/**/*.test.ts`.
 - `yarn run build` — `tsc -b`, затем сборка desktop preload через esbuild и renderer через Vite; результат в `dist/` каждого пакета и приложения (игнорируется Git).
 - `yarn run format` / `yarn run format:check` — Prettier для `apps`, `packages`, `eslint`, корневых конфигураций, `.yarnrc.yml` и этого файла. Остальные документы, Harness и `planning/` не форматируются автоматически.
+
+### Локальная упаковка desktop — STEP-035
+
+Текущая упаковка выполняется только на Linux по [ADR-019](adr/ADR-019-portable-distribution-and-updates.md) и [STEP-036](../planning/tasks/STEP-036.md); исторические результаты STEP-035 сохранены ниже. Нужны Node.js/Yarn из Prerequisites и установленные зависимости (`yarn install --immutable`). Если Wine отсутствует, скрипт автоматически собирает закреплённый Linux build image и запускает упаковку через Docker; в этом случае нужен доступный Docker daemon. Docker нужен и для чистого Linux smoke. Для извлечения и проверки дистрибутивов установите `7z`, `unzip` и `unsquashfs`. ImageMagick не требуется. При первой сборке нужен сетевой доступ для загрузки сборочных инструментов и Electron.
+
+Из корня репозитория выполните:
+
+```sh
+node packages/testing/scripts/run-yarn.mjs run package:local
+node packages/testing/scripts/run-yarn.mjs run package:verify
+node packages/testing/scripts/run-yarn.mjs run package:smoke --check
+```
+
+`package:local` использует electron-builder 26.18.1 и собирает сразу четыре дистрибутива с локальной версией `0.0.0`: AppImage Linux x64, portable ZIP Windows x64 и отдельные `.app.zip` macOS arm64/x64. Они сохраняются в `.cache/desktop-packaging/local-0.0.0/` в каталогах `linux-x64`, `win32-x64`, `darwin-arm64`, `darwin-x64`. Сборка не подписывает и не публикует артефакты; manifest содержит `signed: false`, `published: false`, `tag: null`.
+
+Отдельный режим `node apps/desktop/scripts/package.mjs --tag v1.2.3` берёт версию из существующего Git-тега, требует его соответствия `HEAD` и чистого рабочего дерева. Команда сама не создаёт тег, не подписывает и не публикует сборку. Локальный запуск `package:local` не требует релизного тега.
+
+`package:verify` извлекает содержимое всех четырёх артефактов и проверяет полноту production-зависимостей, целевые архитектуры native-модулей, версию, shipping fuses, ASAR integrity и актуальность хешей исходных файлов. Исторический PASS STEP-035 получен для прежнего набора AppImage/NSIS/macOS ZIP; он не переносится на текущие portable-пакеты STEP-036 и не заменяет запуск на соответствующей ОС.
+
+`package:smoke -- --check` запускает извлечённый AppImage в новом контейнере Ubuntu 24.04 без установленных Node.js/FFmpeg, с сетью `none` и отдельными HOME/state/userData. Проверка пишет только в игнорируемый кеш. `node packages/testing/scripts/run-yarn.mjs run package:smoke` дополнительно сохраняет долговременные PNG/JSON в `apps/desktop/evidence/STEP-035/`. Подтверждены `uiReady: true`, четыре проверки изоляции и заголовок SQLite; [снимок окна](../apps/desktop/evidence/STEP-035/linux-window.png) показывает интерфейс и жёлтую иконку приложения.
+
+Ограничения: извлечённый запуск не проверяет FUSE и desktop integration; Docker smoke использует `--no-sandbox`. В контейнере нет Secret Service, поэтому видимое системное предупреждение ожидаемо; вход в аккаунт не проверен. Успешная Linux-проверка не доказывает нативный запуск Windows/macOS. Исторический FAIL macOS x64/Rosetta остаётся нерешённым и проверяется в финальном STEP-054. Текущий сборщик уже выбирает portable Windows ZIP вместо NSIS; свежие результаты сборки всех четырёх целей и Linux N → N+1 в STEP-036 ещё не зафиксированы. Нативная приёмка Windows/macOS относится к STEP-054. Готовность релиза этими результатами не заявляется.
+
+### Проверенные portable-обновления — STEP-036
+
+В «Настройках» доступны «Проверить обновления», затем «Скачать обновление» и «Открыть папку с обновлением». Проверка и скачивание выполняются только по явному действию пользователя. Main проверяет detached Ed25519-подпись точных байтов описания релиза до разбора JSON, более новую SemVer-версию без build metadata, канал, ОС/архитектуру, HTTPS и доверенные origins, включая перенаправления. При скачивании проверяются фактические размер и SHA-256; неполный `.part` удаляется, готовым становится только проверенный файл. Перед открытием папки размер и хеш проверяются повторно. Renderer не задаёт URL, путь или ключ.
+
+Публичная конфигурация находится в `apps/desktop/packaging/update-trust.json` и при сборке включается в production ASAR; её хеш входит в manifest inputs. Сейчас `feedBaseUrl` и `publicKey` равны `null`, `origins` пуст, `channel` — `stable`: проверка явно сообщает, что обновления не настроены. Production feed ещё не задан. Для подготовки выпуска автор задаёт HTTPS `feedBaseUrl`, открытый Ed25519-ключ в PEM/SPKI, разрешённые origins вида `https://downloads.example.org` и канал, затем пересобирает приложение. Это доверие задаётся сборкой, а не renderer, переменными окружения или сетевым ответом. Ключ из feed не принимается автоматически.
+
+Ключ подписи создаётся один раз на Linux после сборки проекта, при доступном разблокированном системном Secret Service:
+
+```sh
+node packages/testing/scripts/run-yarn.mjs run build
+node apps/desktop/scripts/release-update.mjs init-key
+```
+
+Команда печатает только открытый ключ для `publicKey`; повторный вызов использует существующий ключ. Закрытый Ed25519-ключ хранится через native credential store в namespace `music-downloader.release.update-signing`. Команда не принимает его файлом или аргументом и при недоступности хранилища завершается ошибкой без plaintext fallback. Закрытый ключ не копируют в репозиторий, пакет, журналы или Evidence.
+
+Для каждой цели готовится отдельный `latest.json`. Адрес проверки: `<feedBaseUrl>/<channel>/<target>/latest.json`; рядом ожидается `latest.json.sig` с 64 байтами бинарной detached-подписи. Допустимые `target`: `linux-x64`, `win32-x64`, `darwin-arm64`, `darwin-x64`. Описание содержит ровно следующие поля (пример требует замены URL, размера и хеша на данные окончательного пакета):
+
+```json
+{
+  "schemaVersion": 1,
+  "version": "1.2.3",
+  "channel": "stable",
+  "target": "linux-x64",
+  "url": "https://downloads.example.org/music-downloader-1.2.3.AppImage",
+  "size": 123456789,
+  "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+}
+```
+
+`size` — целое положительное число байт до 2 147 483 648; `sha256` — 64 строчных шестнадцатеричных символа. Канал и цель должны совпадать со встроенной конфигурацией и текущим приложением; URL пакета и feed, а также каждый redirect должны оставаться на разрешённых HTTPS origins. Подписывается готовый файл, после подписи его байты не меняют:
+
+```sh
+node apps/desktop/scripts/release-update.mjs sign /путь/к/latest.json
+```
+
+Результат — `/путь/к/latest.json.sig`. HTTPS-размещение пакета, описания и подписи выполняется отдельно: эти команды не публикуют релиз, не создают Git-теги и не настраивают хостинг. `signed: false` в packaging manifest означает отсутствие системной подписи приложения; собственная подпись descriptor создаётся отдельной командой.
+
+После получения проверенного пакета:
+
+1. Нажмите «Открыть папку с обновлением» и полностью закройте приложение.
+2. На Windows распакуйте ZIP и замените каталог приложения целиком; на macOS распакуйте ZIP подходящей архитектуры и замените `.app`; на Linux замените AppImage и разрешите исполнение нового файла (`chmod +x /путь/к/приложению.AppImage`): скачанный файл создаётся с приватными правами `0600`.
+3. Запустите новую версию. Сохраняйте общий каталог состояния, папку аудио и системное хранилище credentials: portable означает отсутствие установщика, а не хранение SQLite или секретов рядом с executable.
+
+Автоматическая установка, замена или запуск скачанного пакета, фоновое скачивание, electron-updater/Squirrel отсутствуют. Платные сертификаты и Apple notarization не требуются постоянно, по ADR-019. Собственная Ed25519-подпись подтверждает соответствие ключу автора, но не доверие Apple/Microsoft к издателю. Предупреждения ОС допустимы; отказ доступа к macOS Keychain может потребовать повторной авторизации без plaintext fallback. После forward-only миграции SQLite старый клиент безопасно отказывает; ручная замена не является откатом базы.
+
+Для локальной Linux-проверки двух явно проверочных версий после сборки и проверки `0.0.0` выполните:
+
+```sh
+node apps/desktop/scripts/package.mjs --local-version 0.0.1 --linux-only
+node apps/desktop/scripts/verify-package.mjs .cache/desktop-packaging/local-0.0.1 --linux-only
+node apps/desktop/scripts/package-update-smoke.mjs --check
+```
+
+Обычный `package:verify` требует все четыре цели; явный каталог с `--linux-only` проверяет manifest только с Linux. Режим `--local-version` пишет в `.cache/desktop-packaging/local-0.0.1/`, не создаёт тег и не публикует пакет. Update smoke использует готовые приложения `0.0.0` и `0.0.1`, временный тестовый Ed25519-ключ и отдельный HTTPS fixture CA; production trust он не настраивает. Скачанный проверенный AppImage извлекается для ручной замены между запусками в контейнере с общим SQLite state; проверяются версии и сохранение настроек. `--check` оставляет результат в игнорируемом кеше; запуск без него сохраняет отчёт и снимки в `apps/desktop/evidence/STEP-036/`. Ограничения: `--no-sandbox`, без FUSE/desktop integration, авторизации и нативного запуска Windows/macOS. Свежий прогон STEP-036 прошёл: готовые приложения 0.0.0 → 0.0.1 запущены, собственная подпись/HTTPS download проверены, после ручной замены сохранены настройки и SQLite. [Отчёт и снимки](../apps/desktop/evidence/STEP-036/README.md).
 
 ### Проверка provider на реальном API
 
@@ -129,7 +206,7 @@ Boundary-проход директивы не принимает вообще. E
 
 Текущие offline-тесты проверяют readback Unicode-тегов и artwork на синтетических MP3, MP4/AAC и MP4/FLAC ([metadata](../packages/metadata/src/index.test.ts)), TTL, смену account/schema, чтение cache после restart и прямое делегирование variants/stream ([cache integration](../packages/application/src/cache.integration.test.ts)). [Baseline integration](../packages/application/src/baseline-no-subprocess.integration.test.ts) завершает загрузку с default production validator при запрете внешнего decoder; тест разрешает только отдельные process-identity probes и не доказывает отсутствие любых subprocess во всём приложении. [CLI crash/resume integration](../apps/cli/src/headless.integration.test.ts) использует новый процесс и реальный SQLite store с offline provider. Эти проверки не заменяют real API и native platform evidence.
 
-Electron E2E [STEP-033](../planning/tasks/STEP-033.md) запускается отдельно от unit/integration-тестов. Из корня репозитория с установленными workspace dependencies:
+Electron E2E [STEP-033](../planning/tasks/STEP-033.md) запускается отдельно от unit/integration-тестов. Из корня репозитория на Linux с установленными workspace dependencies:
 
 ```sh
 npm --prefix apps/desktop/e2e ci --ignore-scripts --workspaces=false
@@ -141,7 +218,44 @@ node apps/desktop/e2e/run.mjs
 
 UX-проверка [STEP-056](../planning/tasks/STEP-056.md) использует большой синтетический список и обычное, широкое и низкое окно; screenshots и наблюдения находятся в [evidence STEP-056](../apps/desktop/evidence/STEP-056/README.md). Проверки сохранности очереди и разделения desktop/CLI диагностики выполняются unit/integration-тестами; screenshots не заменяют эти доказательства.
 
-Локальный Linux прогон Electron E2E STEP-033 завершился PASS. Для Acceptance STEP-033 ещё нужны фактический Linux CI PASS и нативные подтверждения на Windows/macOS; они остаются pending. Этот локальный результат не закрывает packaging и прочие platform gates.
+Локальный Linux Electron E2E STEP-033 повторно прошёл 2026-10-29, в том числе внутри canonical Verification: подтверждены итоговый MP3 и History после перезапуска. Предыдущий отказ при ожидании предпросмотра не воспроизведён; причина не установлена, исправление кода не заявляется. Нативные [отчёты готового приложения](../apps/desktop/e2e/evidence/native-20261029/README.md) подтверждают Windows x64 и macOS arm64: MP3 50 785 байт, тот же job в History после restart, integrity и неизменность готовых файлов PASS; сборка в гостевой ОС не выполнялась. Последний ARM64 прогон нового офлайнового набора прошёл на M2 Pro без Rosetta; предыдущий ранний отказ запуска сохранён, причина не установлена. [Привязка артефакта](../apps/desktop/e2e/evidence/native-20261029/ready-artifact-binding.json) содержит хеши текущих dist/package, сценария и prebuilt host. macOS x64/Rosetta остаётся неподтверждённой; её FAIL не объявлен исправленным. Все новые Windows/macOS прогоны перенесены в единый финальный STEP-054 после разработки и упаковки. CI-приёмка решением владельца отменена. Packaging и прочие platform gates сохраняются.
+
+## Финальная проверка Windows и macOS — STEP-054
+
+Решением владельца от 2026-10-29 все новые Windows/macOS прогоны выполняются одним самым последним STEP-054 после разработки, упаковки и механизмов проверенных portable-обновлений. STEP-054 зависит от STEP-034/035/036; при добавлении новой работы он должен зависеть и от неё. До финального шага отсутствие доступа к Windows/Mac не блокирует промежуточные STEP: обязательные проверки выполняются на Linux. На целевых ОС проверяются только готовые Linux-сборки.
+
+Финальная приёмка включает Windows x64 и macOS arm64/x64: portable-запуск без установщика, офлайновый E2E с файлом и историей после restart, собственную подпись descriptor и ручное обновление N → N+1. В отчётах фиксируются build ID, revision, хеши, ОС/CPU/runtime/Rosetta. Она остаётся условием готовности релиза. До её начала новые архивы другу для проверки не передаются.
+
+### Историческая инструкция прежнего x64 набора
+
+Ниже сохранена прежняя инструкция, а не задание нового прогона и не утверждение об исправлении. Архив `20261029T093752Z-9f44abe6` остаётся прежним.
+
+Это готовое приложение и заранее собранный на Linux тестовый host. Набор восстановлен без изменений; исправление прежнего x64/Rosetta отказа не заявляется. Авторизация, сеть, установленные Node.js/FFmpeg и сборка на Mac не нужны.
+
+1. Скопируйте ZIP на локальный диск Mac и распакуйте в новую папку. Откройте Terminal в распакованной папке music-downloader-desktop-ready-check.
+2. Сохраните сведения о системе и runtime:
+
+```sh
+{ uname -m; /usr/sbin/sysctl -n hw.optional.arm64; file runtime/node; ./runtime/node -p 'JSON.stringify({platform:process.platform,arch:process.arch,node:process.version})'; } > system-x64.txt 2>&1
+```
+
+На M2 это x64 через Rosetta; успешный результат не доказывает отдельный прогон на Intel. Если встроенный x64 Node сообщает Bad CPU type in executable, Rosetta отсутствует: сохраните сообщение; до запуска Electron сценарий не дошёл.
+
+3. Запустите только автоматический офлайновый сценарий с журналами:
+
+```sh
+DEBUG=pw:browser ELECTRON_ENABLE_LOGGING=1 ELECTRON_LOG_FILE="$PWD/electron-x64.log" bash run-macos.command > launcher-x64.log 2>&1
+```
+
+Пока идёт проверка, не закрывайте окно приложения. После её окончания скрипт может ждать Enter в Terminal. В отдельный каталог скопируйте reports, launcher-x64.log, electron-x64.log (если создан) и system-x64.txt. При повторе сначала сохраните предыдущие reports. Верните весь каталог отчётов, включая FAIL, а не только последний удачный report.json.
+
+Нужен report.json со status PASS, platform darwin, arch x64, performedOnGuest=false, integrity/prebuiltFilesUnchanged PASS, итоговым MP3 и тем же job в historyAfterRestart. Пустое окно или таймаут — FAIL с журналами, а не повод менять таймауты вслепую.
+
+Build ID: 20261029T093752Z-9f44abe6
+appArtifactHash: 7b37871db2ad5c2e8a2acfb020b2e57a048b70d470ed6a7b38f70baff9221f39
+ZIP SHA256: a51db9c902766933f21d435278a684ff4b7bc5eed52349b192415deb60ffb61a
+
+Архив предоставлен в `/home/user/Документы/vbox_shared/Mac-x64-STEP-054/`. Последний предоставленный машинный x64 отчёт — FAIL; [сохранённый исходник](../apps/desktop/e2e/evidence/native-20261029/darwin-x64/report.json). ARM64 PASS STEP-033 не подменяет x64 приёмку. Его повторная проверка отложена до финального STEP-054. CI не требуется; другие desktop/platform/packaging gates сохраняются.
 
 ## Воспроизводимая проверка STEP-001
 
@@ -152,7 +266,7 @@ UX-проверка [STEP-056](../planning/tasks/STEP-056.md) используе
 - `verify-step-001.mjs` — чистые копии для Node.js 22.14.0 и 24: `corepack enable --install-directory <tmp-bin>`, immutable install, lint/test/typecheck/format:check/build, негативные boundary-проверки, mismatch `yarn.lock` и недоступный workspace;
 - `verify-step-001-manual.sh` — обёртка для ручного запуска.
 
-Требования и ограничения: нужны `nvm` с уже установленными Node.js 22.14.0 и 24 (`nvm install` скрипты не вызывают; при отсутствии версии результат FAIL с причиной) и доступ к npm registry. Проверка выполнена на Linux; Windows (запуск Corepack как `corepack.cmd` через shell) и macOS не проверялись локально; платформенную матрицу выполняет CI (STEP-002): Windows и macOS проверены им, результат зафиксирован в Evidence STEP-002.
+Требования и ограничения: нужны `nvm` с уже установленными Node.js 22.14.0 и 24 (`nvm install` скрипты не вызывают; при отсутствии версии результат FAIL с причиной) и доступ к npm registry. Проверка выполнена на Linux; Windows (запуск Corepack как `corepack.cmd` через shell) и macOS не проверялись локально; историческая CI-матрица STEP-002 проверяла Windows и macOS (Evidence STEP-002). Новые платформенные доказательства получают локально.
 
 ## Environment / configuration
 
@@ -164,22 +278,24 @@ SQLite и миграции поставлены [STEP-029](../planning/tasks/STE
 
 ## CI/CD
 
-Workflow `.github/workflows/ci.yml` (STEP-002) запускается на `pull_request` в `main` и на `push` в `main`. Права — только `contents: read`, secrets не используются. Устаревшие запуски PR отменяются; запуск для `main` новым push не отменяется, но ожидающий в очереди запуск GitHub может заменить более новым, поэтому не каждый промежуточный merge commit гарантированно проверяется отдельно. Все actions закреплены полными SHA, runner images — конкретными версиями (`ubuntu-24.04`, `windows-2025`, `macos-15`).
+Решением владельца от 2026-10-29 обязательная CI-приёмка отменена из-за исчерпанных лимитов. CI приложения включён для дополнительных проверок только на Linux: lint, typecheck, format:check, unit tests на Node.js 22.14.0/24 и Harness validation. Windows/macOS runners, интеграционные сценарии, Electron E2E и build в CI приложения не запускаются. Workflows CI Harness сохраняются без изменений, включая его собственные Windows-проверки. Успешные jobs не требуются для завершения STEP; их ожидание или отказ не блокирует приёмку. Старые CI-отчёты остаются историческим Evidence.
 
-Для Linux jobs можно задать Repository Actions Variable `CI_LINUX_RUNS_ON`: JSON-массив labels или JSON-строку. Например, `["self-hosted","linux","x64","ci"]`. При пустом или отсутствующем значении используется `ubuntu-24.04`; labels приведены как пример и должны совпадать с labels runner. Эта переменная применяется только к Linux jobs, поэтому Windows и macOS продолжают использовать версии из матрицы.
+Перед слиянием выполняются локально:
 
-- Job `quality` (Ubuntu, Node.js 24): `install --immutable`, `lint`, `typecheck`, `format:check`, `build`. Провал любого шага роняет job.
-- Job `test` — матрица ОС (`ubuntu-24.04`, `windows-2025`, `macos-15`) × Node.js (`22.14.0` — нижняя граница `engines`, и `24`), `fail-fast: false`. Каждый вариант выполняет `install --immutable` и `test`; один и тот же набор Vitest (unit и integration) идёт на всех ОС, чтобы особенности файловой системы выявлялись рано. Сборка выполняется один раз в `quality`: тесты не требуют `dist`.
-- Установка и запуск везде идут через `node packages/testing/scripts/run-yarn.mjs`, без зависимости от глобальных shims Corepack.
-- Кэш (`actions/cache`): `.yarn/cache` и `.cache/corepack`, ключ из ОС, версии Node.js и хеша `yarn.lock`. Встроенный кэш `setup-node` не используется, потому что он требует Yarn в `PATH` до установки.
-- Offline-тест `packages/providers/yandex-music/test-live/runner.test.mjs` (`node:test`) не входит в `yarn test` и в CI не запускается; при изменении этого каталога запускайте его вручную: `node --test packages/providers/yandex-music/test-live/runner.test.mjs`.
-- Live-тесты provider в CI не запускаются и токены не передаются: они выполняются вручную (см. «Проверка provider на реальном API»).
-- Harness Integrity workflow остаётся отдельным и этим STEP не изменяется.
+```sh
+node packages/testing/scripts/run-yarn.mjs install --immutable
+node packages/testing/scripts/run-yarn.mjs run lint
+node packages/testing/scripts/run-yarn.mjs run typecheck
+node packages/testing/scripts/run-yarn.mjs run format:check
+node packages/testing/scripts/run-yarn.mjs test
+node packages/testing/scripts/run-yarn.mjs run build
+python3 .harness/tools/validate.py --mode manual
+```
 
-Локальное воспроизведение: `yarn install --immutable`, `yarn run lint`, `yarn run typecheck`, `yarn run format:check`, `yarn run build`, `yarn test`.
+Desktop дополнительно проходит Electron E2E по инструкции Testing. Сборка приложения и всех артефактов выполняется только на Linux. На Windows x64 и macOS arm64/x64 запускаются готовые собранные на Linux приложения и заранее собранный E2E host, без TypeScript/Vite/esbuild и пересборки. Новые Windows/macOS проверки выполняются только в финальном STEP-054 после разработки и упаковки, на соответствующих компьютерах; Evidence содержит revision, ОС, архитектуру, команды и результаты. Промежуточные шаги проходят обязательную проверку на Linux и не ждут доступа к Windows/Mac. Локальный Linux результат не заменяет Windows/macOS. Поддерживаемые Node.js 22.14.0 и 24, Yarn и архитектурные границы сохраняются; упоминания CI в исторических ADR описывают прежнее место выполнения проверок, а не дополнительный актуальный gate.
 
-Идентификаторы jobs (`quality`, `test`) стабильны; для branch protection используйте отображаемые имена checks: `Quality` и `Test (<ОС>, Node.js <версия>)` (6 вариантов). сама защита ветки настраивается вне репозитория. Release CI, сборки desktop и публикация артефактов относятся к последующим STEP.
+Сборка portable-дистрибутивов и проверки собственной подписи descriptor/ручного обновления выполняются локально по STEP-035/036. Платная системная подпись и notarization не требуются по ADR-019; собственный приватный ключ остаётся в защищённом хранилище ОС Linux-сборщика. Live-тесты provider запускаются только вручную с явной настройкой, отдельно от offline suite; токены не попадают в репозиторий и Evidence.
 
 ## Git и CI
 
-Repository Git workflow задаётся `.harness/docs/GIT_WORKFLOW.md` и `.harness/git-policy.toml`. Harness Integrity CI является baseline; product CI (`ci.yml`) описан в разделе «CI/CD».
+Repository Git workflow задаётся `.harness/docs/GIT_WORKFLOW.md` и `.harness/git-policy.toml`. Harness validation выполняется локально; Linux CI используется как дополнительная обратная связь; ожидать CI checks для завершения STEP не требуется.

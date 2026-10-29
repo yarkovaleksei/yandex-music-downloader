@@ -8,6 +8,8 @@ import {
   session,
   shell,
 } from 'electron';
+import { PortableUpdates } from './update/service.js';
+import type { UpdateTrust } from './update/service.js';
 import { randomBytes } from 'node:crypto';
 import { readFile, stat } from 'node:fs/promises';
 import path from 'node:path';
@@ -111,10 +113,25 @@ void app.whenReady().then(async () => {
     if (!isAppUrl(url)) event.preventDefault();
   });
   const directories = new DirectoryRegistry();
+  // Конфигурация доверия поставляется внутри ASAR, а не принимается от renderer/env/feed.
+  const trust = JSON.parse(
+    await readFile(
+      path.resolve(import.meta.dirname, '../update-trust.json'),
+      'utf8',
+    ),
+  ) as UpdateTrust;
+  const updates = new PortableUpdates({
+    trust,
+    currentVersion: app.getVersion(),
+    target: `${process.platform}-${process.arch}`,
+    directory: path.join(app.getPath('userData'), 'portable-updates'),
+    reveal: (file) => shell.showItemInFolder(file),
+  });
   removeIpc = registerIpc(
     window,
     directories,
     {
+      updates,
       selectFfmpeg: async () => {
         if (!window) return undefined;
         const result = await dialog.showOpenDialog(window, {

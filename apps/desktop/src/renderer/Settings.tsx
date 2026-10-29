@@ -1,3 +1,4 @@
+import { Updates } from './Updates.js';
 import { useEffect, useState } from 'react';
 import {
   Alert,
@@ -112,6 +113,7 @@ export function Settings({
       <Typography color="text.secondary">
         Загрузка музыки и параметры приложения
       </Typography>
+      <Updates api={api} />
       {message && <Alert severity="info">{message}</Alert>}
       {value && (
         <Paper variant="outlined" sx={{ p: 3 }}>

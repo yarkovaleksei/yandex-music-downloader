@@ -1,0 +1,57 @@
+{
+  "schema": 1,
+  "status": "PASS",
+  "buildId": "20261029T093752Z-9f44abe6",
+  "sourceHash": "9f44abe60ddeb9afd97b71a36367d694a7cf5beffde5fa7332694b57872d77f4",
+  "appArtifactHash": "7b37871db2ad5c2e8a2acfb020b2e57a048b70d470ed6a7b38f70baff9221f39",
+  "gitHead": "32fb8e1aef7d7b78cb90b8ffce508da55f98aa52",
+  "dirty": true,
+  "platform": "darwin",
+  "arch": "arm64",
+  "node": "24.21.0",
+  "build": {
+    "performedOnGuest": false,
+    "builtOn": {
+      "arch": "x64",
+      "platform": "linux"
+    }
+  },
+  "stages": {
+    "integrity": {
+      "status": "PASS"
+    },
+    "e2e": {
+      "exitCode": 0,
+      "error": null
+    },
+    "prebuiltFilesUnchanged": {
+      "status": "PASS"
+    }
+  },
+  "scenario": {
+    "platform": "darwin",
+    "jobId": "488412a1-8818-4a18-bd52-6de27246065a",
+    "status": "completed",
+    "output": "Тестовый исполнитель - Проверочный сигнал.mp3",
+    "bytes": 50785,
+    "historyAfterRestart": [
+      {
+        "jobId": "488412a1-8818-4a18-bd52-6de27246065a",
+        "source": {
+          "provider": "e2e-offline",
+          "kind": "track",
+          "id": "e2e-track"
+        },
+        "title": "Проверочный сигнал",
+        "artists": [
+          "Тестовый исполнитель"
+        ],
+        "count": 1,
+        "bytes": 50785,
+        "completedAt": "2026-10-29T10:13:40.088Z",
+        "replayAvailable": true,
+        "replayReason": null
+      }
+    ]
+  }
+}

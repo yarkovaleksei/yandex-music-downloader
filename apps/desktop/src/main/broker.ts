@@ -1,3 +1,4 @@
+import type { UpdateView } from '../contract/update.js';
 import type {
   ApplicationResult,
   DesktopSettings,
@@ -7,6 +8,11 @@ import type { Input, Method } from '../contract/desktop-api.js';
 import { failure, safeResult, success } from '../contract/result.js';
 import type { DirectoryRegistry } from './directory-registry.js';
 export interface BrokerActions {
+  readonly updates?: {
+    check(): Promise<UpdateView>;
+    download(): Promise<UpdateView>;
+    reveal(): Promise<UpdateView>;
+  };
   readonly selectFfmpeg?: () => Promise<string | undefined>;
   readonly selectDirectory: () => Promise<string | undefined>;
   readonly showItemInFolder: (
@@ -57,6 +63,21 @@ export async function invokeBroker(
   if (!trusted) return failure(method, 'PERMISSION_DENIED');
   try {
     const input = parseInput(method, payload);
+    // ADR-019: ни URL, ни путь обновления не приходят из renderer.
+    if (
+      method === 'checkUpdate' ||
+      method === 'downloadUpdate' ||
+      method === 'openUpdateFolder'
+    ) {
+      if (!actions.updates) return failure(method, 'PERMISSION_DENIED');
+      const action =
+        method === 'checkUpdate'
+          ? 'check'
+          : method === 'downloadUpdate'
+            ? 'download'
+            : 'reveal';
+      return success(method, await actions.updates[action]());
+    }
     if (method === 'ffmpegHelp')
       return success(method, ffmpegHelp(process.platform));
     if (method === 'checkFfmpeg') {

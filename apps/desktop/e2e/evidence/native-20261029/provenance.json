@@ -1,0 +1,26 @@
+{
+  "buildId": "20261029T093752Z-9f44abe6",
+  "sourceHash": "9f44abe60ddeb9afd97b71a36367d694a7cf5beffde5fa7332694b57872d77f4",
+  "appArtifactHash": "7b37871db2ad5c2e8a2acfb020b2e57a048b70d470ed6a7b38f70baff9221f39",
+  "gitHead": "32fb8e1aef7d7b78cb90b8ffce508da55f98aa52",
+  "reports": [
+    {
+      "platform": "darwin-arm64",
+      "status": "PASS",
+      "reportSha256": "d17882c05d62b167157cae32a31e50014d6df651c48ec81441b4d96198d135bd",
+      "sourceDirectory": "/home/user/Документы/vbox_shared/reports-arm/reports-arm/darwin-arm64"
+    },
+    {
+      "platform": "darwin-x64",
+      "status": "FAIL",
+      "reportSha256": "1d51f3b4773e9ee0e24a6e25412c019645084e673d51517ae336a6fc29ba8d13",
+      "sourceDirectory": "/home/user/Документы/vbox_shared/reports-x86/reports-x86/darwin-x64"
+    },
+    {
+      "platform": "win32-x64",
+      "status": "PASS",
+      "reportSha256": "48dbbab56689429d8ca70355c044a7847edecc17f1c7f16ab956a2e59d44b314",
+      "sourceDirectory": "/home/user/Документы/vbox_shared/win32-x64"
+    }
+  ]
+}

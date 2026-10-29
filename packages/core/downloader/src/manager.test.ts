@@ -38,6 +38,95 @@ describe('Download Manager', () => {
     expect(fixture.releases).toEqual(['order']);
   });
 
+  // @link planning/tasks/STEP-057.md: terminal snapshot виден до записи playlist.
+  // Shutdown в этом окне должен дождаться финализации, сохранив её результат и ошибку.
+  it.each([false, true])(
+    'shutdown завершённого job ждёт playlist, ошибка writer: %s',
+    async (failWriter) => {
+      const fixture = managerFixture(2);
+      let enterWriter!: () => void;
+      let releaseWriter!: () => void;
+      const entered = new Promise<void>((resolve) => {
+        enterWriter = resolve;
+      });
+      const gate = new Promise<void>((resolve) => {
+        releaseWriter = resolve;
+      });
+      const error = new DownloadError();
+      fixture.deps.files.writePlaylist = async () => {
+        enterWriter();
+        await gate;
+        if (failWriter) throw error;
+      };
+      await fixture.create('terminal-shutdown');
+      const manager = createDownloadManager(fixture.deps, pauseOptions);
+      const running = manager.run('terminal-shutdown');
+      const outcome = running.then(
+        () => undefined,
+        (failure: unknown) => failure,
+      );
+      await entered;
+      expect(
+        (await fixture.deps.store.read('terminal-shutdown'))?.tracks.map(
+          (track) => track.status,
+        ),
+      ).toEqual(['completed', 'completed']);
+      const shutdown = manager.shutdown('terminal-shutdown').then(
+        () => undefined,
+        (failure: unknown) => failure,
+      );
+      expect(fixture.releases).toEqual([]);
+      releaseWriter();
+      const [runFailure, shutdownFailure] = await Promise.all([
+        outcome,
+        shutdown,
+      ]);
+      expect(runFailure).toBe(failWriter ? error : undefined);
+      expect(shutdownFailure).toBe(failWriter ? error : undefined);
+      expect(
+        (await fixture.deps.store.read('terminal-shutdown'))?.control.state,
+      ).toBe('running');
+      expect(
+        fixture.events.some((event) => event.event === 'job.completed'),
+      ).toBe(!failWriter);
+      expect(fixture.releases).toEqual(['terminal-shutdown']);
+    },
+  );
+
+  // F-001 STEP-057: pause во время terminal shutdown не отменяет обязанность release.
+  it('shutdown освобождает lease при pause во время финализации playlist', async () => {
+    const fixture = managerFixture(2);
+    let enterWriter!: () => void;
+    let releaseWriter!: () => void;
+    const entered = new Promise<void>((resolve) => {
+      enterWriter = resolve;
+    });
+    const gate = new Promise<void>((resolve) => {
+      releaseWriter = resolve;
+    });
+    fixture.deps.files.writePlaylist = async () => {
+      enterWriter();
+      await gate;
+    };
+    await fixture.create('terminal-pause');
+    const manager = createDownloadManager(fixture.deps, pauseOptions);
+    const running = manager.run('terminal-pause');
+    await entered;
+    const shutdown = manager.shutdown('terminal-pause');
+    const pause = manager.command('terminal-pause', 'pause');
+    releaseWriter();
+    try {
+      await Promise.all([running, shutdown, pause]);
+      expect(
+        (await fixture.deps.store.read('terminal-pause'))?.control.state,
+      ).toBe('paused');
+      expect(fixture.releases).toEqual(['terminal-pause']);
+    } finally {
+      // При regression fixture также освобождается, чтобы её timers не мешали suite.
+      await manager.shutdown('terminal-pause');
+    }
+  });
+
   it('при ошибке writer освобождает lease без job.completed', async () => {
     const fixture = managerFixture(1);
     fixture.deps.files.writePlaylist = async () => {

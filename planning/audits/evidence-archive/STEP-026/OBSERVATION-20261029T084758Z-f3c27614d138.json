@@ -1,0 +1,27 @@
+{
+  "finding": {
+    "criterion": "Все перечисленные интеграционные сценарии существуют и проходят без сети.",
+    "expected": "Оба трека и итоговый job completed.",
+    "given": "Существующая CLI crash/resume fixture: первый трек completed, второй прерван после 32 байт; SQLite store.",
+    "invalidatedChecks": [
+      "yarn test"
+    ],
+    "observed": "В двух локальных прогонах оба трека completed, job paused; assertion apps/cli/src/headless.integration.test.ts:206 FAIL.",
+    "reproducerEvidence": {
+      "path": "planning/tasks/STEP-033.md",
+      "sha256": "sha256:04fa3a2b556cae68cca694f16c083caa3d60806ca632644d93800e450b0a6cba"
+    },
+    "when": "Новый CLI process выполняет resume и штатный shutdown."
+  },
+  "kind": "late-defect",
+  "observedAt": "2026-10-29T08:47:58.763933+00:00",
+  "reuse": null,
+  "schemaVersion": 1,
+  "source": {
+    "evidenceSha256": "sha256:5c6c1b844a1d42a6fc2cfe27b965cbf50864ae83a29057eeb8671037c0ca0b76",
+    "review": "planning/reviews/STEP-026/REVIEW-20261013T210949Z.md",
+    "reviewSha256": "sha256:823f8133eabbfa174750e2c943f31c5c0337d240a09bac1a9486cd4ed4fa0d8e",
+    "statusAtObservation": "completed"
+  },
+  "sourceStep": "STEP-026"
+}

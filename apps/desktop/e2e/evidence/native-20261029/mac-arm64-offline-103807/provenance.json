@@ -1,0 +1,60 @@
+{
+  "sourceArchive": "/home/user/Документы/vbox_shared/reports.zip",
+  "archiveSha256": "42cbaa942b3b305efa0e9e1ad9a9673c6e72d4663ceea3f21e9cf579a30c7d40",
+  "buildId": "20261029T103807Z-mac-arm64-offline",
+  "appArtifactHash": "7b37871db2ad5c2e8a2acfb020b2e57a048b70d470ed6a7b38f70baff9221f39",
+  "files": {
+    "current/report.json": {
+      "zipEntry": "reports/darwin-arm64/report.json",
+      "sha256": "23ef5f9ae8b7345ea65843ba0fd26ff35ab24c48d4da79d307440729a101da69"
+    },
+    "current/console.log": {
+      "zipEntry": "reports/darwin-arm64/console.log",
+      "sha256": "a97fb0416cd095cb331bdcfd56712ee855d253821f380be1943ffd95b45f61fa"
+    },
+    "current/result.json": {
+      "zipEntry": "reports/darwin-arm64/e2e/download-╨í╤ü╤ï╨╗╨║╨░-ΓåÆ-╨┐╤Ç╨╡╨┤╨┐╤Ç╨╛╤ü-d6b3b-╨╕-╨╕╤ü╤é╨╛╤Ç╨╕╤Å-╨┐╨╛╤ü╨╗╨╡-╨┐╨╡╤Ç╨╡╨╖╨░╨┐╤â╤ü╨║╨░/result.json",
+      "sha256": "97572dfc43318bed7b4167948d2a92e545ea9f5aa9a74b8c291be4bcd5fa7ccd"
+    },
+    "current/system.json": {
+      "zipEntry": "reports/mac-native-20261029T104711Z/system.json",
+      "sha256": "0c061e9f84ffa57f010c56b89b64dd21057d52600bb8cd7cfb01697be637470f"
+    },
+    "current/launcher.log": {
+      "zipEntry": "reports/mac-native-20261029T104711Z/launcher.log",
+      "sha256": "7c769d517c6b758c0f01c2cf21d21f8f228ea457cd29e17823377efd51ca1d1c"
+    },
+    "current/chromium.log": {
+      "zipEntry": "reports/mac-native-20261029T104711Z/chromium.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "first-failure/report.json": {
+      "zipEntry": "reports/mac-native-20261029T104554Z/current-run/report.json",
+      "sha256": "cebc267661a8554d41e5a29172f8fd3e6efb324c2d62c28e30e048e437ce081d"
+    },
+    "first-failure/console.log": {
+      "zipEntry": "reports/mac-native-20261029T104554Z/current-run/console.log",
+      "sha256": "6763ed1a42e18b3bf4ba5134d7533f1336bc9d709cdd5112c0f2223772fea25b"
+    },
+    "first-failure/system.json": {
+      "zipEntry": "reports/mac-native-20261029T104554Z/system.json",
+      "sha256": "0c061e9f84ffa57f010c56b89b64dd21057d52600bb8cd7cfb01697be637470f"
+    },
+    "first-failure/launcher.log": {
+      "zipEntry": "reports/mac-native-20261029T104554Z/launcher.log",
+      "sha256": "ec0905231b22e2cd98aa3f79023391145f3cef22422172e957b611517b847518"
+    }
+  },
+  "uniqueRuns": [
+    {
+      "timestamp": "20261029T104554Z",
+      "status": "FAIL",
+      "stage": "Electron launch"
+    },
+    {
+      "timestamp": "20261029T104711Z",
+      "status": "PASS",
+      "stage": "Full E2E"
+    }
+  ]
+}

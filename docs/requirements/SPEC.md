@@ -44,7 +44,7 @@
 | [REQ-038](REQ-038-sec-no-circumvention.md) | [SECURITY] Работа только с доступным аккаунту контентом | critical | brief |
 | [REQ-039](REQ-039-sec-redaction.md) | [SECURITY] Запрет утечки секретов в логи и артефакты | critical | brief |
 | [REQ-040](REQ-040-tool-ts-quality.md) | [TOOLING] Строгий TypeScript и контроль качества кода | high | brief |
-| [REQ-041](REQ-041-tool-ci.md) | [TOOLING] CI на pull request | high | brief |
+| [REQ-041](REQ-041-tool-ci.md) | [TOOLING] Локальные проверки перед слиянием | high | brief |
 | [REQ-042](REQ-042-tool-tests.md) | [TOOLING] Обязательные unit и integration тесты | high | brief |
 | [REQ-043](REQ-043-tool-headless-gate.md) | [TOOLING] Критерий готовности headless MVP и перехода к UI | critical | brief |
 | [REQ-044](REQ-044-desk-application-api.md) | [DESKTOP] Application API как единая граница для клиентов | high | brief |
@@ -58,6 +58,6 @@
 | [REQ-052](REQ-052-ui-settings-account-diag.md) | [UI] Экраны Settings, Account и Diagnostics | medium | brief |
 | [REQ-053](REQ-053-ui-e2e.md) | [UI] End-to-end сценарий desktop | medium | brief |
 | [REQ-054](REQ-054-pack-installers.md) | [PACKAGING] Дистрибутивы для всех целевых ОС | medium | brief |
-| [REQ-055](REQ-055-pack-update-signing.md) | [PACKAGING] Архитектура автообновления и подписания | low | brief |
+| [REQ-055](REQ-055-pack-update-signing.md) | [PACKAGING] Проверенные обновления portable-приложения | low | brief |
 | [REQ-056](REQ-056-auth-browser-page.md) | [AUTH] Оформление приватной страницы Device Authorization | medium | user |
 | [REQ-057](REQ-057-desktop-usable-ux.md) | Компактный desktop UX и понятная диагностика препятствий | high | user |

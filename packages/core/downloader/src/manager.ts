@@ -143,6 +143,21 @@ export class DownloadManager {
       await this.close(jobId, live);
       return;
     }
+    // @link planning/tasks/STEP-057.md: completed snapshot может опередить playlist и release.
+    // В терминальной стадии ждём исходный loop, чтобы shutdown не записал ложную паузу.
+    if (live.intent === 'running' && live.loop !== undefined) {
+      const status = aggregateJobStatus({
+        control: live.owner.current.control.state,
+        leaseAlive: true,
+        tracks: live.owner.current.tracks.map((track) => track.status),
+      });
+      if (['completed', 'completed_with_errors', 'failed'].includes(status)) {
+        await this.bounded(live.loop);
+        // F-001: одновременный pause может оставить loop без собственной ветви close.
+        await this.close(jobId, live);
+        return;
+      }
+    }
     if (live.intent === 'running') await this.apply(live, 'pause');
     else await this.bounded(Promise.allSettled([...live.effects]));
     await this.bounded(live.owner.exclusive(async () => undefined));
