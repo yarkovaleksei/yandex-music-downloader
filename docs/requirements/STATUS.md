@@ -53,10 +53,11 @@
 | [REQ-047](REQ-047-desk-secure-storage.md) | [DESKTOP] Токен в системном secure storage | completed | STEP-028, STEP-030 | sha256:6ed02e4a4013216b80251402ae01afe62f6a6ea194fa6fcd5a4c4c2db3cd7ea3, sha256:df511b2e702d0103758b40eb433c438125d0e5f636fb5452781e416b9a5583c0 |
 | [REQ-048](REQ-048-ui-stack.md) | [UI] Стек UI и соответствие брендбуку | completed | STEP-030 | sha256:df511b2e702d0103758b40eb433c438125d0e5f636fb5452781e416b9a5583c0 |
 | [REQ-049](REQ-049-ui-url-preview.md) | [UI] Вставка URL и предпросмотр до скачивания | completed | STEP-031 | sha256:b32f182a3913a8c6197682bfe78befd7e5c69b776e68c75fcbae31cef76f8a3c |
-| [REQ-050](REQ-050-ui-downloads.md) | [UI] Экран загрузок, прогресс и управление | completed | STEP-031 | sha256:b32f182a3913a8c6197682bfe78befd7e5c69b776e68c75fcbae31cef76f8a3c |
-| [REQ-051](REQ-051-ui-history.md) | [UI] Экран истории | completed | STEP-032 | sha256:078e3ce93b754d761fd2f7884d3e8fd98314df0de2cf9067f8ca5f7e8a129401 |
-| [REQ-052](REQ-052-ui-settings-account-diag.md) | [UI] Экраны Settings, Account и Diagnostics | completed | STEP-032 | sha256:078e3ce93b754d761fd2f7884d3e8fd98314df0de2cf9067f8ca5f7e8a129401 |
+| [REQ-050](REQ-050-ui-downloads.md) | [UI] Экран загрузок, прогресс и управление | completed | STEP-056, STEP-031 | sha256:76987970557da2d1cc6bf4ff98e6640da9109b546420311b9d47f3dcf3557455, sha256:b32f182a3913a8c6197682bfe78befd7e5c69b776e68c75fcbae31cef76f8a3c |
+| [REQ-051](REQ-051-ui-history.md) | [UI] Экран истории | completed | STEP-056, STEP-032 | sha256:76987970557da2d1cc6bf4ff98e6640da9109b546420311b9d47f3dcf3557455, sha256:078e3ce93b754d761fd2f7884d3e8fd98314df0de2cf9067f8ca5f7e8a129401 |
+| [REQ-052](REQ-052-ui-settings-account-diag.md) | [UI] Экраны Settings, Account и Diagnostics | completed | STEP-056, STEP-032 | sha256:76987970557da2d1cc6bf4ff98e6640da9109b546420311b9d47f3dcf3557455, sha256:078e3ce93b754d761fd2f7884d3e8fd98314df0de2cf9067f8ca5f7e8a129401 |
 | [REQ-053](REQ-053-ui-e2e.md) | [UI] End-to-end сценарий desktop | planned | STEP-033 | — |
 | [REQ-054](REQ-054-pack-installers.md) | [PACKAGING] Дистрибутивы для всех целевых ОС | planned | STEP-034, STEP-035 | — |
 | [REQ-055](REQ-055-pack-update-signing.md) | [PACKAGING] Архитектура автообновления и подписания | planned | STEP-034, STEP-036 | — |
 | [REQ-056](REQ-056-auth-browser-page.md) | [AUTH] Оформление приватной страницы Device Authorization | completed | STEP-041 | sha256:b72119e77e7455cbb6a3cbe10cab188e90c639e4136d98a92952b14eb823f011 |
+| [REQ-057](REQ-057-desktop-usable-ux.md) | Компактный desktop UX и понятная диагностика препятствий | completed | STEP-056 | sha256:76987970557da2d1cc6bf4ff98e6640da9109b546420311b9d47f3dcf3557455 |

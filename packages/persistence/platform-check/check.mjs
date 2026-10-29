@@ -27,10 +27,11 @@ import { SqliteManifestStore } from '../dist/sqlite-manifest-store.js';
 import {
   readUserVersion,
   sqliteMigrations,
+  supportedSchemaVersion,
 } from '../dist/sqlite-migrations.js';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
-// STEP-032: проверяется настоящая миграция v1→v2, исходная fixture явно закреплена на v1.
+// STEP-056: проверяется переход v1 к текущей production-схеме; исходная fixture закреплена на v1.
 const additiveV2 = sqliteMigrations;
 const marker = 'platform-check-secret-marker';
 
@@ -254,8 +255,15 @@ const checks = {
           .map((row) => row.version)
           .join(','),
       }));
-      expect(after.version === 2, 'USER_VERSION');
-      expect(after.applied === '1,2', 'APPLIED');
+      expect(
+        after.version === supportedSchemaVersion(sqliteMigrations),
+        'USER_VERSION',
+      );
+      expect(
+        after.applied ===
+          sqliteMigrations.map((migration) => migration.version).join(','),
+        'APPLIED',
+      );
       expect(after.jobs === before, 'DATA_PRESERVED');
       expect(
         databaseFiles(stateDir).some((name) => name.includes('.bak-v1-')),

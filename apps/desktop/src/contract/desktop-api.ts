@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import type {
   Account,
+  ArtworkDto,
   DesktopSettings,
   HistoryEntry,
   SavedDiagnostics,
@@ -50,8 +51,10 @@ export const methods = {
   resume: { input: jobInput, executor: 'host' },
   retry: { input: jobInput, executor: 'host' },
   cancel: { input: jobInput, executor: 'host' },
+  clearDownloads: { input: empty, executor: 'host' },
   listJobs: { input: empty, executor: 'host' },
   getJob: { input: jobInput, executor: 'host' },
+  getDownload: { input: jobInput, executor: 'host' },
   diagnostics: { input: empty, executor: 'host' },
   getSettings: { input: empty, executor: 'host' },
   saveSettings: {
@@ -67,10 +70,17 @@ export const methods = {
     executor: 'host',
   },
   history: { input: empty, executor: 'host' },
+  historyArtwork: { input: jobInput, executor: 'host' },
   hideHistory: { input: jobInput, executor: 'host' },
   replay: { input: jobInput, executor: 'host' },
   lastDiagnostics: { input: empty, executor: 'host' },
   refreshDiagnostics: { input: empty, executor: 'host' },
+  openDownloadsFolder: { input: empty, executor: 'main' },
+  checkFfmpeg: {
+    input: z.strictObject({ ffmpegRef: executableRef.nullable().optional() }),
+    executor: 'host',
+  },
+  ffmpegHelp: { input: empty, executor: 'main' },
   selectFfmpeg: { input: empty, executor: 'main' },
   selectDirectory: { input: empty, executor: 'main' },
   showItemInFolder: {
@@ -100,12 +110,15 @@ export interface Results {
   resume: JobSnapshot;
   retry: JobSnapshot;
   cancel: JobSnapshot;
+  clearDownloads: number;
   listJobs: readonly JobSnapshot[];
   getJob: JobSnapshot | null;
+  getDownload: JobSnapshot | null;
   diagnostics: DiagnosticsDto;
   getSettings: DesktopSettings;
   saveSettings: DesktopSettings;
   history: readonly HistoryEntry[];
+  historyArtwork: ArtworkDto | null;
   hideHistory: null;
   replay: JobSnapshot;
   lastDiagnostics: SavedDiagnostics | null;
@@ -114,6 +127,13 @@ export interface Results {
     readonly executableRef: string;
     readonly displayPath: string;
   } | null;
+  checkFfmpeg: { readonly available: boolean };
+  ffmpegHelp: {
+    readonly platform: string;
+    readonly url: string;
+    readonly instruction: string;
+  };
+  openDownloadsFolder: null;
   selectDirectory: DirectorySelection | null;
   showItemInFolder: null;
   openExternal: null;

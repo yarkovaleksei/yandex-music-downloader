@@ -65,6 +65,27 @@ export class SqliteDesktopStateStore implements DesktopStateStore {
   public saveSnapshot(jobId: string, value: EffectiveDownload) {
     this.write('job_settings', jobId, effectiveDownload(value));
   }
+  public hiddenDownloads(): readonly string[] {
+    return (
+      this.connection()
+        .prepare('SELECT job_id FROM downloads_hidden')
+        .all() as { job_id: string }[]
+    ).map((row) => row.job_id);
+  }
+  public hideDownloads(jobIds: readonly string[]) {
+    try {
+      const db = this.connection();
+      db.transaction(() => {
+        assertSchemaVersion(db, supportedSchemaVersion(sqliteMigrations));
+        const insert = db.prepare(
+          'INSERT OR IGNORE INTO downloads_hidden (job_id) VALUES (?)',
+        );
+        for (const jobId of jobIds) insert.run(jobId);
+      }).immediate();
+    } catch (error) {
+      throw safeStoreError(error);
+    }
+  }
   public hidden(): readonly string[] {
     return (
       this.connection().prepare('SELECT job_id FROM history_hidden').all() as {

@@ -101,8 +101,10 @@ function mockApi(kind: MediaReference['kind'] = 'playlist') {
       }),
     ),
     createDownload: vi.fn(async () => result(snapshot)),
+    historyArtwork: vi.fn(async () => result(null)),
     listJobs: vi.fn(async () => result([] as readonly JobSnapshot[])),
     getJob: vi.fn(async () => result(snapshot)),
+    getDownload: vi.fn(async () => result(snapshot)),
     pause: vi.fn(async () => result(snapshot)),
     resume: vi.fn(async () => result(snapshot)),
     cancel: vi.fn(async () => result(snapshot)),
@@ -151,7 +153,7 @@ it.each(['track', 'album', 'playlist'] as const)(
     fireEvent.click(screen.getByText('Качество: Лучшее доступное'));
     const dialog = screen.getByRole('dialog');
     expect(within(dialog).queryByText(/Без потерь/)).toBeNull();
-    fireEvent.click(within(dialog).getByLabelText('Высокое · 1 / 1 треков'));
+    fireEvent.click(within(dialog).getByLabelText('Высокое · 1 / 1 трек'));
     fireEvent.click(within(dialog).getByText('Готово'));
     fireEvent.click(screen.getByText('Выбрать папку'));
     await screen.findByText(/Папка: \/synthetic\/music/);
@@ -219,7 +221,8 @@ it('события показывают job и позиционный прогр
     seq: 2,
     payload: { bytes: 100, fraction: 0.25 },
   });
-  await screen.findByText('1 / 2 · 50%');
+  await screen.findByText('1 / 2 трека · 50%');
+  fireEvent.click(screen.getByRole('button', { name: 'Подробности 1' }));
   expect(screen.getByText(/Трек 1 · Загрузка · 25%/)).toBeTruthy();
   expect(screen.getByText(/Трек 2 · Ошибка/)).toBeTruthy();
   expect(screen.queryByText(/Скорость:/)).toBeNull();
@@ -357,7 +360,7 @@ it('частичное покрытие видно, неизвестный ис�
   fireEvent.click(screen.getByText('Качество: Без потерь'));
   expect(
     within(screen.getByRole('dialog')).getByLabelText(
-      'Без потерь · 1 / 2 треков',
+      'Без потерь · 1 / 2 трека',
     ),
   ).toBeTruthy();
   fireEvent.click(screen.getByText('Готово'));
@@ -421,7 +424,9 @@ it.each(['AUTH_REQUIRED', 'DISK_FULL'])(
       seq: 1,
       durationMs: 0,
     });
-    await waitFor(() => expect(mock.mocks.getJob).toHaveBeenCalledTimes(1));
+    await waitFor(() =>
+      expect(mock.mocks.getDownload).toHaveBeenCalledTimes(1),
+    );
     expect(hook.result.current.notice).toBeUndefined();
     await act(async () => {
       await hook.result.current.command(paused, 'resume');

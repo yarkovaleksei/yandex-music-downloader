@@ -59,3 +59,4 @@
 | STEP-053 | Синхронизировать описание принятого headless MVP | documentation | medium | completed | STEP-027, STEP-024 | — |
 | STEP-054 | macOS x64 в CI-матрице тестов | implementation | medium | in_progress | — | REQ-041, REQ-045 |
 | STEP-055 | Нижняя граница Node.js 22.14.0 | implementation | medium | completed | — | REQ-040 |
+| STEP-056 | Компактные загрузки, история и полезная desktop-диагностика | implementation | high | completed | STEP-031, STEP-032 | REQ-050, REQ-051, REQ-052, REQ-057 |

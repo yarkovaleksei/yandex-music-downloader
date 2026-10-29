@@ -29,13 +29,10 @@ it('REQ-052: показывает каждый статус doctor и не вы�
   };
   render(<Diagnostics api={api as unknown as DesktopApi} />);
   await screen.findByText('API изменился');
-  for (const text of [
-    'Успешно',
-    'Ошибка',
-    'Пропущено',
-    'Необязательно · необязательно',
-  ])
+  for (const text of ['Успешно', 'Ошибка', 'Пропущено'])
     expect(screen.getByText(text)).toBeTruthy();
+  expect(screen.queryByText('FFmpeg')).toBeNull();
+  expect(screen.getByText(/Ответ источника несовместим/)).toBeTruthy();
   const previous = screen.getByText(/Последняя проверка:/).textContent;
   fireEvent.click(screen.getByRole('button', { name: 'Повторить проверки' }));
   await screen.findByText(/Проверка не обновлена/);

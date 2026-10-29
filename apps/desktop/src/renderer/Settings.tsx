@@ -27,10 +27,16 @@ export function Settings({
   const [ffmpegRef, setFfmpegRef] = useState<string | null>();
   const [message, setMessage] = useState('');
   const [busy, setBusy] = useState(false);
+  const [ffmpegMessage, setFfmpegMessage] = useState('');
+  const [ffmpegBusy, setFfmpegBusy] = useState(false);
+  const [help, setHelp] = useState<{ url: string; instruction: string }>();
   useEffect(() => {
     void api.getSettings().then((result) => {
       if (result.kind === 'result') setValue(result.data);
       else setMessage(result.error.message);
+    });
+    void api.ffmpegHelp().then((result) => {
+      if (result.kind === 'result') setHelp(result.data);
     });
   }, [api]);
   async function chooseDirectory() {
@@ -46,6 +52,23 @@ export function Settings({
       setFfmpegRef(result.data.executableRef);
       setValue({ ...value, ffmpegPath: result.data.displayPath });
     } else if (result.kind === 'error') setMessage(result.error.message);
+  }
+  async function checkFfmpeg() {
+    setFfmpegBusy(true);
+    try {
+      const result = await api.checkFfmpeg(
+        ffmpegRef === undefined ? {} : { ffmpegRef },
+      );
+      setFfmpegMessage(
+        result.kind === 'result'
+          ? result.data.available
+            ? 'FFmpeg найден и запускается.'
+            : 'FFmpeg не найден или не запускается. Основные загрузки продолжат работать. Установите его по инструкции ниже либо выберите исполняемый файл.'
+          : 'Не удалось проверить FFmpeg. Выберите исполняемый файл и повторите проверку; основные загрузки продолжат работать.',
+      );
+    } finally {
+      setFfmpegBusy(false);
+    }
   }
   async function save() {
     if (!value) return;
@@ -167,7 +190,8 @@ export function Settings({
             <Divider />
             <Typography variant="h2">Диагностика и журнал</Typography>
             <Typography color="text.secondary">
-              FFmpeg используется только проверкой диагностики.
+              Дополнительная проверка FFmpeg запускается только по вашей
+              команде.
             </Typography>
             <Stack direction="row" spacing={2}>
               <TextField
@@ -188,6 +212,26 @@ export function Settings({
                 Автоматически
               </Button>
             </Stack>
+            <Button disabled={ffmpegBusy} onClick={() => void checkFfmpeg()}>
+              {ffmpegBusy ? 'Проверяем FFmpeg…' : 'Проверить FFmpeg'}
+            </Button>
+            {ffmpegMessage && <Alert severity="info">{ffmpegMessage}</Alert>}
+            <Alert severity="info">
+              FFmpeg необязателен: базовые загрузки и запись тегов работают без
+              него. Устанавливать его для обычного использования не нужно.
+              {help && (
+                <>
+                  {' '}
+                  {help.instruction}{' '}
+                  <Button
+                    size="small"
+                    onClick={() => void api.openExternal({ url: help.url })}
+                  >
+                    Скачать FFmpeg
+                  </Button>
+                </>
+              )}
+            </Alert>
             <TextField
               select
               label="Уровень журнала"

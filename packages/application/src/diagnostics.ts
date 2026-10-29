@@ -31,6 +31,7 @@ export interface DiagnosticRuntimeOptions {
 /** Формирует безопасный снимок doctor: причины и секреты provider-а за DTO не выходят.
  * @link docs/requirements/REQ-034-diag-doctor.md */
 export async function collectDiagnostics(input: {
+  readonly desktop?: boolean;
   readonly provider: MusicProvider;
   readonly manifestStore: ManifestStore;
   /** Read-only проверка default SQLite store; иначе проверяется list() переданного store. */
@@ -128,9 +129,10 @@ export async function collectDiagnostics(input: {
   checks.filesystem = checkOutcome(
     await isolated(() => filesystem(input.runtime)),
   );
-  checks.ffmpeg = await ffmpegCheck(input.runtime);
+  if (!input.desktop) checks.ffmpeg = await ffmpegCheck(input.runtime);
   // Native keyring не задаёт права token-файла; configurationConfirmed не выводится из read.
-  checks.tokenPermissions = { status: 'skipped', code: 'NOT_APPLICABLE' };
+  if (!input.desktop)
+    checks.tokenPermissions = { status: 'skipped', code: 'NOT_APPLICABLE' };
   const available = Object.values(checks).every(
     (check) =>
       check.optional === true ||
@@ -200,7 +202,9 @@ async function filesystem(runtime: DiagnosticRuntimeOptions): Promise<void> {
     await rm(root, { recursive: true, force: true });
   }
 }
-async function ffmpegCheck(runtime: DiagnosticRuntimeOptions): Promise<Check> {
+export async function ffmpegCheck(
+  runtime: DiagnosticRuntimeOptions,
+): Promise<Check> {
   try {
     if (runtime.runFfmpeg !== undefined)
       await runtime.runFfmpeg(runtime.ffmpegPath ?? 'ffmpeg');

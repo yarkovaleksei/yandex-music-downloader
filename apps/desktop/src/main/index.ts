@@ -147,6 +147,8 @@ void app.whenReady().then(async () => {
           return false;
         }
       },
+      openDirectory: async (directory) =>
+        (await shell.openPath(directory)) === '',
       openExternal: async (url) => {
         await shell.openExternal(url);
       },

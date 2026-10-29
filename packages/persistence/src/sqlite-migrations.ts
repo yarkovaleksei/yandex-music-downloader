@@ -79,6 +79,15 @@ export const sqliteMigrations: readonly SqliteMigration[] = [
     `);
     },
   },
+  {
+    version: 3,
+    up: (db) => {
+      // REQ-057: очистка очереди независима от истории и исходных jobs.
+      db.exec(
+        'CREATE TABLE downloads_hidden (job_id TEXT PRIMARY KEY) STRICT;',
+      );
+    },
+  },
 ];
 
 /** Последняя версия схемы, которую понимает этот процесс. */

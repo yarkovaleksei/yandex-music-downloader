@@ -1,8 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   Alert,
+  Avatar,
+  IconButton,
+  Link,
+  Tooltip,
   Box,
-  Button,
   Chip,
   MenuItem,
   Paper,
@@ -10,6 +13,10 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import ReplayRounded from '@mui/icons-material/ReplayRounded';
+import FolderOpenRounded from '@mui/icons-material/FolderOpenRounded';
+import DeleteOutlineRounded from '@mui/icons-material/DeleteOutlineRounded';
+import { tracksQuantity } from './quantity.js';
 import HistoryRounded from '@mui/icons-material/HistoryRounded';
 import type { HistoryEntry } from '@music-downloader/shared';
 import type { DesktopApi } from '../contract/desktop-api.js';
@@ -29,13 +36,43 @@ export function History({
   const [period, setPeriod] = useState('all');
   const [notice, setNotice] = useState('');
   const [busy, setBusy] = useState(false);
+  const revision = useRef(0);
   async function refresh() {
+    const current = ++revision.current;
     const result = await api.history();
-    if (result.kind === 'result') setEntries(result.data);
-    else setNotice(result.error.message);
+    if (current !== revision.current) return;
+    if (result.kind === 'result') {
+      setEntries(result.data);
+      // F-001 STEP-056: строки и действия доступны до завершения необязательных обложек.
+      // Ошибка/таймаут оставляет fallback, а поздний ответ не возвращает удалённую строку.
+      for (const entry of result.data) {
+        if (entry.artwork) continue;
+        void api
+          .historyArtwork({ jobId: entry.jobId })
+          .then((image) => {
+            if (
+              current !== revision.current ||
+              image.kind !== 'result' ||
+              !image.data
+            )
+              return;
+            setEntries((previous) =>
+              previous.map((item) =>
+                item.jobId === entry.jobId
+                  ? { ...item, artwork: image.data! }
+                  : item,
+              ),
+            );
+          })
+          .catch(() => {});
+      }
+    } else setNotice(result.error.message);
   }
   useEffect(() => {
     void refresh();
+    return () => {
+      revision.current++;
+    };
   }, [api]);
   async function act(
     action: 'replay' | 'hideHistory' | 'showItemInFolder',
@@ -145,18 +182,54 @@ export function History({
               {filtered.map((entry) => (
                 <tr key={entry.jobId}>
                   <td>
-                    <Typography sx={{ fontWeight: 600 }}>
-                      {entry.title}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      {entry.artists.join(', ') || 'Исполнитель не указан'}
-                    </Typography>
+                    <Stack
+                      direction="row"
+                      spacing={2}
+                      sx={{ alignItems: 'center' }}
+                    >
+                      <Avatar
+                        variant="rounded"
+                        src={
+                          entry.artwork
+                            ? `data:${entry.artwork.mimeType};base64,${entry.artwork.base64}`
+                            : undefined
+                        }
+                        alt=""
+                        sx={{ width: 48, height: 48 }}
+                      >
+                        <HistoryRounded />
+                      </Avatar>
+                      <Box sx={{ minWidth: 0 }}>
+                        {entry.publicUrl ? (
+                          <Link
+                            href={entry.publicUrl}
+                            sx={{ fontWeight: 600 }}
+                            onClick={(event) => {
+                              event.preventDefault();
+                              void api.openExternal({ url: entry.publicUrl! });
+                            }}
+                          >
+                            {entry.title}
+                          </Link>
+                        ) : (
+                          <Typography sx={{ fontWeight: 600 }}>
+                            {entry.title}
+                          </Typography>
+                        )}
+                        {entry.source.kind !== 'playlist' && (
+                          <Typography variant="body2" color="text.secondary">
+                            {entry.artists.join(', ') ||
+                              'Исполнитель не указан'}
+                          </Typography>
+                        )}
+                      </Box>
+                    </Stack>
                   </td>
                   <td>
                     <Chip size="small" label={kinds[entry.source.kind]} />
                   </td>
                   <td>
-                    {entry.count} треков
+                    {tracksQuantity(entry.count)}
                     <Typography variant="body2" color="text.secondary">
                       {entry.bytes === null
                         ? 'Размер неизвестен'
@@ -167,33 +240,58 @@ export function History({
                     {new Date(entry.completedAt).toLocaleDateString('ru-RU')}
                   </td>
                   <td>
-                    <Stack spacing={1}>
-                      <Button
-                        disabled={busy || !entry.replayAvailable}
-                        onClick={() => void act('replay', entry.jobId)}
-                      >
-                        Скачать снова
-                      </Button>
-                      {!entry.replayAvailable && (
-                        <Typography variant="caption" color="text.secondary">
-                          {entry.replayReason}
-                        </Typography>
-                      )}
-                      <Button
-                        disabled={busy}
-                        onClick={() =>
-                          void act('showItemInFolder', entry.jobId)
+                    <Stack
+                      direction="row"
+                      spacing={1}
+                      sx={{ whiteSpace: 'nowrap' }}
+                    >
+                      <Tooltip
+                        describeChild
+                        title={
+                          entry.replayAvailable
+                            ? 'Скачать снова'
+                            : entry.replayReason ||
+                              'Откройте источник на Главной и создайте новую загрузку.'
                         }
                       >
-                        Открыть папку
-                      </Button>
-                      <Button
-                        color="error"
-                        disabled={busy}
-                        onClick={() => void act('hideHistory', entry.jobId)}
-                      >
-                        Убрать из истории
-                      </Button>
+                        <span
+                          tabIndex={!entry.replayAvailable ? 0 : undefined}
+                          aria-label={
+                            !entry.replayAvailable
+                              ? `Скачать снова: ${entry.replayReason}`
+                              : undefined
+                          }
+                        >
+                          <IconButton
+                            aria-label="Скачать снова"
+                            disabled={busy || !entry.replayAvailable}
+                            onClick={() => void act('replay', entry.jobId)}
+                          >
+                            <ReplayRounded />
+                          </IconButton>
+                        </span>
+                      </Tooltip>
+                      <Tooltip title="Открыть папку">
+                        <IconButton
+                          aria-label="Открыть папку"
+                          disabled={busy}
+                          onClick={() =>
+                            void act('showItemInFolder', entry.jobId)
+                          }
+                        >
+                          <FolderOpenRounded />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title="Убрать из истории">
+                        <IconButton
+                          aria-label="Убрать из истории"
+                          color="error"
+                          disabled={busy}
+                          onClick={() => void act('hideHistory', entry.jobId)}
+                        >
+                          <DeleteOutlineRounded />
+                        </IconButton>
+                      </Tooltip>
                     </Stack>
                   </td>
                 </tr>

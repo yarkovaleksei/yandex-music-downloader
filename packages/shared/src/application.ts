@@ -12,6 +12,7 @@ export interface JobSnapshot {
   readonly jobId: string;
   readonly source: MediaReference;
   readonly status: DownloadJobStatus;
+  readonly publicUrl?: string;
   readonly pauseReason?: string;
   readonly tracks: readonly {
     readonly trackKey: string;

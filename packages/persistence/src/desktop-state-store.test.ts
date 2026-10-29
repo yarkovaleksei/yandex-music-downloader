@@ -90,7 +90,7 @@ it('ADR-014: populated production v1→v2 сохраняет job/import и со�
   expect(state.settings()).toEqual(defaultDesktopSettings);
   state.close();
   const after = new Database(path.join(stateDir, 'state.sqlite3'));
-  expect(after.pragma('user_version', { simple: true })).toBe(2);
+  expect(after.pragma('user_version', { simple: true })).toBe(3);
   expect(after.prepare('SELECT job_id FROM jobs').all()).toEqual([
     { job_id: 'old' },
   ]);
@@ -118,6 +118,7 @@ it('ADR-014: stale соединение запрещает каждую desktop 
   for (const write of [
     () => state.saveSettings(defaultDesktopSettings),
     () => state.hide('old'),
+    () => state.hideDownloads(['old']),
     () => state.saveSnapshot('old', snapshot),
     () =>
       state.saveDiagnostics({
@@ -174,7 +175,7 @@ it('PRN-002: allowlist diagnostics исключает fixture secrets из DTO, 
     migrations: [
       ...sqliteMigrations,
       {
-        version: 3,
+        version: sqliteMigrations.length + 1,
         up: (db) => {
           db.exec('CREATE TABLE future_fixture (id INTEGER)');
         },
@@ -189,4 +190,44 @@ it('PRN-002: allowlist diagnostics исключает fixture secrets из DTO, 
     expect((await readFile(path.join(stateDir, name))).includes(secret)).toBe(
       false,
     );
+});
+
+it('REQ-057: миграция v2→v3 и очистка очереди сохраняют jobs, контроль, аренды и историю', async () => {
+  const stateDir = await root();
+  const jobs = new SqliteManifestStore({
+    stateDir,
+    migrations: sqliteMigrations.slice(0, 2),
+  });
+  await jobs.create(manifestFixture('queue'));
+  await jobs.close();
+  const file = path.join(stateDir, 'state.sqlite3');
+  const before = new Database(file);
+  const tables = [
+    'jobs',
+    'leases',
+    'control_requests',
+    'control_receipts',
+    'history_hidden',
+    'job_settings',
+  ];
+  const rows = tables.map((table) =>
+    before.prepare(`SELECT * FROM ${table}`).all(),
+  );
+  before.close();
+  const state = new SqliteDesktopStateStore({ stateDir });
+  state.hideDownloads(['queue']);
+  state.close();
+  const reopened = new SqliteDesktopStateStore({ stateDir });
+  expect(reopened.hiddenDownloads()).toEqual(['queue']);
+  expect(reopened.hidden()).toEqual([]);
+  reopened.close();
+  const after = new Database(file);
+  expect(after.pragma('user_version', { simple: true })).toBe(3);
+  expect(
+    tables.map((table) => after.prepare(`SELECT * FROM ${table}`).all()),
+  ).toEqual(rows);
+  after.close();
+  expect(
+    (await readdir(stateDir)).some((name) => name.includes('.bak-v2-')),
+  ).toBe(true);
 });

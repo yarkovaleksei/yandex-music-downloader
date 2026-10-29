@@ -17,6 +17,7 @@ import {
   type DesktopStateStore,
   type EffectiveDownload,
   type HistoryEntry,
+  type ArtworkDto,
   ValidationError,
   type JobManifestV1,
   type JobSnapshot,
@@ -24,6 +25,12 @@ import {
   type MusicProvider,
 } from '@music-downloader/shared';
 import type { ApplicationEvents } from './events.js';
+
+function terminal(status: string): boolean {
+  return ['completed', 'completed_with_errors', 'failed', 'cancelled'].includes(
+    status,
+  );
+}
 
 async function planFor(
   provider: MusicProvider,
@@ -39,6 +46,7 @@ async function planFor(
 async function snapshot(
   store: ManifestStore,
   manifest: JobManifestV1,
+  provider: MusicProvider,
 ): Promise<JobSnapshot> {
   const lease = await store.readLeaseState(manifest.jobId);
   const statuses = manifest.tracks.map((track) => track.status);
@@ -59,6 +67,9 @@ async function snapshot(
   return {
     jobId: manifest.jobId,
     source: manifest.source,
+    ...(provider.publicUrl?.(manifest.source)
+      ? { publicUrl: provider.publicUrl(manifest.source)! }
+      : {}),
     status,
     ...(manifest.control.pauseReason === undefined
       ? {}
@@ -161,22 +172,50 @@ export class Jobs {
 
   public async get(jobId: string): Promise<JobSnapshot | null> {
     const manifest = await this.store.read(jobId);
-    return manifest === undefined ? null : snapshot(this.store, manifest);
+    return manifest === undefined
+      ? null
+      : snapshot(this.store, manifest, this.provider);
   }
 
   public async list(): Promise<readonly JobSnapshot[]> {
     const manifests = await this.store.list();
     return Promise.all(
-      manifests.map((manifest) => snapshot(this.store, manifest)),
+      manifests.map((manifest) =>
+        snapshot(this.store, manifest, this.provider),
+      ),
     );
   }
 
+  public async getDownload(jobId: string): Promise<JobSnapshot | null> {
+    const job = await this.get(jobId);
+    return job &&
+      terminal(job.status) &&
+      this.desktopState?.hiddenDownloads().includes(jobId)
+      ? null
+      : job;
+  }
+  public async listDownloads(): Promise<readonly JobSnapshot[]> {
+    const hidden = new Set(this.desktopState?.hiddenDownloads() ?? []);
+    // REQ-057: повторно активированное задание всегда возвращается в очередь.
+    return (await this.list()).filter(
+      (job) => !hidden.has(job.jobId) || !terminal(job.status),
+    );
+  }
+  public async clearDownloads(): Promise<number> {
+    const jobs = await this.listDownloads();
+    const ids = jobs
+      .filter((job) => terminal(job.status))
+      .map((job) => job.jobId);
+    this.desktopState!.hideDownloads(ids);
+    return ids.length;
+  }
   public async history(): Promise<readonly HistoryEntry[]> {
     const hidden = new Set(this.desktopState?.hidden() ?? []);
     const entries: HistoryEntry[] = [];
     for (const manifest of await this.store.list()) {
       if (hidden.has(manifest.jobId)) continue;
-      const status = (await snapshot(this.store, manifest)).status;
+      const status = (await snapshot(this.store, manifest, this.provider))
+        .status;
       if (
         !['completed', 'completed_with_errors', 'failed', 'cancelled'].includes(
           status,
@@ -193,14 +232,20 @@ export class Jobs {
         jobId: manifest.jobId,
         source: manifest.source,
         title: manifest.plan.title,
-        artists: [
-          ...new Set(
-            manifest.plan.tracks.flatMap(
-              (track) =>
-                track.track.artists?.map((artist) => artist.name) ?? [],
-            ),
-          ),
-        ],
+        ...(this.provider.publicUrl?.(manifest.source)
+          ? { publicUrl: this.provider.publicUrl(manifest.source)! }
+          : {}),
+        artists:
+          manifest.source.kind === 'playlist'
+            ? []
+            : [
+                ...new Set(
+                  manifest.plan.tracks.flatMap(
+                    (track) =>
+                      track.track.artists?.map((artist) => artist.name) ?? [],
+                  ),
+                ),
+              ],
         count: manifest.tracks.length,
         bytes:
           sizes.length > 0 && sizes.every((size) => size !== undefined)
@@ -210,11 +255,44 @@ export class Jobs {
         replayAvailable: effective !== null,
         replayReason:
           effective === null
-            ? 'Исходные настройки старого задания неизвестны. Повторная загрузка недоступна.'
+            ? 'Эта запись создана предыдущей версией без исходных параметров. Откройте источник на Главной, выберите папку и качество и создайте новую загрузку.'
             : null,
       });
     }
     return entries.sort((a, b) => b.completedAt.localeCompare(a.completedAt));
+  }
+  public async historyArtwork(jobId: string): Promise<ArtworkDto | null> {
+    const manifest = await this.store.read(jobId);
+    if (
+      !manifest ||
+      this.desktopState?.hidden().includes(jobId) ||
+      !terminal((await snapshot(this.store, manifest, this.provider)).status)
+    )
+      return null;
+    const source = manifest.source;
+    // F-001 STEP-056: необязательная сеть вынесена из локальной истории в отдельный запрос.
+    // Источник читается из manifest; renderer получает только безопасные байты либо fallback.
+    try {
+      const entity =
+        source.kind === 'track'
+          ? await this.provider.getTrack(source.id)
+          : source.kind === 'album'
+            ? await this.provider.getAlbum(source.id)
+            : await this.provider.getPlaylist(source.id);
+      if (!entity.artwork) return null;
+      const image = await this.provider.fetchArtwork(entity.artwork, 100);
+      if (
+        !['image/jpeg', 'image/png', 'image/webp'].includes(image.mimeType) ||
+        image.bytes.length > 2 * 1024 * 1024
+      )
+        return null;
+      return {
+        mimeType: image.mimeType,
+        base64: Buffer.from(image.bytes).toString('base64'),
+      };
+    } catch {
+      return null;
+    }
   }
   public async hideHistory(jobId: string): Promise<null> {
     if (!(await this.history()).some((entry) => entry.jobId === jobId))

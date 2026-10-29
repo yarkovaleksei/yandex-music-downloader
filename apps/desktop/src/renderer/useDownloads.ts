@@ -75,9 +75,12 @@ export function useDownloads(api: DesktopApi) {
   }, []);
   const completionPending = useRef(new Map<string, number>());
   const revisions = useRef(new Map<string, number>());
+  const refreshSequence = useRef(0);
   const refresh = useCallback(async () => {
+    const sequence = ++refreshSequence.current;
     const observed = new Map(revisions.current);
     const result = await api.listJobs();
+    if (sequence !== refreshSequence.current) return;
     if (result.kind === 'result') {
       for (const job of result.data)
         if (revisions.current.get(job.jobId) === observed.get(job.jobId))
@@ -98,14 +101,17 @@ export function useDownloads(api: DesktopApi) {
         completionPending.current.set(jobId, completionSequence);
       const revision = (revisions.current.get(jobId) ?? 0) + 1;
       revisions.current.set(jobId, revision);
-      const result = await api.getJob({ jobId });
+      const result = await api.getDownload({ jobId });
       if (revisions.current.get(jobId) !== revision) return;
       if (result.kind === 'error') {
         setNotice({ severity: 'error', message: result.error.message });
         return;
       }
       const job = result.data;
-      if (!job) return;
+      if (!job) {
+        setJobs((previous) => previous.filter((item) => item.jobId !== jobId));
+        return;
+      }
       observePause(job);
       setJobs((previous) => [
         ...previous.filter((item) => item.jobId !== jobId),
@@ -178,7 +184,87 @@ export function useDownloads(api: DesktopApi) {
       setPending((previous) => ({ ...previous, [job.jobId]: false }));
     }
   }
+  async function batch(action: 'pause' | 'resume') {
+    const eligible = jobs.filter(
+      (job) => allowed(job, action) && !pending[job.jobId],
+    );
+    setPending((previous) => ({
+      ...previous,
+      ...Object.fromEntries(eligible.map((job) => [job.jobId, true])),
+    }));
+    let failed = 0;
+    let unknown = false;
+    const failures: string[] = [];
+    try {
+      // Каждую mutation отправляем ровно один раз; итог перечитывается даже при частичном отказе.
+      for (const job of eligible) {
+        try {
+          const result = await api[action]({ jobId: job.jobId });
+          if (result.kind === 'error') {
+            failed++;
+            failures.push(`${job.source.id}: ${result.error.message}`);
+            unknown ||= result.error.code === 'OUTCOME_UNKNOWN';
+          }
+        } catch {
+          failed++;
+          failures.push(`${job.source.id}: нет ответа приложения.`);
+        }
+      }
+      await refresh();
+      setNotice({
+        severity: failed ? 'error' : 'success',
+        message: `${action === 'pause' ? 'Приостановлено' : 'Продолжено'}: ${eligible.length - failed} из ${eligible.length}.${failed ? ` Не выполнено: ${failed}. ${failures.join(' ')}` : ''}${unknown ? ' Исход части операций неизвестен. Проверьте обновлённое состояние перед новым действием.' : ''}`,
+      });
+    } finally {
+      setPending((previous) => ({
+        ...previous,
+        ...Object.fromEntries(eligible.map((job) => [job.jobId, false])),
+      }));
+    }
+  }
+  async function clearCompleted() {
+    // Ответы, начатые до очистки, не должны возвращать скрытые terminal строки.
+    refreshSequence.current++;
+    for (const job of jobs)
+      revisions.current.set(
+        job.jobId,
+        (revisions.current.get(job.jobId) ?? 0) + 1,
+      );
+    setPending((previous) => ({ ...previous, queue: true }));
+    try {
+      const result = await api.clearDownloads();
+      await refresh();
+      setNotice(
+        result.kind === 'result'
+          ? {
+              severity: 'info',
+              message: `Убрано из списка: ${result.data}. История и файлы сохранены.`,
+            }
+          : { severity: 'error', message: result.error.message },
+      );
+    } finally {
+      setPending((previous) => ({ ...previous, queue: false }));
+    }
+  }
+  async function openFolder() {
+    const result = await api.openDownloadsFolder();
+    if (result.kind === 'error')
+      setNotice({
+        severity: 'error',
+        message:
+          'Не удалось открыть папку. Выберите доступную папку загрузок в Настройках.',
+      });
+  }
+  async function openSource(url: string) {
+    const result = await api.openExternal({ url });
+    if (result.kind === 'error')
+      setNotice({ severity: 'error', message: result.error.message });
+  }
   return {
+    batch,
+    clearCompleted,
+    openFolder,
+    openSource,
     jobs,
     progress,
     trackProgress,

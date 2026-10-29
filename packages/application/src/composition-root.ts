@@ -33,7 +33,7 @@ import {
   YandexMusicProvider,
 } from '@music-downloader/provider-yandex-music';
 import type { RuntimeAdapters } from './runtime-adapters.js';
-import { collectDiagnostics } from './diagnostics.js';
+import { collectDiagnostics, ffmpegCheck } from './diagnostics.js';
 import { CachedProvider } from './cached-provider.js';
 
 /** Единственное место регистрации Yandex adapter; @link docs/adr/ADR-001-layered-architecture-monorepo.md */
@@ -157,6 +157,7 @@ export function createApplication(
     adapters.diagnostics ??
     (() =>
       collectDiagnostics({
+        desktop: adapters.clientProfile === 'desktop',
         provider,
         manifestStore: store,
         ...(defaultStore === undefined
@@ -192,6 +193,16 @@ export function createApplication(
     events,
     logger,
     diagnostics,
+    checkFfmpeg: async (ffmpegPath) => ({
+      available:
+        (
+          await ffmpegCheck({
+            ...adapters.diagnosticsRuntime,
+            outputDirectory: stateDir,
+            ffmpegPath: ffmpegPath ?? undefined,
+          })
+        ).status === 'ok',
+    }),
     debug: adapters.logging?.debug === true,
     desktopState,
     desktop: adapters.clientProfile === 'desktop',

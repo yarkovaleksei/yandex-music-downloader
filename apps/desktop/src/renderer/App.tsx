@@ -1,3 +1,4 @@
+import { tracksQuantity } from './quantity.js';
 import { useEffect, useRef, useState } from 'react';
 import {
   Alert,
@@ -202,6 +203,14 @@ export function App({ api = window.desktopApi }: { api?: DesktopApi }) {
           component="aside"
           sx={{
             width: 224,
+            position: 'sticky',
+            top: 0,
+            height: '100vh',
+            overflowY: 'auto',
+            '& > .MuiButton-root': {
+              justifyContent: 'flex-start',
+              textAlign: 'left',
+            },
             flexShrink: 0,
             borderRight: 1,
             borderColor: 'divider',
@@ -288,7 +297,7 @@ export function App({ api = window.desktopApi }: { api?: DesktopApi }) {
         </Box>
         <Box
           component="main"
-          sx={{ p: { xs: 2, md: 4 }, flex: 1, minWidth: 0, maxWidth: 1200 }}
+          sx={{ p: { xs: 2, md: 4 }, flex: 1, minWidth: 0 }}
         >
           <Stack spacing={3}>
             <Stack direction="row" sx={{ justifyContent: 'flex-end' }}>
@@ -575,7 +584,7 @@ export function App({ api = window.desktopApi }: { api?: DesktopApi }) {
                       onChange={() => setQuality(item.preference)}
                     />
                   }
-                  label={`${qualityNames[item.preference]} · ${item.available} / ${item.total} треков`}
+                  label={`${qualityNames[item.preference]} · ${item.available} / ${tracksQuantity(item.total)}`}
                 />
               ))}
           </Stack>

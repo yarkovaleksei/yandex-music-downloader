@@ -225,7 +225,7 @@ it('REQ-051/052: restart применяет настройки; exact replay, le
   await jobs.close();
 });
 
-it('REQ-052: doctor применяет текущие output/FFmpeg, сохраняет безопасные статусы и время после restart', async () => {
+it('REQ-052: desktop doctor применяет output без запуска FFmpeg, отдельная проверка использует settings; статусы переживают restart', async () => {
   const directory = await root();
   const stateDir = path.join(directory, 'state');
   const output = path.join(directory, 'selected-output');
@@ -255,13 +255,15 @@ it('REQ-052: doctor применяет текущие output/FFmpeg, сохра�
         configuration: {
           checks: {
             filesystem: { status: 'ok' },
-            ffmpeg: { status: 'ok', optional: true },
           },
         },
       },
     },
   });
   expect(filesystemProbe).toHaveBeenCalledWith(output);
+  expect(runFfmpeg).not.toHaveBeenCalled();
+  expect(JSON.stringify(result)).not.toContain('ffmpeg');
+  expect(await api.checkFfmpeg()).toMatchObject({ data: { available: true } });
   expect(runFfmpeg).toHaveBeenCalledWith(
     path.join(directory, 'fixture-ffmpeg'),
   );
@@ -467,3 +469,94 @@ it.each([
     expect(replay.data.source).toEqual(source);
   },
 );
+
+it('REQ-057: очистка скрывает только terminal, сохраняет историю и аудио; revived job снова виден', async () => {
+  const directory = await root();
+  const stateDir = path.join(directory, 'state');
+  const api = createApplication({
+    stateDir,
+    clientProfile: 'desktop',
+    providerOverride: provider().value,
+  });
+  apps.push(api);
+  const created = await api.createDownload({
+    source: { provider: 'mock', kind: 'track', id: '1' },
+    quality: 'best',
+    destination: path.join(directory, 'music'),
+  });
+  if (created.kind !== 'result') throw new Error('Не создано тестовое задание');
+  await completed(api, created.data.jobId);
+  const history = await api.history();
+  const job = await api.getJob(created.data.jobId);
+  const audio =
+    job.kind === 'result' ? job.data?.tracks[0]?.resultPath : undefined;
+  expect(audio).toBeTruthy();
+  const bytes = await readFile(audio!);
+  expect(await api.clearDownloads()).toMatchObject({ data: 1 });
+  expect(await api.listDownloads()).toMatchObject({ data: [] });
+  expect(await api.history()).toEqual(history);
+  expect(await api.getJob(created.data.jobId)).toEqual(job);
+  expect(await readFile(audio!)).toEqual(bytes);
+  const store = new SqliteManifestStore({ stateDir });
+  const manifest = await store.read(created.data.jobId);
+  if (!manifest) throw new Error('Отсутствует тестовый manifest');
+  const session = await store.acquire(created.data.jobId, {
+    recover: async (value) => value,
+  });
+  await session.save({
+    ...manifest,
+    control: { state: 'paused' },
+    tracks: manifest.tracks.map((track) => ({ ...track, status: 'paused' })),
+  });
+  await session.release();
+  expect(await api.listDownloads()).toMatchObject({
+    data: [{ jobId: created.data.jobId, status: 'paused' }],
+  });
+  expect(await api.clearDownloads()).toMatchObject({ data: 0 });
+  await store.close();
+}, 20000);
+
+it('F-001 STEP-056: локальная история и скрытие не ждут удержанную или недоступную сеть обложек', async () => {
+  const directory = await root();
+  const fixture = provider();
+  const api = createApplication({
+    stateDir: path.join(directory, 'state'),
+    clientProfile: 'desktop',
+    providerOverride: fixture.value,
+    cache: { ttlMs: 0 },
+  });
+  apps.push(api);
+  const created = await api.createDownload({
+    source: { provider: 'mock', kind: 'track', id: '1' },
+    quality: 'best',
+    destination: path.join(directory, 'music'),
+  });
+  if (created.kind !== 'result') throw new Error('Не создано тестовое задание');
+  await completed(api, created.data.jobId);
+  let rejectMetadata!: (error: Error) => void;
+  const held = new Promise<Awaited<ReturnType<MusicProvider['getTrack']>>>(
+    (_, reject) => {
+      rejectMetadata = reject;
+    },
+  );
+  const metadata = vi.spyOn(fixture.value, 'getTrack').mockReturnValue(held);
+  const local = await api.history();
+  expect(local).toMatchObject({
+    kind: 'result',
+    data: [{ jobId: created.data.jobId }],
+  });
+  expect(metadata).not.toHaveBeenCalled();
+  const optional = api.historyArtwork(created.data.jobId);
+  try {
+    await expect.poll(() => metadata.mock.calls.length).toBe(1);
+    expect(await api.history()).toEqual(local);
+    expect(await api.hideHistory(created.data.jobId)).toMatchObject({
+      kind: 'result',
+      data: null,
+    });
+    expect(await api.history()).toMatchObject({ data: [] });
+  } finally {
+    rejectMetadata(new Error('Синтетическая сеть недоступна'));
+  }
+  expect(await optional).toMatchObject({ kind: 'result', data: null });
+});

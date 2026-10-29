@@ -21,6 +21,11 @@ const samples: Record<Method, unknown> = {
   retry: { jobId: '1' },
   cancel: { jobId: '1' },
   listJobs: undefined,
+  clearDownloads: undefined,
+  getDownload: { jobId: '1' },
+  openDownloadsFolder: undefined,
+  ffmpegHelp: undefined,
+  checkFfmpeg: {},
   getJob: { jobId: '1' },
   diagnostics: undefined,
   getSettings: undefined,
@@ -32,6 +37,7 @@ const samples: Record<Method, unknown> = {
     logging: 'info',
   },
   history: undefined,
+  historyArtwork: { jobId: '1' },
   hideHistory: { jobId: '1' },
   replay: { jobId: '1' },
   lastDiagnostics: undefined,
@@ -312,4 +318,72 @@ it('REQ-052: settings runtime schema отклоняет открытые шаб�
   expect(() =>
     parseInput('replay', { jobId: '1', source, quality: 'best' }),
   ).toThrow();
+});
+
+it('REQ-057: общая папка и FFmpeg разрешаются из trusted settings/opaque ref, помощь фиксирована', async () => {
+  const dirs = new DirectoryRegistry();
+  const executable = dirs.addExecutable('/fixture/ffmpeg');
+  const host = vi.fn(async (method: Method) =>
+    method === 'getSettings'
+      ? success(method, { outputDirectory: '/fixture/music' })
+      : success(method, { available: true }),
+  );
+  const actions = {
+    selectDirectory: async () => undefined,
+    showItemInFolder: async () => false,
+    openDirectory: vi.fn(async () => true),
+    openExternal: vi.fn(async () => {}),
+  };
+  expect(
+    await invokeBroker(
+      'openDownloadsFolder',
+      undefined,
+      true,
+      dirs,
+      actions,
+      host,
+    ),
+  ).toMatchObject({ kind: 'result' });
+  expect(actions.openDirectory).toHaveBeenCalledWith('/fixture/music');
+  await invokeBroker(
+    'checkFfmpeg',
+    { ffmpegRef: executable.executableRef },
+    true,
+    dirs,
+    actions,
+    host,
+  );
+  expect(host).toHaveBeenLastCalledWith('checkFfmpeg', {
+    ffmpegPath: '/fixture/ffmpeg',
+  });
+  expect(
+    await invokeBroker(
+      'checkFfmpeg',
+      { ffmpegRef: '/fixture/arbitrary' },
+      true,
+      dirs,
+      actions,
+      host,
+    ),
+  ).toMatchObject({ kind: 'error' });
+  expect(
+    await invokeBroker(
+      'openExternal',
+      { url: 'https://ffmpeg.org/download.html#build-linux' },
+      true,
+      dirs,
+      actions,
+      host,
+    ),
+  ).toMatchObject({ kind: 'result' });
+  expect(
+    await invokeBroker(
+      'openExternal',
+      { url: 'https://ffmpeg.org/arbitrary' },
+      true,
+      dirs,
+      actions,
+      host,
+    ),
+  ).toMatchObject({ kind: 'error' });
 });

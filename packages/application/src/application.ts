@@ -1,3 +1,4 @@
+import { desktopDiagnostics } from '@music-downloader/shared';
 import type {
   DesktopApplicationApi,
   DesktopSettings,
@@ -38,6 +39,9 @@ export class ApplicationFacade implements DesktopApplicationApi {
       events: ApplicationEvents;
       logger: Logger;
       diagnostics: () => Promise<DiagnosticsDto>;
+      checkFfmpeg: (
+        path?: string | null,
+      ) => Promise<{ readonly available: boolean }>;
       debug: boolean;
       desktopState: DesktopStateStore;
       desktop: boolean;
@@ -191,11 +195,43 @@ export class ApplicationFacade implements DesktopApplicationApi {
       this.deps.debug,
     );
   }
+  public getDownload(jobId: string) {
+    return command(
+      'getDownload',
+      this.deps.logger,
+      () => this.deps.jobs.getDownload(jobId),
+      this.deps.debug,
+    );
+  }
+  public listDownloads() {
+    return command(
+      'listDownloads',
+      this.deps.logger,
+      () => this.deps.jobs.listDownloads(),
+      this.deps.debug,
+    );
+  }
+  public clearDownloads() {
+    return command(
+      'clearDownloads',
+      this.deps.logger,
+      () => this.deps.jobs.clearDownloads(),
+      this.deps.debug,
+    );
+  }
   public history() {
     return command(
       'history',
       this.deps.logger,
       () => this.deps.jobs.history(),
+      this.deps.debug,
+    );
+  }
+  public historyArtwork(jobId: string) {
+    return command(
+      'historyArtwork',
+      this.deps.logger,
+      () => this.deps.jobs.historyArtwork(jobId),
       this.deps.debug,
     );
   }
@@ -215,11 +251,29 @@ export class ApplicationFacade implements DesktopApplicationApi {
       this.deps.debug,
     );
   }
+  public checkFfmpeg(ffmpegPath?: string | null) {
+    return command(
+      'checkFfmpeg',
+      this.deps.logger,
+      () =>
+        this.deps.checkFfmpeg(
+          ffmpegPath === undefined
+            ? this.deps.desktopState.settings().ffmpegPath
+            : ffmpegPath,
+        ),
+      this.deps.debug,
+    );
+  }
   public lastDiagnostics() {
     return command(
       'lastDiagnostics',
       this.deps.logger,
-      async () => this.deps.desktopState.diagnostics(),
+      async () => {
+        const saved = this.deps.desktopState.diagnostics();
+        return saved
+          ? { ...saved, diagnostics: desktopDiagnostics(saved.diagnostics) }
+          : null;
+      },
       this.deps.debug,
     );
   }
@@ -230,7 +284,7 @@ export class ApplicationFacade implements DesktopApplicationApi {
       async () => {
         const value = {
           checkedAt: new Date().toISOString(),
-          diagnostics: await this.deps.diagnostics(),
+          diagnostics: desktopDiagnostics(await this.deps.diagnostics()),
         };
         this.deps.desktopState.saveDiagnostics(value);
         return this.deps.desktopState.diagnostics()!;

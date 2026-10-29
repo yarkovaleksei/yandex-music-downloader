@@ -51,10 +51,16 @@ export async function executeApplication(
         result = await api[method](parseInput(method, payload).jobId);
         break;
       case 'listJobs':
-        result = await api.listJobs();
+        result = await desktop.listDownloads();
+        break;
+      case 'clearDownloads':
+        result = await desktop.clearDownloads();
         break;
       case 'getJob':
-        result = await api.getJob(parseInput(method, payload).jobId);
+        result = await api.getJob(parseInput('getJob', payload).jobId);
+        break;
+      case 'getDownload':
+        result = await desktop.getDownload(parseInput(method, payload).jobId);
         break;
       case 'diagnostics':
         result = await api.diagnostics();
@@ -68,11 +74,21 @@ export async function executeApplication(
       case 'history':
         result = await desktop.history();
         break;
+      case 'historyArtwork':
+        result = await desktop.historyArtwork(
+          parseInput(method, payload).jobId,
+        );
+        break;
       case 'hideHistory':
         result = await desktop.hideHistory(parseInput(method, payload).jobId);
         break;
       case 'replay':
         result = await desktop.replay(parseInput(method, payload).jobId);
+        break;
+      case 'checkFfmpeg':
+        result = await desktop.checkFfmpeg(
+          (payload as { ffmpegPath?: string | null }).ffmpegPath,
+        );
         break;
       case 'lastDiagnostics':
         result = await desktop.lastDiagnostics();

@@ -79,7 +79,7 @@ describe('SQLite миграции', () => {
         { version: 3, up: () => {} },
       ]),
     ).toThrow();
-    expect(supportedSchemaVersion(sqliteMigrations)).toBe(2);
+    expect(supportedSchemaVersion(sqliteMigrations)).toBe(3);
   });
 
   it('v1 fixture создаётся без резервной копии', async () => {
@@ -110,7 +110,10 @@ describe('SQLite миграции', () => {
         await store.close();
       }
       expect(snapshot(stateDir)).toEqual(before);
-      expect(versions(stateDir)).toEqual({ userVersion: 2, applied: [1, 2] });
+      expect(versions(stateDir)).toEqual({
+        userVersion: 3,
+        applied: [1, 2, 3],
+      });
     } finally {
       await removeDirectory(stateDir);
     }
@@ -235,6 +238,7 @@ describe('SQLite миграции', () => {
       ).toEqual([
         { version: 1, applied_at: 'now' },
         { version: 2, applied_at: 'now' },
+        { version: 3, applied_at: 'now' },
       ]);
     } finally {
       first.close();
