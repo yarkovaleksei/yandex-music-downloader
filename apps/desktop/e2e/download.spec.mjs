@@ -1,0 +1,152 @@
+import { test, expect, _electron as electron } from '@playwright/test';
+import electronPath from 'electron';
+import { readFile, rm, stat, writeFile } from 'node:fs/promises';
+import path from 'node:path';
+import { prepare } from './prepare.mjs';
+
+/** Только наблюдение через настоящий preload: команды пользователя выполняются кнопками UI. */
+async function jobs(page) {
+  const response = await page.evaluate(() => globalThis.desktopApi.listJobs());
+  expect(response.kind).toBe('result');
+  return response.data;
+}
+async function history(page) {
+  const response = await page.evaluate(() => globalThis.desktopApi.history());
+  expect(response.kind).toBe('result');
+  return response.data;
+}
+
+test('Ссылка → предпросмотр → загрузка → пауза → продолжение → файл и история после перезапуска', async () => {
+  const testInfo = test.info();
+  const fixture = await prepare();
+  let app;
+  let page;
+  const env = { ...process.env, ...fixture.env };
+  delete env.ELECTRON_RUN_AS_NODE;
+  delete env.MUSIC_DOWNLOADER_SMOKE_DIR;
+  async function launch() {
+    app = await electron.launch({
+      executablePath: electronPath,
+      args: [path.join(fixture.directory, 'bootstrap.mjs')],
+      env,
+      timeout: 15_000,
+    });
+    page = await app.firstWindow();
+    await expect(page.getByLabel('Ссылка на музыку')).toBeVisible();
+  }
+  try {
+    await launch();
+    await expect.poll(async () => (await jobs(page)).length).toBe(0);
+    await page.getByLabel('Ссылка на музыку').fill('mock://track/e2e-track');
+    await page
+      .getByRole('button', { name: 'Анализировать', exact: true })
+      .click();
+    await expect(
+      page.getByRole('heading', { name: 'Проверочный сигнал', exact: true }),
+    ).toBeVisible();
+    // Предпросмотр не начинает загрузку; только явное действие создаёт job.
+    expect(await jobs(page)).toEqual([]);
+    await page
+      .getByRole('button', { name: 'Выбрать папку', exact: true })
+      .click();
+    await page
+      .getByRole('button', { name: 'Добавить в загрузки', exact: true })
+      .click();
+    const article = page.getByRole('article');
+    await expect(article).toHaveCount(1);
+    await expect
+      .poll(async () => (await jobs(page))[0]?.tracks[0]?.status)
+      .toBe('downloading');
+    const jobId = (await jobs(page))[0].jobId;
+    await article
+      .getByRole('button', { name: 'Приостановить', exact: true })
+      .click();
+    await expect(
+      article.getByText('Приостановлено', { exact: true }),
+    ).toBeVisible();
+    await expect.poll(async () => (await jobs(page))[0]?.status).toBe('paused');
+    await article
+      .getByRole('button', { name: 'Продолжить', exact: true })
+      .click();
+    await expect
+      .poll(async () => (await jobs(page))[0]?.status)
+      .toBe('completed');
+    await expect(
+      article.getByText('Завершено', { exact: true }).first(),
+    ).toBeVisible();
+    const [completed] = await jobs(page);
+    expect(completed.jobId).toBe(jobId);
+    expect(completed.tracks).toHaveLength(1);
+    expect(completed.tracks[0].status).toBe('completed');
+    const output = completed.tracks[0].resultPath;
+    const relative = path.relative(fixture.env.MUSIC_E2E_OUTPUT, output);
+    expect(relative).not.toMatch(/^\.\./);
+    expect(path.isAbsolute(relative)).toBe(false);
+    expect(relative).not.toBe('');
+    const bytes = (await stat(output)).size;
+    expect(bytes).toBeGreaterThan(0);
+    await page.getByRole('button', { name: 'История', exact: true }).click();
+    await expect(
+      page.getByRole('heading', { name: 'История загрузок', exact: true }),
+    ).toBeVisible();
+    await expect(
+      page.getByText('Проверочный сигнал', { exact: true }),
+    ).toBeVisible();
+    const entries = await history(page);
+    expect(entries).toHaveLength(1);
+    expect(entries[0]).toMatchObject({
+      jobId,
+      title: 'Проверочный сигнал',
+      count: 1,
+    });
+    await app.close();
+    app = undefined;
+    // Файл SQLite и новый utilityProcess доказывают persistence без импорта внутренних stores из apps.
+    const sqlite = await readFile(
+      path.join(fixture.env.MUSIC_E2E_STATE, 'state.sqlite3'),
+    );
+    expect(sqlite.subarray(0, 16).toString()).toBe('SQLite format 3\0');
+    await launch();
+    await page.getByRole('button', { name: 'История', exact: true }).click();
+    await expect(
+      page.getByText('Проверочный сигнал', { exact: true }),
+    ).toBeVisible();
+    const restored = await history(page);
+    expect(restored).toEqual(entries);
+    expect((await jobs(page))[0]).toMatchObject({ jobId, status: 'completed' });
+    expect((await stat(output)).size).toBe(bytes);
+    const resultPath = testInfo.outputPath('result.json');
+    await writeFile(
+      resultPath,
+      JSON.stringify(
+        {
+          platform: process.platform,
+          jobId,
+          status: 'completed',
+          output: relative,
+          bytes,
+          historyAfterRestart: restored,
+        },
+        null,
+        2,
+      ),
+    );
+    await testInfo.attach('результат-сценария', {
+      path: resultPath,
+      contentType: 'application/json',
+    });
+  } catch (error) {
+    if (page && !page.isClosed())
+      await testInfo.attach('окно-при-ошибке', {
+        body: await page.screenshot(),
+        contentType: 'image/png',
+      });
+    throw error;
+  } finally {
+    try {
+      if (app) await app.close();
+    } finally {
+      await rm(fixture.directory, { recursive: true, force: true });
+    }
+  }
+});

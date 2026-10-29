@@ -36,7 +36,7 @@
 | STEP-030 | Desktop shell: Electron, React, MUI, typed IPC, secure storage | implementation | medium | completed | STEP-028, STEP-018, STEP-029 | REQ-045, REQ-046, REQ-047, REQ-048 |
 | STEP-031 | UX: предпросмотр URL, загрузки, прогресс и уведомления | implementation | medium | completed | STEP-030 | REQ-049, REQ-050 |
 | STEP-032 | UX: History, Settings, Account и Diagnostics | implementation | medium | completed | STEP-031, STEP-025 | REQ-033, REQ-051, REQ-052 |
-| STEP-033 | E2E-тест desktop | hardening | medium | planned | STEP-031, STEP-032 | REQ-053 |
+| STEP-033 | E2E-тест desktop | hardening | medium | in_progress | STEP-031, STEP-032 | REQ-053 |
 | STEP-034 | ADR: кроссплатформенная упаковка | adr | low | planned | STEP-033 | REQ-054, REQ-055 |
 | STEP-035 | Дистрибутивы и release CI | implementation | low | planned | STEP-034 | REQ-054, REQ-045, REQ-041 |
 | STEP-036 | Подписание, notarization и автообновление | implementation | low | planned | STEP-035 | REQ-055 |

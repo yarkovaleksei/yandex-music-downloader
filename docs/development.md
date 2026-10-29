@@ -129,7 +129,19 @@ Boundary-проход директивы не принимает вообще. E
 
 Текущие offline-тесты проверяют readback Unicode-тегов и artwork на синтетических MP3, MP4/AAC и MP4/FLAC ([metadata](../packages/metadata/src/index.test.ts)), TTL, смену account/schema, чтение cache после restart и прямое делегирование variants/stream ([cache integration](../packages/application/src/cache.integration.test.ts)). [Baseline integration](../packages/application/src/baseline-no-subprocess.integration.test.ts) завершает загрузку с default production validator при запрете внешнего decoder; тест разрешает только отдельные process-identity probes и не доказывает отсутствие любых subprocess во всём приложении. [CLI crash/resume integration](../apps/cli/src/headless.integration.test.ts) использует новый процесс и реальный SQLite store с offline provider. Эти проверки не заменяют real API и native platform evidence.
 
+Electron E2E [STEP-033](../planning/tasks/STEP-033.md) запускается отдельно от unit/integration-тестов. Из корня репозитория с установленными workspace dependencies:
+
+```sh
+npm --prefix apps/desktop/e2e ci --ignore-scripts --workspaces=false
+node packages/testing/scripts/run-yarn.mjs run build
+node apps/desktop/e2e/run.mjs
+```
+
+Изолированный package закрепляет Playwright и использует workspace Electron; runner зависимости не скачивает. Linux требует графического дисплея и системных библиотек Electron; команды подготовки headless Linux и нативного запуска Windows/macOS приведены в [инструкции E2E](../apps/desktop/e2e/README.md). Сценарий проходит предпросмотр URL → явный старт → пауза → продолжение → завершение, проверяет непустой файл, тот же job в History и сохранение результата после штатного закрытия и нового запуска Electron с реальным SQLite. Renderer, IPC, utilityProcess, application, stores и обработка аудио настоящие; provider, каталоги состояния и ответ диалога выбора папки тестовые. Bootstrap сохраняет два automation switches для Playwright; это ограничивает доказательство и не проверяет удаление debugging endpoint в shipping entrypoint. Пользовательские данные, credentials и live provider не используются.
+
 UX-проверка [STEP-056](../planning/tasks/STEP-056.md) использует большой синтетический список и обычное, широкое и низкое окно; screenshots и наблюдения находятся в [evidence STEP-056](../apps/desktop/evidence/STEP-056/README.md). Проверки сохранности очереди и разделения desktop/CLI диагностики выполняются unit/integration-тестами; screenshots не заменяют эти доказательства.
+
+Локальный Linux прогон Electron E2E STEP-033 завершился PASS. Для Acceptance STEP-033 ещё нужны фактический Linux CI PASS и нативные подтверждения на Windows/macOS; они остаются pending. Этот локальный результат не закрывает packaging и прочие platform gates.
 
 ## Воспроизводимая проверка STEP-001
 
