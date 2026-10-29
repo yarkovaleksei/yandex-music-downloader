@@ -6,6 +6,9 @@ import { invokeBroker } from '../main/broker.js';
 import { DirectoryRegistry } from '../main/directory-registry.js';
 const source = { provider: 'mock', kind: 'track', id: '1' };
 const samples: Record<Method, unknown> = {
+  checkUpdate: undefined,
+  downloadUpdate: undefined,
+  openUpdateFolder: undefined,
   authenticate: undefined,
   account: undefined,
   logout: undefined,

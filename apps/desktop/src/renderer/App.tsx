@@ -230,9 +230,15 @@ export function App({ api = window.desktopApi }: { api?: DesktopApi }) {
             spacing={1}
             sx={{ alignItems: 'center', mb: 3 }}
           >
-            <Avatar variant="rounded" sx={{ bgcolor: 'primary.main' }}>
-              <DownloadRounded />
-            </Avatar>
+            {/* Утверждённая иконка сохраняет единый образ приложения. @link docs/brand/brandbook.md */}
+            <Avatar
+              variant="rounded"
+              src={
+                new URL('../../../../docs/brand/icon.png', import.meta.url).href
+              }
+              alt=""
+              sx={{ bgcolor: 'transparent' }}
+            />
             <Typography variant="h3">Yandex Music Downloader</Typography>
           </Stack>
           <Button

@@ -1,0 +1,10 @@
+{
+  "environment": {
+    "VITEST_MAX_FORKS": "4",
+    "VITEST_MIN_FORKS": "1",
+    "VITEST_MAX_THREADS": "4",
+    "VITEST_MIN_THREADS": "1"
+  },
+  "availableParallelism": 32,
+  "reason": "Ограничена конкуренция тестовых файлов при наблюдавшихся таймаутах; полный набор тестов и их таймауты не изменялись."
+}

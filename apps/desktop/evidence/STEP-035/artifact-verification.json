@@ -1,0 +1,90 @@
+{
+  "status": "PASS",
+  "local": true,
+  "targets": {
+    "linux-x64": {
+      "status": "PASS",
+      "artifactSha256": "83eaa355f0bab13f01161d6c6cdccc970bea4124e73eef61bf613d7724d15ea0",
+      "version": "0.0.0",
+      "productionPackages": 133,
+      "nativeFiles": 4,
+      "fuses": {
+        "0": 48,
+        "1": 48,
+        "2": 48,
+        "3": 48,
+        "4": 48,
+        "5": 49,
+        "6": 48,
+        "7": 49,
+        "8": 49,
+        "version": "1"
+      },
+      "extracted": "verify/linux-x64",
+      "executable": "verify/linux-x64/music-downloader"
+    },
+    "win32-x64": {
+      "status": "PASS",
+      "artifactSha256": "952ce18ab8f48396a0cdc86ba7318ac9312d34ba89b07eb9ef15672c8ee24bae",
+      "version": "0.0.0",
+      "productionPackages": 132,
+      "nativeFiles": 3,
+      "fuses": {
+        "0": 48,
+        "1": 48,
+        "2": 48,
+        "3": 48,
+        "4": 49,
+        "5": 49,
+        "6": 48,
+        "7": 49,
+        "8": 49,
+        "version": "1"
+      },
+      "extracted": "verify/win32-x64",
+      "executable": "verify/win32-x64/application/Yandex Music Downloader.exe"
+    },
+    "darwin-arm64": {
+      "status": "PASS",
+      "artifactSha256": "bbcdec47be266039fb0d1a6229f4f0c6119a62e37970870d6585240c8444b140",
+      "version": "0.0.0",
+      "productionPackages": 132,
+      "nativeFiles": 3,
+      "fuses": {
+        "0": 48,
+        "1": 48,
+        "2": 48,
+        "3": 48,
+        "4": 49,
+        "5": 49,
+        "6": 48,
+        "7": 49,
+        "8": 49,
+        "version": "1"
+      },
+      "extracted": "verify/darwin-arm64",
+      "executable": "verify/darwin-arm64/Yandex Music Downloader.app/Contents/MacOS/Yandex Music Downloader"
+    },
+    "darwin-x64": {
+      "status": "PASS",
+      "artifactSha256": "ac1762b99bc6f40c8513090d4e56372a827d3763993c52ec2e03b2ddd78c11ea",
+      "version": "0.0.0",
+      "productionPackages": 132,
+      "nativeFiles": 3,
+      "fuses": {
+        "0": 48,
+        "1": 48,
+        "2": 48,
+        "3": 48,
+        "4": 49,
+        "5": 49,
+        "6": 48,
+        "7": 49,
+        "8": 49,
+        "version": "1"
+      },
+      "extracted": "verify/darwin-x64",
+      "executable": "verify/darwin-x64/Yandex Music Downloader.app/Contents/MacOS/Yandex Music Downloader"
+    }
+  }
+}

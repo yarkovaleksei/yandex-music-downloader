@@ -1,0 +1,68 @@
+{
+  "status": "PASS",
+  "from": "0.0.0",
+  "to": "0.0.1",
+  "artifactBeforeSha256": "a6ecfe79da61df595ab69deae103661c8f6ec772822edb278b159603324ee2f0",
+  "artifactAfterSha256": "d2a7dda76414178f0e161800a2b5882857649e581b80fdbf11b47669d69e9810",
+  "descriptorSha256": "e877d5d1957072f70f31529ed3535f7087e3439e5dddc45c9baf075b55ff9a99",
+  "signatureVerified": true,
+  "productionDownloadVerified": true,
+  "imageId": "sha256:801e1409481492c3916140785740f6f6e6e1446dd3eace315792bd12c1d9b011",
+  "installedNode": false,
+  "installedFfmpeg": false,
+  "runtimeNetwork": "none",
+  "statePreserved": true,
+  "windows": [
+    {
+      "status": "PASS",
+      "platform": "linux",
+      "arch": "x64",
+      "appVersion": "0.0.0",
+      "versions": {
+        "electron": "45.0.0",
+        "node": "24.22.0",
+        "napi": "10"
+      },
+      "isolation": {
+        "requireAbsent": true,
+        "processAbsent": true,
+        "ipcRendererAbsent": true,
+        "apiPresent": true
+      },
+      "uiReady": true,
+      "settings": {
+        "quality": "normal",
+        "logging": "debug",
+        "concurrency": 3
+      }
+    },
+    {
+      "status": "PASS",
+      "platform": "linux",
+      "arch": "x64",
+      "appVersion": "0.0.1",
+      "versions": {
+        "electron": "45.0.0",
+        "node": "24.22.0",
+        "napi": "10"
+      },
+      "isolation": {
+        "requireAbsent": true,
+        "processAbsent": true,
+        "ipcRendererAbsent": true,
+        "apiPresent": true
+      },
+      "uiReady": true,
+      "settings": {
+        "quality": "normal",
+        "logging": "debug",
+        "concurrency": 3
+      }
+    }
+  ],
+  "limitations": [
+    "Временный тестовый Ed25519 ключ и отдельный HTTPS fixture CA; production trust/feed не настроены",
+    "Ручная замена: между двумя запусками /app заменён извлечённым скачанным AppImage, общий stateDir сохранён",
+    "Контейнерный --no-sandbox, без FUSE/desktop integration, без авторизации и native Windows/macOS"
+  ]
+}

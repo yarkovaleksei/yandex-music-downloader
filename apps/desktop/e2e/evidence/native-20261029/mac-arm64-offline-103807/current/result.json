@@ -1,0 +1,26 @@
+{
+  "platform": "darwin",
+  "jobId": "0ac32ced-762a-4c09-bb8e-5aef2047d36c",
+  "status": "completed",
+  "output": "Тестовый исполнитель - Проверочный сигнал.mp3",
+  "bytes": 50785,
+  "historyAfterRestart": [
+    {
+      "jobId": "0ac32ced-762a-4c09-bb8e-5aef2047d36c",
+      "source": {
+        "provider": "e2e-offline",
+        "kind": "track",
+        "id": "e2e-track"
+      },
+      "title": "Проверочный сигнал",
+      "artists": [
+        "Тестовый исполнитель"
+      ],
+      "count": 1,
+      "bytes": 50785,
+      "completedAt": "2026-10-29T10:47:29.258Z",
+      "replayAvailable": true,
+      "replayReason": null
+    }
+  ]
+}

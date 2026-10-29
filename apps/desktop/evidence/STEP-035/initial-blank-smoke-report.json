@@ -1,0 +1,33 @@
+{
+  "status": "PASS",
+  "version": "0.0.0",
+  "artifactSha256": "991b525ea38d21c653b19376d68196e6cfe974af5f5451f11af8dfba3e3c53d9",
+  "imageId": "sha256:6ddddd64af14bc679bb940597e9a32d4697a8731aaccbf801baf93ffa3afcc11",
+  "baseImage": "ubuntu:24.04@sha256:fe81560990fae86dc4743202b2cb4d3df98d0bcf949173cecef15ce1127ef852",
+  "installedNode": false,
+  "installedFfmpeg": false,
+  "network": "none",
+  "window": {
+    "status": "PASS",
+    "platform": "linux",
+    "arch": "x64",
+    "versions": {
+      "electron": "45.0.0",
+      "node": "24.22.0",
+      "napi": "10"
+    },
+    "isolation": {
+      "requireAbsent": true,
+      "processAbsent": true,
+      "ipcRendererAbsent": true,
+      "apiPresent": true
+    }
+  },
+  "sqliteHeader": true,
+  "screenshotSha256": "d6072abf705eaf7c391f5d9ce5cbefdbf9a0c725a71571d7a2153c66a1ae5d59",
+  "limitations": [
+    "Извлечённый AppImage: FUSE/desktop integration не проверялись",
+    "Контейнерный запуск с --no-sandbox; shipping fuses и BrowserWindow preferences не изменены",
+    "Это не Windows/macOS qualification и не проверка signing/updater"
+  ]
+}

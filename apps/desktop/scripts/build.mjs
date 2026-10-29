@@ -1,6 +1,7 @@
 import { build as bundle } from 'esbuild';
 import { build } from 'vite';
 import path from 'node:path';
+import { cp } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 // Sandbox preload использует только встроенный Electron require, остальные модули bundled.
@@ -41,3 +42,9 @@ await build({
   },
   logLevel: 'warn',
 });
+
+// Открытая конфигурация доверия входит в production ASAR и build input hashes.
+await cp(
+  path.join(root, 'packaging/update-trust.json'),
+  path.join(root, 'dist/update-trust.json'),
+);

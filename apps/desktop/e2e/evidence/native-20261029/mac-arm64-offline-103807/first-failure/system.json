@@ -1,0 +1,30 @@
+{
+  "platform": "darwin",
+  "runtimeArch": "arm64",
+  "node": "24.21.0",
+  "cpuModel": "Apple M2 Pro",
+  "unameMachine": {
+    "stdout": "arm64",
+    "stderr": "",
+    "exitCode": 0,
+    "error": null
+  },
+  "macOS": {
+    "stdout": "ProductName:\t\tmacOS\nProductVersion:\t\t15.7.7\nBuildVersion:\t\t24G720",
+    "stderr": "",
+    "exitCode": 0,
+    "error": null
+  },
+  "arm64Available": {
+    "stdout": "1",
+    "stderr": "",
+    "exitCode": 0,
+    "error": null
+  },
+  "translationProbe": {
+    "stdout": "0",
+    "stderr": "",
+    "exitCode": 0,
+    "error": null
+  }
+}

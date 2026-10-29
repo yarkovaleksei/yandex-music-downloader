@@ -1,0 +1,30 @@
+{
+  "schema": 1,
+  "status": "FAIL",
+  "buildId": "20261029T103807Z-mac-arm64-offline",
+  "sourceHash": "9f44abe60ddeb9afd97b71a36367d694a7cf5beffde5fa7332694b57872d77f4",
+  "appArtifactHash": "7b37871db2ad5c2e8a2acfb020b2e57a048b70d470ed6a7b38f70baff9221f39",
+  "gitHead": "32fb8e1aef7d7b78cb90b8ffce508da55f98aa52",
+  "dirty": true,
+  "platform": "darwin",
+  "arch": "arm64",
+  "node": "24.21.0",
+  "build": {
+    "performedOnGuest": false,
+    "builtOn": {
+      "arch": "x64",
+      "platform": "linux"
+    }
+  },
+  "stages": {
+    "integrity": {
+      "status": "PASS"
+    },
+    "e2e": {
+      "exitCode": 1,
+      "error": null
+    }
+  },
+  "scenario": null,
+  "error": "Electron E2E завершился с ошибкой."
+}

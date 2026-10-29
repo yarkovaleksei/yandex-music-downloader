@@ -16,7 +16,7 @@
 | [OQ-010](open-questions/OQ-010-secure-storage.md) | resolved | Какие платформенные secure storage APIs использовать через Electron? | STEP-030 |
 | [OQ-011](open-questions/OQ-011-quality-policy.md) | resolved | Правила для high/normal и fallback при недоступной настройке качества | STEP-013 |
 | [OQ-012](open-questions/OQ-012-encrypted-variants.md) | resolved | Допустимы ли варианты, доступные только в зашифрованном транспорте или как preview? | STEP-010, STEP-013 |
-| [OQ-013](open-questions/OQ-013-signing-prereq.md) | open | Сертификаты и аккаунты для подписи и notarization релизов | STEP-036 |
+| [OQ-013](open-questions/OQ-013-signing-prereq.md) | resolved | Сертификаты и аккаунты для подписи и notarization релизов | STEP-036 |
 
 ## Blocking semantics
 

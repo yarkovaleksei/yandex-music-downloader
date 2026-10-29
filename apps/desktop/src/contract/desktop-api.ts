@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import type { UpdateView } from './update.js';
 import type {
   Account,
   ArtworkDto,
@@ -30,6 +31,9 @@ const executableRef = z.string().regex(/^exe:[a-f0-9-]{36}$/);
 
 /** Единственная таблица методов/каналов ADR-016; схемы закрыты для лишних полей. */
 export const methods = {
+  checkUpdate: { input: empty, executor: 'main' },
+  downloadUpdate: { input: empty, executor: 'main' },
+  openUpdateFolder: { input: empty, executor: 'main' },
   authenticate: { input: empty, executor: 'host' },
   account: { input: empty, executor: 'host' },
   logout: { input: empty, executor: 'host' },
@@ -100,6 +104,9 @@ export interface DirectorySelection {
   readonly displayPath: string;
 }
 export interface Results {
+  checkUpdate: UpdateView;
+  downloadUpdate: UpdateView;
+  openUpdateFolder: UpdateView;
   authenticate: Account;
   account: Account | null;
   logout: null;
