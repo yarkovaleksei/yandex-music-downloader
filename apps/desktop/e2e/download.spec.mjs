@@ -21,6 +21,7 @@ test('Ссылка → предпросмотр → загрузка → пау�
   const fixture = await prepare();
   let app;
   let page;
+  const diagnostics = [];
   const env = { ...process.env, ...fixture.env };
   delete env.ELECTRON_RUN_AS_NODE;
   delete env.MUSIC_DOWNLOADER_SMOKE_DIR;
@@ -31,8 +32,22 @@ test('Ссылка → предпросмотр → загрузка → пау�
       env,
       timeout: 15_000,
     });
+    app
+      .process()
+      .stdout?.on('data', (bytes) => diagnostics.push(bytes.toString()));
+    app
+      .process()
+      .stderr?.on('data', (bytes) => diagnostics.push(bytes.toString()));
     page = await app.firstWindow();
+    page.on('pageerror', (error) => diagnostics.push(error.stack));
+    page.on('console', (message) =>
+      diagnostics.push(message.type() + ': ' + message.text()),
+    );
     await expect(page.getByLabel('Ссылка на музыку')).toBeVisible();
+    if (process.env.MUSIC_FINAL_DIAGNOSTICS)
+      await page.evaluate(() =>
+        console.info('STEP-054: журнал renderer подключён'),
+      );
   }
   try {
     await launch();
@@ -121,6 +136,9 @@ test('Ссылка → предпросмотр → загрузка → пау�
       JSON.stringify(
         {
           platform: process.platform,
+          stateDir: fixture.env.MUSIC_E2E_STATE,
+          outputPath: output,
+          fixtureDirectory: fixture.directory,
           jobId,
           status: 'completed',
           output: relative,
@@ -146,7 +164,12 @@ test('Ссылка → предпросмотр → загрузка → пау�
     try {
       if (app) await app.close();
     } finally {
-      await rm(fixture.directory, { recursive: true, force: true });
+      await writeFile(
+        testInfo.outputPath('electron-stdio.log'),
+        diagnostics.join(''),
+      );
+      if (process.env.MUSIC_FINAL_KIT !== '1')
+        await rm(fixture.directory, { recursive: true, force: true });
     }
   }
 });

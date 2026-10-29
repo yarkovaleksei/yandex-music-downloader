@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "source": "/home/user/Документы/vbox_shared/reports",
+  "buildId": "20261029T152446475Z-94fa63b4",
+  "platform": "win32-x64",
+  "functionalStatus": "PASS",
+  "nativeAcceptance": "PENDING",
+  "reason": "В PATH обнаружен установленный Node.js; проверка чистой ОС не подтверждена.",
+  "files": {
+    "after.json": {
+      "sha256": "5b6cbddff004a0f82c431cdaa5e3e86ecd54ad4148b9bdb4b5f6f79618b096b0",
+      "bytes": 4482
+    },
+    "before.json": {
+      "sha256": "091704f32bc15400d83233bbaf016dca606edc57b031e1d89d5a76a6dc527554",
+      "bytes": 15758
+    },
+    "e2e/.last-run.json": {
+      "sha256": "91d1c43004802cd49950d78eb11c8fa7d05da8ffffe219a8b13b2f561bc00903",
+      "bytes": 45
+    },
+    "e2e/download-Ссылка-→-предпрос-d6b3b-и-история-после-перезапуска/attachments/результат-сценария-5a4b95294814bfe19bab934c14cf1ec90c158bfe.json": {
+      "sha256": "a67eafa929c4f30ddf538ebf43825d2771f863f37bd209fbbb0df82cddb29c2c",
+      "bytes": 1124
+    },
+    "e2e/download-Ссылка-→-предпрос-d6b3b-и-история-после-перезапуска/electron-stdio.log": {
+      "sha256": "037f2c68a41feacc96e745be0ec14e4bd6d4c0dea025da087f2d06e218a595cb",
+      "bytes": 402
+    },
+    "e2e/download-Ссылка-→-предпрос-d6b3b-и-история-после-перезапуска/result.json": {
+      "sha256": "a67eafa929c4f30ddf538ebf43825d2771f863f37bd209fbbb0df82cddb29c2c",
+      "bytes": 1124
+    },
+    "e2e-stdio.json": {
+      "sha256": "260205ab9448ae1599ecf6258dcb6b0146190d53b0eba1cd0d340276f734e676",
+      "bytes": 5180
+    },
+    "electron-e2e.log": {
+      "sha256": "c3f58f3d6240f1297df121dd5519ac94e4991fe9f18ac4ee8beb16136a9398aa",
+      "bytes": 232
+    },
+    "electron-events.jsonl": {
+      "sha256": "8eda6ec4b9f915ad7f1f9eba6e480cb6da1dbf36a1a4eef9906dfb66151506e7",
+      "bytes": 566
+    },
+    "shipping-n/electron.log": {
+      "sha256": "9a9e2d71c2bec676b6eea725d50e6083761338f45b015810f357dd9d18d67c19",
+      "bytes": 126
+    },
+    "shipping-n/stdio.json": {
+      "sha256": "61b43df634db1363fcfa270e772a2550d805017c550cdf7b613ec79d96b9339c",
+      "bytes": 227
+    },
+    "shipping-n/window-report.json": {
+      "sha256": "69ea0b7448b240b50f9ddf12b2f86ee9b06f3c6c34a75d09957319bcaeef0f59",
+      "bytes": 415
+    },
+    "shipping-n/window.png": {
+      "sha256": "eb9f5c1310f516c2fff820106b413bc6bd78ae865836810a8c8d387d22a2cd74",
+      "bytes": 52692
+    },
+    "shipping-n-plus-1/electron.log": {
+      "sha256": "dbcf7987a44e4135d104b7eaeef461cb6f81e589f9b004377b0cfa4a9bfeabde",
+      "bytes": 126
+    },
+    "shipping-n-plus-1/stdio.json": {
+      "sha256": "61b43df634db1363fcfa270e772a2550d805017c550cdf7b613ec79d96b9339c",
+      "bytes": 227
+    },
+    "shipping-n-plus-1/window-report.json": {
+      "sha256": "8a54860a180ebd5f27849b3f9d07af0bc154ff5dc689bf9b5e1ac333b2206f79",
+      "bytes": 415
+    },
+    "shipping-n-plus-1/window.png": {
+      "sha256": "22390bd5ae056e4110d824e59c53a935fd2e4a2b943310ebdc9c162d90919522",
+      "bytes": 51876
+    }
+  },
+  "downloadedPayload": {
+    "file": "music-downloader-0.0.1-win32-x64-04403b2a5786.zip",
+    "sha256": "04403b2a578626154a061cb39e28e97967c56076c61c62eaf432a83df35083e5",
+    "bytes": 175079668,
+    "matchesFinalManifest": true,
+    "copied": false
+  }
+}

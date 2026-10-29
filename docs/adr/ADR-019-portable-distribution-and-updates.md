@@ -9,9 +9,11 @@ supersedes:
   - ADR-018
 superseded_by: []
 requirements:
+  - REQ-058
   - REQ-054
   - REQ-055
 steps:
+  - STEP-058
   - STEP-036
   - STEP-054
 ---

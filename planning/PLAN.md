@@ -57,7 +57,8 @@
 | STEP-051 | Загрузка коллекции «Мне нравится» по ссылке lk.UUID | bugfix | critical | completed | STEP-007, STEP-009, STEP-019 | REQ-006, REQ-007, REQ-009 |
 | STEP-052 | Платформа M3U8 writer по умолчанию и переносимость тестов | bugfix | critical | completed | STEP-022 | REQ-028, REQ-043, REQ-044 |
 | STEP-053 | Синхронизировать описание принятого headless MVP | documentation | medium | completed | STEP-027, STEP-024 | — |
-| STEP-054 | Финальная проверка готового приложения на Windows и macOS | implementation | medium | planned | STEP-034, STEP-035, STEP-036 | REQ-041, REQ-045, REQ-053, REQ-054, REQ-055 |
+| STEP-054 | Финальная проверка готового приложения на Windows и macOS | implementation | medium | in_progress | STEP-034, STEP-035, STEP-036, STEP-055, STEP-056 | REQ-041, REQ-045, REQ-053, REQ-054, REQ-055 |
 | STEP-055 | Нижняя граница Node.js 22.14.0 | implementation | medium | completed | — | REQ-040 |
 | STEP-056 | Компактные загрузки, история и полезная desktop-диагностика | implementation | high | completed | STEP-031, STEP-032 | REQ-050, REQ-051, REQ-052, REQ-057 |
 | STEP-057 | Итоговое состояние CLI после crash/resume | bugfix | high | completed | STEP-026 | REQ-020, REQ-042 |
+| STEP-058 | Недостающие функции desktop UI и соответствие макетам | implementation | medium | planned | STEP-031, STEP-032, STEP-056 | REQ-010, REQ-025, REQ-026, REQ-028, REQ-048, REQ-049, REQ-050, REQ-051, REQ-052, REQ-057, REQ-058 |

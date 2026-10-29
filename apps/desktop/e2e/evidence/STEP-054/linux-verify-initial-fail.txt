@@ -1,0 +1,16 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Запрещённый compiler/key: project/node_modules/@babel/types/lib/builders/typescript/createTSUnionType.js
+    at verify (file:///home/user/github.com/yarkovaleksei/yandex-music-downloader/apps/desktop/scripts/final-kit.mjs:219:9)
+    at async file:///home/user/github.com/yarkovaleksei/yandex-music-downloader/apps/desktop/scripts/final-kit.mjs:540:31 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

@@ -8,9 +8,11 @@ deciders:
 supersedes: []
 superseded_by: []
 requirements:
+  - REQ-058
   - REQ-046
   - REQ-047
 steps:
+  - STEP-058
   - STEP-028
   - STEP-030
   - STEP-031

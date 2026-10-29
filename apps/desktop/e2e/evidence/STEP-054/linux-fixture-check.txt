@@ -1,0 +1,1 @@
+PASS fixture: production Ed25519/download, signature/size/hash rejection, integrity tamper, guest prebuilt branch; native PENDING

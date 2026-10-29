@@ -1,0 +1,146 @@
+{
+  "status": "PASS",
+  "externalTools": {
+    "node": {
+      "command": [
+        "where.exe",
+        "node"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "stdout": "C:\\Program Files\\nodejs\\node.exe\r\n",
+      "stderr": ""
+    },
+    "ffmpeg": {
+      "command": [
+        "where.exe",
+        "ffmpeg"
+      ],
+      "exitCode": 1,
+      "signal": null,
+      "stdout": "",
+      "stderr": "����������: �� 㤠���� ���� 䠩�� �� ������� 蠡�����.\r\n"
+    }
+  },
+  "cleanEnvironment": false,
+  "executionRuntimes": "Только встроенные Node/Electron по абсолютным путям; externalTools — наблюдение PATH, чистая ОС требует manual подтверждения",
+  "nativeAcceptance": "PENDING",
+  "revision": "94fa63b4dbbc9ae40b2e18c850c8e986df1d6d62",
+  "buildId": "20261029T152446475Z-94fa63b4",
+  "appArtifactHash": "8e33becb043c2c32fa9b590cb87938d2fc149e79f82e54345bbc4578a461b6c0",
+  "nextArtifactHash": "04403b2a578626154a061cb39e28e97967c56076c61c62eaf432a83df35083e5",
+  "platform": "win32",
+  "arch": "x64",
+  "cpu": [
+    "AMD Ryzen 9 5950X 16-Core Processor            ",
+    "AMD Ryzen 9 5950X 16-Core Processor            ",
+    "AMD Ryzen 9 5950X 16-Core Processor            ",
+    "AMD Ryzen 9 5950X 16-Core Processor            ",
+    "AMD Ryzen 9 5950X 16-Core Processor            ",
+    "AMD Ryzen 9 5950X 16-Core Processor            ",
+    "AMD Ryzen 9 5950X 16-Core Processor            ",
+    "AMD Ryzen 9 5950X 16-Core Processor            "
+  ],
+  "os": "10.0.26200",
+  "rosetta": null,
+  "hostArm64": null,
+  "runtime": {
+    "node": "24.21.0",
+    "acorn": "8.18.0",
+    "ada": "4.0.0",
+    "amaro": "1.1.11",
+    "ares": "1.34.8",
+    "brotli": "1.2.0",
+    "cldr": "48.0",
+    "icu": "78.3",
+    "llhttp": "9.4.3",
+    "merve": "1.2.2",
+    "modules": "137",
+    "napi": "10",
+    "nbytes": "0.1.4",
+    "ncrypto": "0.0.1",
+    "nghttp2": "1.70.0",
+    "nghttp3": "",
+    "ngtcp2": "",
+    "openssl": "3.5.8",
+    "simdjson": "4.6.7",
+    "simdutf": "6.4.0",
+    "sqlite": "3.53.4",
+    "tz": "2026c",
+    "undici": "7.29.1",
+    "unicode": "17.0",
+    "uv": "1.52.1",
+    "uvwasi": "0.0.23",
+    "v8": "13.6.233.17-node.53",
+    "zlib": "1.3.2.1-motley-8002e91",
+    "zstd": "1.5.7"
+  },
+  "guestBuildPerformed": false,
+  "commands": [
+    {
+      "command": [
+        "C:\\Users\\vboxuser\\test\\music-downloader-final-win32-x64-20261029T152446475Z-94fa63b4\\current\\Yandex Music Downloader.exe"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "stdout": "\r\n",
+      "stderr": ""
+    }
+  ],
+  "manualReplacement": "CONFIRMED_BY_USER",
+  "integrityBefore": "PASS",
+  "shipping": {
+    "status": "PASS",
+    "platform": "win32",
+    "arch": "x64",
+    "appVersion": "0.0.1",
+    "versions": {
+      "electron": "45.0.0",
+      "node": "24.22.0",
+      "napi": "10"
+    },
+    "isolation": {
+      "requireAbsent": true,
+      "processAbsent": true,
+      "ipcRendererAbsent": true,
+      "apiPresent": true
+    },
+    "uiReady": true,
+    "settings": {
+      "quality": "normal",
+      "logging": "debug",
+      "concurrency": 3
+    }
+  },
+  "e2e": {
+    "platform": "win32",
+    "stateDir": "C:\\Users\\vboxuser\\test\\music-downloader-final-win32-x64-20261029T152446475Z-94fa63b4\\isolated-home\\Local\\music-downloader",
+    "outputPath": "C:\\Users\\vboxuser\\AppData\\Local\\Temp\\music-desktop-e2e-Pis7SD\\output\\Тестовый исполнитель - Проверочный сигнал.mp3",
+    "fixtureDirectory": "C:\\Users\\vboxuser\\AppData\\Local\\Temp\\music-desktop-e2e-Pis7SD",
+    "jobId": "dc887ba2-557c-474b-838d-2f4d8e85c37e",
+    "status": "completed",
+    "output": "Тестовый исполнитель - Проверочный сигнал.mp3",
+    "bytes": 50785,
+    "historyAfterRestart": [
+      {
+        "jobId": "dc887ba2-557c-474b-838d-2f4d8e85c37e",
+        "source": {
+          "provider": "e2e-offline",
+          "kind": "track",
+          "id": "e2e-track"
+        },
+        "title": "Проверочный сигнал",
+        "artists": [
+          "Тестовый исполнитель"
+        ],
+        "count": 1,
+        "bytes": 50785,
+        "completedAt": "2026-10-29T17:30:22.033Z",
+        "replayAvailable": true,
+        "replayReason": null
+      }
+    ]
+  },
+  "fileAndHistoryPreserved": true,
+  "integrityAfter": "PASS"
+}

@@ -1,1 +1,5 @@
 * text=auto eol=lf
+
+# Raw Evidence сохраняет исходные байты, включая CRLF гостевой Windows.
+apps/desktop/e2e/evidence/STEP-054/**/*.txt -text
+apps/desktop/e2e/evidence/STEP-054/*.txt -text

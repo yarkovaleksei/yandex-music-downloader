@@ -1,0 +1,29 @@
+{
+  "platform": "win32",
+  "stateDir": "C:\\Users\\vboxuser\\test\\music-downloader-final-win32-x64-20261029T152446475Z-94fa63b4\\isolated-home\\Local\\music-downloader",
+  "outputPath": "C:\\Users\\vboxuser\\AppData\\Local\\Temp\\music-desktop-e2e-Pis7SD\\output\\Тестовый исполнитель - Проверочный сигнал.mp3",
+  "fixtureDirectory": "C:\\Users\\vboxuser\\AppData\\Local\\Temp\\music-desktop-e2e-Pis7SD",
+  "jobId": "dc887ba2-557c-474b-838d-2f4d8e85c37e",
+  "status": "completed",
+  "output": "Тестовый исполнитель - Проверочный сигнал.mp3",
+  "bytes": 50785,
+  "historyAfterRestart": [
+    {
+      "jobId": "dc887ba2-557c-474b-838d-2f4d8e85c37e",
+      "source": {
+        "provider": "e2e-offline",
+        "kind": "track",
+        "id": "e2e-track"
+      },
+      "title": "Проверочный сигнал",
+      "artists": [
+        "Тестовый исполнитель"
+      ],
+      "count": 1,
+      "bytes": 50785,
+      "completedAt": "2026-10-29T17:30:22.033Z",
+      "replayAvailable": true,
+      "replayReason": null
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "schema": 1,
+  "revision": "94fa63b4dbbc9ae40b2e18c850c8e986df1d6d62",
+  "buildId": "20261029T152446475Z-94fa63b4",
+  "builtOn": {
+    "platform": "linux",
+    "arch": "x64"
+  },
+  "guestBuildAllowed": false,
+  "nativeAcceptance": "PENDING",
+  "inputs": {
+    "apps/desktop/e2e/application.mjs": "fe821202695d9f57d0324e02d7374bf1ebc80c1468e50fb1ebaa1f1ea1b7339d",
+    "apps/desktop/e2e/assets/README.md": "05fbf7d9f25f9cfeea50ca52fa20508df76b64b042c9f8402300a979975b5329",
+    "apps/desktop/e2e/assets/tone.mp3": "ad000a6d13917c2cfdd6b84996d8fbb506b325dae065a2b0e00ae701fcb6f37f",
+    "apps/desktop/e2e/download.spec.mjs": "1e6636f34d6e9652a4e0471beb78b6863082079a31b5c5fb8fe15198ffd0612b",
+    "apps/desktop/e2e/final-check.mjs": "bdaf114272ee95491c67809669bd932b77af4cddafcd32a5d136ca46eac1ac20",
+    "apps/desktop/e2e/main.mjs": "935a56d7a7104a5b56d281ace9c3da344671e6f6ab2fdfa7a3c2633d15569d85",
+    "apps/desktop/e2e/package-lock.json": "c4b8f334271066136ccd1a6ff5ae2bbe1d70ba4fb7a9957a5f8e3639102e155d",
+    "apps/desktop/e2e/package.json": "70b6494ab1fdbf21c0b6e8e9962bea37753dc14fbf3c5ed7756ba7d93f332e58",
+    "apps/desktop/e2e/playwright.config.mjs": "84b350b9d78a7a38fa53bac7c12e199b959216eb5a7167a9b37a728fcbe25995",
+    "apps/desktop/e2e/prepare.mjs": "894be9b002eac55e0929009e7d26217863b9c5129e39900ee01e9e827a762649",
+    "apps/desktop/e2e/provider.mjs": "9e47fc55a4b7667aed0feeeee75e07201809a8ccb8b40815129a23cd17246c66",
+    "apps/desktop/e2e/README.md": "c81d6ebecc251b757b5348d15ed02a9387a3ecca4f09bed499d8e89f2df18473",
+    "apps/desktop/e2e/run.mjs": "b138225c876147fa4ef37d635da935e4c0639abc4713f927fcce1d02d86ea060",
+    "apps/desktop/scripts/final-kit.mjs": "757ae93b26e1fbc5f136ac0abb3440e46096f96a5238ce4e4cbeea4c2f231520",
+    "apps/desktop/e2e/node_modules/@playwright/test/package.json": "6b1c8bb530059f2555530e8dcc1b3803565237e17598683b3766c0fa313b3fd6",
+    "apps/desktop/e2e/node_modules/playwright/package.json": "313d23ce667d93962d3a1ab4be80908cefe840e4d9e48f1cd5863b91f65e8e39",
+    "apps/desktop/e2e/node_modules/playwright-core/package.json": "8aa1c9863fa8dea324e674254158cdc79440f4124ef2d84d38053013541cb7d6",
+    "node_modules/electron/checksums.json": "499f818a4a5e105778fdc5c83a51c5e473abcfb2b8c552e0a930ec9617517936"
+  },
+  "packagingManifests": [
+    "3bf88a87af56d30cc0126990e4c8b509463d6a902fb37a0242f03198564d55e1",
+    "da96f064ad8acb76df115a62bce35346a05acf6bc80470fb30a1b40305b4f65f"
+  ],
+  "targets": {
+    "win32-x64": {
+      "archive": "music-downloader-final-win32-x64-20261029T152446475Z-94fa63b4.zip",
+      "sha256": "5901ef089550c88fc59c7425f780cd05065e03ad4cfbc6eb874bbc4a9cecb635",
+      "appArtifactHash": "8e33becb043c2c32fa9b590cb87938d2fc149e79f82e54345bbc4578a461b6c0",
+      "nextArtifactHash": "04403b2a578626154a061cb39e28e97967c56076c61c62eaf432a83df35083e5"
+    },
+    "darwin-arm64": {
+      "archive": "music-downloader-final-darwin-arm64-20261029T152446475Z-94fa63b4.zip",
+      "sha256": "ebdf20d5ee273c066fc044d7ddc96523ea7ad7521064a981d5a2d9825714cc6f",
+      "appArtifactHash": "55deca5f0a01cafafa9a5007ee63203a267b29fb02bf3512bedb65f80a4a474b",
+      "nextArtifactHash": "4b1e2604070244104ea5bb0f004816702070fdef50a56622aa5dd582fd12fe4d"
+    },
+    "darwin-x64": {
+      "archive": "music-downloader-final-darwin-x64-20261029T152446475Z-94fa63b4.zip",
+      "sha256": "53ff281df2c68afcfe808928ba3eba2c10819c1f564985b95ca02134ab653afc",
+      "appArtifactHash": "294a9a03c97b32ed378ea6555d8113a4b1746e3f1fe66149f696e08dc638e9ee",
+      "nextArtifactHash": "ac7875d84bdf694543fd1e2fee62b6af127e7968294696b1e13a0c06f3ef3766"
+    }
+  }
+}
