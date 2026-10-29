@@ -24,6 +24,10 @@ import {
 import { ThemeProvider } from '@mui/material/styles';
 import DownloadRounded from '@mui/icons-material/DownloadRounded';
 import HomeRounded from '@mui/icons-material/HomeRounded';
+import HistoryRounded from '@mui/icons-material/HistoryRounded';
+import SettingsRounded from '@mui/icons-material/SettingsRounded';
+import PersonRounded from '@mui/icons-material/PersonRounded';
+import HealthAndSafetyRounded from '@mui/icons-material/HealthAndSafetyRounded';
 import FolderOpenRounded from '@mui/icons-material/FolderOpenRounded';
 import type {
   Account,
@@ -246,16 +250,18 @@ export function App({ api = window.desktopApi }: { api?: DesktopApi }) {
             Загрузки{' '}
             {downloads.jobs.length > 0 ? `(${downloads.jobs.length})` : ''}
           </Button>
+          {/* Иконки Rounded сохраняют единый визуальный ряд пунктов меню. */}
           {(
             [
-              ['history', 'История'],
-              ['settings', 'Настройки'],
-              ['account', 'Аккаунт'],
-              ['diagnostics', 'Диагностика'],
+              ['history', 'История', HistoryRounded],
+              ['settings', 'Настройки', SettingsRounded],
+              ['account', 'Аккаунт', PersonRounded],
+              ['diagnostics', 'Диагностика', HealthAndSafetyRounded],
             ] as const
-          ).map(([key, label]) => (
+          ).map(([key, label, Icon]) => (
             <Button
               key={key}
+              startIcon={<Icon />}
               variant={page === key ? 'contained' : 'text'}
               onClick={() => setPage(key)}
             >
