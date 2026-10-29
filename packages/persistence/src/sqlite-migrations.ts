@@ -67,6 +67,27 @@ function createSchemaV1(db: Database.Database): void {
 /** Упорядоченный production-список; новые версии добавляются только в конец. */
 export const sqliteMigrations: readonly SqliteMigration[] = [
   { version: 1, up: createSchemaV1 },
+  {
+    version: 2,
+    up: (db) => {
+      // STEP-032: история скрывается отдельно, исходные jobs/leases/import не удаляются.
+      db.exec(`
+      CREATE TABLE desktop_settings (id INTEGER PRIMARY KEY CHECK (id = 1), value TEXT NOT NULL) STRICT;
+      CREATE TABLE desktop_diagnostics (id INTEGER PRIMARY KEY CHECK (id = 1), value TEXT NOT NULL) STRICT;
+      CREATE TABLE history_hidden (job_id TEXT PRIMARY KEY) STRICT;
+      CREATE TABLE job_settings (job_id TEXT PRIMARY KEY REFERENCES jobs(job_id), value TEXT NOT NULL) STRICT;
+    `);
+    },
+  },
+  {
+    version: 3,
+    up: (db) => {
+      // REQ-057: очистка очереди независима от истории и исходных jobs.
+      db.exec(
+        'CREATE TABLE downloads_hidden (job_id TEXT PRIMARY KEY) STRICT;',
+      );
+    },
+  },
 ];
 
 /** Последняя версия схемы, которую понимает этот процесс. */

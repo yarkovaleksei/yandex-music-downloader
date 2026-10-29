@@ -34,9 +34,9 @@
 | STEP-028 | ADR: SQLite, модель безопасности Electron и IPC | adr | medium | completed | STEP-027 | REQ-033, REQ-046, REQ-047 |
 | STEP-029 | SQLite persistence и миграции | implementation | medium | completed | STEP-018, STEP-028, STEP-055 | REQ-033 |
 | STEP-030 | Desktop shell: Electron, React, MUI, typed IPC, secure storage | implementation | medium | completed | STEP-028, STEP-018, STEP-029 | REQ-045, REQ-046, REQ-047, REQ-048 |
-| STEP-031 | UX: предпросмотр URL, загрузки, прогресс и уведомления | implementation | medium | planned | STEP-030 | REQ-049, REQ-050 |
-| STEP-032 | UX: History, Settings, Account и Diagnostics | implementation | medium | planned | STEP-031, STEP-025 | REQ-033, REQ-051, REQ-052 |
-| STEP-033 | E2E-тест desktop | hardening | medium | planned | STEP-031, STEP-032 | REQ-053 |
+| STEP-031 | UX: предпросмотр URL, загрузки, прогресс и уведомления | implementation | medium | completed | STEP-030 | REQ-049, REQ-050 |
+| STEP-032 | UX: History, Settings, Account и Diagnostics | implementation | medium | completed | STEP-031, STEP-025 | REQ-033, REQ-051, REQ-052 |
+| STEP-033 | E2E-тест desktop | hardening | medium | in_progress | STEP-031, STEP-032 | REQ-053 |
 | STEP-034 | ADR: кроссплатформенная упаковка | adr | low | planned | STEP-033 | REQ-054, REQ-055 |
 | STEP-035 | Дистрибутивы и release CI | implementation | low | planned | STEP-034 | REQ-054, REQ-045, REQ-041 |
 | STEP-036 | Подписание, notarization и автообновление | implementation | low | planned | STEP-035 | REQ-055 |
@@ -56,6 +56,7 @@
 | STEP-050 | Диагностика PERMISSION_DENIED в Windows CI PR #17 | bugfix | critical | completed | STEP-044, STEP-045, STEP-049 | REQ-012, REQ-032, REQ-041, REQ-042 |
 | STEP-051 | Загрузка коллекции «Мне нравится» по ссылке lk.UUID | bugfix | critical | completed | STEP-007, STEP-009, STEP-019 | REQ-006, REQ-007, REQ-009 |
 | STEP-052 | Платформа M3U8 writer по умолчанию и переносимость тестов | bugfix | critical | completed | STEP-022 | REQ-028, REQ-043, REQ-044 |
-| STEP-053 | Синхронизировать описание принятого headless MVP | documentation | medium | planned | STEP-027, STEP-024 | — |
+| STEP-053 | Синхронизировать описание принятого headless MVP | documentation | medium | completed | STEP-027, STEP-024 | — |
 | STEP-054 | macOS x64 в CI-матрице тестов | implementation | medium | in_progress | — | REQ-041, REQ-045 |
 | STEP-055 | Нижняя граница Node.js 22.14.0 | implementation | medium | completed | — | REQ-040 |
+| STEP-056 | Компактные загрузки, история и полезная desktop-диагностика | implementation | high | completed | STEP-031, STEP-032 | REQ-050, REQ-051, REQ-052, REQ-057 |

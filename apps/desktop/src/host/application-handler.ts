@@ -1,4 +1,8 @@
-import type { ApplicationApi } from '@music-downloader/shared';
+import type {
+  ApplicationApi,
+  DesktopApplicationApi,
+  DesktopSettings,
+} from '@music-downloader/shared';
 import { parseInput } from '../contract/desktop-api.js';
 import type { Method } from '../contract/desktop-api.js';
 import { failure, safeResult } from '../contract/result.js';
@@ -11,6 +15,7 @@ export async function executeApplication(
 ): Promise<unknown> {
   try {
     let result: unknown;
+    const desktop = api as DesktopApplicationApi;
     switch (method) {
       case 'authenticate':
         result = await api.authenticate();
@@ -46,13 +51,50 @@ export async function executeApplication(
         result = await api[method](parseInput(method, payload).jobId);
         break;
       case 'listJobs':
-        result = await api.listJobs();
+        result = await desktop.listDownloads();
+        break;
+      case 'clearDownloads':
+        result = await desktop.clearDownloads();
         break;
       case 'getJob':
-        result = await api.getJob(parseInput(method, payload).jobId);
+        result = await api.getJob(parseInput('getJob', payload).jobId);
+        break;
+      case 'getDownload':
+        result = await desktop.getDownload(parseInput(method, payload).jobId);
         break;
       case 'diagnostics':
         result = await api.diagnostics();
+        break;
+      case 'getSettings':
+        result = await desktop.getSettings();
+        break;
+      case 'saveSettings':
+        result = await desktop.saveSettings(payload as DesktopSettings);
+        break;
+      case 'history':
+        result = await desktop.history();
+        break;
+      case 'historyArtwork':
+        result = await desktop.historyArtwork(
+          parseInput(method, payload).jobId,
+        );
+        break;
+      case 'hideHistory':
+        result = await desktop.hideHistory(parseInput(method, payload).jobId);
+        break;
+      case 'replay':
+        result = await desktop.replay(parseInput(method, payload).jobId);
+        break;
+      case 'checkFfmpeg':
+        result = await desktop.checkFfmpeg(
+          (payload as { ffmpegPath?: string | null }).ffmpegPath,
+        );
+        break;
+      case 'lastDiagnostics':
+        result = await desktop.lastDiagnostics();
+        break;
+      case 'refreshDiagnostics':
+        result = await desktop.refreshDiagnostics();
         break;
       case 'shutdown':
         result = await api.shutdown();

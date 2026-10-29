@@ -4,7 +4,7 @@ import { createRecovery } from './adapters/recovery.js';
 import { ApplicationFacade } from './application.js';
 import { ApplicationEvents } from './events.js';
 import { Jobs } from './jobs.js';
-import type { ApplicationApi } from '@music-downloader/shared';
+import type { DesktopApplicationApi } from '@music-downloader/shared';
 import { ConcurrencyScheduler } from '@music-downloader/core-queue';
 import { decideRetry } from '@music-downloader/core-retry';
 import { resolveVariant } from '@music-downloader/core-planner';
@@ -24,6 +24,7 @@ import {
   FileCacheStore,
   resolveStateDirectory,
   SqliteManifestStore,
+  SqliteDesktopStateStore,
 } from '@music-downloader/persistence';
 import {
   DOCTOR_CANARY_TRACK_ID,
@@ -32,14 +33,24 @@ import {
   YandexMusicProvider,
 } from '@music-downloader/provider-yandex-music';
 import type { RuntimeAdapters } from './runtime-adapters.js';
-import { collectDiagnostics } from './diagnostics.js';
+import { collectDiagnostics, ffmpegCheck } from './diagnostics.js';
 import { CachedProvider } from './cached-provider.js';
 
 /** Единственное место регистрации Yandex adapter; @link docs/adr/ADR-001-layered-architecture-monorepo.md */
 export function createApplication(
   adapters: RuntimeAdapters = {},
-): ApplicationApi {
-  const logging = adapters.logging;
+): DesktopApplicationApi {
+  const stateDir = resolveStateDirectory({ stateDir: adapters.stateDir });
+  const desktopState =
+    adapters.desktopStateStore ?? new SqliteDesktopStateStore({ stateDir });
+  // REQ-052: настройки читаются до единственного scheduler и logger; CLI precedence прежний.
+  const settings =
+    adapters.clientProfile === 'desktop' ? desktopState.settings() : undefined;
+  const logging =
+    adapters.logging ??
+    (settings === undefined || adapters.logger !== undefined
+      ? undefined
+      : { level: settings.logging });
   if (
     adapters.logger !== undefined &&
     (logging?.level !== undefined || logging?.filePath !== undefined)
@@ -49,7 +60,6 @@ export function createApplication(
   if (logging?.level !== undefined && !isLogLevel(logging.level)) {
     throw new ValidationError();
   }
-  const stateDir = resolveStateDirectory({ stateDir: adapters.stateDir });
   const logger =
     adapters.logger ??
     createLogger({
@@ -59,7 +69,7 @@ export function createApplication(
         : { sink: createFileSink(logging.filePath) }),
     });
   // Default store — SQLite (ADR-014): открывается лениво при первом обращении,
-  // поэтому auth/account базу не открывают; закрывает его только shutdown фасада.
+  // CLI auth/account базу не открывают; desktop читает startup settings отдельно.
   const defaultStore =
     adapters.manifestStore === undefined
       ? new SqliteManifestStore({ stateDir })
@@ -83,9 +93,15 @@ export function createApplication(
       },
     });
   const cachedProvider = createCachedProvider(provider, stateDir, adapters);
-  const scheduler = new ConcurrencyScheduler(adapters.concurrency);
+  const scheduler = new ConcurrencyScheduler(
+    adapters.concurrency ?? settings?.concurrency,
+  );
   const events = new ApplicationEvents(logger);
-  const files = createDownloadFiles();
+  const files = createDownloadFiles(
+    defaultStore === undefined && settings === undefined
+      ? undefined
+      : (jobId) => desktopState.snapshot(jobId)?.naming,
+  );
   const metadata =
     adapters.processing === undefined ? createMetadataWriter() : undefined;
   const jobs = new Jobs(
@@ -133,11 +149,15 @@ export function createApplication(
       },
     },
     events,
+    defaultStore === undefined && settings === undefined
+      ? undefined
+      : desktopState,
   );
   const diagnostics =
     adapters.diagnostics ??
     (() =>
       collectDiagnostics({
+        desktop: adapters.clientProfile === 'desktop',
         provider,
         manifestStore: store,
         ...(defaultStore === undefined
@@ -155,9 +175,16 @@ export function createApplication(
         providerSchemaVersion: PROVIDER_SCHEMA_VERSION,
         canaryTrackId: DOCTOR_CANARY_TRACK_ID,
         runtime: {
-          outputDirectory:
-            adapters.diagnosticsRuntime?.outputDirectory ?? stateDir,
           ...adapters.diagnosticsRuntime,
+          outputDirectory:
+            (settings === undefined
+              ? undefined
+              : desktopState.settings().outputDirectory) ??
+            adapters.diagnosticsRuntime?.outputDirectory ??
+            stateDir,
+          ...(settings === undefined
+            ? {}
+            : { ffmpegPath: desktopState.settings().ffmpegPath ?? undefined }),
         },
       }));
   return new ApplicationFacade({
@@ -166,7 +193,20 @@ export function createApplication(
     events,
     logger,
     diagnostics,
-    debug: logging?.debug === true,
+    checkFfmpeg: async (ffmpegPath) => ({
+      available:
+        (
+          await ffmpegCheck({
+            ...adapters.diagnosticsRuntime,
+            outputDirectory: stateDir,
+            ffmpegPath: ffmpegPath ?? undefined,
+          })
+        ).status === 'ok',
+    }),
+    debug: adapters.logging?.debug === true,
+    desktopState,
+    desktop: adapters.clientProfile === 'desktop',
+    snapshotEnabled: defaultStore !== undefined || settings !== undefined,
     ...(defaultStore === undefined
       ? {}
       : { closeStore: () => defaultStore.close() }),

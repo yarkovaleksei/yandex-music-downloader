@@ -51,6 +51,8 @@ export interface MusicProvider {
   getAccount(): Promise<Account | null>;
   logout(): Promise<void>;
   resolveUrl(url: string): Promise<MediaReference>;
+  /** Публичная ссылка строится внутри provider, без signed URL. */
+  publicUrl?(source: MediaReference): string | undefined;
   getTrack(id: string): Promise<Track>;
   getAlbum(id: string): Promise<Album>;
   getPlaylist(id: string): Promise<Playlist>;

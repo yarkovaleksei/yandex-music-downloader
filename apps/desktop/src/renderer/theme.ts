@@ -30,3 +30,14 @@ export const theme = createTheme({
     MuiPaper: { styleOverrides: { root: { borderRadius: 12 } } },
   },
 });
+
+/** Локальная тёмная палитра не сохраняется в Settings (STEP-031). */
+export const darkTheme = createTheme(theme, {
+  palette: {
+    mode: 'dark',
+    background: { default: '#0B1220', paper: '#111827' },
+    text: { primary: '#E5E7EB', secondary: '#94A3B8' },
+    divider: '#263244',
+    action: { hover: '#1E293B', selected: '#262D57' },
+  },
+});

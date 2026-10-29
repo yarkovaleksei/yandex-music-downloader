@@ -1,0 +1,57 @@
+import '@fontsource/inter/400.css';
+import '@fontsource/inter/600.css';
+import '@fontsource/inter/700.css';
+import { createRoot } from 'react-dom/client';
+import { ffmpegHelp as platformHelp } from '../../../../apps/desktop/src/main/broker';
+import { App } from '../../../../apps/desktop/src/renderer/App';
+import type { DesktopApi, DesktopEvent } from '../../../../apps/desktop/src/contract/desktop-api';
+
+// Синтетическая проверка STEP-056: реальные credentials/provider/fs не используются.
+const scenario = new URLSearchParams(location.search).get('scenario') ?? 'normal';
+const ok = (data: unknown) => ({ schemaVersion: 1, kind: 'result', command: 'mock', data });
+const fail = (message: string) => ({schemaVersion:1,kind:'error',command:'mock',error:{code:'STATE_ERROR',message}});
+const listeners = new Set<(event: DesktopEvent) => void>();
+const defaults = { outputDirectory:'/Музыка/Коллекция', quality:'best', concurrency:4, naming:'collection', overwrite:false, ffmpegPath:null, logging:'info' };
+let settings = JSON.parse(localStorage.getItem('step056-settings') ?? 'null') ?? defaults;
+let signedIn = scenario !== 'loggedout';
+let jobs: any[] = Array.from({length:38}, (_,i)=>({jobId:`synthetic-job-${i+1}`,source:{provider:'yandex-music',kind:i%3===0?'playlist':'track',id:`synthetic-${i+1}`},publicUrl:`https://music.yandex.ru/track/${1000+i}`,status:i%4===0?'completed':i%4===1?'paused':'running',tracks:Array.from({length:i%3===0?148:1},(_,j)=>({trackKey:`${i}:${j}`,title:`Тестовая композиция ${j+1}`,status:i%4===0?'completed':'queued'})),progress:{completedTracks:i%4===0?148:2,totalTracks:148,percent:i%4===0?100:14}}));
+const source = {provider:'yandex-music',kind:'playlist',id:'synthetic-playlist'};
+const baseHistory = [
+ {jobId:'synthetic-playlist',source,title:'Вечерний вайб',artists:['Тестовый исполнитель'],count:42,bytes:1932735283,completedAt:'2026-10-28T10:24:00Z',replayAvailable:true,replayReason:null},
+ {jobId:'synthetic-track',source:{...source,kind:'track',id:'synthetic-track'},title:'Сияй',artists:['Тестовая группа'],count:1,bytes:13002342,completedAt:'2026-10-27T11:12:00Z',replayAvailable:true,replayReason:null},
+ {jobId:'synthetic-legacy',source:{...source,kind:'album',id:'synthetic-legacy'},title:'Лучшee: старая запись',artists:['Тестовый исполнитель'],count:12,bytes:null,completedAt:'2026-10-26T06:41:00Z',replayAvailable:false,replayReason:'Запись создана предыдущей версией приложения без исходных настроек. Откройте источник на Главной, выберите папку и качество и начните новую загрузку.'}
+];
+baseHistory.forEach((item,i)=>Object.assign(item,{publicUrl:`https://music.yandex.ru/track/${1000+i}`,artists:item.source.kind==='playlist'?[]:item.artists,...(i===0?{artwork:{mimeType:'image/png',base64:'iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAIAAABt+uBvAAACCElEQVR4nO2by00DQRQEbUQApEE+iCNIZEEEZIHEnXxIgwt3DiuhxbLda96nH1LVzR95ess9Y+/as3+4/9rBaa7cAaaDIAGCBAgSIEiAIAGCBAgSIEiAIAGCBAgSIEiAIAGCBAgSIEiAIAGCBNfuALu356fzT3h8ee1JcpS95aK9lHKKflndgv6sZk2npj5BKWrW9GjqEJSuZk21pvJPsVI7Da9fK6g6fcMoVVOsR80BFdOtpEEWO0Xj5gty2SkanVMNQbIgb30qMmQKmmBnITFJmqA5dhay8rAGCXIETavPQkoqGiRIEDSzPgvxbDRIEBU0uT4LwYT+a9I/3N59rm9+vN94cvxmhKADNes77Zr8a9BROxsfbSAkKL4AbTn+uKNITmeDth+5sUf+KTYcm6BLS+EqEQ0SIEiAIAGCBDZBl35Fdn2lpkECp6DtpTCekYUExX/q3XLkcTuRnP4pdv747WfzIy53LBa4HiQYYuSA6BTz/gV1C8GE/jVoOAmCJpcono0GCXIEzSxRSioaJEgTNK1EWXkyGzTHUWKS5Ck2wVFuBtYgQb4gb4nSRy9pkMtRxbi1u33a/hxT95bUrkE9VSodpXyRrnZU/frsOBSwZ1XArmeBR9Aa9s3/bzjVECBIgCABggQIEiBIgCABggQIEiBIgCABggQIEiBIgCABggQIEiBI8A1UK50+JIKTjwAAAABJRU5ErkJggg=='}}:{})}));
+let hidden = new Set<string>(JSON.parse(localStorage.getItem('step056-hidden') ?? '[]'));
+let checkedAt = '2026-10-28T12:00:00Z';
+const diagnostics = () => ({ checkedAt, diagnostics:{available:scenario !== 'diagnostic-errors',backend:'sqlite',configuration:{schemaVersion:'1',credentialBackend:'native-keyring',configurationConfirmed:false,checks:{runtime:{status:'ok'},credentialStore:{status:'ok'},provider:scenario==='diagnostic-errors'?{status:'api-changed',code:'API_CHANGED'}:{status:'ok'},auth:{status:'ok'},account:{status:'ok'},metadata:scenario==='diagnostic-errors'?{status:'skipped',code:'DEPENDENCY_FAILED'}:{status:'ok'},audioVariants:{status:'ok'},manifestStore:{status:'ok'},filesystem:{status:'ok'},ffmpeg:{status:'failed',code:'FFMPEG_NOT_FOUND',optional:true},tokenPermissions:{status:'skipped',code:'NOT_APPLICABLE'}}}} });
+const api = {
+ historyArtwork:async()=>scenario==='cover-pending'?new Promise(()=>{}):ok(null),
+ openExternal:async({url}:{url:string})=>{sessionStorage.setItem('last-opened',url);return ok(null);},
+ openDownloadsFolder:async()=>ok(null),
+ checkFfmpeg:async()=>ok({available:scenario==='ffmpeg-installed'}),
+ ffmpegHelp:async()=>ok(platformHelp(new URLSearchParams(location.search).get('os')??'linux')),
+ clearDownloads:async()=>{const before=jobs.length;jobs=jobs.filter(j=>!['completed','cancelled','failed'].includes(j.status));return ok(before-jobs.length);},
+ account:async()=>ok(signedIn?{id:'synthetic-account',displayName:'Тестовый пользователь'}:null),
+ authenticate:async()=>{signedIn=true;return ok({id:'synthetic-account',displayName:'Тестовый пользователь'});},
+ logout:async()=>{signedIn=false;return ok(null);},
+ listJobs:async()=>ok(jobs),getJob:async()=>ok(jobs[0]??null),getDownload:async({jobId}:{jobId:string})=>ok(jobs.find(j=>j.jobId===jobId)??null),
+ resolve:async()=>ok(source),preview:async()=>ok({source,kind:'playlist',title:'Вечерний вайб',tracks:[],qualities:[]}),
+ createDownload:async()=>ok(null),
+ pause:async({jobId}:{jobId:string})=>{const j=jobs.find(j=>j.jobId===jobId);if(j)j.status='paused';return ok(j);},
+ resume:async({jobId}:{jobId:string})=>{const j=jobs.find(j=>j.jobId===jobId);if(j)j.status='running';return ok(j);},
+ cancel:async()=>ok(null),retry:async()=>ok(null),
+ selectDirectory:async()=>ok({directoryRef:'dir:00000000-0000-0000-0000-000000000032',displayPath:'/Музыка/Новая коллекция'}),
+ selectFfmpeg:async()=>ok({executableRef:'exe:00000000-0000-0000-0000-000000000032',displayPath:'/Тестовые инструменты/ffmpeg'}),
+ getSettings:async()=>ok(settings),
+ saveSettings:async(value:Record<string,unknown>)=>{settings={...settings,...Object.fromEntries(Object.entries(value).filter(([key])=>!['directoryRef','ffmpegRef'].includes(key))),...(value.directoryRef?{outputDirectory:'/Музыка/Новая коллекция'}:{}),...('ffmpegRef'in value?{ffmpegPath:value.ffmpegRef===null?null:'/Тестовые инструменты/ffmpeg'}:{})};localStorage.setItem('step056-settings',JSON.stringify(settings));return ok(settings);},
+ history:async()=>ok(scenario==='empty'?[]:baseHistory.filter(item=>!hidden.has(item.jobId))),
+ hideHistory:async({jobId}:{jobId:string})=>{hidden.add(jobId);localStorage.setItem('step056-hidden',JSON.stringify([...hidden]));return ok(null);},
+ replay:async({jobId}:{jobId:string})=>{if(scenario==='replay-error')return {schemaVersion:1,kind:'error',command:'replay',error:{code:'OUTCOME_UNKNOWN',message:'Исход операции неизвестен. Проверьте очередь перед повтором.'}};const original=baseHistory.find(item=>item.jobId===jobId);if(!original?.replayAvailable)return fail('Исходные настройки недоступны');const job={jobId:'synthetic-replayed-job',source:original.source,status:'queued',tracks:[{trackKey:'1:synthetic',status:'queued'}]};jobs=[job];return ok(job);},
+ showItemInFolder:async()=>ok(null),
+ lastDiagnostics:async()=>ok(scenario==='empty'?null:diagnostics()),
+ refreshDiagnostics:async()=>{if(scenario==='refresh-error')return fail('Не удалось обновить диагностику');checkedAt='2026-10-28T12:05:00Z';return ok(diagnostics());},
+ diagnostics:async()=>ok(diagnostics().diagnostics),
+ subscribe:(listener:(event:DesktopEvent)=>void)=>{listeners.add(listener);return()=>listeners.delete(listener);}
+};
+createRoot(document.getElementById('root')!).render(<App api={api as unknown as DesktopApi}/>);

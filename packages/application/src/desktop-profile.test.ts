@@ -1,3 +1,6 @@
+import { mkdtemp, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
 import type * as Persistence from '@music-downloader/persistence';
 import { afterEach, expect, it, vi } from 'vitest';
 const profiles = vi.hoisted(() => [] as unknown[]);
@@ -22,8 +25,10 @@ afterEach(() => {
 });
 it('ADR-015 application по умолчанию остаётся CLI, desktop передаёт только нейтральный профиль', async () => {
   const cli = createApplication();
-  const desktop = createApplication({ clientProfile: 'desktop' });
+  const stateDir = await mkdtemp(path.join(tmpdir(), 'desktop-profile-'));
+  const desktop = createApplication({ clientProfile: 'desktop', stateDir });
   expect(profiles).toEqual([undefined, 'desktop']);
   await cli.shutdown();
   await desktop.shutdown();
+  await rm(stateDir, { recursive: true, force: true });
 });

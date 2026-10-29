@@ -60,3 +60,4 @@
 | [REQ-054](REQ-054-pack-installers.md) | [PACKAGING] Дистрибутивы для всех целевых ОС | medium | brief |
 | [REQ-055](REQ-055-pack-update-signing.md) | [PACKAGING] Архитектура автообновления и подписания | low | brief |
 | [REQ-056](REQ-056-auth-browser-page.md) | [AUTH] Оформление приватной страницы Device Authorization | medium | user |
+| [REQ-057](REQ-057-desktop-usable-ux.md) | Компактный desktop UX и понятная диагностика препятствий | high | user |

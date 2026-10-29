@@ -42,6 +42,23 @@ export async function resolveYandexMusicUrl(
   }
 }
 
+/** REQ-057: round-trip проверяет literal canonical ID, включая owner и lk. */
+export function publicYandexMusicUrl(
+  source: MediaReference,
+): string | undefined {
+  if (source.provider !== 'yandex-music') return undefined;
+  const pathname =
+    source.kind === 'playlist'
+      ? source.id.startsWith('users/')
+        ? `/${source.id}`
+        : `/playlists/${source.id}`
+      : `/${source.kind}/${source.id}`;
+  const resolved = resolvePathname(pathname);
+  return resolved?.kind === source.kind && resolved.id === source.id
+    ? `https://music.yandex.ru${pathname}`
+    : undefined;
+}
+
 function resolvePathname(pathname: string): MediaReference | undefined {
   const track = /^\/track\/(\d+)\/?$/.exec(pathname);
   if (track?.[1] !== undefined)

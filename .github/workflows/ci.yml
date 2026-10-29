@@ -237,3 +237,100 @@ jobs:
         # Offline unit/integration тесты Vitest; live-тесты provider сюда не входят.
         # Пример: yarn test.
         run: node packages/testing/scripts/run-yarn.mjs test
+
+  # STEP-033: тот же offline-сценарий, что локально; release artifacts не создаются.
+  # Пример: desktop-e2e проверяет один Linux сценарий загрузки и истории.
+  desktop-e2e:
+    # Отображаемое имя E2E job в GitHub Actions.
+    # Пример: "Desktop E2E (Linux)".
+    name: Desktop E2E (Linux)
+    # Linux runner с настройкой через repository variable и безопасным fallback.
+    # Пример: CI_LINUX_RUNS_ON=["self-hosted","linux","x64","ci"] или ubuntu-24.04.
+    runs-on: ${{ fromJSON(vars.CI_LINUX_RUNS_ON || '"ubuntu-24.04"') }}
+    # Ограничение времени установки, сборки и одного E2E сценария.
+    # Пример: 15 минут.
+    timeout-minutes: 15
+    # Последовательность установки, production сборки и запуска Electron.
+    # Пример: install → build → E2E; ошибка любого шага останавливает сценарий.
+    steps:
+      # Отображаемое имя получения исходников проверяемой revision.
+      # Пример: "Checkout repository".
+      - name: Checkout repository
+        # Официальный checkout action, закреплён полным SHA.
+        # Пример: actions/checkout@v7.0.1.
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        # Параметры получения исходников.
+        # Пример: не сохранять credentials в git config.
+        with:
+          # Не оставлять GitHub token в локальном git config runner.
+          # Пример: false.
+          persist-credentials: false
+      # Отображаемое имя установки Node.js.
+      # Пример: "Setup Node.js".
+      - name: Setup Node.js
+        # Официальный action установки Node.js, закреплён полным SHA.
+        # Пример: actions/setup-node@v6.5.0.
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
+        # Параметры runtime для Linux job.
+        # Пример: версия Node.js как в существующем quality job.
+        with:
+          # Версия Node.js для установки зависимостей и запуска runner.
+          # Пример: "24".
+          node-version: "24"
+      # Отображаемое имя установки workspace dependencies.
+      # Пример: "Install dependencies".
+      - name: Install dependencies
+        # Общая Corepack-обёртка запрещает изменение yarn.lock при установке.
+        # Пример: node packages/testing/scripts/run-yarn.mjs install --immutable.
+        run: node packages/testing/scripts/run-yarn.mjs install --immutable
+      # Отображаемое имя установки изолированных зависимостей E2E.
+      # Пример: "Install pinned E2E dependencies".
+      - name: Install pinned E2E dependencies
+        # Отдельный lockfile закрепляет Playwright без изменения workspace dependencies.
+        # Пример: npm --prefix apps/desktop/e2e ci --ignore-scripts --workspaces=false.
+        run: npm --prefix apps/desktop/e2e ci --ignore-scripts --workspaces=false
+      # Устанавливаются Linux libraries и Xvfb для workspace Electron.
+      # Пример: "Install Electron display prerequisites"; браузер Playwright не скачивается.
+      - name: Install Electron display prerequisites
+        # Официальная команда Playwright устанавливает только системные prerequisites Chromium.
+        # Пример: node apps/desktop/e2e/node_modules/@playwright/test/cli.js install-deps chromium.
+        run: node apps/desktop/e2e/node_modules/@playwright/test/cli.js install-deps chromium
+      # Отображаемое имя production сборки.
+      # Пример: "Build".
+      - name: Build
+        # Тот же build script, что в существующем quality job.
+        # Пример: node packages/testing/scripts/run-yarn.mjs run build.
+        run: node packages/testing/scripts/run-yarn.mjs run build
+      # Отображаемое имя полного offline Electron сценария.
+      # Пример: "Electron E2E".
+      - name: Electron E2E
+        # Тот же локальный runner запускается в виртуальном Linux дисплее.
+        # Пример: xvfb-run -a node apps/desktop/e2e/run.mjs.
+        run: xvfb-run -a node apps/desktop/e2e/run.mjs
+      # Диагностика содержит только синтетические fixture.
+      # Пример: "Upload E2E failure artifacts".
+      - name: Upload E2E failure artifacts
+        # Сохранять диагностику только при неуспешном предыдущем шаге.
+        # Пример: failure().
+        if: failure()
+        # Официальный action загрузки artifacts, закреплён полным SHA.
+        # Пример: actions/upload-artifact@v4.6.2.
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        # Параметры ограниченного хранения тестовой диагностики.
+        # Пример: отдельный Linux artifact на 7 дней.
+        with:
+          # Имя artifact с ошибкой Linux сценария.
+          # Пример: desktop-e2e-linux-failure.
+          name: desktop-e2e-linux-failure
+          # Только каталог синтетической диагностики E2E.
+          # Пример: .harness/local/e2e-artifacts.
+          path: .harness/local/e2e-artifacts
+          # Разрешить artifact из скрытого каталога .harness.
+          # Пример: true.
+          include-hidden-files: true
+          # Отсутствие диагностики до старта E2E не создаёт вторичную ошибку.
+          # Пример: ignore.
+          if-no-files-found: ignore
+          # Срок хранения диагностики в днях.
+          # Пример: 7.
+          retention-days: 7

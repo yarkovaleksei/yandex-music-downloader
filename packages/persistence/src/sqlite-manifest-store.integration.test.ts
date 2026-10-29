@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 import Database from 'better-sqlite3';
 import { beforeAll, describe, expect, it } from 'vitest';
 import { manifestFixture } from '@music-downloader/shared';
-import { readUserVersion } from './sqlite-migrations.js';
+import { readUserVersion, sqliteMigrations } from './sqlite-migrations.js';
 import { SqliteManifestStore } from './sqlite-manifest-store.js';
 import {
   inspectDatabase,
@@ -193,7 +193,10 @@ describe('SqliteManifestStore: межпроцессная аренда и миг
     const stateDir = await temporaryStateDir('sqlite-migrate-race-');
     const owners: ReturnType<typeof child>[] = [];
     try {
-      const store = new SqliteManifestStore({ stateDir });
+      const store = new SqliteManifestStore({
+        stateDir,
+        migrations: sqliteMigrations.slice(0, 1),
+      });
       await store.create(manifestFixture('job'));
       await store.close();
       const left = child(stateDir, 'migrate');
@@ -224,7 +227,10 @@ describe('SqliteManifestStore: межпроцессная аренда и миг
     const stateDir = await temporaryStateDir('sqlite-stale-process-');
     const owners: ReturnType<typeof child>[] = [];
     try {
-      const store = new SqliteManifestStore({ stateDir });
+      const store = new SqliteManifestStore({
+        stateDir,
+        migrations: sqliteMigrations.slice(0, 1),
+      });
       await store.create(manifestFixture('job'));
       await store.close();
       const stale = child(stateDir, 'stale-writer');

@@ -1,7 +1,7 @@
 import { mkdtemp, readFile, rm } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import type {
   JobManifestV1,
   ManifestStore,
@@ -359,6 +359,7 @@ describe('публичный ApplicationApi', () => {
   });
 
   it('не раскрывает provider-private metadata в preview DTO', async () => {
+    const openAudioStream = vi.fn(provider().openAudioStream);
     const api = createApplication({
       providerOverride: {
         ...provider(),
@@ -370,6 +371,15 @@ describe('публичный ApplicationApi', () => {
           artwork: { key: 'private-artwork-key' },
           signedUrl: 'https://example.invalid/audio?token=secret-token',
         }),
+        getAudioVariants: async () => [
+          {
+            key: 'private-variant-key',
+            codec: 'mp3',
+            container: 'mp3',
+            lossless: false,
+          },
+        ],
+        openAudioStream,
       },
     });
     const preview = await api.preview({
@@ -379,6 +389,18 @@ describe('публичный ApplicationApi', () => {
     });
     expect(JSON.stringify(preview)).not.toContain('private-artwork-key');
     expect(JSON.stringify(preview)).not.toContain('secret-token');
+    expect(JSON.stringify(preview)).not.toContain('private-variant-key');
+    expect(openAudioStream).not.toHaveBeenCalled();
+    expect(preview).toMatchObject({
+      kind: 'result',
+      data: {
+        source: { provider: 'mock', kind: 'track', id: '1' },
+        tracks: [{ id: '1', title: 'Трек' }],
+        qualities: expect.arrayContaining([
+          { preference: 'best', available: 1, total: 1 },
+        ]),
+      },
+    });
   });
 
   it('создаёт manifest, публикует начальные события и пишет итоговый файл через public facade', async () => {

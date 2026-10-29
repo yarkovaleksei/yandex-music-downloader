@@ -7,6 +7,14 @@ export class DirectoryRegistry {
     this.selected.set(directoryRef, directory);
     return { directoryRef, displayPath: directory };
   }
+  public addExecutable(file: string): {
+    executableRef: string;
+    displayPath: string;
+  } {
+    const executableRef = `exe:${randomUUID()}`;
+    this.selected.set(executableRef, file);
+    return { executableRef, displayPath: file };
+  }
   public resolve(reference: string): string | undefined {
     return this.selected.get(reference);
   }

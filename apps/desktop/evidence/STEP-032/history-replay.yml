@@ -1,0 +1,34 @@
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - heading "Yandex Music Downloader" [level=3] [ref=e187]
+    - button [ref=e188] [cursor=pointer]
+    - button [ref=e215] [cursor=pointer]
+    - button "История" [ref=e190] [cursor=pointer]
+    - button "Настройки" [ref=e191] [cursor=pointer]
+    - button "Аккаунт" [ref=e192] [cursor=pointer]
+    - button "Диагностика" [ref=e193] [cursor=pointer]
+    - generic [ref=e23] [cursor=pointer]:
+      - switch "Тёмная тема" [ref=e194]
+      - generic [ref=e29]: Тёмная тема
+    - separator [ref=e30]
+    - paragraph [ref=e31]: Вы вошли как Тестовый пользователь
+    - button "Выйти" [ref=e195] [cursor=pointer]
+  - main [ref=e33]:
+    - generic [ref=e34]:
+      - generic [ref=e35]: Приложение подключено
+      - generic [ref=e216]:
+        - heading "Загрузки" [level=1] [ref=e217]
+        - article [ref=e218]:
+          - generic [ref=e219]:
+            - generic [ref=e220]:
+              - heading "Трек · synthetic-track" [level=2] [ref=e221]
+              - paragraph [ref=e222]: В очереди
+            - paragraph [ref=e223]: 0 / 1 · 0%
+            - progressbar "Прогресс задания" [ref=e224]
+            - paragraph [ref=e227]: Трек 1 · В очереди
+            - generic [ref=e228]:
+              - button "Приостановить" [ref=e229] [cursor=pointer]
+              - button "Продолжить" [disabled]
+              - button "Отменить" [ref=e230] [cursor=pointer]
+              - button "Повторить" [disabled]
+              - button "Показать в папке" [disabled]

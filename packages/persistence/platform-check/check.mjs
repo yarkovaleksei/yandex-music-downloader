@@ -27,13 +27,12 @@ import { SqliteManifestStore } from '../dist/sqlite-manifest-store.js';
 import {
   readUserVersion,
   sqliteMigrations,
+  supportedSchemaVersion,
 } from '../dist/sqlite-migrations.js';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
-const additiveV2 = [
-  ...sqliteMigrations,
-  { version: 2, up: (db) => db.exec('ALTER TABLE jobs ADD COLUMN note TEXT') },
-];
+// STEP-056: проверяется переход v1 к текущей production-схеме; исходная fixture закреплена на v1.
+const additiveV2 = sqliteMigrations;
 const marker = 'platform-check-secret-marker';
 
 class CheckFailure extends Error {
@@ -232,7 +231,7 @@ const checks = {
 
   async migrations() {
     await withStateDir(async (stateDir, open) => {
-      const v1 = open();
+      const v1 = open({ migrations: sqliteMigrations.slice(0, 1) });
       await v1.create(manifestFixture('job'));
       await v1.close();
       const before = inspect(stateDir, (db) =>
@@ -256,8 +255,15 @@ const checks = {
           .map((row) => row.version)
           .join(','),
       }));
-      expect(after.version === 2, 'USER_VERSION');
-      expect(after.applied === '1,2', 'APPLIED');
+      expect(
+        after.version === supportedSchemaVersion(sqliteMigrations),
+        'USER_VERSION',
+      );
+      expect(
+        after.applied ===
+          sqliteMigrations.map((migration) => migration.version).join(','),
+        'APPLIED',
+      );
       expect(after.jobs === before, 'DATA_PRESERVED');
       expect(
         databaseFiles(stateDir).some((name) => name.includes('.bak-v1-')),
@@ -315,7 +321,7 @@ const checks = {
 
   async stale_connection() {
     await withStateDir(async (stateDir, open) => {
-      const old = open();
+      const old = open({ migrations: sqliteMigrations.slice(0, 1) });
       await old.create(manifestFixture('job'));
       const newer = open({ migrations: additiveV2 });
       await newer.open();
@@ -379,7 +385,10 @@ const checks = {
     if (process.platform === 'win32') return 'SKIP';
     await withStateDir(async (stateDir) => {
       const nested = path.join(stateDir, 'state');
-      const store = new SqliteManifestStore({ stateDir: nested });
+      const store = new SqliteManifestStore({
+        stateDir: nested,
+        migrations: sqliteMigrations.slice(0, 1),
+      });
       try {
         await store.create(manifestFixture('job'));
         const mode = (name) => statSync(path.join(nested, name)).mode & 0o777;

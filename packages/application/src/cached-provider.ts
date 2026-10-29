@@ -54,6 +54,9 @@ export class CachedProvider implements MusicProvider {
   public resolveUrl(url: string): Promise<MediaReference> {
     return this.provider.resolveUrl(url);
   }
+  public publicUrl(source: MediaReference): string | undefined {
+    return this.provider.publicUrl?.(source);
+  }
   public getTrack(id: string): Promise<Track> {
     return this.serial(() =>
       this.cached(

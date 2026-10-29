@@ -2,6 +2,7 @@ import type {
   DownloadJobStatus,
   DownloadRequest,
   MediaReference,
+  QualityPreference,
 } from './domain.js';
 import type { Account } from './provider.js';
 import type { CommandErrorDto, JsonObject, JobEvent } from './events.js';
@@ -11,6 +12,7 @@ export interface JobSnapshot {
   readonly jobId: string;
   readonly source: MediaReference;
   readonly status: DownloadJobStatus;
+  readonly publicUrl?: string;
   readonly pauseReason?: string;
   readonly tracks: readonly {
     readonly trackKey: string;
@@ -30,6 +32,12 @@ export interface PreviewDto {
   readonly kind: MediaReference['kind'];
   readonly tracks: readonly JsonObject[];
   readonly artwork?: ArtworkDto;
+  readonly author?: string;
+  readonly qualities?: readonly {
+    readonly preference: QualityPreference;
+    readonly available: number;
+    readonly total: number;
+  }[];
 }
 
 export interface DiagnosticsDto {

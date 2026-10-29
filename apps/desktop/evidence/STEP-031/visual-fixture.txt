@@ -1,0 +1,35 @@
+import '@fontsource/inter/400.css';
+import '@fontsource/inter/600.css';
+import '@fontsource/inter/700.css';
+import { createRoot } from 'react-dom/client';
+import { App } from '../../../../apps/desktop/src/renderer/App';
+import type { DesktopApi, DesktopEvent } from '../../../../apps/desktop/src/contract/desktop-api';
+import type { JobSnapshot } from '@music-downloader/shared';
+
+// Только синтетическая fixture для STEP-031; production backend сюда не подключается.
+const scenario = new URLSearchParams(location.search).get('scenario') ?? 'empty';
+const ok = (data: unknown) => ({ schemaVersion: 1, kind: 'result', command: 'mock', data });
+const source = { provider: 'mock', kind: 'playlist', id: 'вечерний-вайб' };
+const listeners = new Set<(event: DesktopEvent) => void>();
+const tracks = ['Сияй', 'Пламя', 'Вечерний город', 'Мой плейлист'].map((title, index) => ({ position: index + 1, track: { id: String(index), title, artists: [{ name: 'Синтетический исполнитель' }], availability: 'available', durationMs: 198000 } }));
+let created = false;
+let job: JobSnapshot = { jobId: 'synthetic-job', source: source as JobSnapshot['source'], status: scenario === 'auth' ? 'paused' : scenario === 'error' ? 'completed_with_errors' : scenario === 'success' ? 'completed' : 'running', ...(scenario === 'auth' ? { pauseReason: 'AUTH_REQUIRED' } : {}), tracks: tracks.map((_, index) => ({ trackKey: `${index + 1}:track`, status: scenario === 'auth' ? (index === 0 ? 'completed' : index === 1 ? 'interrupted' : 'queued') : scenario === 'success' ? 'completed' : scenario === 'error' ? (index === 2 ? 'failed' : 'completed') : index === 0 ? 'completed' : index === 1 ? 'downloading' : 'queued', ...(index === 0 ? { resultPath: '/synthetic/Сияй.mp3' } : {}) })) };
+const api = {
+  account: async () => ok({ id: 'mock', displayName: 'Тестовый пользователь' }),
+  authenticate: async () => ok({ id: 'mock', displayName: 'Тестовый пользователь' }), logout: async () => ok(null),
+  resolve: async () => ok(source),
+  preview: async () => ok({ source, kind: 'playlist', title: 'Вечерний вайб', author: 'Синтетический автор', artwork: { mimeType: 'image/svg+xml', base64: 'PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNDAiIGhlaWdodD0iMjQwIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImciIHgyPSIwIiB5Mj0iMSI+PHN0b3Agc3RvcC1jb2xvcj0iIzgxOENGOCIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI0Y2Qzk0NSIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHdpZHRoPSIyNDAiIGhlaWdodD0iMjQwIiByeD0iMTYiIGZpbGw9InVybCgjZykiLz48cGF0aCBkPSJNMCAxOTVMNTAgMTIwTDk1IDE3NUwxNTAgOTBMMjQwIDE5MFYyNDBIMFoiIGZpbGw9IiM0MjQ3RDkiLz48Y2lyY2xlIGN4PSIxNzUiIGN5PSI2NSIgcj0iMjQiIGZpbGw9IiNGRkZGRkYiLz48L3N2Zz4=' }, tracks, qualities: [{ preference: 'best', available: 4, total: 4 }, { preference: 'lossless', available: 2, total: 4 }, { preference: 'high', available: 4, total: 4 }, { preference: 'normal', available: 4, total: 4 }] }),
+  selectDirectory: async () => ok({ directoryRef: 'dir:00000000-0000-0000-0000-000000000001', displayPath: '/Музыка/Коллекция' }),
+  createDownload: async () => { created = true; for (const listener of listeners) listener({ schemaVersion: 1, event: 'job.created', jobId: job.jobId, seq: 1, durationMs: 0 }); return ok(job); },
+  listJobs: async () => ok((created || ['downloads', 'success', 'error', 'auth'].includes(scenario)) ? [job] : []), getJob: async () => ok(job),
+  pause: async () => { job = { ...job, status: 'paused' }; return ok(job); }, resume: async () => { job = { ...job, status: 'running' }; return ok(job); }, cancel: async () => { job = { ...job, status: 'cancelled' }; return ok(job); }, retry: async () => ok(job), showItemInFolder: async () => ok(null),
+  subscribe: (listener: (event: DesktopEvent) => void) => { listeners.add(listener); return () => listeners.delete(listener); },
+};
+createRoot(document.getElementById('root')!).render(<App api={api as unknown as DesktopApi} />);
+if (['downloads', 'success', 'error'].includes(scenario)) setTimeout(() => {
+  for (const listener of listeners) {
+    listener({ schemaVersion: 1, event: 'job.progress', jobId: job.jobId, seq: 2, payload: { completed: scenario === 'success' ? 4 : scenario === 'error' ? 3 : 1, total: 4, fraction: scenario === 'success' ? 1 : scenario === 'error' ? 0.75 : 0.28 } });
+    if (scenario === 'downloads') listener({ schemaVersion: 1, event: 'track.progress', jobId: job.jobId, trackKey: '2:track', seq: 3, payload: { bytes: 5400000, fraction: 0.54, speed: 1048576, eta: 12000 } });
+    if (scenario !== 'downloads') listener({ schemaVersion: 1, event: 'job.completed', jobId: job.jobId, seq: 4, durationMs: 0 });
+  }
+}, 600);

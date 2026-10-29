@@ -2,6 +2,7 @@ import {
   buildAlbumPlan,
   buildPlaylistPlan,
   buildTrackPlan,
+  resolveVariant,
 } from '@music-downloader/core-planner';
 import type {
   Album,
@@ -60,23 +61,32 @@ export async function preview(
   source: MediaReference,
 ): Promise<PreviewDto> {
   let title: string;
+  let author: string | undefined;
+  let positions: readonly Track[];
   let tracks: readonly JsonObject[];
   let artwork: { readonly key: string } | undefined;
   if (source.kind === 'track') {
     const track = await provider.getTrack(source.id);
     title = track.title ?? '';
+    author =
+      track.artists?.map((artist) => artist.name).join(', ') || undefined;
+    positions = [track];
     tracks = [trackDto(track)];
     artwork = track.artwork;
     buildTrackPlan(source, track);
   } else if (source.kind === 'album') {
     const album = await provider.getAlbum(source.id);
     title = album.title;
+    author = album.artists.map((artist) => artist.name).join(', ') || undefined;
+    positions = album.tracks;
     tracks = albumTracks(album);
     artwork = album.artwork;
     buildAlbumPlan(source, album);
   } else {
     const playlist = await provider.getPlaylist(source.id);
     title = playlist.title;
+    author = playlist.owner;
+    positions = playlist.tracks.map((item) => item.track);
     tracks = playlist.tracks.map((item) => ({
       position: item.position,
       track: trackDto(item.track),
@@ -84,6 +94,23 @@ export async function preview(
     artwork = playlist.artwork;
     buildPlaylistPlan(source, playlist);
   }
+  // REQ-049: покрытие считается по позициям, включая повторы; ключи вариантов не покидают application.
+  const variants = await Promise.all(
+    positions.map((track) =>
+      track.availability === 'available'
+        ? provider.getAudioVariants(track.id)
+        : Promise.resolve([]),
+    ),
+  );
+  const qualities = (['best', 'lossless', 'high', 'normal'] as const).map(
+    (preference) => ({
+      preference,
+      available: variants.filter(
+        (items) => resolveVariant(items, preference).ok,
+      ).length,
+      total: positions.length,
+    }),
+  );
   const image =
     artwork === undefined
       ? undefined
@@ -93,6 +120,8 @@ export async function preview(
     kind: source.kind,
     title,
     tracks,
+    qualities,
+    ...(author ? { author } : {}),
     ...(image === undefined
       ? {}
       : {

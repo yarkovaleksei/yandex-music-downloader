@@ -1,3 +1,4 @@
+import { publicYandexMusicUrl } from './url/resolve-yandex-music-url.js';
 import { Client, DeviceAuthError } from '@dvxch/yandex-music';
 import { z } from 'zod';
 import {
@@ -166,6 +167,10 @@ export class YandexMusicProviderAuth {
     this.active = undefined;
     this.loggedOut = true;
     await this.options.credentialStore.clear();
+  }
+
+  public publicUrl(source: MediaReference): string | undefined {
+    return publicYandexMusicUrl(source);
   }
 
   public resolveUrl(url: string): Promise<MediaReference> {

@@ -124,3 +124,28 @@ describe('doctor application', () => {
       expect(checks.runtime?.code).toBe('UNSUPPORTED_RUNTIME');
   });
 });
+
+it('REQ-057: desktop не запускает FFmpeg, CLI сохраняет полный doctor', async () => {
+  const runFfmpeg = vi.fn(async () => {});
+  const input = {
+    provider: provider(),
+    manifestStore: manifests,
+    providerHealth: async () => 'available' as const,
+    providerSchemaVersion: '1.1.0',
+    canaryTrackId: '2224197',
+    runtime: {
+      outputDirectory: '/tmp',
+      nodeVersion: '22.14.0',
+      filesystemProbe: async () => {},
+      runFfmpeg,
+    },
+  };
+  const desktop = await collectDiagnostics({ ...input, desktop: true });
+  expect(runFfmpeg).not.toHaveBeenCalled();
+  expect(desktop.configuration?.checks).not.toHaveProperty('ffmpeg');
+  expect(desktop.configuration?.checks).not.toHaveProperty('tokenPermissions');
+  const cli = await collectDiagnostics(input);
+  expect(runFfmpeg).toHaveBeenCalledOnce();
+  expect(cli.configuration?.checks).toHaveProperty('ffmpeg');
+  expect(cli.configuration?.checks).toHaveProperty('tokenPermissions');
+});

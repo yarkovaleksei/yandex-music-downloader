@@ -3,6 +3,7 @@ import {
   BrowserWindow,
   dialog,
   net,
+  Notification,
   protocol,
   session,
   shell,
@@ -23,6 +24,8 @@ import { windowOptions } from './window-options.js';
 import { DirectoryRegistry } from './directory-registry.js';
 import { HostSupervisor } from './host-supervisor.js';
 import { registerIpc } from '../transport/main-ipc.js';
+import type { Method } from '../contract/desktop-api.js';
+import { jobNotifications } from './job-notifications.js';
 import { sendEvent } from '../transport/window-events.js';
 
 if (process.env.MUSIC_DOWNLOADER_SMOKE_DIR)
@@ -46,7 +49,26 @@ app.commandLine.removeSwitch('remote-debugging-pipe');
 let window: BrowserWindow | undefined;
 let closing = false;
 let removeIpc: (() => void) | undefined;
-const host = new HostSupervisor((event) => sendEvent(window, event));
+const notify = jobNotifications(
+  async (jobId) =>
+    (await invokeHost('getJob', {
+      jobId,
+    })) as ApplicationResult<JobSnapshot | null>,
+  (title, body) => {
+    if (Notification.isSupported()) new Notification({ title, body }).show();
+  },
+);
+async function invokeHost(method: Method, input: unknown): Promise<unknown> {
+  if (method === 'resume')
+    notify.beginResume((input as { jobId: string }).jobId);
+  const result = await host.invoke(method, input);
+  notify.observeResult(method, result);
+  return result;
+}
+const host = new HostSupervisor((event) => {
+  sendEvent(window, event);
+  void notify(event);
+});
 
 void app.whenReady().then(async () => {
   const root = path.resolve(import.meta.dirname, '../renderer');
@@ -93,6 +115,14 @@ void app.whenReady().then(async () => {
     window,
     directories,
     {
+      selectFfmpeg: async () => {
+        if (!window) return undefined;
+        const result = await dialog.showOpenDialog(window, {
+          title: 'Выберите FFmpeg для диагностики',
+          properties: ['openFile'],
+        });
+        return result.canceled ? undefined : result.filePaths[0];
+      },
       selectDirectory: async () => {
         if (!window) return undefined;
         const result = await dialog.showOpenDialog(window, {
@@ -101,7 +131,7 @@ void app.whenReady().then(async () => {
         return result.canceled ? undefined : result.filePaths[0];
       },
       showItemInFolder: async (jobId, trackKey) => {
-        const response = (await host.invoke('getJob', {
+        const response = (await invokeHost('getJob', {
           jobId,
         })) as ApplicationResult<JobSnapshot | null>;
         if (response.kind !== 'result' || !response.data) return false;
@@ -117,11 +147,13 @@ void app.whenReady().then(async () => {
           return false;
         }
       },
+      openDirectory: async (directory) =>
+        (await shell.openPath(directory)) === '',
       openExternal: async (url) => {
         await shell.openExternal(url);
       },
     },
-    (method, input) => host.invoke(method, input),
+    (method, input) => invokeHost(method, input),
   );
   host.start();
   await window.loadURL(appUrl);

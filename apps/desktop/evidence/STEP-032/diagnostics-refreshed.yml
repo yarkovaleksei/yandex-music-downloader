@@ -1,0 +1,66 @@
+- generic [ref=f1e3]:
+  - complementary [ref=f1e4]:
+    - heading "Yandex Music Downloader" [level=3] [ref=f1e9]
+    - button [ref=f1e10] [cursor=pointer]
+    - button [ref=f1e14] [cursor=pointer]
+    - button "История" [ref=f1e18] [cursor=pointer]
+    - button "Настройки" [ref=f1e19] [cursor=pointer]
+    - button "Аккаунт" [ref=f1e20] [cursor=pointer]
+    - button "Диагностика" [ref=f1e21] [cursor=pointer]
+    - generic [ref=f1e23] [cursor=pointer]:
+      - switch "Тёмная тема" [ref=f1e26]
+      - generic [ref=f1e29]: Тёмная тема
+    - separator [ref=f1e30]
+    - paragraph [ref=f1e31]: Войдите, чтобы подключить музыку
+    - button "Войти через браузер" [ref=f1e115] [cursor=pointer]
+    - generic [ref=f1e116]: Данные входа сохраняются в защищённом хранилище операционной системы.
+  - main [ref=f1e33]:
+    - generic [ref=f1e34]:
+      - generic [ref=f1e35]: Приложение подключено
+      - generic [ref=f1e119]:
+        - generic [ref=f1e120]:
+          - heading "Диагностика" [level=1] [ref=f1e121]
+          - button "Повторить проверки" [active] [ref=f1e122] [cursor=pointer]
+        - paragraph [ref=f1e123]: Состояние приложения и доступности источника музыки
+        - paragraph [ref=f1e124]: "Последняя проверка: 28.10.2026, 15:05:00"
+        - alert [ref=f1e125]:
+          - generic [ref=f1e129]: Обязательные проверки пройдены
+        - generic [ref=f1e131]:
+          - generic [ref=f1e132]:
+            - paragraph [ref=f1e133]: Среда выполнения
+            - generic [ref=f1e134]: Успешно
+          - generic [ref=f1e137]:
+            - paragraph [ref=f1e138]: Защищённое хранилище
+            - generic [ref=f1e139]: Успешно
+          - generic [ref=f1e142]:
+            - paragraph [ref=f1e143]: Источник музыки
+            - generic [ref=f1e144]: Успешно
+          - generic [ref=f1e147]:
+            - paragraph [ref=f1e148]: Авторизация
+            - generic [ref=f1e149]: Успешно
+          - generic [ref=f1e152]:
+            - paragraph [ref=f1e153]: Аккаунт
+            - generic [ref=f1e154]: Успешно
+          - generic [ref=f1e157]:
+            - paragraph [ref=f1e158]: Метаданные
+            - generic [ref=f1e159]: Успешно
+          - generic [ref=f1e162]:
+            - paragraph [ref=f1e163]: Варианты аудио
+            - generic [ref=f1e164]: Успешно
+          - generic [ref=f1e167]:
+            - paragraph [ref=f1e168]: База состояния
+            - generic [ref=f1e169]: Успешно
+          - generic [ref=f1e172]:
+            - paragraph [ref=f1e173]: Папка загрузок
+            - generic [ref=f1e174]: Успешно
+          - generic [ref=f1e177]:
+            - paragraph [ref=f1e178]: FFmpeg
+            - generic [ref=f1e179]:
+              - generic [ref=f1e180]: FFMPEG_NOT_FOUND
+              - generic [ref=f1e181]: Ошибка · необязательно
+          - generic [ref=f1e183]:
+            - paragraph [ref=f1e184]: Права хранилища
+            - generic [ref=f1e185]:
+              - generic [ref=f1e186]: NOT_APPLICABLE
+              - generic [ref=f1e187]: Пропущено
+        - generic [ref=f1e189]: "Версия схемы provider: 1"

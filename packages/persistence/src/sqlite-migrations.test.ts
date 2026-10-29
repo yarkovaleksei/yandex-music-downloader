@@ -20,7 +20,10 @@ import {
 
 /** v1-фикстура с данными: job, аренда, control-запрос и receipt. */
 async function seedV1(stateDir: string): Promise<void> {
-  const store = new SqliteManifestStore({ stateDir });
+  const store = new SqliteManifestStore({
+    stateDir,
+    migrations: sqliteMigrations.slice(0, 1),
+  });
   try {
     await store.create(manifestFixture('a'));
     await store.create({
@@ -76,10 +79,10 @@ describe('SQLite миграции', () => {
         { version: 3, up: () => {} },
       ]),
     ).toThrow();
-    expect(supportedSchemaVersion(sqliteMigrations)).toBe(1);
+    expect(supportedSchemaVersion(sqliteMigrations)).toBe(3);
   });
 
-  it('новая база создаётся миграцией 0 → 1 без резервной копии', async () => {
+  it('v1 fixture создаётся без резервной копии', async () => {
     const stateDir = await temporaryStateDir('sqlite-new-');
     try {
       await seedV1(stateDir);
@@ -107,7 +110,10 @@ describe('SQLite миграции', () => {
         await store.close();
       }
       expect(snapshot(stateDir)).toEqual(before);
-      expect(versions(stateDir)).toEqual({ userVersion: 1, applied: [1] });
+      expect(versions(stateDir)).toEqual({
+        userVersion: 3,
+        applied: [1, 2, 3],
+      });
     } finally {
       await removeDirectory(stateDir);
     }
@@ -229,7 +235,11 @@ describe('SQLite миграции', () => {
         first
           .prepare('SELECT version, applied_at FROM schema_migrations')
           .all(),
-      ).toEqual([{ version: 1, applied_at: 'now' }]);
+      ).toEqual([
+        { version: 1, applied_at: 'now' },
+        { version: 2, applied_at: 'now' },
+        { version: 3, applied_at: 'now' },
+      ]);
     } finally {
       first.close();
     }
