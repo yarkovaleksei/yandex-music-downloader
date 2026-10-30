@@ -29,7 +29,9 @@
     "docs:req": "node scripts/docs/generate-req.mjs",
     "docs:adr": "node scripts/docs/generate-adr.mjs",
     "docs:generate": "node scripts/docs/generate-req.mjs && node scripts/docs/generate-adr.mjs && node scripts/docs/generate-oq.mjs",
-    "docs:oq": "node scripts/docs/generate-oq.mjs"
+    "docs:oq": "node scripts/docs/generate-oq.mjs",
+    "release": "node apps/desktop/scripts/release.mjs",
+    "test:release": "node --test apps/desktop/packaging/release-operations.test.mjs apps/desktop/packaging/release-contract.test.mjs"
   },
   "devDependencies": {
     "@electron/asar": "3.4.1",

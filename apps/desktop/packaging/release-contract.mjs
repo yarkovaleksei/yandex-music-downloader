@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import path from 'node:path';
-import { readFile } from 'node:fs/promises';
+import { readFile, readdir } from 'node:fs/promises';
 import { createPublicKey, verify } from 'node:crypto';
 import asar from '@electron/asar';
 import { files, sha, targets, versionFromTag } from './lib.mjs';
@@ -118,4 +118,32 @@ export async function readCandidate(directory, candidate) {
   assert.equal(manifest.tag, candidate.tag);
   assert.equal(manifest.gitHead, candidate.revision);
   return manifest;
+}
+
+/** Каждый завершённый комплект хранит свой индекс; число выпусков не ограничено парой N/N+1. */
+export async function readReleaseCandidates(cache, tag) {
+  const names = tag
+    ? [tag]
+    : (await readdir(cache, { withFileTypes: true }))
+        .filter(
+          (entry) => entry.isDirectory() && /^v\d+\.\d+\.\d+$/.test(entry.name),
+        )
+        .map((entry) => entry.name);
+  const candidates = [];
+  for (const name of names) {
+    const file = path.join(cache, name, 'release-candidate.json');
+    let candidate;
+    try {
+      candidate = JSON.parse(await readFile(file, 'utf8'));
+    } catch (error) {
+      if (!tag && error.code === 'ENOENT') continue;
+      throw error;
+    }
+    assert.equal(candidate.schema, 1);
+    assert.equal(candidate.tag, name);
+    assert(!versionFromTag(name).includes('-'));
+    candidates.push(candidate);
+  }
+  assert(candidates.length, 'Нет завершённых комплектов релиза');
+  return candidates;
 }

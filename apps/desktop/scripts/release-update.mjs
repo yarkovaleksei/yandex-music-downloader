@@ -20,10 +20,10 @@ import {
   validateShippingTrust,
   validatePublicReceipt,
   readCandidate,
+  readReleaseCandidates,
 } from '../packaging/release-contract.mjs';
 
 const cache = path.join(root, '.cache/desktop-packaging');
-const indexFile = path.join(cache, 'release-candidate.json');
 const trustFile = path.join(root, 'apps/desktop/packaging/update-trust.json');
 const run = (command, args, capture = false) => {
   const result = spawnSync(command, args, {
@@ -50,34 +50,6 @@ async function keyEntry() {
     linux: { store: 'secret-service' },
   });
 }
-async function candidateIndex() {
-  if (!existsSync(indexFile))
-    throw new Error(
-      'Нет реальных release-кандидатов. После фиксации кода и создания exact stable тега выполните prepare-release <tag>.',
-    );
-  const index = await json(indexFile);
-  if (
-    index.schema !== 1 ||
-    !Array.isArray(index.candidates) ||
-    !index.candidates.length ||
-    index.candidates.length > 2
-  )
-    throw new Error('Неверный индекс release-кандидатов');
-  const { newer } = await import('../dist/main/update/service.js');
-  for (let position = 0; position < index.candidates.length; position++) {
-    const current = versionFromTag(index.candidates[position].tag);
-    if (
-      current.includes('-') ||
-      (position > 0 &&
-        !newer(current, versionFromTag(index.candidates[position - 1].tag)))
-    )
-      throw new Error(
-        'Индекс требует разные stable версии N и N+1 по возрастанию',
-      );
-  }
-  return index;
-}
-
 /** локальная подготовка не создаёт тегов, коммитов или публикаций. */
 try {
   if (process.platform !== 'linux') throw new Error('Требуется Linux');
@@ -105,18 +77,6 @@ try {
       throw new Error('Нужны существующий exact HEAD тег и чистое дерево');
     const trust = await json(trustFile);
     validateTrust(trust);
-    const index = existsSync(indexFile)
-      ? await candidateIndex()
-      : { schema: 1, candidates: [] };
-    if (index.candidates.length === 2)
-      throw new Error(
-        'Индекс уже содержит N и N+1; сохраните evidence перед подготовкой следующей пары',
-      );
-    if (index.candidates.length) {
-      const { newer } = await import('../dist/main/update/service.js');
-      if (!newer(versionFromTag(tag), versionFromTag(index.candidates[0].tag)))
-        throw new Error('Следующий кандидат должен быть новее N');
-    }
     const directory = path.join(cache, tag);
     // Уже подготовленные байты одной версии не заменяются другой сборкой.
     if (existsSync(directory))
@@ -146,7 +106,8 @@ try {
     }
     const assets = await validateAssets(directory, manifest, trust);
     await save(path.join(directory, 'release-assets.json'), assets);
-    index.candidates.push({
+    await save(path.join(directory, 'release-candidate.json'), {
+      schema: 1,
       tag,
       revision,
       directory: path.relative(root, directory),
@@ -154,14 +115,17 @@ try {
         await readFile(path.join(directory, 'manifest.json')),
       ),
     });
-    await save(indexFile, index);
     console.log(
       'Локальный release-комплект проверен. Публикация требует отдельного действия владельца.',
     );
-  } else if (args.length === 1 && args[0] === 'verify-release') {
-    const index = await candidateIndex();
+  } else if (
+    (args.length === 1 || args.length === 2) &&
+    args[0] === 'verify-release'
+  ) {
+    if (args[1]) versionFromTag(args[1]);
+    const candidates = await readReleaseCandidates(cache, args[1]);
     const trust = await json(trustFile);
-    for (const candidate of index.candidates) {
+    for (const candidate of candidates) {
       versionFromTag(candidate.tag);
       const directory = path.resolve(root, candidate.directory);
       if (directory !== path.join(cache, candidate.tag))
@@ -191,7 +155,7 @@ try {
     }
   } else
     throw new Error(
-      'Команды: init-key, sign <descriptor>, prepare-release <tag>, verify-release',
+      'Команды: init-key, sign <descriptor>, prepare-release <tag>, verify-release [tag]',
     );
 } catch (error) {
   // Исключения native keyring/сети не печатаются: они могут содержать секретные детали.
