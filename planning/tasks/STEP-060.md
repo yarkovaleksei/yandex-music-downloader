@@ -1,7 +1,7 @@
 ---
 schema: 1
 id: STEP-060
-status: in_progress
+status: completed
 type: implementation
 priority: high
 phase: packaging
@@ -249,29 +249,30 @@ GitHub Releases является размещением HTTPS-файлов вн�
 ## Evidence
 
 
+
 <!-- VERIFICATION-EVIDENCE:START -->
-- Verification run: 2026-10-30T11:37:01Z
-- Status: FAIL
+- Verification run: 2026-10-30T12:52:26Z
+- Status: PASS
 - Automated resumed: false
 - Verification mode: full
 - Incremental executed checks: 8
 - Incremental reused checks: 0
 - Targeted feedback reused: 0
 - Incremental fallback reason: RISK_REQUIRES_FULL
-- Git head: 7e7535909a05f939e4eb7716a52a2a450673dd69
-- Worktree hash: sha256:7af78de7808df346af7599d8dc04ae070fd480d3d2706d0da1fb0173dd2ec0d9
+- Git head: e29369a4e49b815da1be730abbf0bf3da3c908ad
+- Worktree hash: sha256:afb1249a6d6d87757b2cee4b4605894fc108d756968d19c36d19b46849ef9721
 - Verification contract basis: sha256:02e0f4eed768e18af1696e6e40512e44fb184912269abe0f6a8b3218df21fa40
 - Verification context basis: sha256:50373430d7cd183be9917ecedb3e89cc7eb771d39ebcd9f8ceb9526400a1bf50
-- Subject git head: 7e7535909a05f939e4eb7716a52a2a450673dd69
-- Subject worktree hash: sha256:d475d11817999cf65facc20484507f8405f72a55aca93f497f8b943e03e0147e
-- Subject content hash: sha256:f8dbce29b385329395eddde5272d80e8775b62dc246b3f0743d995dc590d60cd
+- Subject git head: e29369a4e49b815da1be730abbf0bf3da3c908ad
+- Subject worktree hash: sha256:afb1249a6d6d87757b2cee4b4605894fc108d756968d19c36d19b46849ef9721
+- Subject content hash: sha256:a10ccbc2290133c7d8c11959b087f76dde4ca94b97b0b28697800bc7d9c22b6c
 
 ### Automated verification
 - Command: python3 .harness/tools/validate.py --mode manual
   - Status: PASS
   - Exit code: 0
-  - Duration ms: 6926
-  - stdout sha256: 52aaa2779d558ff4fc7fb7ac95767413236c9c5e13b123932a5064d7d9a2b211
+  - Duration ms: 6824
+  - stdout sha256: df2e635d9931d174a7f7ee5230cd852f579778b73ba32a2281ad46f925bdbd8b
   - stderr sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
   - stdout bytes: 67
   - stderr bytes: 0
@@ -279,7 +280,7 @@ GitHub Releases является размещением HTTPS-файлов вн�
 - Command: npm run lint
   - Status: PASS
   - Exit code: 0
-  - Duration ms: 19054
+  - Duration ms: 17349
   - stdout sha256: a9abc4bc51d6729860fb000bf87c02e5a80cc830999d05e640c5651c7e3daa6a
   - stderr sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
   - stdout bytes: 147
@@ -288,7 +289,7 @@ GitHub Releases является размещением HTTPS-файлов вн�
 - Command: npm run typecheck
   - Status: PASS
   - Exit code: 0
-  - Duration ms: 8427
+  - Duration ms: 18930
   - stdout sha256: 73ad7967b0b62b903e0e14e90a6a3971d720cb1ab6b744714e6d2ef05dd89743
   - stderr sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
   - stdout bytes: 83
@@ -297,16 +298,16 @@ GitHub Releases является размещением HTTPS-файлов вн�
 - Command: npm test
   - Status: PASS
   - Exit code: 0
-  - Duration ms: 35441
-  - stdout sha256: cfa13ef8ecb0774811f2d008a244a5dc68ee74aeaae721fc12f2dca1ec01e6ae
-  - stderr sha256: 20248282fca23aafd2dc8578f495951503f9a42afdc7f693a19076b259649b37
-  - stdout bytes: 15342
+  - Duration ms: 44529
+  - stdout sha256: f6f19bf6bb4509eb2bdad8098393ed7f335dc6ab67c90be6fc03dcb110fff069
+  - stderr sha256: 4a60cec581d47661303b8afeaa4251c781ab3d33309768266e7eab9f1a0cf66c
+  - stdout bytes: 17836
   - stderr bytes: 4700
   - Provenance: executed
 - Command: npm run build
   - Status: PASS
   - Exit code: 0
-  - Duration ms: 765
+  - Duration ms: 815
   - stdout sha256: 4a84685762211c33a9f2ac6336f7b1d29d9e1f9d26373ef0b9a167bf0a587116
   - stderr sha256: 351b524197fb492920789369e7f1a271420c757633fbb553b280a181ac4c31a4
   - stdout bytes: 88
@@ -315,29 +316,29 @@ GitHub Releases является размещением HTTPS-файлов вн�
 - Command: node --test apps/desktop/packaging/update-contract.test.mjs
   - Status: PASS
   - Exit code: 0
-  - Duration ms: 364
-  - stdout sha256: 8e657f2d301b09fd5c3b6a96cb046ca9243e053c0b7e6346407999b591c4b56b
+  - Duration ms: 515
+  - stdout sha256: 5b3f1322b7d0956211d142137864edb6bea5b81f767451139808a9ea3f22e01d
   - stderr sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-  - stdout bytes: 2269
+  - stdout bytes: 2267
   - stderr bytes: 0
   - Provenance: executed
 - Command: node --test apps/desktop/packaging/release-contract.test.mjs
   - Status: PASS
   - Exit code: 0
   - Duration ms: 364
-  - stdout sha256: a90b48403b2853917f521f5ea09890d9ee60793e079c47683fcff5d2890e8284
+  - stdout sha256: ce95e50e4c0cd9526fe38f0ef4540ab6788ad456f9f2dfd56a221f66a44da026
   - stderr sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-  - stdout bytes: 1254
+  - stdout bytes: 1256
   - stderr bytes: 0
   - Provenance: executed
 - Command: node apps/desktop/scripts/release-update.mjs verify-release
-  - Status: FAIL
-  - Exit code: 1
-  - Duration ms: 63
-  - stdout sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-  - stderr sha256: a066eeb8d9883e1892b3a72a38bde72e13e9657f6249b81e652eeb5d708bb3f3
-  - stdout bytes: 0
-  - stderr bytes: 175
+  - Status: PASS
+  - Exit code: 0
+  - Duration ms: 27671
+  - stdout sha256: 87de9b5cc0554408df7411a42aafc6111f565c077efbb1009055d9153363c053
+  - stderr sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  - stdout bytes: 804
+  - stderr bytes: 0
   - Provenance: executed
 
 ### Product verification
@@ -345,14 +346,18 @@ GitHub Releases является размещением HTTPS-файлов вн�
 
 ### Manual verification
 - Check: Проверить публичную видимость текущего репозитория и анонимную HTTPS-загрузку 12 обязательных Release assets для четырёх целей; сверить descriptor/signature/version/tag/revision/size/SHA-256 с окончательными пакетами и trust в собранном ASAR. Подтвердить прохождение применимых release gates до публикации.
-  - Status: PENDING
+  - Status: PASS
+  - Observed: "Репозиторий публичен. v0.1.0 и v0.1.1 опубликованы stable на e29369a4e49b815da1be730abbf0bf3da3c908ad; у каждого12 assets. До публикации имена/размеры/server SHA256 совпали. После неё все24файла скачаны анонимно, signatures/descriptors/packages byte-identical к проверенному комплекту. prepare-release проверил 4target ASAR/native closure/fuses/version/trust. Exact tags/clean source и подписи подтверждены; N/N+1 одного проверенного source revision, нового native/platform кода нет. Старые native054 proof не перенесены на новые hashes. Evidence apps/desktop/evidence/STEP-060/public-release.json и v0.1.0/v0.1.1/{manifest,verification,anonymous-verification,draft-verification}.json."
 - Check: Выполнить реальный Linux N → N+1 через пользовательский UI и production-канал: проверить, скачать, открыть папку, вручную заменить, запустить и подтвердить сохранение SQLite/настроек/истории/контрольного аудиофайла; в N+1 подтвердить актуальную версию. Записать exact versions/build IDs/hashes и фактические действия.
-  - Status: PENDING
+  - Status: PASS
+  - Observed: "Настоящий shipping UI0.1.0 безDevTools/ASAR changes: quality normal/concurrency3 сохранены через реальные поля, синтетическая history видна. После публикации/fresh restart UI check показал0.1.1, downloadVerified и open-folder вызвалPCManFM; из parentuserData выполнен обычный переходportable-updates, file виден (минимальный runtime безdesktopDBus, FileManager1 не квалифицирован). Полученный UIAppImage151948194bytes SHA256 совпал с published. После SIGTERM вручную заменён /app mount на извлечённый скачанный0.1.1 при том же /report. UIAfter=0.1.1/current, history/settings/schema и контрольный MP3 49572bytes hashad000a6d13917c2cfdd6b84996d8fbb506b325dae065a2b0e00ae701fcb6f37f exactpreserved. linux-update.json, before-state.json/after-state.json, ui snapshots/actions. Initial stalecurrent shots сохранены, причинаunknown; послеrestartработаетбезподменыfeed."
 - Check: Сверить runbook публикации, ручную первичную установку, docs/development.md и docs/architecture.md#deployment-runtime-assumptions с code/Evidence; подтвердить отсутствие секретов в публикуемом содержимом/истории/пакетах/отчётах. Проверить сохранность старых платформенных отчётов и отсутствие переноса PASS на новые хеши; внешние visibility/tag/Release действия подтверждены владельцем.
-  - Status: PENDING
+  - Status: PASS
+  - Observed: "Runbook и текущие deployment-runtime claims синхронизированы с фактической публикацией, начальная ручная установка/замена/owner permission сохранены. Только публичный ключ, privatekey в SecretService. Подготовительный targetedsecretcheck прошёл, signedCDNURL/Authorization отсутствуют в reports. Все additions синтетические/публичные. Старые platform reports не изменены, nativeWinMac/FUSE/auth/newFileManager1 claims не заявлены. Локальные ограничения и наблюдения открыто отражены в README/linux-update.json; публикации обеих версий разрешены владельцем в чате."
 <!-- VERIFICATION-EVIDENCE:END -->
 
 Generated verification block записывает deterministic runner. Дополнительные semantic observations можно хранить вне generated markers.
+
 
 
 ## Blocker / Failure reason

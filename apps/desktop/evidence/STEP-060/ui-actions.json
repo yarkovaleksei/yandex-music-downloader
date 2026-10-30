@@ -1,0 +1,317 @@
+[
+  {
+    "at": "2026-10-30T12:32:41.286167+00:00",
+    "container": "ymd-step060-n",
+    "action": "click",
+    "arguments": [
+      "1134",
+      "175"
+    ],
+    "screenshot": "ui/02-n-dismiss.png"
+  },
+  {
+    "at": "2026-10-30T12:32:42.364867+00:00",
+    "container": "ymd-step060-n",
+    "action": "click",
+    "arguments": [
+      "174",
+      "273"
+    ],
+    "screenshot": "ui/03-n-history.png"
+  },
+  {
+    "at": "2026-10-30T12:32:51.139197+00:00",
+    "container": "ymd-step060-n",
+    "action": "click",
+    "arguments": [
+      "174",
+      "318"
+    ],
+    "screenshot": "ui/04-n-settings.png"
+  },
+  {
+    "at": "2026-10-30T12:33:11.507803+00:00",
+    "container": "ymd-step060-n",
+    "action": "click",
+    "arguments": [
+      "467",
+      "488"
+    ],
+    "screenshot": "ui/05-n-concurrency-focus.png"
+  },
+  {
+    "at": "2026-10-30T12:33:12.510564+00:00",
+    "container": "ymd-step060-n",
+    "action": "keys",
+    "arguments": [
+      "ctrl+a"
+    ],
+    "screenshot": "ui/06-n-concurrency-select.png"
+  },
+  {
+    "at": "2026-10-30T12:33:13.494212+00:00",
+    "container": "ymd-step060-n",
+    "action": "type",
+    "arguments": [
+      "3"
+    ],
+    "screenshot": "ui/07-n-concurrency-edited.png"
+  },
+  {
+    "at": "2026-10-30T12:33:14.571964+00:00",
+    "container": "ymd-step060-n",
+    "action": "click",
+    "arguments": [
+      "739",
+      "427"
+    ],
+    "screenshot": "ui/08-n-quality-menu.png"
+  },
+  {
+    "at": "2026-10-30T12:33:15.574843+00:00",
+    "container": "ymd-step060-n",
+    "action": "keys",
+    "arguments": [
+      "End",
+      "Return"
+    ],
+    "screenshot": "ui/09-n-quality-normal.png"
+  },
+  {
+    "at": "2026-10-30T12:33:16.655156+00:00",
+    "container": "ymd-step060-n",
+    "action": "click",
+    "arguments": [
+      "736",
+      "638"
+    ],
+    "screenshot": "ui/10-n-settings-saved.png"
+  },
+  {
+    "at": "2026-10-30T12:33:40.181418+00:00",
+    "container": "ymd-step060-n",
+    "action": "click",
+    "arguments": [
+      "825",
+      "274"
+    ],
+    "screenshot": "ui/11-n-about.png"
+  },
+  {
+    "at": "2026-10-30T12:37:13.849592+00:00",
+    "container": "ymd-step060-n",
+    "action": "click",
+    "arguments": [
+      "463",
+      "606"
+    ],
+    "screenshot": "ui/12-n-current-before-release.png"
+  },
+  {
+    "at": "2026-10-30T12:37:41.333389+00:00",
+    "container": "ymd-step060-n",
+    "action": "shot",
+    "arguments": [],
+    "screenshot": "ui/13-n-current-result.png"
+  },
+  {
+    "at": "2026-10-30T12:38:09.020922+00:00",
+    "container": "ymd-step060-n",
+    "action": "click",
+    "arguments": [
+      "461",
+      "670"
+    ],
+    "screenshot": "ui/14-n-check-next.png"
+  },
+  {
+    "at": "2026-10-30T12:38:18.429007+00:00",
+    "container": "ymd-step060-n",
+    "action": "shot",
+    "arguments": [],
+    "screenshot": "ui/15-n-update-available.png"
+  },
+  {
+    "at": "2026-10-30T12:39:14.988744+00:00",
+    "container": "ymd-step060-n",
+    "action": "click",
+    "arguments": [
+      "463",
+      "670"
+    ],
+    "screenshot": "ui/16-n-check-retry.png"
+  },
+  {
+    "at": "2026-10-30T12:39:22.604805+00:00",
+    "container": "ymd-step060-n",
+    "action": "shot",
+    "arguments": [],
+    "screenshot": "ui/17-n-update-available.png"
+  },
+  {
+    "at": "2026-10-30T12:41:22.137155+00:00",
+    "container": "ymd-step060-n",
+    "action": "keys",
+    "arguments": [
+      "Return"
+    ],
+    "screenshot": "ui/18-n-check-keyboard.png"
+  },
+  {
+    "at": "2026-10-30T12:41:33.660317+00:00",
+    "container": "ymd-step060-n",
+    "action": "shot",
+    "arguments": [],
+    "screenshot": "ui/19-n-update-result.png"
+  },
+  {
+    "at": "2026-10-30T12:42:20.967645+00:00",
+    "container": "ymd-step060-n",
+    "action": "click",
+    "arguments": [
+      "1134",
+      "175"
+    ],
+    "screenshot": "ui/20-n-restart-dismiss.png"
+  },
+  {
+    "at": "2026-10-30T12:42:22.048979+00:00",
+    "container": "ymd-step060-n",
+    "action": "click",
+    "arguments": [
+      "174",
+      "318"
+    ],
+    "screenshot": "ui/21-n-restart-settings.png"
+  },
+  {
+    "at": "2026-10-30T12:42:23.129826+00:00",
+    "container": "ymd-step060-n",
+    "action": "click",
+    "arguments": [
+      "825",
+      "274"
+    ],
+    "screenshot": "ui/22-n-restart-about.png"
+  },
+  {
+    "at": "2026-10-30T12:42:33.154575+00:00",
+    "container": "ymd-step060-n",
+    "action": "click",
+    "arguments": [
+      "463",
+      "606"
+    ],
+    "screenshot": "ui/23-n-fresh-check.png"
+  },
+  {
+    "at": "2026-10-30T12:42:53.895748+00:00",
+    "container": "ymd-step060-n",
+    "action": "shot",
+    "arguments": [],
+    "screenshot": "ui/24-n-fresh-result.png"
+  },
+  {
+    "at": "2026-10-30T12:43:13.610146+00:00",
+    "container": "ymd-step060-n",
+    "action": "click",
+    "arguments": [
+      "652",
+      "670"
+    ],
+    "screenshot": "ui/25-n-download-started.png"
+  },
+  {
+    "at": "2026-10-30T12:43:40.104076+00:00",
+    "container": "ymd-step060-n",
+    "action": "shot",
+    "arguments": [],
+    "screenshot": "ui/26-n-download-result.png"
+  },
+  {
+    "at": "2026-10-30T12:43:49.663346+00:00",
+    "container": "ymd-step060-n",
+    "action": "click",
+    "arguments": [
+      "688",
+      "685"
+    ],
+    "screenshot": "ui/27-n-open-folder.png"
+  },
+  {
+    "at": "2026-10-30T12:44:31.910468+00:00",
+    "container": "ymd-step060-n",
+    "action": "click",
+    "arguments": [
+      "202",
+      "278"
+    ],
+    "screenshot": "ui/29-n-folder-selected.png"
+  },
+  {
+    "at": "2026-10-30T12:44:32.903742+00:00",
+    "container": "ymd-step060-n",
+    "action": "keys",
+    "arguments": [
+      "Return"
+    ],
+    "screenshot": "ui/30-n-package-in-folder.png"
+  },
+  {
+    "at": "2026-10-30T12:45:59.655325+00:00",
+    "container": "ymd-step060-next",
+    "action": "click",
+    "arguments": [
+      "1134",
+      "175"
+    ],
+    "screenshot": "ui/31-next-dismiss.png"
+  },
+  {
+    "at": "2026-10-30T12:46:00.737975+00:00",
+    "container": "ymd-step060-next",
+    "action": "click",
+    "arguments": [
+      "174",
+      "273"
+    ],
+    "screenshot": "ui/32-next-history.png"
+  },
+  {
+    "at": "2026-10-30T12:46:01.816910+00:00",
+    "container": "ymd-step060-next",
+    "action": "click",
+    "arguments": [
+      "174",
+      "318"
+    ],
+    "screenshot": "ui/33-next-settings.png"
+  },
+  {
+    "at": "2026-10-30T12:46:02.898263+00:00",
+    "container": "ymd-step060-next",
+    "action": "click",
+    "arguments": [
+      "825",
+      "274"
+    ],
+    "screenshot": "ui/34-next-about.png"
+  },
+  {
+    "at": "2026-10-30T12:46:03.978747+00:00",
+    "container": "ymd-step060-next",
+    "action": "click",
+    "arguments": [
+      "463",
+      "606"
+    ],
+    "screenshot": "ui/35-next-check.png"
+  },
+  {
+    "at": "2026-10-30T12:46:30.783383+00:00",
+    "container": "ymd-step060-next",
+    "action": "shot",
+    "arguments": [],
+    "screenshot": "ui/36-next-current.png"
+  }
+]

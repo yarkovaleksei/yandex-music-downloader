@@ -63,4 +63,4 @@
 | STEP-057 | Итоговое состояние CLI после crash/resume | bugfix | high | completed | STEP-026 | REQ-020, REQ-042 |
 | STEP-058 | Недостающие функции desktop UI и соответствие макетам | implementation | medium | completed | STEP-031, STEP-032, STEP-056 | REQ-010, REQ-025, REQ-026, REQ-028, REQ-048, REQ-049, REQ-050, REQ-051, REQ-052, REQ-057, REQ-058 |
 | STEP-059 | Исправления истории, настроек и аккаунта после пользовательской проверки | bugfix | high | completed | STEP-058 | REQ-051, REQ-052, REQ-057, REQ-058 |
-| STEP-060 | Рабочий канал обновлений через GitHub Releases | implementation | high | in_progress | STEP-036, STEP-054, STEP-059 | REQ-055 |
+| STEP-060 | Рабочий канал обновлений через GitHub Releases | implementation | high | completed | STEP-036, STEP-054, STEP-059 | REQ-055 |

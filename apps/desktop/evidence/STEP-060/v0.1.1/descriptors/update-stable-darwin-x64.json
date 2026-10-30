@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "version": "0.1.1",
+  "channel": "stable",
+  "target": "darwin-x64",
+  "url": "https://github.com/yarkovaleksei/yandex-music-downloader/releases/download/v0.1.1/music-downloader-0.1.1-darwin-x64.zip",
+  "size": 144082062,
+  "sha256": "1d1d6fe4691c4faef9f0b2978cfd208e3e91b84d353bc66f1f276c065bc4f6f2"
+}

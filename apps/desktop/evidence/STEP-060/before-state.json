@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 3,
+  "settings": {
+    "writeTags": true,
+    "saveCoverFile": true,
+    "writeM3u8": true,
+    "theme": "light",
+    "outputDirectory": null,
+    "quality": "normal",
+    "concurrency": 3,
+    "naming": "collection",
+    "overwrite": false,
+    "ffmpegPath": null,
+    "logging": "info"
+  },
+  "jobs": [
+    {
+      "jobId": "linux-update-baseline",
+      "manifest": {
+        "version": 1,
+        "jobId": "linux-update-baseline",
+        "provider": "e2e-offline",
+        "source": {
+          "provider": "e2e-offline",
+          "kind": "track",
+          "id": "linux-update-baseline"
+        },
+        "quality": "best",
+        "destination": "/report",
+        "createdAt": "2026-10-30T12:29:52.523Z",
+        "updatedAt": "2026-10-30T12:29:52.523Z",
+        "control": {
+          "state": "running"
+        },
+        "plan": {
+          "source": {
+            "provider": "e2e-offline",
+            "kind": "track",
+            "id": "linux-update-baseline"
+          },
+          "title": "Проверка сохранности при обновлении",
+          "tracks": [
+            {
+              "position": 1,
+              "trackKey": "1",
+              "track": {
+                "id": "linux-update-baseline",
+                "title": "Проверочный сигнал",
+                "availability": "available",
+                "artists": [
+                  {
+                    "id": "fixture",
+                    "name": "Проверочный исполнитель"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "tracks": [
+          {
+            "position": 1,
+            "trackKey": "1",
+            "status": "completed",
+            "attempts": 1,
+            "history": [
+              {
+                "at": "2026-10-30T12:29:52.523Z",
+                "status": "completed"
+              }
+            ],
+            "updatedAt": "2026-10-30T12:29:52.523Z",
+            "resultPath": "/report/baseline.mp3",
+            "postProcessing": {
+              "size": 49572
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "audio": {
+    "bytes": 49572,
+    "sha256": "ad000a6d13917c2cfdd6b84996d8fbb506b325dae065a2b0e00ae701fcb6f37f"
+  }
+}

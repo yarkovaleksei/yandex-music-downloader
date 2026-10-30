@@ -1,0 +1,1421 @@
+{
+  "schemaVersion": 1,
+  "status": "PASS",
+  "captureKind": "summary",
+  "checkedAt": "2026-10-30T12:48:09.817901+00:00",
+  "from": "0.1.0",
+  "to": "0.1.1",
+  "sourceRevision": "e29369a4e49b815da1be730abbf0bf3da3c908ad",
+  "sameSourceRevisionForVersions": true,
+  "beforePackage": {
+    "artifact": "linux-x64/music-downloader-0.1.0-linux-x64.AppImage",
+    "sha256": "3a3e14df4773b48ed668591b5bdd72b045fbc878e08ec1acdc491c2b5d3ad9e2",
+    "bytes": 151948172,
+    "resources": "linux-x64/linux-unpacked/resources",
+    "closure": [
+      {
+        "name": "@emotion/cache",
+        "version": "11.14.0",
+        "directory": "node_modules/@emotion/cache"
+      },
+      {
+        "name": "@emotion/memoize",
+        "version": "0.9.0",
+        "directory": "node_modules/@emotion/memoize"
+      },
+      {
+        "name": "@emotion/sheet",
+        "version": "1.4.0",
+        "directory": "node_modules/@emotion/sheet"
+      },
+      {
+        "name": "@emotion/utils",
+        "version": "1.4.2",
+        "directory": "node_modules/@emotion/utils"
+      },
+      {
+        "name": "@emotion/weak-memoize",
+        "version": "0.4.0",
+        "directory": "node_modules/@emotion/weak-memoize"
+      },
+      {
+        "name": "stylis",
+        "version": "4.2.0",
+        "directory": "node_modules/stylis"
+      },
+      {
+        "name": "@emotion/react",
+        "version": "11.14.0",
+        "directory": "node_modules/@emotion/react"
+      },
+      {
+        "name": "@babel/runtime",
+        "version": "7.29.10",
+        "directory": "node_modules/@babel/runtime"
+      },
+      {
+        "name": "@emotion/babel-plugin",
+        "version": "11.13.5",
+        "directory": "node_modules/@emotion/babel-plugin"
+      },
+      {
+        "name": "@babel/helper-module-imports",
+        "version": "7.29.7",
+        "directory": "node_modules/@babel/helper-module-imports"
+      },
+      {
+        "name": "@babel/traverse",
+        "version": "7.29.10",
+        "directory": "node_modules/@babel/traverse"
+      },
+      {
+        "name": "@babel/code-frame",
+        "version": "7.29.7",
+        "directory": "node_modules/@babel/code-frame"
+      },
+      {
+        "name": "@babel/helper-validator-identifier",
+        "version": "7.29.7",
+        "directory": "node_modules/@babel/helper-validator-identifier"
+      },
+      {
+        "name": "js-tokens",
+        "version": "4.0.0",
+        "directory": "node_modules/js-tokens"
+      },
+      {
+        "name": "picocolors",
+        "version": "1.1.1",
+        "directory": "node_modules/picocolors"
+      },
+      {
+        "name": "@babel/generator",
+        "version": "7.29.8",
+        "directory": "node_modules/@babel/generator"
+      },
+      {
+        "name": "@babel/parser",
+        "version": "7.29.11",
+        "directory": "node_modules/@babel/parser"
+      },
+      {
+        "name": "@babel/types",
+        "version": "7.29.11",
+        "directory": "node_modules/@babel/types"
+      },
+      {
+        "name": "@babel/helper-string-parser",
+        "version": "7.29.11",
+        "directory": "node_modules/@babel/helper-string-parser"
+      },
+      {
+        "name": "@jridgewell/gen-mapping",
+        "version": "0.3.13",
+        "directory": "node_modules/@jridgewell/gen-mapping"
+      },
+      {
+        "name": "@jridgewell/sourcemap-codec",
+        "version": "1.6.0",
+        "directory": "node_modules/@jridgewell/sourcemap-codec"
+      },
+      {
+        "name": "@jridgewell/trace-mapping",
+        "version": "0.3.31",
+        "directory": "node_modules/@jridgewell/trace-mapping"
+      },
+      {
+        "name": "@jridgewell/resolve-uri",
+        "version": "3.1.2",
+        "directory": "node_modules/@jridgewell/resolve-uri"
+      },
+      {
+        "name": "jsesc",
+        "version": "3.1.0",
+        "directory": "node_modules/jsesc"
+      },
+      {
+        "name": "@babel/helper-globals",
+        "version": "7.29.7",
+        "directory": "node_modules/@babel/helper-globals"
+      },
+      {
+        "name": "@babel/template",
+        "version": "7.29.7",
+        "directory": "node_modules/@babel/template"
+      },
+      {
+        "name": "debug",
+        "version": "4.4.3",
+        "directory": "node_modules/debug"
+      },
+      {
+        "name": "ms",
+        "version": "2.1.3",
+        "directory": "node_modules/ms"
+      },
+      {
+        "name": "@emotion/hash",
+        "version": "0.9.2",
+        "directory": "node_modules/@emotion/hash"
+      },
+      {
+        "name": "@emotion/serialize",
+        "version": "1.3.3",
+        "directory": "node_modules/@emotion/serialize"
+      },
+      {
+        "name": "@emotion/unitless",
+        "version": "0.10.0",
+        "directory": "node_modules/@emotion/unitless"
+      },
+      {
+        "name": "csstype",
+        "version": "3.2.3",
+        "directory": "node_modules/csstype"
+      },
+      {
+        "name": "babel-plugin-macros",
+        "version": "3.1.0",
+        "directory": "node_modules/babel-plugin-macros"
+      },
+      {
+        "name": "cosmiconfig",
+        "version": "7.1.0",
+        "directory": "node_modules/cosmiconfig"
+      },
+      {
+        "name": "@types/parse-json",
+        "version": "4.0.2",
+        "directory": "node_modules/@types/parse-json"
+      },
+      {
+        "name": "import-fresh",
+        "version": "3.3.1",
+        "directory": "node_modules/import-fresh"
+      },
+      {
+        "name": "parent-module",
+        "version": "1.0.1",
+        "directory": "node_modules/parent-module"
+      },
+      {
+        "name": "callsites",
+        "version": "3.1.0",
+        "directory": "node_modules/callsites"
+      },
+      {
+        "name": "resolve-from",
+        "version": "4.0.0",
+        "directory": "node_modules/resolve-from"
+      },
+      {
+        "name": "parse-json",
+        "version": "5.2.0",
+        "directory": "node_modules/parse-json"
+      },
+      {
+        "name": "error-ex",
+        "version": "1.3.4",
+        "directory": "node_modules/error-ex"
+      },
+      {
+        "name": "is-arrayish",
+        "version": "0.2.1",
+        "directory": "node_modules/is-arrayish"
+      },
+      {
+        "name": "json-parse-even-better-errors",
+        "version": "2.3.1",
+        "directory": "node_modules/json-parse-even-better-errors"
+      },
+      {
+        "name": "lines-and-columns",
+        "version": "1.2.4",
+        "directory": "node_modules/lines-and-columns"
+      },
+      {
+        "name": "path-type",
+        "version": "4.0.0",
+        "directory": "node_modules/path-type"
+      },
+      {
+        "name": "yaml",
+        "version": "1.10.3",
+        "directory": "node_modules/yaml"
+      },
+      {
+        "name": "resolve",
+        "version": "1.22.13",
+        "directory": "node_modules/resolve"
+      },
+      {
+        "name": "es-errors",
+        "version": "1.3.0",
+        "directory": "node_modules/es-errors"
+      },
+      {
+        "name": "is-core-module",
+        "version": "2.17.0",
+        "directory": "node_modules/is-core-module"
+      },
+      {
+        "name": "hasown",
+        "version": "2.0.4",
+        "directory": "node_modules/hasown"
+      },
+      {
+        "name": "function-bind",
+        "version": "1.1.2",
+        "directory": "node_modules/function-bind"
+      },
+      {
+        "name": "path-parse",
+        "version": "1.0.7",
+        "directory": "node_modules/path-parse"
+      },
+      {
+        "name": "supports-preserve-symlinks-flag",
+        "version": "1.0.0",
+        "directory": "node_modules/supports-preserve-symlinks-flag"
+      },
+      {
+        "name": "convert-source-map",
+        "version": "1.9.0",
+        "directory": "node_modules/convert-source-map"
+      },
+      {
+        "name": "escape-string-regexp",
+        "version": "4.0.0",
+        "directory": "node_modules/escape-string-regexp"
+      },
+      {
+        "name": "find-root",
+        "version": "1.1.0",
+        "directory": "node_modules/find-root"
+      },
+      {
+        "name": "source-map",
+        "version": "0.5.7",
+        "directory": "node_modules/source-map"
+      },
+      {
+        "name": "@emotion/use-insertion-effect-with-fallbacks",
+        "version": "1.2.0",
+        "directory": "node_modules/@emotion/use-insertion-effect-with-fallbacks"
+      },
+      {
+        "name": "hoist-non-react-statics",
+        "version": "3.3.2",
+        "directory": "node_modules/hoist-non-react-statics"
+      },
+      {
+        "name": "react-is",
+        "version": "16.13.1",
+        "directory": "node_modules/react-is"
+      },
+      {
+        "name": "@emotion/styled",
+        "version": "11.14.1",
+        "directory": "node_modules/@emotion/styled"
+      },
+      {
+        "name": "@emotion/is-prop-valid",
+        "version": "1.4.0",
+        "directory": "node_modules/@emotion/is-prop-valid"
+      },
+      {
+        "name": "@fontsource/inter",
+        "version": "5.3.0",
+        "directory": "node_modules/@fontsource/inter"
+      },
+      {
+        "name": "@mui/icons-material",
+        "version": "9.5.0",
+        "directory": "node_modules/@mui/icons-material"
+      },
+      {
+        "name": "@babel/runtime",
+        "version": "8.0.8",
+        "directory": "node_modules/@mui/icons-material/node_modules/@babel/runtime"
+      },
+      {
+        "name": "@mui/material",
+        "version": "9.5.0",
+        "directory": "node_modules/@mui/material"
+      },
+      {
+        "name": "@babel/runtime",
+        "version": "8.0.8",
+        "directory": "node_modules/@mui/material/node_modules/@babel/runtime"
+      },
+      {
+        "name": "@mui/core-downloads-tracker",
+        "version": "9.5.0",
+        "directory": "node_modules/@mui/core-downloads-tracker"
+      },
+      {
+        "name": "@mui/system",
+        "version": "9.5.0",
+        "directory": "node_modules/@mui/system"
+      },
+      {
+        "name": "@babel/runtime",
+        "version": "8.0.8",
+        "directory": "node_modules/@mui/system/node_modules/@babel/runtime"
+      },
+      {
+        "name": "@mui/private-theming",
+        "version": "9.5.0",
+        "directory": "node_modules/@mui/private-theming"
+      },
+      {
+        "name": "@babel/runtime",
+        "version": "8.0.8",
+        "directory": "node_modules/@mui/private-theming/node_modules/@babel/runtime"
+      },
+      {
+        "name": "@mui/utils",
+        "version": "9.5.0",
+        "directory": "node_modules/@mui/utils"
+      },
+      {
+        "name": "@babel/runtime",
+        "version": "8.0.8",
+        "directory": "node_modules/@mui/utils/node_modules/@babel/runtime"
+      },
+      {
+        "name": "@mui/types",
+        "version": "9.5.0",
+        "directory": "node_modules/@mui/types"
+      },
+      {
+        "name": "@babel/runtime",
+        "version": "8.0.8",
+        "directory": "node_modules/@mui/types/node_modules/@babel/runtime"
+      },
+      {
+        "name": "@types/prop-types",
+        "version": "15.7.15",
+        "directory": "node_modules/@types/prop-types"
+      },
+      {
+        "name": "clsx",
+        "version": "2.1.1",
+        "directory": "node_modules/clsx"
+      },
+      {
+        "name": "prop-types",
+        "version": "15.8.1",
+        "directory": "node_modules/prop-types"
+      },
+      {
+        "name": "loose-envify",
+        "version": "1.4.0",
+        "directory": "node_modules/loose-envify"
+      },
+      {
+        "name": "object-assign",
+        "version": "4.1.1",
+        "directory": "node_modules/object-assign"
+      },
+      {
+        "name": "react-is",
+        "version": "19.3.1",
+        "directory": "node_modules/@mui/utils/node_modules/react-is"
+      },
+      {
+        "name": "@mui/styled-engine",
+        "version": "9.5.0",
+        "directory": "node_modules/@mui/styled-engine"
+      },
+      {
+        "name": "@babel/runtime",
+        "version": "8.0.8",
+        "directory": "node_modules/@mui/styled-engine/node_modules/@babel/runtime"
+      },
+      {
+        "name": "@popperjs/core",
+        "version": "2.11.8",
+        "directory": "node_modules/@popperjs/core"
+      },
+      {
+        "name": "@types/react-transition-group",
+        "version": "4.4.12",
+        "directory": "node_modules/@types/react-transition-group"
+      },
+      {
+        "name": "react-is",
+        "version": "19.3.1",
+        "directory": "node_modules/@mui/material/node_modules/react-is"
+      },
+      {
+        "name": "react-transition-group",
+        "version": "4.4.5",
+        "directory": "node_modules/react-transition-group"
+      },
+      {
+        "name": "dom-helpers",
+        "version": "5.2.1",
+        "directory": "node_modules/dom-helpers"
+      },
+      {
+        "name": "@music-downloader/application",
+        "version": "0.0.0",
+        "directory": "node_modules/@music-downloader/application"
+      },
+      {
+        "name": "@music-downloader/core-downloader",
+        "version": "0.0.0",
+        "directory": "node_modules/@music-downloader/core-downloader"
+      },
+      {
+        "name": "@music-downloader/core-validation",
+        "version": "0.0.0",
+        "directory": "node_modules/@music-downloader/core-validation"
+      },
+      {
+        "name": "@music-downloader/shared",
+        "version": "0.0.0",
+        "directory": "node_modules/@music-downloader/shared"
+      },
+      {
+        "name": "music-metadata",
+        "version": "12.1.0",
+        "directory": "node_modules/music-metadata"
+      },
+      {
+        "name": "@borewit/text-codec",
+        "version": "0.2.2",
+        "directory": "node_modules/@borewit/text-codec"
+      },
+      {
+        "name": "@tokenizer/token",
+        "version": "0.3.0",
+        "directory": "node_modules/@tokenizer/token"
+      },
+      {
+        "name": "content-type",
+        "version": "3.1.1",
+        "directory": "node_modules/content-type"
+      },
+      {
+        "name": "file-type",
+        "version": "22.1.1",
+        "directory": "node_modules/file-type"
+      },
+      {
+        "name": "@tokenizer/inflate",
+        "version": "0.4.1",
+        "directory": "node_modules/@tokenizer/inflate"
+      },
+      {
+        "name": "token-types",
+        "version": "6.1.2",
+        "directory": "node_modules/token-types"
+      },
+      {
+        "name": "ieee754",
+        "version": "1.2.1",
+        "directory": "node_modules/ieee754"
+      },
+      {
+        "name": "strtok3",
+        "version": "10.3.5",
+        "directory": "node_modules/strtok3"
+      },
+      {
+        "name": "uint8array-extras",
+        "version": "1.6.0",
+        "directory": "node_modules/uint8array-extras"
+      },
+      {
+        "name": "media-typer",
+        "version": "2.0.0",
+        "directory": "node_modules/media-typer"
+      },
+      {
+        "name": "win-guid",
+        "version": "0.2.1",
+        "directory": "node_modules/win-guid"
+      },
+      {
+        "name": "@music-downloader/core-filesystem",
+        "version": "0.0.0",
+        "directory": "node_modules/@music-downloader/core-filesystem"
+      },
+      {
+        "name": "@music-downloader/core-manifest",
+        "version": "0.0.0",
+        "directory": "node_modules/@music-downloader/core-manifest"
+      },
+      {
+        "name": "@music-downloader/core-planner",
+        "version": "0.0.0",
+        "directory": "node_modules/@music-downloader/core-planner"
+      },
+      {
+        "name": "@music-downloader/core-queue",
+        "version": "0.0.0",
+        "directory": "node_modules/@music-downloader/core-queue"
+      },
+      {
+        "name": "@music-downloader/core-retry",
+        "version": "0.0.0",
+        "directory": "node_modules/@music-downloader/core-retry"
+      },
+      {
+        "name": "@music-downloader/logging",
+        "version": "0.0.0",
+        "directory": "node_modules/@music-downloader/logging"
+      },
+      {
+        "name": "@music-downloader/metadata",
+        "version": "0.0.0",
+        "directory": "node_modules/@music-downloader/metadata"
+      },
+      {
+        "name": "taglib-wasm",
+        "version": "1.5.3",
+        "directory": "node_modules/taglib-wasm"
+      },
+      {
+        "name": "@msgpack/msgpack",
+        "version": "3.1.3",
+        "directory": "node_modules/@msgpack/msgpack"
+      },
+      {
+        "name": "@music-downloader/persistence",
+        "version": "0.0.0",
+        "directory": "node_modules/@music-downloader/persistence"
+      },
+      {
+        "name": "@napi-rs/keyring",
+        "version": "2.1.0",
+        "directory": "node_modules/@napi-rs/keyring"
+      },
+      {
+        "name": "@napi-rs/keyring-linux-x64-gnu",
+        "version": "2.1.0",
+        "directory": "node_modules/@napi-rs/keyring-linux-x64-gnu"
+      },
+      {
+        "name": "@napi-rs/keyring-linux-x64-musl",
+        "version": "2.1.0",
+        "directory": "node_modules/@napi-rs/keyring-linux-x64-musl"
+      },
+      {
+        "name": "better-sqlite3",
+        "version": "13.0.3",
+        "directory": "node_modules/better-sqlite3"
+      },
+      {
+        "name": "node-addon-api",
+        "version": "8.9.2",
+        "directory": "node_modules/node-addon-api"
+      },
+      {
+        "name": "fs-native-extensions",
+        "version": "1.5.1",
+        "directory": "node_modules/fs-native-extensions"
+      },
+      {
+        "name": "require-addon",
+        "version": "1.3.0",
+        "directory": "node_modules/require-addon"
+      },
+      {
+        "name": "bare-addon-resolve",
+        "version": "1.11.0",
+        "directory": "node_modules/bare-addon-resolve"
+      },
+      {
+        "name": "bare-module-resolve",
+        "version": "1.12.6",
+        "directory": "node_modules/bare-module-resolve"
+      },
+      {
+        "name": "bare-semver",
+        "version": "1.1.0",
+        "directory": "node_modules/bare-semver"
+      },
+      {
+        "name": "which-runtime",
+        "version": "1.4.0",
+        "directory": "node_modules/which-runtime"
+      },
+      {
+        "name": "@music-downloader/provider-yandex-music",
+        "version": "0.0.0",
+        "directory": "node_modules/@music-downloader/provider-yandex-music"
+      },
+      {
+        "name": "@dvxch/yandex-music",
+        "version": "0.3.0",
+        "directory": "node_modules/@dvxch/yandex-music"
+      },
+      {
+        "name": "zod",
+        "version": "4.6.5",
+        "directory": "node_modules/@music-downloader/provider-yandex-music/node_modules/zod"
+      },
+      {
+        "name": "react",
+        "version": "19.3.1",
+        "directory": "node_modules/react"
+      },
+      {
+        "name": "react-dom",
+        "version": "19.3.1",
+        "directory": "node_modules/react-dom"
+      },
+      {
+        "name": "scheduler",
+        "version": "0.28.0",
+        "directory": "node_modules/scheduler"
+      },
+      {
+        "name": "zod",
+        "version": "4.6.7",
+        "directory": "node_modules/zod"
+      }
+    ],
+    "electronArchiveSha256": "22f6a10bd3f7fef987ddbb379d3375ce664ad0c98a9a50f80c89f1718a0c3e3a"
+  },
+  "afterPackage": {
+    "artifact": "linux-x64/music-downloader-0.1.1-linux-x64.AppImage",
+    "sha256": "dc4b315f0681ca7361980ee9560cd87e0e57f9fb5fa89b9946ee5da921e2cdb7",
+    "bytes": 151948194,
+    "resources": "linux-x64/linux-unpacked/resources",
+    "closure": [
+      {
+        "name": "@emotion/cache",
+        "version": "11.14.0",
+        "directory": "node_modules/@emotion/cache"
+      },
+      {
+        "name": "@emotion/memoize",
+        "version": "0.9.0",
+        "directory": "node_modules/@emotion/memoize"
+      },
+      {
+        "name": "@emotion/sheet",
+        "version": "1.4.0",
+        "directory": "node_modules/@emotion/sheet"
+      },
+      {
+        "name": "@emotion/utils",
+        "version": "1.4.2",
+        "directory": "node_modules/@emotion/utils"
+      },
+      {
+        "name": "@emotion/weak-memoize",
+        "version": "0.4.0",
+        "directory": "node_modules/@emotion/weak-memoize"
+      },
+      {
+        "name": "stylis",
+        "version": "4.2.0",
+        "directory": "node_modules/stylis"
+      },
+      {
+        "name": "@emotion/react",
+        "version": "11.14.0",
+        "directory": "node_modules/@emotion/react"
+      },
+      {
+        "name": "@babel/runtime",
+        "version": "7.29.10",
+        "directory": "node_modules/@babel/runtime"
+      },
+      {
+        "name": "@emotion/babel-plugin",
+        "version": "11.13.5",
+        "directory": "node_modules/@emotion/babel-plugin"
+      },
+      {
+        "name": "@babel/helper-module-imports",
+        "version": "7.29.7",
+        "directory": "node_modules/@babel/helper-module-imports"
+      },
+      {
+        "name": "@babel/traverse",
+        "version": "7.29.10",
+        "directory": "node_modules/@babel/traverse"
+      },
+      {
+        "name": "@babel/code-frame",
+        "version": "7.29.7",
+        "directory": "node_modules/@babel/code-frame"
+      },
+      {
+        "name": "@babel/helper-validator-identifier",
+        "version": "7.29.7",
+        "directory": "node_modules/@babel/helper-validator-identifier"
+      },
+      {
+        "name": "js-tokens",
+        "version": "4.0.0",
+        "directory": "node_modules/js-tokens"
+      },
+      {
+        "name": "picocolors",
+        "version": "1.1.1",
+        "directory": "node_modules/picocolors"
+      },
+      {
+        "name": "@babel/generator",
+        "version": "7.29.8",
+        "directory": "node_modules/@babel/generator"
+      },
+      {
+        "name": "@babel/parser",
+        "version": "7.29.11",
+        "directory": "node_modules/@babel/parser"
+      },
+      {
+        "name": "@babel/types",
+        "version": "7.29.11",
+        "directory": "node_modules/@babel/types"
+      },
+      {
+        "name": "@babel/helper-string-parser",
+        "version": "7.29.11",
+        "directory": "node_modules/@babel/helper-string-parser"
+      },
+      {
+        "name": "@jridgewell/gen-mapping",
+        "version": "0.3.13",
+        "directory": "node_modules/@jridgewell/gen-mapping"
+      },
+      {
+        "name": "@jridgewell/sourcemap-codec",
+        "version": "1.6.0",
+        "directory": "node_modules/@jridgewell/sourcemap-codec"
+      },
+      {
+        "name": "@jridgewell/trace-mapping",
+        "version": "0.3.31",
+        "directory": "node_modules/@jridgewell/trace-mapping"
+      },
+      {
+        "name": "@jridgewell/resolve-uri",
+        "version": "3.1.2",
+        "directory": "node_modules/@jridgewell/resolve-uri"
+      },
+      {
+        "name": "jsesc",
+        "version": "3.1.0",
+        "directory": "node_modules/jsesc"
+      },
+      {
+        "name": "@babel/helper-globals",
+        "version": "7.29.7",
+        "directory": "node_modules/@babel/helper-globals"
+      },
+      {
+        "name": "@babel/template",
+        "version": "7.29.7",
+        "directory": "node_modules/@babel/template"
+      },
+      {
+        "name": "debug",
+        "version": "4.4.3",
+        "directory": "node_modules/debug"
+      },
+      {
+        "name": "ms",
+        "version": "2.1.3",
+        "directory": "node_modules/ms"
+      },
+      {
+        "name": "@emotion/hash",
+        "version": "0.9.2",
+        "directory": "node_modules/@emotion/hash"
+      },
+      {
+        "name": "@emotion/serialize",
+        "version": "1.3.3",
+        "directory": "node_modules/@emotion/serialize"
+      },
+      {
+        "name": "@emotion/unitless",
+        "version": "0.10.0",
+        "directory": "node_modules/@emotion/unitless"
+      },
+      {
+        "name": "csstype",
+        "version": "3.2.3",
+        "directory": "node_modules/csstype"
+      },
+      {
+        "name": "babel-plugin-macros",
+        "version": "3.1.0",
+        "directory": "node_modules/babel-plugin-macros"
+      },
+      {
+        "name": "cosmiconfig",
+        "version": "7.1.0",
+        "directory": "node_modules/cosmiconfig"
+      },
+      {
+        "name": "@types/parse-json",
+        "version": "4.0.2",
+        "directory": "node_modules/@types/parse-json"
+      },
+      {
+        "name": "import-fresh",
+        "version": "3.3.1",
+        "directory": "node_modules/import-fresh"
+      },
+      {
+        "name": "parent-module",
+        "version": "1.0.1",
+        "directory": "node_modules/parent-module"
+      },
+      {
+        "name": "callsites",
+        "version": "3.1.0",
+        "directory": "node_modules/callsites"
+      },
+      {
+        "name": "resolve-from",
+        "version": "4.0.0",
+        "directory": "node_modules/resolve-from"
+      },
+      {
+        "name": "parse-json",
+        "version": "5.2.0",
+        "directory": "node_modules/parse-json"
+      },
+      {
+        "name": "error-ex",
+        "version": "1.3.4",
+        "directory": "node_modules/error-ex"
+      },
+      {
+        "name": "is-arrayish",
+        "version": "0.2.1",
+        "directory": "node_modules/is-arrayish"
+      },
+      {
+        "name": "json-parse-even-better-errors",
+        "version": "2.3.1",
+        "directory": "node_modules/json-parse-even-better-errors"
+      },
+      {
+        "name": "lines-and-columns",
+        "version": "1.2.4",
+        "directory": "node_modules/lines-and-columns"
+      },
+      {
+        "name": "path-type",
+        "version": "4.0.0",
+        "directory": "node_modules/path-type"
+      },
+      {
+        "name": "yaml",
+        "version": "1.10.3",
+        "directory": "node_modules/yaml"
+      },
+      {
+        "name": "resolve",
+        "version": "1.22.13",
+        "directory": "node_modules/resolve"
+      },
+      {
+        "name": "es-errors",
+        "version": "1.3.0",
+        "directory": "node_modules/es-errors"
+      },
+      {
+        "name": "is-core-module",
+        "version": "2.17.0",
+        "directory": "node_modules/is-core-module"
+      },
+      {
+        "name": "hasown",
+        "version": "2.0.4",
+        "directory": "node_modules/hasown"
+      },
+      {
+        "name": "function-bind",
+        "version": "1.1.2",
+        "directory": "node_modules/function-bind"
+      },
+      {
+        "name": "path-parse",
+        "version": "1.0.7",
+        "directory": "node_modules/path-parse"
+      },
+      {
+        "name": "supports-preserve-symlinks-flag",
+        "version": "1.0.0",
+        "directory": "node_modules/supports-preserve-symlinks-flag"
+      },
+      {
+        "name": "convert-source-map",
+        "version": "1.9.0",
+        "directory": "node_modules/convert-source-map"
+      },
+      {
+        "name": "escape-string-regexp",
+        "version": "4.0.0",
+        "directory": "node_modules/escape-string-regexp"
+      },
+      {
+        "name": "find-root",
+        "version": "1.1.0",
+        "directory": "node_modules/find-root"
+      },
+      {
+        "name": "source-map",
+        "version": "0.5.7",
+        "directory": "node_modules/source-map"
+      },
+      {
+        "name": "@emotion/use-insertion-effect-with-fallbacks",
+        "version": "1.2.0",
+        "directory": "node_modules/@emotion/use-insertion-effect-with-fallbacks"
+      },
+      {
+        "name": "hoist-non-react-statics",
+        "version": "3.3.2",
+        "directory": "node_modules/hoist-non-react-statics"
+      },
+      {
+        "name": "react-is",
+        "version": "16.13.1",
+        "directory": "node_modules/react-is"
+      },
+      {
+        "name": "@emotion/styled",
+        "version": "11.14.1",
+        "directory": "node_modules/@emotion/styled"
+      },
+      {
+        "name": "@emotion/is-prop-valid",
+        "version": "1.4.0",
+        "directory": "node_modules/@emotion/is-prop-valid"
+      },
+      {
+        "name": "@fontsource/inter",
+        "version": "5.3.0",
+        "directory": "node_modules/@fontsource/inter"
+      },
+      {
+        "name": "@mui/icons-material",
+        "version": "9.5.0",
+        "directory": "node_modules/@mui/icons-material"
+      },
+      {
+        "name": "@babel/runtime",
+        "version": "8.0.8",
+        "directory": "node_modules/@mui/icons-material/node_modules/@babel/runtime"
+      },
+      {
+        "name": "@mui/material",
+        "version": "9.5.0",
+        "directory": "node_modules/@mui/material"
+      },
+      {
+        "name": "@babel/runtime",
+        "version": "8.0.8",
+        "directory": "node_modules/@mui/material/node_modules/@babel/runtime"
+      },
+      {
+        "name": "@mui/core-downloads-tracker",
+        "version": "9.5.0",
+        "directory": "node_modules/@mui/core-downloads-tracker"
+      },
+      {
+        "name": "@mui/system",
+        "version": "9.5.0",
+        "directory": "node_modules/@mui/system"
+      },
+      {
+        "name": "@babel/runtime",
+        "version": "8.0.8",
+        "directory": "node_modules/@mui/system/node_modules/@babel/runtime"
+      },
+      {
+        "name": "@mui/private-theming",
+        "version": "9.5.0",
+        "directory": "node_modules/@mui/private-theming"
+      },
+      {
+        "name": "@babel/runtime",
+        "version": "8.0.8",
+        "directory": "node_modules/@mui/private-theming/node_modules/@babel/runtime"
+      },
+      {
+        "name": "@mui/utils",
+        "version": "9.5.0",
+        "directory": "node_modules/@mui/utils"
+      },
+      {
+        "name": "@babel/runtime",
+        "version": "8.0.8",
+        "directory": "node_modules/@mui/utils/node_modules/@babel/runtime"
+      },
+      {
+        "name": "@mui/types",
+        "version": "9.5.0",
+        "directory": "node_modules/@mui/types"
+      },
+      {
+        "name": "@babel/runtime",
+        "version": "8.0.8",
+        "directory": "node_modules/@mui/types/node_modules/@babel/runtime"
+      },
+      {
+        "name": "@types/prop-types",
+        "version": "15.7.15",
+        "directory": "node_modules/@types/prop-types"
+      },
+      {
+        "name": "clsx",
+        "version": "2.1.1",
+        "directory": "node_modules/clsx"
+      },
+      {
+        "name": "prop-types",
+        "version": "15.8.1",
+        "directory": "node_modules/prop-types"
+      },
+      {
+        "name": "loose-envify",
+        "version": "1.4.0",
+        "directory": "node_modules/loose-envify"
+      },
+      {
+        "name": "object-assign",
+        "version": "4.1.1",
+        "directory": "node_modules/object-assign"
+      },
+      {
+        "name": "react-is",
+        "version": "19.3.1",
+        "directory": "node_modules/@mui/utils/node_modules/react-is"
+      },
+      {
+        "name": "@mui/styled-engine",
+        "version": "9.5.0",
+        "directory": "node_modules/@mui/styled-engine"
+      },
+      {
+        "name": "@babel/runtime",
+        "version": "8.0.8",
+        "directory": "node_modules/@mui/styled-engine/node_modules/@babel/runtime"
+      },
+      {
+        "name": "@popperjs/core",
+        "version": "2.11.8",
+        "directory": "node_modules/@popperjs/core"
+      },
+      {
+        "name": "@types/react-transition-group",
+        "version": "4.4.12",
+        "directory": "node_modules/@types/react-transition-group"
+      },
+      {
+        "name": "react-is",
+        "version": "19.3.1",
+        "directory": "node_modules/@mui/material/node_modules/react-is"
+      },
+      {
+        "name": "react-transition-group",
+        "version": "4.4.5",
+        "directory": "node_modules/react-transition-group"
+      },
+      {
+        "name": "dom-helpers",
+        "version": "5.2.1",
+        "directory": "node_modules/dom-helpers"
+      },
+      {
+        "name": "@music-downloader/application",
+        "version": "0.0.0",
+        "directory": "node_modules/@music-downloader/application"
+      },
+      {
+        "name": "@music-downloader/core-downloader",
+        "version": "0.0.0",
+        "directory": "node_modules/@music-downloader/core-downloader"
+      },
+      {
+        "name": "@music-downloader/core-validation",
+        "version": "0.0.0",
+        "directory": "node_modules/@music-downloader/core-validation"
+      },
+      {
+        "name": "@music-downloader/shared",
+        "version": "0.0.0",
+        "directory": "node_modules/@music-downloader/shared"
+      },
+      {
+        "name": "music-metadata",
+        "version": "12.1.0",
+        "directory": "node_modules/music-metadata"
+      },
+      {
+        "name": "@borewit/text-codec",
+        "version": "0.2.2",
+        "directory": "node_modules/@borewit/text-codec"
+      },
+      {
+        "name": "@tokenizer/token",
+        "version": "0.3.0",
+        "directory": "node_modules/@tokenizer/token"
+      },
+      {
+        "name": "content-type",
+        "version": "3.1.1",
+        "directory": "node_modules/content-type"
+      },
+      {
+        "name": "file-type",
+        "version": "22.1.1",
+        "directory": "node_modules/file-type"
+      },
+      {
+        "name": "@tokenizer/inflate",
+        "version": "0.4.1",
+        "directory": "node_modules/@tokenizer/inflate"
+      },
+      {
+        "name": "token-types",
+        "version": "6.1.2",
+        "directory": "node_modules/token-types"
+      },
+      {
+        "name": "ieee754",
+        "version": "1.2.1",
+        "directory": "node_modules/ieee754"
+      },
+      {
+        "name": "strtok3",
+        "version": "10.3.5",
+        "directory": "node_modules/strtok3"
+      },
+      {
+        "name": "uint8array-extras",
+        "version": "1.6.0",
+        "directory": "node_modules/uint8array-extras"
+      },
+      {
+        "name": "media-typer",
+        "version": "2.0.0",
+        "directory": "node_modules/media-typer"
+      },
+      {
+        "name": "win-guid",
+        "version": "0.2.1",
+        "directory": "node_modules/win-guid"
+      },
+      {
+        "name": "@music-downloader/core-filesystem",
+        "version": "0.0.0",
+        "directory": "node_modules/@music-downloader/core-filesystem"
+      },
+      {
+        "name": "@music-downloader/core-manifest",
+        "version": "0.0.0",
+        "directory": "node_modules/@music-downloader/core-manifest"
+      },
+      {
+        "name": "@music-downloader/core-planner",
+        "version": "0.0.0",
+        "directory": "node_modules/@music-downloader/core-planner"
+      },
+      {
+        "name": "@music-downloader/core-queue",
+        "version": "0.0.0",
+        "directory": "node_modules/@music-downloader/core-queue"
+      },
+      {
+        "name": "@music-downloader/core-retry",
+        "version": "0.0.0",
+        "directory": "node_modules/@music-downloader/core-retry"
+      },
+      {
+        "name": "@music-downloader/logging",
+        "version": "0.0.0",
+        "directory": "node_modules/@music-downloader/logging"
+      },
+      {
+        "name": "@music-downloader/metadata",
+        "version": "0.0.0",
+        "directory": "node_modules/@music-downloader/metadata"
+      },
+      {
+        "name": "taglib-wasm",
+        "version": "1.5.3",
+        "directory": "node_modules/taglib-wasm"
+      },
+      {
+        "name": "@msgpack/msgpack",
+        "version": "3.1.3",
+        "directory": "node_modules/@msgpack/msgpack"
+      },
+      {
+        "name": "@music-downloader/persistence",
+        "version": "0.0.0",
+        "directory": "node_modules/@music-downloader/persistence"
+      },
+      {
+        "name": "@napi-rs/keyring",
+        "version": "2.1.0",
+        "directory": "node_modules/@napi-rs/keyring"
+      },
+      {
+        "name": "@napi-rs/keyring-linux-x64-gnu",
+        "version": "2.1.0",
+        "directory": "node_modules/@napi-rs/keyring-linux-x64-gnu"
+      },
+      {
+        "name": "@napi-rs/keyring-linux-x64-musl",
+        "version": "2.1.0",
+        "directory": "node_modules/@napi-rs/keyring-linux-x64-musl"
+      },
+      {
+        "name": "better-sqlite3",
+        "version": "13.0.3",
+        "directory": "node_modules/better-sqlite3"
+      },
+      {
+        "name": "node-addon-api",
+        "version": "8.9.2",
+        "directory": "node_modules/node-addon-api"
+      },
+      {
+        "name": "fs-native-extensions",
+        "version": "1.5.1",
+        "directory": "node_modules/fs-native-extensions"
+      },
+      {
+        "name": "require-addon",
+        "version": "1.3.0",
+        "directory": "node_modules/require-addon"
+      },
+      {
+        "name": "bare-addon-resolve",
+        "version": "1.11.0",
+        "directory": "node_modules/bare-addon-resolve"
+      },
+      {
+        "name": "bare-module-resolve",
+        "version": "1.12.6",
+        "directory": "node_modules/bare-module-resolve"
+      },
+      {
+        "name": "bare-semver",
+        "version": "1.1.0",
+        "directory": "node_modules/bare-semver"
+      },
+      {
+        "name": "which-runtime",
+        "version": "1.4.0",
+        "directory": "node_modules/which-runtime"
+      },
+      {
+        "name": "@music-downloader/provider-yandex-music",
+        "version": "0.0.0",
+        "directory": "node_modules/@music-downloader/provider-yandex-music"
+      },
+      {
+        "name": "@dvxch/yandex-music",
+        "version": "0.3.0",
+        "directory": "node_modules/@dvxch/yandex-music"
+      },
+      {
+        "name": "zod",
+        "version": "4.6.5",
+        "directory": "node_modules/@music-downloader/provider-yandex-music/node_modules/zod"
+      },
+      {
+        "name": "react",
+        "version": "19.3.1",
+        "directory": "node_modules/react"
+      },
+      {
+        "name": "react-dom",
+        "version": "19.3.1",
+        "directory": "node_modules/react-dom"
+      },
+      {
+        "name": "scheduler",
+        "version": "0.28.0",
+        "directory": "node_modules/scheduler"
+      },
+      {
+        "name": "zod",
+        "version": "4.6.7",
+        "directory": "node_modules/zod"
+      }
+    ],
+    "electronArchiveSha256": "22f6a10bd3f7fef987ddbb379d3375ce664ad0c98a9a50f80c89f1718a0c3e3a"
+  },
+  "runtime": {
+    "imageId": "sha256:6280e22dd08a708e4e140866a98ff36a865a24e62644d2cc2c1624583cf0cfd2",
+    "base": "Ubuntu24.04 shipping smoke image + xdotool/scrot/python3/PCManFM",
+    "nodeInstalled": false,
+    "ffmpegInstalled": false,
+    "network": "реальный HTTPS GitHub, без аккаунта и Authorization",
+    "devTools": false,
+    "modifiedAsar": false,
+    "rootFilesystemMount": "/app readonly; ручная замена mount между запусками",
+    "stateDir": "/report/state/music-downloader",
+    "userData": "/report/config/Yandex Music Downloader"
+  },
+  "baseline": {
+    "source": "Отдельная синтетическая история и контрольный tone.mp3; не пользовательская загрузка",
+    "jobId": "linux-update-baseline",
+    "audioBytes": 49572,
+    "audioSha256": "ad000a6d13917c2cfdd6b84996d8fbb506b325dae065a2b0e00ae701fcb6f37f",
+    "settingsChangedViaUi": {
+      "quality": "normal",
+      "concurrency": 3
+    }
+  },
+  "observedUi": {
+    "versionBefore": "0.1.0",
+    "versionAfter": "0.1.1",
+    "updateAvailable": "ui/24-n-fresh-result.png",
+    "packageVerified": "ui/26-n-download-result.png",
+    "fileManagerOpened": "ui/28-n-folder-visible.png",
+    "downloadedFileVisible": "ui/30-n-package-in-folder.png",
+    "historyBefore": "ui/03-n-history.png",
+    "historyAfter": "ui/32-next-history.png",
+    "settingsBefore": "ui/10-n-settings-saved.png",
+    "settingsAfter": "ui/33-next-settings.png",
+    "currentAfter": "ui/36-next-current.png"
+  },
+  "download": {
+    "source": "Настоящая кнопка downloadUpdate в shipping UI0.1.0; production HTTPS/GitHub Release",
+    "version": "0.1.1",
+    "bytes": 151948194,
+    "sha256": "dc4b315f0681ca7361980ee9560cd87e0e57f9fb5fa89b9946ee5da921e2cdb7",
+    "expectedSha256": "dc4b315f0681ca7361980ee9560cd87e0e57f9fb5fa89b9946ee5da921e2cdb7",
+    "matchesPublishedArtifact": true,
+    "fileRelativeToReport": "config/Yandex Music Downloader/portable-updates/music-downloader-0.1.1-linux-x64-dc4b315f0681.AppImage",
+    "replacementRelative": "replacement",
+    "folderObservation": "shell.showItemInFolder запустил PCManFM в родительском userData; в portable-updates выполнен обычный переход, пакет виден."
+  },
+  "statePreserved": true,
+  "historyPreserved": true,
+  "settingsPreserved": true,
+  "audioPreserved": true,
+  "schemaBefore": 3,
+  "schemaAfter": 3,
+  "replacement": "После check/download/open-folder из UI0.1.0 приложение закрыто SIGTERM. Скачанный и проверенный AppImage извлечён; /app заменён извлечённым 0.1.1 при том же /report, запущено неизменённое приложение.",
+  "observations": [
+    "До публикации 0.1.1 UI0.1.0 правильно сообщил current. Первые запросы в уже открытой сессии после публикации ещё показывали current; причина не установлена. После обычного перезапуска N свежая проверка показала 0.1.1 без изменения feed/ключа/пакета. Старые снимки сохранены.",
+    "Без активной desktop D-Bus session Electron fallback запустил PCManFM в userData; в portable-updates выполнен обычный переход, пакет показан. Нативная FileManager1-интеграция этим не подтверждается."
+  ],
+  "limitations": [
+    "Извлечённый AppImage в контейнере с --no-sandbox: FUSE/desktop integration не проверялись.",
+    "Проверены Linux0.1.0→0.1.1 и публичная раздача четырёх целей; новые nativeWindows/macOS запуски не выполнялись, старые STEP054 PASS не перенесены на новые hashes.",
+    "Авторизация/Secret Service не проверялись; системное предупреждение без credential service в runtime ожидаемо.",
+    "Это два настоящих тегированных релиза одной проверенной source revision с разными версиями packages."
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "version": "0.1.0",
+  "channel": "stable",
+  "target": "win32-x64",
+  "url": "https://github.com/yarkovaleksei/yandex-music-downloader/releases/download/v0.1.0/music-downloader-0.1.0-win32-x64.zip",
+  "size": 175096502,
+  "sha256": "b6d193d02d93abb263660aa16cee44b7655c734251c2b50b4715532c3fe13204"
+}

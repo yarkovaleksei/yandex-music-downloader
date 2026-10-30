@@ -1,0 +1,9 @@
+{
+  "status": "PREPARATION",
+  "explanation": "Синтетические файл и запись истории для update; E2E не запускался повторно.",
+  "jobId": "linux-update-baseline",
+  "outputPath": "/home/user/github.com/yarkovaleksei/yandex-music-downloader/.cache/desktop-packaging/step060-ui-update/baseline.mp3",
+  "bytes": 49572,
+  "source": "Синтетическая завершённая история и контрольный аудиофайл; не новая загрузка из Яндекса",
+  "sha256": "ad000a6d13917c2cfdd6b84996d8fbb506b325dae065a2b0e00ae701fcb6f37f"
+}

@@ -1,0 +1,74 @@
+[
+  {
+    "name": "music-downloader-0.1.1-linux-x64.AppImage",
+    "url": "https://github.com/yarkovaleksei/yandex-music-downloader/releases/download/v0.1.1/music-downloader-0.1.1-linux-x64.AppImage",
+    "size": 151948194,
+    "sha256": "dc4b315f0681ca7361980ee9560cd87e0e57f9fb5fa89b9946ee5da921e2cdb7"
+  },
+  {
+    "name": "update-stable-linux-x64.json",
+    "url": "https://github.com/yarkovaleksei/yandex-music-downloader/releases/download/v0.1.1/update-stable-linux-x64.json",
+    "size": 332,
+    "sha256": "2569356e185950587cb1e3d5ce6ba2b1982f59ee57a1f6095e9bc14916ec36df"
+  },
+  {
+    "name": "update-stable-linux-x64.json.sig",
+    "url": "https://github.com/yarkovaleksei/yandex-music-downloader/releases/download/v0.1.1/update-stable-linux-x64.json.sig",
+    "size": 64,
+    "sha256": "f4e336f1430f5f4eb9eb7f6db2a0a62e715df162348fb2fb2318334f971cdbd3"
+  },
+  {
+    "name": "music-downloader-0.1.1-win32-x64.zip",
+    "url": "https://github.com/yarkovaleksei/yandex-music-downloader/releases/download/v0.1.1/music-downloader-0.1.1-win32-x64.zip",
+    "size": 175096507,
+    "sha256": "f71e0115895f69ce330c468b60043096e215d2ad8c402a7d089521685143a3f1"
+  },
+  {
+    "name": "update-stable-win32-x64.json",
+    "url": "https://github.com/yarkovaleksei/yandex-music-downloader/releases/download/v0.1.1/update-stable-win32-x64.json",
+    "size": 327,
+    "sha256": "eea54ff78fd69a67e76e1739b337d6845a5007a59d75f9e6b83f2cc0d959334a"
+  },
+  {
+    "name": "update-stable-win32-x64.json.sig",
+    "url": "https://github.com/yarkovaleksei/yandex-music-downloader/releases/download/v0.1.1/update-stable-win32-x64.json.sig",
+    "size": 64,
+    "sha256": "1b7dadef35eb6b1d07ca06f1ea4938e8debc75735e842757716c6c40ec5fe5f2"
+  },
+  {
+    "name": "music-downloader-0.1.1-darwin-arm64.zip",
+    "url": "https://github.com/yarkovaleksei/yandex-music-downloader/releases/download/v0.1.1/music-downloader-0.1.1-darwin-arm64.zip",
+    "size": 147414936,
+    "sha256": "5b93d8b0d2c99a94a14d7e04946e42f0f0d86c61593f82684fd0d25a1ee66938"
+  },
+  {
+    "name": "update-stable-darwin-arm64.json",
+    "url": "https://github.com/yarkovaleksei/yandex-music-downloader/releases/download/v0.1.1/update-stable-darwin-arm64.json",
+    "size": 333,
+    "sha256": "9f74d0b2153e20a56f3d9b8c00aec8cd4087c55e3692e9f1f6874b0f84d824e4"
+  },
+  {
+    "name": "update-stable-darwin-arm64.json.sig",
+    "url": "https://github.com/yarkovaleksei/yandex-music-downloader/releases/download/v0.1.1/update-stable-darwin-arm64.json.sig",
+    "size": 64,
+    "sha256": "95fc60c70c250ccf735bbae71beda318086149c315f557262aee8d5fbebfaf2b"
+  },
+  {
+    "name": "music-downloader-0.1.1-darwin-x64.zip",
+    "url": "https://github.com/yarkovaleksei/yandex-music-downloader/releases/download/v0.1.1/music-downloader-0.1.1-darwin-x64.zip",
+    "size": 144082062,
+    "sha256": "1d1d6fe4691c4faef9f0b2978cfd208e3e91b84d353bc66f1f276c065bc4f6f2"
+  },
+  {
+    "name": "update-stable-darwin-x64.json",
+    "url": "https://github.com/yarkovaleksei/yandex-music-downloader/releases/download/v0.1.1/update-stable-darwin-x64.json",
+    "size": 329,
+    "sha256": "0b4c49b569f60843578e59872d1e1b95f87098963487c9cca145e8e18d378cda"
+  },
+  {
+    "name": "update-stable-darwin-x64.json.sig",
+    "url": "https://github.com/yarkovaleksei/yandex-music-downloader/releases/download/v0.1.1/update-stable-darwin-x64.json.sig",
+    "size": 64,
+    "sha256": "3b3608b1aa64acc3513905a4ad11c6bc7f0d5f1949cc6ca6b1974b517e1e3a6d"
+  }
+]
