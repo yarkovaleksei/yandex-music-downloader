@@ -1,0 +1,395 @@
+
+$ ["resize", "1440", "1000"]
+### Ran Playwright code
+```js
+await page.setViewportSize({ width: 1440, height: 1000 });
+```
+
+$ ["click", "aside button:has-text(\"Настройки\")"]
+### Ran Playwright code
+```js
+await page.locator('aside button:has-text("Настройки")').click();
+```
+### Page
+- Page URL: http://127.0.0.1:4188/?scenario=normal&theme=light
+- Page Title: STEP-058 · синтетическая fixture
+### Snapshot
+- [Snapshot](.playwright-cli/page-2026-10-29T19-36-30-982Z.yml)
+
+$ ["snapshot"]
+### Page
+- Page URL: http://127.0.0.1:4188/?scenario=normal&theme=light
+- Page Title: STEP-058 · синтетическая fixture
+### Snapshot
+```yaml
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - heading "Yandex Music Downloader" [level=3] [ref=e7]
+    - button [ref=e8] [cursor=pointer]
+    - button [ref=e12] [cursor=pointer]
+    - button [ref=e16] [cursor=pointer]
+    - button [active] [ref=e20] [cursor=pointer]
+    - button [ref=e24] [cursor=pointer]
+    - button [ref=e28] [cursor=pointer]
+    - generic [ref=e33] [cursor=pointer]:
+      - switch "Тёмная тема" [ref=e36]
+      - generic [ref=e39]: Тёмная тема
+    - separator [ref=e40]
+    - paragraph [ref=e41]: Вы вошли как Тестовый пользователь
+    - button "Выйти" [ref=e42] [cursor=pointer]
+  - main [ref=e43]:
+    - generic [ref=e44]:
+      - generic [ref=e45]: Приложение подключено
+      - generic [ref=e63]:
+        - heading "Настройки" [level=1] [ref=e64]
+        - paragraph [ref=e65]: Загрузка музыки и параметры приложения
+        - tablist "Разделы настроек" [ref=e68]:
+          - tab "Основные" [selected] [ref=e69] [cursor=pointer]
+          - tab "Загрузка" [ref=e70] [cursor=pointer]
+          - tab "Файлы" [ref=e71] [cursor=pointer]
+          - tab "Внешний вид" [ref=e72] [cursor=pointer]
+          - tab "О программе" [ref=e73] [cursor=pointer]
+        - generic [ref=e76]:
+          - generic [ref=e78]:
+            - generic [ref=e79]:
+              - generic [ref=e80]:
+                - generic [ref=e81]: Папка загрузок
+                - generic [ref=e82]:
+                  - textbox "Папка загрузок" [ref=e83]: /Музыка/Yandex Music
+                  - group [aria-hidden]:
+                    - generic: Папка загрузок
+              - button "Выбрать папку" [ref=e84] [cursor=pointer]
+            - generic [ref=e85]:
+              - generic [ref=e86]: Качество по умолчанию
+              - generic [ref=e87]:
+                - combobox "Качество по умолчанию" [ref=e88] [cursor=pointer]: Лучшее доступное
+                - textbox [aria-hidden]: best
+                - group [aria-hidden]:
+                  - generic: Качество по умолчанию
+            - generic [ref=e89]:
+              - generic [ref=e90]: Параллельных загрузок
+              - generic [ref=e91]:
+                - combobox "Параллельных загрузок" [ref=e92] [cursor=pointer]: "4"
+                - textbox [aria-hidden]: "4"
+                - group [aria-hidden]:
+                  - generic: Параллельных загрузок
+          - alert [ref=e93]:
+            - generic [ref=e97]: Параллельность и уровень журнала применяются после перезапуска. Остальные настройки используются новыми заданиями; текущие загрузки сохраняют свои параметры.
+          - button "Сохранить настройки" [ref=e98] [cursor=pointer]
+```
+
+$ ["click", "e36"]
+### Ran Playwright code
+```js
+await page.getByRole('switch', { name: 'Тёмная тема' }).click();
+```
+### Page
+- Page URL: http://127.0.0.1:4188/?scenario=normal&theme=light
+- Page Title: STEP-058 · синтетическая fixture
+### Snapshot
+- [Snapshot](.playwright-cli/page-2026-10-29T19-36-42-085Z.yml)
+
+$ ["click", "e98"]
+### Ran Playwright code
+```js
+await page.getByRole('button', { name: 'Сохранить настройки' }).click();
+```
+### Page
+- Page URL: http://127.0.0.1:4188/?scenario=normal&theme=light
+- Page Title: STEP-058 · синтетическая fixture
+### Snapshot
+- [Snapshot](.playwright-cli/page-2026-10-29T19-36-43-020Z.yml)
+
+$ ["snapshot"]
+### Page
+- Page URL: http://127.0.0.1:4188/?scenario=normal&theme=light
+- Page Title: STEP-058 · синтетическая fixture
+### Snapshot
+```yaml
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - heading "Yandex Music Downloader" [level=3] [ref=e7]
+    - button [ref=e8] [cursor=pointer]
+    - button [ref=e12] [cursor=pointer]
+    - button [ref=e16] [cursor=pointer]
+    - button [ref=e20] [cursor=pointer]
+    - button [ref=e24] [cursor=pointer]
+    - button [ref=e28] [cursor=pointer]
+    - generic [ref=e33] [cursor=pointer]:
+      - switch "Тёмная тема" [checked] [ref=e36]
+      - generic [ref=e39]: Тёмная тема
+    - separator [ref=e40]
+    - paragraph [ref=e41]: Вы вошли как Тестовый пользователь
+    - button "Выйти" [ref=e42] [cursor=pointer]
+  - main [ref=e43]:
+    - generic [ref=e44]:
+      - generic [ref=e45]: Приложение подключено
+      - generic [ref=e63]:
+        - heading "Настройки" [level=1] [ref=e64]
+        - paragraph [ref=e65]: Загрузка музыки и параметры приложения
+        - tablist "Разделы настроек" [ref=e68]:
+          - tab "Основные" [selected] [ref=e69] [cursor=pointer]
+          - tab "Загрузка" [ref=e70] [cursor=pointer]
+          - tab "Файлы" [ref=e71] [cursor=pointer]
+          - tab "Внешний вид" [ref=e72] [cursor=pointer]
+          - tab "О программе" [ref=e73] [cursor=pointer]
+        - alert [ref=e99]:
+          - generic [ref=e103]: Настройки сохранены. Изменения параллельности и логирования применятся после перезапуска.
+        - generic [ref=e76]:
+          - generic [ref=e78]:
+            - generic [ref=e79]:
+              - generic [ref=e80]:
+                - generic [ref=e81]: Папка загрузок
+                - generic [ref=e82]:
+                  - textbox "Папка загрузок" [ref=e83]: /Музыка/Yandex Music
+                  - group [aria-hidden]:
+                    - generic: Папка загрузок
+              - button "Выбрать папку" [ref=e84] [cursor=pointer]
+            - generic [ref=e85]:
+              - generic [ref=e86]: Качество по умолчанию
+              - generic [ref=e87]:
+                - combobox "Качество по умолчанию" [ref=e88] [cursor=pointer]: Лучшее доступное
+                - textbox [aria-hidden]: best
+                - group [aria-hidden]:
+                  - generic: Качество по умолчанию
+            - generic [ref=e89]:
+              - generic [ref=e90]: Параллельных загрузок
+              - generic [ref=e91]:
+                - combobox "Параллельных загрузок" [ref=e92] [cursor=pointer]: "4"
+                - textbox [aria-hidden]: "4"
+                - group [aria-hidden]:
+                  - generic: Параллельных загрузок
+          - alert [ref=e93]:
+            - generic [ref=e97]: Параллельность и уровень журнала применяются после перезапуска. Остальные настройки используются новыми заданиями; текущие загрузки сохраняют свои параметры.
+          - button "Сохранить настройки" [active] [ref=e98] [cursor=pointer]
+```
+
+$ ["eval", "() => ({saved:JSON.parse(localStorage.getItem(\"step058-settings\")).theme,checked:document.querySelector(\"aside input\").checked})"]
+### Result
+{
+  "saved": "dark",
+  "checked": true
+}
+### Ran Playwright code
+```js
+await page.evaluate('() => ({saved:JSON.parse(localStorage.getItem("step058-settings")).theme,checked:document.querySelector("aside input").checked})');
+```
+
+$ ["screenshot", "--filename=/home/user/github.com/yarkovaleksei/yandex-music-downloader/apps/desktop/evidence/STEP-058/screenshots/fix-theme-saved.png"]
+### Result
+- [Screenshot of viewport](apps/desktop/evidence/STEP-058/screenshots/fix-theme-saved.png)
+### Ran Playwright code
+```js
+// Screenshot viewport and save it as apps/desktop/evidence/STEP-058/screenshots/fix-theme-saved.png
+await page.screenshot({
+  path: 'apps/desktop/evidence/STEP-058/screenshots/fix-theme-saved.png',
+  scale: 'css',
+  type: 'png'
+});
+```
+
+$ ["click", "aside button:has-text(\"Загрузки\")"]
+### Ran Playwright code
+```js
+await page.locator('aside button:has-text("Загрузки")').click();
+```
+### Page
+- Page URL: http://127.0.0.1:4188/?scenario=normal&theme=light
+- Page Title: STEP-058 · синтетическая fixture
+### Snapshot
+- [Snapshot](.playwright-cli/page-2026-10-29T19-36-52-530Z.yml)
+
+$ ["snapshot"]
+### Page
+- Page URL: http://127.0.0.1:4188/?scenario=normal&theme=light
+- Page Title: STEP-058 · синтетическая fixture
+### Snapshot
+```yaml
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - heading "Yandex Music Downloader" [level=3] [ref=e7]
+    - button [ref=e8] [cursor=pointer]
+    - button [active] [ref=e12] [cursor=pointer]
+    - button [ref=e16] [cursor=pointer]
+    - button [ref=e20] [cursor=pointer]
+    - button [ref=e24] [cursor=pointer]
+    - button [ref=e28] [cursor=pointer]
+    - generic [ref=e33] [cursor=pointer]:
+      - switch "Тёмная тема" [checked] [ref=e36]
+      - generic [ref=e39]: Тёмная тема
+    - separator [ref=e40]
+    - paragraph [ref=e41]: Вы вошли как Тестовый пользователь
+    - button "Выйти" [ref=e42] [cursor=pointer]
+  - main [ref=e43]:
+    - generic [ref=e44]:
+      - generic [ref=e45]: Приложение подключено
+      - generic [ref=e104]:
+        - heading "Загрузки" [level=1] [ref=e105]
+        - generic [ref=e106]:
+          - button "Приостановить все" [ref=e107] [cursor=pointer]: Приостановить
+          - button "Продолжить все" [ref=e108] [cursor=pointer]: Продолжить
+          - button "Открыть папку" [ref=e109] [cursor=pointer]
+          - button "Убрать завершённые" [ref=e110] [cursor=pointer]
+        - tablist "Состояния загрузок" [ref=e113]:
+          - tab "Очередь (3)" [ref=e114] [cursor=pointer]
+          - tab "Активные (1)" [selected] [ref=e115] [cursor=pointer]
+          - tab "Завершённые (2)" [ref=e116] [cursor=pointer]
+          - tab "Ошибки (2)" [ref=e117] [cursor=pointer]
+        - article [ref=e119]:
+          - generic [ref=e120]:
+            - generic [ref=e121]:
+              - button "Подробности synthetic-0" [ref=e124] [cursor=pointer]: ▸ Плейлист
+              - link "Вечерний вайб" [ref=e125] [cursor=pointer]:
+                - /url: https://music.yandex.ru/users/fixture/playlists/1
+              - paragraph [ref=e126]: Тестовый исполнитель
+              - paragraph [ref=e127]: Загрузка
+              - paragraph [ref=e128]: 0 / 42 трека · 0%
+              - generic [ref=e129]:
+                - button "Приостановить" [ref=e130] [cursor=pointer]
+                - button "Действия Вечерний вайб" [ref=e131] [cursor=pointer]
+            - progressbar "Прогресс задания" [ref=e134]
+```
+
+$ ["click", "e131"]
+### Ran Playwright code
+```js
+await page.getByRole('button', { name: 'Действия Вечерний вайб' }).click();
+```
+### Page
+- Page URL: http://127.0.0.1:4188/?scenario=normal&theme=light
+- Page Title: STEP-058 · синтетическая fixture
+### Snapshot
+- [Snapshot](.playwright-cli/page-2026-10-29T19-36-56-094Z.yml)
+
+$ ["snapshot"]
+### Page
+- Page URL: http://127.0.0.1:4188/?scenario=normal&theme=light
+- Page Title: STEP-058 · синтетическая fixture
+### Snapshot
+```yaml
+- generic [ref=e1]:
+  - generic [ref=e3]:
+    - complementary [ref=e4]:
+      - heading [level=3] [ref=e136]: Yandex Music Downloader
+      - button [ref=e137] [cursor=pointer]: Главная
+      - button [ref=e138] [cursor=pointer]: Загрузки (8)
+      - button [ref=e139] [cursor=pointer]: История
+      - button [ref=e140] [cursor=pointer]: Настройки
+      - button [ref=e141] [cursor=pointer]: Аккаунт
+      - button [ref=e142] [cursor=pointer]: Диагностика
+      - generic [ref=e33] [cursor=pointer]:
+        - switch [checked] [ref=e143]
+        - generic [ref=e39]: Тёмная тема
+      - separator [ref=e40]
+      - paragraph [ref=e41]: Вы вошли как Тестовый пользователь
+      - button [ref=e144] [cursor=pointer]: Выйти
+    - main [ref=e43]:
+      - generic [ref=e44]:
+        - generic [ref=e45]: Приложение подключено
+        - generic [ref=e104]:
+          - heading [level=1] [ref=e145]: Загрузки
+          - generic [ref=e106]:
+            - button [ref=e146] [cursor=pointer]: Приостановить
+            - button [ref=e147] [cursor=pointer]: Продолжить
+            - button [ref=e148] [cursor=pointer]: Открыть папку
+            - button [ref=e149] [cursor=pointer]: Убрать завершённые
+          - tablist [ref=e150]:
+            - tab [ref=e151] [cursor=pointer]: Очередь (3)
+            - tab [selected] [ref=e152] [cursor=pointer]: Активные (1)
+            - tab [ref=e153] [cursor=pointer]: Завершённые (2)
+            - tab [ref=e154] [cursor=pointer]: Ошибки (2)
+          - article [ref=e119]:
+            - generic [ref=e120]:
+              - generic [ref=e121]:
+                - button [ref=e155] [cursor=pointer]: ▸ Плейлист
+                - link [ref=e156] [cursor=pointer]:
+                  - /url: https://music.yandex.ru/users/fixture/playlists/1
+                  - text: Вечерний вайб
+                - paragraph [ref=e126]: Тестовый исполнитель
+                - paragraph [ref=e127]: Загрузка
+                - paragraph [ref=e128]: 0 / 42 трека · 0%
+                - generic [ref=e129]:
+                  - button [ref=e157] [cursor=pointer]: Приостановить
+                  - button [ref=e158] [cursor=pointer]
+              - progressbar [ref=e159]
+  - menu [ref=e162]:
+    - menuitem "Приостановить" [active] [ref=e163] [cursor=pointer]
+    - menuitem "Продолжить" [disabled]
+    - menuitem "Отменить" [ref=e164] [cursor=pointer]
+    - menuitem "Повторить" [disabled]
+    - menuitem "Показать в папке" [disabled]
+```
+
+$ ["click", "e164"]
+### Ran Playwright code
+```js
+await page.getByRole('menuitem', { name: 'Отменить' }).click();
+```
+### Page
+- Page URL: http://127.0.0.1:4188/?scenario=normal&theme=light
+- Page Title: STEP-058 · синтетическая fixture
+### Snapshot
+- [Snapshot](.playwright-cli/page-2026-10-29T19-37-00-872Z.yml)
+
+$ ["snapshot"]
+### Page
+- Page URL: http://127.0.0.1:4188/?scenario=normal&theme=light
+- Page Title: STEP-058 · синтетическая fixture
+### Snapshot
+```yaml
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - heading "Yandex Music Downloader" [level=3] [ref=e165]
+    - button [ref=e166] [cursor=pointer]
+    - button [ref=e167] [cursor=pointer]
+    - button [ref=e168] [cursor=pointer]
+    - button [ref=e169] [cursor=pointer]
+    - button [ref=e170] [cursor=pointer]
+    - button [ref=e171] [cursor=pointer]
+    - generic [ref=e33] [cursor=pointer]:
+      - switch "Тёмная тема" [checked] [ref=e172]
+      - generic [ref=e39]: Тёмная тема
+    - separator [ref=e40]
+    - paragraph [ref=e41]: Вы вошли как Тестовый пользователь
+    - button "Выйти" [ref=e173] [cursor=pointer]
+  - main [ref=e43]:
+    - generic [ref=e44]:
+      - generic [ref=e45]: Приложение подключено
+      - alert [ref=e174]:
+        - generic [ref=e178]:
+          - generic [ref=e179]: Уведомление
+          - text: "Отменено: Вечерний вайб"
+        - button "Закрыть" [ref=e181] [cursor=pointer]
+      - generic [ref=e104]:
+        - heading "Загрузки" [level=1] [ref=e184]
+        - generic [ref=e106]:
+          - button "Приостановить все" [ref=e185] [cursor=pointer]: Приостановить
+          - button "Продолжить все" [ref=e186] [cursor=pointer]: Продолжить
+          - button "Открыть папку" [ref=e187] [cursor=pointer]
+          - button "Убрать завершённые" [ref=e188] [cursor=pointer]
+        - tablist "Состояния загрузок" [ref=e189]:
+          - tab "Очередь (3)" [ref=e190] [cursor=pointer]
+          - tab "Активные (0)" [selected] [ref=e191] [cursor=pointer]
+          - tab "Завершённые (3)" [ref=e192] [cursor=pointer]
+          - tab "Ошибки (2)" [ref=e193] [cursor=pointer]
+        - generic [ref=e194]: Здесь появятся ваши загрузки. Добавьте ссылку на Главной.
+```
+
+$ ["screenshot", "--filename=/home/user/github.com/yarkovaleksei/yandex-music-downloader/apps/desktop/evidence/STEP-058/screenshots/fix-cancel-confirmed.png"]
+### Result
+- [Screenshot of viewport](apps/desktop/evidence/STEP-058/screenshots/fix-cancel-confirmed.png)
+### Ran Playwright code
+```js
+// Screenshot viewport and save it as apps/desktop/evidence/STEP-058/screenshots/fix-cancel-confirmed.png
+await page.screenshot({
+  path: 'apps/desktop/evidence/STEP-058/screenshots/fix-cancel-confirmed.png',
+  scale: 'css',
+  type: 'png'
+});
+```
+
+$ ["console", "error"]
+### Result
+Total messages: 1 (Errors: 0, Warnings: 0)
+Returning 0 messages for level "error"
+

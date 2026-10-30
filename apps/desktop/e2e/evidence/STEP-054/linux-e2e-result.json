@@ -1,0 +1,29 @@
+{
+  "platform": "linux",
+  "stateDir": "/tmp/music-desktop-e2e-GZHWcI/state",
+  "outputPath": "/tmp/music-desktop-e2e-GZHWcI/output/Тестовый исполнитель - Проверочный сигнал.mp3",
+  "fixtureDirectory": "/tmp/music-desktop-e2e-GZHWcI",
+  "jobId": "3d969e0b-64f7-4d82-aa4a-e674081ffce1",
+  "status": "completed",
+  "output": "Тестовый исполнитель - Проверочный сигнал.mp3",
+  "bytes": 50785,
+  "historyAfterRestart": [
+    {
+      "jobId": "3d969e0b-64f7-4d82-aa4a-e674081ffce1",
+      "source": {
+        "provider": "e2e-offline",
+        "kind": "track",
+        "id": "e2e-track"
+      },
+      "title": "Проверочный сигнал",
+      "artists": [
+        "Тестовый исполнитель"
+      ],
+      "count": 1,
+      "bytes": 50785,
+      "completedAt": "2026-10-29T15:01:08.083Z",
+      "replayAvailable": true,
+      "replayReason": null
+    }
+  ]
+}

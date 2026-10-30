@@ -85,6 +85,8 @@ describe('YandexMusicProviderAuth', () => {
     await expect(provider.authenticate()).resolves.toEqual({
       id: '1',
       displayName: 'Тест',
+      subscriptionReason:
+        'Сервис не передал достаточно данных, чтобы определить подписку.',
     });
     expect(events).toEqual(['browser', 'notify', 'account', 'write']);
   });
@@ -125,6 +127,8 @@ describe('YandexMusicProviderAuth', () => {
     await expect(provider.authenticate()).resolves.toEqual({
       id: '1',
       displayName: 'Тест',
+      subscriptionReason:
+        'Сервис не передал достаточно данных, чтобы определить подписку.',
     });
     expect(polls).toBe(2);
     expect(sleeps).toBe(2);
@@ -486,6 +490,8 @@ describe('YandexMusicProviderAuth', () => {
     await expect(provider.getAccount()).resolves.toEqual({
       id: '1',
       displayName: 'Тест',
+      subscriptionReason:
+        'Сервис не передал достаточно данных, чтобы определить подписку.',
     });
     await provider.logout();
     await expect(provider.getAccount()).resolves.toBeNull();
@@ -569,6 +575,8 @@ describe('YandexMusicProviderAuth', () => {
     await expect(provider.getAccount()).resolves.toEqual({
       id: '1',
       displayName: 'Тест',
+      subscriptionReason:
+        'Сервис не передал достаточно данных, чтобы определить подписку.',
     });
     const unknown = new YandexMusicProviderAuth({
       credentialStore: {
@@ -827,4 +835,167 @@ describe('YandexMusicProviderAuth', () => {
     );
     expect(calls).toBe(1);
   });
+});
+
+it('REQ-058: account проецирует только фактические optional поля без форматов из подписки', async () => {
+  const credentials = store(
+    JSON.stringify({
+      schemaVersion: 1,
+      accessToken: 'synthetic',
+      issuedAt: 0,
+      accountId: '1',
+    }),
+  );
+  const provider = new YandexMusicProviderAuth({
+    credentialStore: credentials,
+    authInteraction: { notify: () => undefined },
+    fetch: async () =>
+      response(200, {
+        result: {
+          account: {
+            uid: 1,
+            displayName: 'Пользователь',
+            region: 225,
+            regionCode: 'RU',
+          },
+          defaultEmail: 'user@example.test',
+          subscription: {
+            autoRenewable: [
+              { finished: false, product: { title: 'Подписка' } },
+            ],
+          },
+          token: 'secret',
+        },
+      }),
+  });
+  await expect(provider.getAccount()).resolves.toEqual({
+    id: '1',
+    displayName: 'Пользователь',
+    email: 'user@example.test',
+    region: 'RU',
+    subscription: 'Подписка',
+  });
+});
+
+it.each([
+  [
+    {
+      plus: { hasPlus: true },
+      subscription: { autoRenewable: [{ finished: false }] },
+    },
+    'Яндекс Плюс активен',
+  ],
+  [
+    {
+      subscription: {
+        familyAutoRenewable: [
+          { finished: false, product: { title: 'Семейная' } },
+        ],
+      },
+    },
+    'Семейная',
+  ],
+  [
+    { subscription: { operator: [{ suspended: false, title: 'Оператор' }] } },
+    'Оператор',
+  ],
+  [
+    {
+      subscription: {
+        nonAutoRenewable: { start: '2020-01-01', end: '2040-01-01' },
+      },
+    },
+    'Подписка без автопродления активна',
+  ],
+])(
+  'STEP-059: подтверждённая SDK форма %j проецируется без выдуманных codecs',
+  async (fields, title) => {
+    const provider = new YandexMusicProviderAuth({
+      credentialStore: store(
+        JSON.stringify({
+          schemaVersion: 1,
+          accessToken: 'synthetic',
+          issuedAt: 0,
+          accountId: '1',
+        }),
+      ),
+      authInteraction: { notify() {} },
+      fetch: async () =>
+        response(200, {
+          result: { account: { uid: 1, displayName: 'Тест' }, ...fields },
+        }),
+    });
+    expect(await provider.getAccount()).toMatchObject({ subscription: title });
+    expect(await provider.getAccount()).not.toHaveProperty('formats');
+  },
+);
+
+it('STEP-059 F-002: поздний account-status A не меняет active credentials после logout и входа B', async () => {
+  const credentials = store(
+    JSON.stringify({
+      schemaVersion: 1,
+      accessToken: 'synthetic-A',
+      accountId: 'A',
+      issuedAt: 0,
+    }),
+  );
+  let finish!: () => void;
+  let markStarted!: () => void;
+  const started = new Promise<void>((resolve) => {
+    markStarted = resolve;
+  });
+  const delayed = new Promise<void>((resolve) => {
+    finish = resolve;
+  });
+  let first = true;
+  const provider = new YandexMusicProviderAuth({
+    credentialStore: credentials,
+    authInteraction: { notify() {} },
+    browser: { async open() {} },
+    sleep: async () => {},
+    now: () => 10,
+    fetch: async (url, init) => {
+      if (url.includes('/device/code'))
+        return response(200, {
+          device_code: 'synthetic-device',
+          user_code: 'synthetic-code',
+          verification_url: 'https://ya.ru/device',
+          expires_in: 60,
+          interval: 1,
+        });
+      if (url.includes('/token'))
+        return response(200, {
+          access_token: 'synthetic-B',
+          token_type: 'bearer',
+          expires_in: 1000,
+        });
+      const authorization = Object.entries(init.headers).find(
+        ([key]) => key.toLowerCase() === 'authorization',
+      )?.[1];
+      const id = authorization?.includes('synthetic-B') ? 'B' : 'A';
+      if (id === 'A' && first) {
+        first = false;
+        markStarted();
+        await delayed;
+      }
+      return response(200, {
+        result: { account: { uid: id, displayName: `Аккаунт ${id}` } },
+      });
+    },
+  });
+  const lookup = provider.getAccount();
+  await started;
+  try {
+    await provider.logout();
+    expect(await provider.authenticate()).toMatchObject({ id: 'B' });
+  } finally {
+    finish();
+  }
+  expect(await lookup).toBeNull();
+  expect(await provider.getAccount()).toMatchObject({ id: 'B' });
+  expect(JSON.parse(credentials.value ?? 'null')).toMatchObject({
+    accessToken: 'synthetic-B',
+    accountId: 'B',
+  });
+  await provider.logout();
 });

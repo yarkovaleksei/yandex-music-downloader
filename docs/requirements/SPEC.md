@@ -61,3 +61,4 @@
 | [REQ-055](REQ-055-pack-update-signing.md) | [PACKAGING] Проверенные обновления portable-приложения | low | brief |
 | [REQ-056](REQ-056-auth-browser-page.md) | [AUTH] Оформление приватной страницы Device Authorization | medium | user |
 | [REQ-057](REQ-057-desktop-usable-ux.md) | Компактный desktop UX и понятная диагностика препятствий | high | user |
+| [REQ-058](REQ-058-ui-mockup-parity.md) | Функциональная полнота desktop UI и соответствие макетам | medium | user |

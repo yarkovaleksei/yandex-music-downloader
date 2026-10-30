@@ -1,0 +1,255 @@
+{
+  "status": "AWAITING_MANUAL_REPLACEMENT",
+  "externalTools": {
+    "node": {
+      "command": [
+        "where.exe",
+        "node"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "stdout": "C:\\Program Files\\nodejs\\node.exe\r\n",
+      "stderr": ""
+    },
+    "ffmpeg": {
+      "command": [
+        "where.exe",
+        "ffmpeg"
+      ],
+      "exitCode": 1,
+      "signal": null,
+      "stdout": "",
+      "stderr": "����������: �� 㤠���� ���� 䠩�� �� ������� 蠡�����.\r\n"
+    }
+  },
+  "cleanEnvironment": false,
+  "executionRuntimes": "Только встроенные Node/Electron по абсолютным путям; externalTools — наблюдение PATH, чистая ОС требует manual подтверждения",
+  "nativeAcceptance": "PENDING",
+  "revision": "94fa63b4dbbc9ae40b2e18c850c8e986df1d6d62",
+  "buildId": "20261029T152446475Z-94fa63b4",
+  "appArtifactHash": "8e33becb043c2c32fa9b590cb87938d2fc149e79f82e54345bbc4578a461b6c0",
+  "nextArtifactHash": "04403b2a578626154a061cb39e28e97967c56076c61c62eaf432a83df35083e5",
+  "platform": "win32",
+  "arch": "x64",
+  "cpu": [
+    "AMD Ryzen 9 5950X 16-Core Processor            ",
+    "AMD Ryzen 9 5950X 16-Core Processor            ",
+    "AMD Ryzen 9 5950X 16-Core Processor            ",
+    "AMD Ryzen 9 5950X 16-Core Processor            ",
+    "AMD Ryzen 9 5950X 16-Core Processor            ",
+    "AMD Ryzen 9 5950X 16-Core Processor            ",
+    "AMD Ryzen 9 5950X 16-Core Processor            ",
+    "AMD Ryzen 9 5950X 16-Core Processor            "
+  ],
+  "os": "10.0.26200",
+  "rosetta": null,
+  "hostArm64": null,
+  "runtime": {
+    "node": "24.21.0",
+    "acorn": "8.18.0",
+    "ada": "4.0.0",
+    "amaro": "1.1.11",
+    "ares": "1.34.8",
+    "brotli": "1.2.0",
+    "cldr": "48.0",
+    "icu": "78.3",
+    "llhttp": "9.4.3",
+    "merve": "1.2.2",
+    "modules": "137",
+    "napi": "10",
+    "nbytes": "0.1.4",
+    "ncrypto": "0.0.1",
+    "nghttp2": "1.70.0",
+    "nghttp3": "",
+    "ngtcp2": "",
+    "openssl": "3.5.8",
+    "simdjson": "4.6.7",
+    "simdutf": "6.4.0",
+    "sqlite": "3.53.4",
+    "tz": "2026c",
+    "undici": "7.29.1",
+    "unicode": "17.0",
+    "uv": "1.52.1",
+    "uvwasi": "0.0.23",
+    "v8": "13.6.233.17-node.53",
+    "zlib": "1.3.2.1-motley-8002e91",
+    "zstd": "1.5.7"
+  },
+  "guestBuildPerformed": false,
+  "commands": [
+    {
+      "command": [
+        "C:\\Users\\vboxuser\\test\\music-downloader-final-win32-x64-20261029T152446475Z-94fa63b4\\current\\Yandex Music Downloader.exe"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "stdout": "\r\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "C:\\Users\\vboxuser\\test\\music-downloader-final-win32-x64-20261029T152446475Z-94fa63b4\\runtime\\node.exe",
+        "C:\\Users\\vboxuser\\test\\music-downloader-final-win32-x64-20261029T152446475Z-94fa63b4\\project\\node_modules\\@playwright\\test\\cli.js",
+        "test",
+        "--config",
+        "C:\\Users\\vboxuser\\test\\music-downloader-final-win32-x64-20261029T152446475Z-94fa63b4\\project\\apps\\desktop\\e2e\\playwright.config.mjs"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "stdout": "\nRunning 1 test using 1 worker\n\n  ok 1 apps\\desktop\\e2e\\download.spec.mjs:19:1 › Ссылка → предпросмотр → загрузка → пауза → продолжение → файл и история после перезапуска (14.9s)\n\n  1 passed (15.7s)\n",
+      "stderr": "  pw:browser <launching> \"C:\\Users\\vboxuser\\test\\music-downloader-final-win32-x64-20261029T152446475Z-94fa63b4\\project\\node_modules\\electron\\dist\\electron.exe\" \"--inspect=0\" \"--remote-debugging-port=0\" \"C:\\Users\\vboxuser\\AppData\\Local\\Temp\\music-desktop-e2e-Pis7SD\\bootstrap.mjs\"  +0ms\n  pw:browser <launched> pid=4924 +14ms\n  pw:browser [pid=4924][out]  +2s\n  pw:browser [pid=4924][err] Debugger listening on ws://127.0.0.1:61547/eb0cc0d9-9ef4-412e-8d0c-7699b6be178b +21ms\n  pw:browser [pid=4924][err] For help, see: https://nodejs.org/learn/getting-started/debugging +0ms\n  pw:browser <ws connecting> ws://127.0.0.1:61547/eb0cc0d9-9ef4-412e-8d0c-7699b6be178b +1ms\n  pw:browser <ws connected> ws://127.0.0.1:61547/eb0cc0d9-9ef4-412e-8d0c-7699b6be178b +9ms\n  pw:browser [pid=4924][err] Debugger attached. +1ms\n  pw:browser [pid=4924][err]  +349ms\n  pw:browser [pid=4924][err] DevTools listening on ws://127.0.0.1:61549/devtools/browser/c6dccd0b-6e2e-40a9-a030-7e002a00f4db +0ms\n  pw:browser <ws connecting> ws://127.0.0.1:61549/devtools/browser/c6dccd0b-6e2e-40a9-a030-7e002a00f4db +0ms\n  pw:browser [pid=4924][err] (electron) 'console-message' arguments are deprecated and will be removed. Please use Event<WebContentsConsoleMessageEventParams> object instead. +32ms\n  pw:browser <ws connected> ws://127.0.0.1:61549/devtools/browser/c6dccd0b-6e2e-40a9-a030-7e002a00f4db +25ms\n  pw:browser <ws disconnecting> ws://127.0.0.1:61547/eb0cc0d9-9ef4-412e-8d0c-7699b6be178b +11s\n  pw:browser [pid=4924][err] Debugger ending on ws://127.0.0.1:61547/eb0cc0d9-9ef4-412e-8d0c-7699b6be178b +3ms\n  pw:browser [pid=4924][err] For help, see: https://nodejs.org/learn/getting-started/debugging +0ms\n  pw:browser <ws disconnected> ws://127.0.0.1:61547/eb0cc0d9-9ef4-412e-8d0c-7699b6be178b code=1005 reason= +1ms\n  pw:browser <ws disconnected> ws://127.0.0.1:61549/devtools/browser/c6dccd0b-6e2e-40a9-a030-7e002a00f4db code=1006 reason= +111ms\n  pw:browser [pid=4924] <process did exit: exitCode=0, signal=null> +21ms\n  pw:browser [pid=4924] starting temporary directories cleanup +0ms\n  pw:browser [pid=4924] finished temporary directories cleanup +2ms\n  pw:browser <launching> \"C:\\Users\\vboxuser\\test\\music-downloader-final-win32-x64-20261029T152446475Z-94fa63b4\\project\\node_modules\\electron\\dist\\electron.exe\" \"--inspect=0\" \"--remote-debugging-port=0\" \"C:\\Users\\vboxuser\\AppData\\Local\\Temp\\music-desktop-e2e-Pis7SD\\bootstrap.mjs\"  +2ms\n  pw:browser <launched> pid=7612 +5ms\n  pw:browser [pid=7612][out]  +43ms\n  pw:browser [pid=7612][err] Debugger listening on ws://127.0.0.1:61551/9ba8e6b1-d6b4-4a6b-8c66-39652f4255d4 +25ms\n  pw:browser [pid=7612][err] For help, see: https://nodejs.org/learn/getting-started/debugging +0ms\n  pw:browser <ws connecting> ws://127.0.0.1:61551/9ba8e6b1-d6b4-4a6b-8c66-39652f4255d4 +0ms\n  pw:browser <ws connected> ws://127.0.0.1:61551/9ba8e6b1-d6b4-4a6b-8c66-39652f4255d4 +3ms\n  pw:browser [pid=7612][err] Debugger attached. +0ms\n  pw:browser [pid=7612][err]  +200ms\n  pw:browser [pid=7612][err] DevTools listening on ws://127.0.0.1:61553/devtools/browser/fd1cc896-4ade-464c-90b6-e708c4f41063 +0ms\n  pw:browser <ws connecting> ws://127.0.0.1:61553/devtools/browser/fd1cc896-4ade-464c-90b6-e708c4f41063 +0ms\n  pw:browser [pid=7612][err] (electron) 'console-message' arguments are deprecated and will be removed. Please use Event<WebContentsConsoleMessageEventParams> object instead. +31ms\n  pw:browser <ws connected> ws://127.0.0.1:61553/devtools/browser/fd1cc896-4ade-464c-90b6-e708c4f41063 +30ms\n  pw:browser <ws disconnecting> ws://127.0.0.1:61551/9ba8e6b1-d6b4-4a6b-8c66-39652f4255d4 +725ms\n  pw:browser <ws disconnected> ws://127.0.0.1:61551/9ba8e6b1-d6b4-4a6b-8c66-39652f4255d4 code=1005 reason= +1ms\n  pw:browser [pid=7612][err] Debugger ending on ws://127.0.0.1:61551/9ba8e6b1-d6b4-4a6b-8c66-39652f4255d4 +0ms\n  pw:browser [pid=7612][err] For help, see: https://nodejs.org/learn/getting-started/debugging +1ms\n  pw:browser <ws disconnected> ws://127.0.0.1:61553/devtools/browser/fd1cc896-4ade-464c-90b6-e708c4f41063 code=1006 reason= +99ms\n  pw:browser [pid=7612] <process did exit: exitCode=0, signal=null> +20ms\n  pw:browser [pid=7612] starting temporary directories cleanup +0ms\n  pw:browser [pid=7612] finished temporary directories cleanup +1ms\n"
+    }
+  ],
+  "manualReplacement": "PENDING",
+  "integrityBefore": "PASS",
+  "shipping": {
+    "status": "PASS",
+    "platform": "win32",
+    "arch": "x64",
+    "appVersion": "0.0.0",
+    "versions": {
+      "electron": "45.0.0",
+      "node": "24.22.0",
+      "napi": "10"
+    },
+    "isolation": {
+      "requireAbsent": true,
+      "processAbsent": true,
+      "ipcRendererAbsent": true,
+      "apiPresent": true
+    },
+    "uiReady": true,
+    "settings": {
+      "quality": "normal",
+      "logging": "debug",
+      "concurrency": 3
+    }
+  },
+  "e2e": {
+    "platform": "win32",
+    "stateDir": "C:\\Users\\vboxuser\\test\\music-downloader-final-win32-x64-20261029T152446475Z-94fa63b4\\isolated-home\\Local\\music-downloader",
+    "outputPath": "C:\\Users\\vboxuser\\AppData\\Local\\Temp\\music-desktop-e2e-Pis7SD\\output\\Тестовый исполнитель - Проверочный сигнал.mp3",
+    "fixtureDirectory": "C:\\Users\\vboxuser\\AppData\\Local\\Temp\\music-desktop-e2e-Pis7SD",
+    "jobId": "dc887ba2-557c-474b-838d-2f4d8e85c37e",
+    "status": "completed",
+    "output": "Тестовый исполнитель - Проверочный сигнал.mp3",
+    "bytes": 50785,
+    "historyAfterRestart": [
+      {
+        "jobId": "dc887ba2-557c-474b-838d-2f4d8e85c37e",
+        "source": {
+          "provider": "e2e-offline",
+          "kind": "track",
+          "id": "e2e-track"
+        },
+        "title": "Проверочный сигнал",
+        "artists": [
+          "Тестовый исполнитель"
+        ],
+        "count": 1,
+        "bytes": 50785,
+        "completedAt": "2026-10-29T17:30:22.033Z",
+        "replayAvailable": true,
+        "replayReason": null
+      }
+    ]
+  },
+  "historySnapshot": {
+    "jobs": [
+      {
+        "job_id": "dc887ba2-557c-474b-838d-2f4d8e85c37e",
+        "manifest": "{\"version\":1,\"jobId\":\"dc887ba2-557c-474b-838d-2f4d8e85c37e\",\"provider\":\"e2e-offline\",\"source\":{\"provider\":\"e2e-offline\",\"kind\":\"track\",\"id\":\"e2e-track\"},\"plan\":{\"source\":{\"provider\":\"e2e-offline\",\"kind\":\"track\",\"id\":\"e2e-track\"},\"title\":\"Проверочный сигнал\",\"tracks\":[{\"position\":1,\"trackKey\":\"1\",\"track\":{\"id\":\"e2e-track\",\"title\":\"Проверочный сигнал\",\"artists\":[{\"id\":\"e2e-artist\",\"name\":\"Тестовый исполнитель\"}],\"durationMs\":2000,\"availability\":\"available\"}}]},\"quality\":\"normal\",\"destination\":\"C:\\\\Users\\\\vboxuser\\\\AppData\\\\Local\\\\Temp\\\\music-desktop-e2e-Pis7SD\\\\output\",\"control\":{\"state\":\"running\"},\"tracks\":[{\"position\":1,\"trackKey\":\"1\",\"status\":\"completed\",\"variant\":{\"key\":\"e2e-mp3\",\"codec\":\"mp3\",\"container\":\"mp3\",\"bitrate\":192,\"lossless\":false},\"variantKey\":\"e2e-mp3\",\"resultPath\":\"C:\\\\Users\\\\vboxuser\\\\AppData\\\\Local\\\\Temp\\\\music-desktop-e2e-Pis7SD\\\\output\\\\Тестовый исполнитель - Проверочный сигнал.mp3\",\"partPath\":\"C:\\\\Users\\\\vboxuser\\\\AppData\\\\Local\\\\Temp\\\\music-desktop-e2e-Pis7SD\\\\output\\\\Тестовый исполнитель - Проверочный сигнал.mp3.399e0563-1.part\",\"attempts\":0,\"history\":[{\"at\":\"2026-10-29T17:30:14.725Z\",\"status\":\"resolving\"},{\"at\":\"2026-10-29T17:30:14.732Z\",\"status\":\"ready\"},{\"at\":\"2026-10-29T17:30:14.734Z\",\"status\":\"downloading\"},{\"at\":\"2026-10-29T17:30:15.643Z\",\"status\":\"paused\"},{\"at\":\"2026-10-29T17:30:16.301Z\",\"status\":\"downloading\"},{\"at\":\"2026-10-29T17:30:21.982Z\",\"status\":\"processing\"}],\"updatedAt\":\"2026-10-29T17:30:21.982Z\",\"postProcessing\":{\"size\":50785}}],\"createdAt\":\"2026-10-29T17:30:13.594Z\",\"updatedAt\":\"2026-10-29T17:30:22.033Z\"}",
+        "control_state": "running"
+      }
+    ],
+    "hidden": [],
+    "settings": [
+      {
+        "job_id": "dc887ba2-557c-474b-838d-2f4d8e85c37e",
+        "value": "{\"source\":{\"provider\":\"e2e-offline\",\"kind\":\"track\",\"id\":\"e2e-track\"},\"destination\":\"C:\\\\Users\\\\vboxuser\\\\AppData\\\\Local\\\\Temp\\\\music-desktop-e2e-Pis7SD\\\\output\",\"quality\":\"normal\",\"overwrite\":false,\"naming\":\"collection\"}"
+      }
+    ]
+  },
+  "outputHash": "61810fb8af6f4eede3d11255103a4efed6c2682c2bff8dacf18d7b859d17ad0d",
+  "update": {
+    "downloaded": "C:\\Users\\vboxuser\\test\\music-downloader-final-win32-x64-20261029T152446475Z-94fa63b4\\reports\\download\\valid\\music-downloader-0.0.1-win32-x64-04403b2a5786.zip",
+    "valid": {
+      "checked": {
+        "status": "available",
+        "currentVersion": "0.0.0",
+        "version": "0.0.1",
+        "message": "Доступна новая версия. Пакет будет скачан только по вашей команде."
+      },
+      "downloaded": {
+        "status": "ready",
+        "currentVersion": "0.0.0",
+        "version": "0.0.1",
+        "message": "Пакет проверен. Откройте папку, закройте приложение и замените portable-файлы. Настройки и история сохранятся."
+      },
+      "opened": {
+        "status": "ready",
+        "currentVersion": "0.0.0",
+        "version": "0.0.1",
+        "message": "Закройте приложение и замените его файлы проверенным portable-пакетом."
+      }
+    },
+    "signature": {
+      "checked": {
+        "status": "error",
+        "currentVersion": "0.0.0",
+        "message": "Не удалось проверить обновление. Текущая версия и ваши данные сохранены."
+      },
+      "downloaded": {
+        "status": "error",
+        "currentVersion": "0.0.0",
+        "message": "Сначала проверьте наличие обновлений."
+      },
+      "opened": {
+        "status": "error",
+        "currentVersion": "0.0.0",
+        "message": "Не удалось проверить обновление. Текущая версия и ваши данные сохранены."
+      }
+    },
+    "size": {
+      "checked": {
+        "status": "available",
+        "currentVersion": "0.0.0",
+        "version": "0.0.1",
+        "message": "Доступна новая версия. Пакет будет скачан только по вашей команде."
+      },
+      "downloaded": {
+        "status": "error",
+        "currentVersion": "0.0.0",
+        "version": "0.0.1",
+        "message": "Не удалось проверить обновление. Текущая версия и ваши данные сохранены."
+      },
+      "opened": {
+        "status": "error",
+        "currentVersion": "0.0.0",
+        "version": "0.0.1",
+        "message": "Не удалось проверить обновление. Текущая версия и ваши данные сохранены."
+      }
+    },
+    "hash": {
+      "checked": {
+        "status": "available",
+        "currentVersion": "0.0.0",
+        "version": "0.0.1",
+        "message": "Доступна новая версия. Пакет будет скачан только по вашей команде."
+      },
+      "downloaded": {
+        "status": "error",
+        "currentVersion": "0.0.0",
+        "version": "0.0.1",
+        "message": "Не удалось проверить обновление. Текущая версия и ваши данные сохранены."
+      },
+      "opened": {
+        "status": "error",
+        "currentVersion": "0.0.0",
+        "version": "0.0.1",
+        "message": "Не удалось проверить обновление. Текущая версия и ваши данные сохранены."
+      }
+    }
+  },
+  "integrityAfter": "PASS"
+}

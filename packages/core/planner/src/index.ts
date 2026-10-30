@@ -6,6 +6,7 @@ export { buildAlbumPlan, buildPlaylistPlan, buildTrackPlan } from './plan.js';
 export {
   resolvePlanVariants,
   resolveVariant,
+  matchesVariant,
   type PlanVariantResult,
   type QualityOptions,
   type VariantResult,

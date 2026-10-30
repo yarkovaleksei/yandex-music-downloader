@@ -1,0 +1,32 @@
+
+ RUN  v3.2.7 /home/user/github.com/yarkovaleksei/yandex-music-downloader
+
+ ✓ |@music-downloader/provider-yandex-music| src/account-profile.test.ts (5 tests) 17ms
+ ✓ |@music-downloader/provider-yandex-music| src/metadata/metadata.test.ts (22 tests) 75ms
+{"level":"warn","time":"2026-10-29T20:51:52.094Z","message":"Команда application завершилась ошибкой.","context":{},"data":{"command":"logout","code":"DOWNLOAD_ERROR"}}
+{"level":"warn","time":"2026-10-29T20:51:52.096Z","message":"Команда application завершилась ошибкой.","context":{},"data":{"command":"getJob","code":"DOWNLOAD_ERROR"}}
+{"level":"warn","time":"2026-10-29T20:51:52.096Z","message":"Команда application завершилась ошибкой.","context":{},"data":{"command":"getJob","code":"DOWNLOAD_ERROR"}}
+{"level":"warn","time":"2026-10-29T20:51:52.097Z","message":"Команда application завершилась ошибкой.","context":{},"data":{"command":"listJobs","code":"DOWNLOAD_ERROR"}}
+{"level":"warn","time":"2026-10-29T20:51:52.097Z","message":"Команда application завершилась ошибкой.","context":{},"data":{"command":"getJob","code":"DOWNLOAD_ERROR"}}
+{"level":"warn","time":"2026-10-29T20:51:52.097Z","message":"Команда application завершилась ошибкой.","context":{},"data":{"command":"listJobs","code":"DOWNLOAD_ERROR"}}
+ ✓ |@music-downloader/application| src/application.contract.test.ts (10 tests) 94ms
+ ✓ |@music-downloader/application| src/cache.integration.test.ts (10 tests) 126ms
+ ✓ |@music-downloader/desktop| src/renderer/Account.test.tsx (4 tests) 229ms
+ ✓ |@music-downloader/provider-yandex-music| src/yandex-music-auth.test.ts (27 tests) 2082ms
+   ✓ YandexMusicProviderAuth > проверяет account до успешной записи credentials  1017ms
+   ✓ YandexMusicProviderAuth > сохраняет прежнюю запись при ошибке native store  1002ms
+ ✓ |@music-downloader/desktop| src/renderer/App.test.tsx (23 tests) 7376ms
+   ✓ preview track показывает поля и не начинает загрузку до явного действия  517ms
+   ✓ действия меню используют ID, OUTCOME_UNKNOWN перечитывает без повтора  560ms
+   ✓ F-002/ADR-016: App сохраняет предупреждение replay VALIDATION_ERROR на History и перечитывает очередь без повтора  340ms
+   ✓ F-002/ADR-016: App сохраняет предупреждение replay OUTCOME_UNKNOWN на History и перечитывает очередь без повтора  327ms
+   ✓ REQ-058: черновик exact качества отменяется кнопкой, Escape и backdrop; Apply передаёт точный descriptor  1745ms
+   ✓ F-001: открытая форма сохраняет подтверждённую тему sidebar вместе с черновиком и opaque refs  969ms
+   ✓ STEP-059 F-001: sidebar logout очищает открытый Account и отбрасывает поздний avatar (pending=false)  377ms
+   ✓ STEP-059 F-001: sidebar logout очищает открытый Account и отбрасывает поздний avatar (pending=true)  371ms
+
+ Test Files  7 passed (7)
+      Tests  101 passed (101)
+   Start at  23:51:50
+   Duration  9.27s (transform 1.95s, setup 0ms, collect 6.69s, tests 10.00s, environment 623ms, prepare 805ms)
+

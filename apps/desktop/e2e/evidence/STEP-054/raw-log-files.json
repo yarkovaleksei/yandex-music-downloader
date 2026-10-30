@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "description": "Исходные raw .log сохранены побайтно как .txt: policy репозитория запрещает отслеживаемые .log. SHA-256 позволяет проверить исходный provenance без изменения исторических отчётов.",
+  "files": [
+    {
+      "source": "linux-diagnostic-fallback.log",
+      "savedAs": "linux-diagnostic-fallback.txt",
+      "sha256": "b62268d5a038990848623ac102b6531d7991dceeaa1d4e2af39f883dab5eabc3",
+      "bytes": 194
+    },
+    {
+      "source": "linux-e2e.log",
+      "savedAs": "linux-e2e.txt",
+      "sha256": "6d6e00fc2f95d4d69bd837b896d4970986dfb3f31a139eaa3e21f7e2181ce8a0",
+      "bytes": 444
+    },
+    {
+      "source": "linux-fixture-check.log",
+      "savedAs": "linux-fixture-check.txt",
+      "sha256": "4feadbe4fcfa7ac41d3ea26b568aa20ebbcb7fae00ce705629727562a3507f7c",
+      "bytes": 130
+    },
+    {
+      "source": "linux-verify-initial-fail.log",
+      "savedAs": "linux-verify-initial-fail.txt",
+      "sha256": "3c8b8b7f4ad8f805ed92560f46318631134f2b09af6e0b764e17b6fde7dbf82b",
+      "bytes": 610
+    },
+    {
+      "source": "native-win32-x64-20261029/e2e/download-Ссылка-→-предпрос-d6b3b-и-история-после-перезапуска/electron-stdio.log",
+      "savedAs": "native-win32-x64-20261029/e2e/download-Ссылка-→-предпрос-d6b3b-и-история-после-перезапуска/electron-stdio.txt",
+      "sha256": "037f2c68a41feacc96e745be0ec14e4bd6d4c0dea025da087f2d06e218a595cb",
+      "bytes": 402
+    },
+    {
+      "source": "native-win32-x64-20261029/electron-e2e.log",
+      "savedAs": "native-win32-x64-20261029/electron-e2e.txt",
+      "sha256": "c3f58f3d6240f1297df121dd5519ac94e4991fe9f18ac4ee8beb16136a9398aa",
+      "bytes": 232
+    },
+    {
+      "source": "native-win32-x64-20261029/shipping-n/electron.log",
+      "savedAs": "native-win32-x64-20261029/shipping-n/electron.txt",
+      "sha256": "9a9e2d71c2bec676b6eea725d50e6083761338f45b015810f357dd9d18d67c19",
+      "bytes": 126
+    },
+    {
+      "source": "native-win32-x64-20261029/shipping-n-plus-1/electron.log",
+      "savedAs": "native-win32-x64-20261029/shipping-n-plus-1/electron.txt",
+      "sha256": "dbcf7987a44e4135d104b7eaeef461cb6f81e589f9b004377b0cfa4a9bfeabde",
+      "bytes": 126
+    }
+  ]
+}

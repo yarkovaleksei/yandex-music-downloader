@@ -1,0 +1,134 @@
+{
+  "status": "FAIL",
+  "externalTools": {
+    "node": {
+      "command": [
+        "/bin/sh",
+        "-c",
+        "command -v node"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "stdout": "/home/user/.nvm/versions/node/v24.21.0/bin/node\n",
+      "stderr": ""
+    },
+    "ffmpeg": {
+      "command": [
+        "/bin/sh",
+        "-c",
+        "command -v ffmpeg"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "stdout": "/usr/bin/ffmpeg\n",
+      "stderr": ""
+    }
+  },
+  "cleanEnvironment": false,
+  "executionRuntimes": "Только встроенные Node/Electron по абсолютным путям; externalTools — наблюдение PATH, чистая ОС требует manual подтверждения",
+  "nativeAcceptance": "PENDING",
+  "revision": "synthetic-fallback-probe",
+  "buildId": "synthetic-fallback-probe",
+  "appArtifactHash": null,
+  "nextArtifactHash": null,
+  "platform": "linux",
+  "arch": "x64",
+  "cpu": [
+    "AMD Ryzen 9 5950X 16-Core Processor",
+    "AMD Ryzen 9 5950X 16-Core Processor",
+    "AMD Ryzen 9 5950X 16-Core Processor",
+    "AMD Ryzen 9 5950X 16-Core Processor",
+    "AMD Ryzen 9 5950X 16-Core Processor",
+    "AMD Ryzen 9 5950X 16-Core Processor",
+    "AMD Ryzen 9 5950X 16-Core Processor",
+    "AMD Ryzen 9 5950X 16-Core Processor",
+    "AMD Ryzen 9 5950X 16-Core Processor",
+    "AMD Ryzen 9 5950X 16-Core Processor",
+    "AMD Ryzen 9 5950X 16-Core Processor",
+    "AMD Ryzen 9 5950X 16-Core Processor",
+    "AMD Ryzen 9 5950X 16-Core Processor",
+    "AMD Ryzen 9 5950X 16-Core Processor",
+    "AMD Ryzen 9 5950X 16-Core Processor",
+    "AMD Ryzen 9 5950X 16-Core Processor",
+    "AMD Ryzen 9 5950X 16-Core Processor",
+    "AMD Ryzen 9 5950X 16-Core Processor",
+    "AMD Ryzen 9 5950X 16-Core Processor",
+    "AMD Ryzen 9 5950X 16-Core Processor",
+    "AMD Ryzen 9 5950X 16-Core Processor",
+    "AMD Ryzen 9 5950X 16-Core Processor",
+    "AMD Ryzen 9 5950X 16-Core Processor",
+    "AMD Ryzen 9 5950X 16-Core Processor",
+    "AMD Ryzen 9 5950X 16-Core Processor",
+    "AMD Ryzen 9 5950X 16-Core Processor",
+    "AMD Ryzen 9 5950X 16-Core Processor",
+    "AMD Ryzen 9 5950X 16-Core Processor",
+    "AMD Ryzen 9 5950X 16-Core Processor",
+    "AMD Ryzen 9 5950X 16-Core Processor",
+    "AMD Ryzen 9 5950X 16-Core Processor",
+    "AMD Ryzen 9 5950X 16-Core Processor"
+  ],
+  "os": "7.0.0-38-generic",
+  "rosetta": null,
+  "hostArm64": null,
+  "runtime": {
+    "node": "24.21.0",
+    "acorn": "8.18.0",
+    "ada": "4.0.0",
+    "amaro": "1.1.11",
+    "ares": "1.34.8",
+    "brotli": "1.2.0",
+    "cldr": "48.0",
+    "icu": "78.3",
+    "llhttp": "9.4.3",
+    "merve": "1.2.2",
+    "modules": "137",
+    "napi": "10",
+    "nbytes": "0.1.4",
+    "ncrypto": "0.0.1",
+    "nghttp2": "1.70.0",
+    "nghttp3": "",
+    "ngtcp2": "",
+    "openssl": "3.5.8",
+    "simdjson": "4.6.7",
+    "simdutf": "6.4.0",
+    "sqlite": "3.53.4",
+    "tz": "2026c",
+    "undici": "7.29.1",
+    "unicode": "17.0",
+    "uv": "1.52.1",
+    "uvwasi": "0.0.23",
+    "v8": "13.6.233.17-node.53",
+    "zlib": "1.3.2.1-motley-8002e91",
+    "zstd": "1.5.7"
+  },
+  "guestBuildPerformed": false,
+  "commands": [
+    {
+      "command": [
+        "/tmp/step054-diagnostic-5dkhit/current/intentionally-missing"
+      ],
+      "exitCode": null,
+      "signal": null,
+      "stdout": "",
+      "stderr": "",
+      "error": "spawnSync /tmp/step054-diagnostic-5dkhit/current/intentionally-missing ENOENT"
+    }
+  ],
+  "manualReplacement": "PENDING",
+  "integrityBefore": "PASS",
+  "error": "AssertionError [ERR_ASSERTION]: Shipping process завершился с ошибкой\n\nnull !== 0\n\n    at main (file:///tmp/step054-diagnostic-5dkhit/project/apps/desktop/e2e/final-check.mjs:308:12)\n    at async file:///tmp/step054-diagnostic-5dkhit/project/apps/desktop/e2e/final-check.mjs:405:3",
+  "diagnosticE2E": {
+    "command": [
+      "/home/user/.nvm/versions/node/v24.21.0/bin/node",
+      "/tmp/step054-diagnostic-5dkhit/project/node_modules/@playwright/test/cli.js",
+      "test",
+      "--config",
+      "/tmp/step054-diagnostic-5dkhit/project/apps/desktop/e2e/playwright.config.mjs"
+    ],
+    "exitCode": 0,
+    "signal": null,
+    "stdout": "\nRunning 1 test using 1 worker\n\n  ✓  1 apps/desktop/e2e/download.spec.mjs:19:1 › Ссылка → предпросмотр → загрузка → пауза → продолжение → файл и история после перезапуска (9.2s)\n\n  1 passed (9.6s)\n",
+    "stderr": "(node:56) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.\n(Use `node --trace-warnings ...` to show where the warning was created)\n  pw:browser <launching> /home/user/github.com/yarkovaleksei/yandex-music-downloader/node_modules/electron/dist/electron --no-sandbox --inspect=0 --remote-debugging-port=0 /tmp/music-desktop-e2e-NFjbYn/bootstrap.mjs +0ms\n  pw:browser <launched> pid=68 +4ms\n  pw:browser [pid=68][err] Debugger listening on ws://127.0.0.1:37379/0de65d92-1291-4c6f-9380-23493e3a7e17 +482ms\n  pw:browser [pid=68][err] For help, see: https://nodejs.org/learn/getting-started/debugging +0ms\n  pw:browser <ws connecting> ws://127.0.0.1:37379/0de65d92-1291-4c6f-9380-23493e3a7e17 +0ms\n  pw:browser <ws connected> ws://127.0.0.1:37379/0de65d92-1291-4c6f-9380-23493e3a7e17 +6ms\n  pw:browser [pid=68][err] Debugger attached. +0ms\n  pw:browser [pid=68][err] (node:68) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set. +6ms\n  pw:browser [pid=68][err] (Use `electron --trace-warnings ...` to show where the warning was created) +1ms\n  pw:browser [pid=68][err]  +124ms\n  pw:browser [pid=68][err] (electron:68): dconf-CRITICAL **: 18:11:20.043: unable to create file '/run/user/1000/dconf/user': Read-only file system.  dconf will not work properly. +0ms\n  pw:browser [pid=68][err]  +0ms\n  pw:browser [pid=68][err] (electron:68): dconf-CRITICAL **: 18:11:20.043: unable to create file '/run/user/1000/dconf/user': Read-only file system.  dconf will not work properly. +0ms\n  pw:browser [pid=68][err]  +0ms\n  pw:browser [pid=68][err] (electron:68): dconf-CRITICAL **: 18:11:20.043: unable to create file '/run/user/1000/dconf/user': Read-only file system.  dconf will not work properly. +0ms\n  pw:browser [pid=68][err]  +0ms\n  pw:browser [pid=68][err] (electron:68): dconf-CRITICAL **: 18:11:20.043: unable to create file '/run/user/1000/dconf/user': Read-only file system.  dconf will not work properly. +0ms\n  pw:browser [pid=68][err]  +0ms\n  pw:browser [pid=68][err] (electron:68): dconf-CRITICAL **: 18:11:20.043: unable to create file '/run/user/1000/dconf/user': Read-only file system.  dconf will not work properly. +0ms\n  pw:browser [pid=68][err]  +0ms\n  pw:browser [pid=68][err] (electron:68): dconf-CRITICAL **: 18:11:20.043: unable to create file '/run/user/1000/dconf/user': Read-only file system.  dconf will not work properly. +1ms\n  pw:browser [pid=68][err]  +0ms\n  pw:browser [pid=68][err] (electron:68): dconf-CRITICAL **: 18:11:20.043: unable to create file '/run/user/1000/dconf/user': Read-only file system.  dconf will not work properly. +0ms\n  pw:browser [pid=68][err]  +0ms\n  pw:browser [pid=68][err] (electron:68): dconf-CRITICAL **: 18:11:20.043: unable to create file '/run/user/1000/dconf/user': Read-only file system.  dconf will not work properly. +0ms\n  pw:browser [pid=68][err]  +0ms\n  pw:browser [pid=68][err] (electron:68): dconf-CRITICAL **: 18:11:20.043: unable to create file '/run/user/1000/dconf/user': Read-only file system.  dconf will not work properly. +0ms\n  pw:browser [pid=68][err]  +0ms\n  pw:browser [pid=68][err] (electron:68): dconf-CRITICAL **: 18:11:20.044: unable to create file '/run/user/1000/dconf/user': Read-only file system.  dconf will not work properly. +0ms\n  pw:browser [pid=68][err]  +0ms\n  pw:browser [pid=68][err] (electron:68): dconf-CRITICAL **: 18:11:20.044: unable to create file '/run/user/1000/dconf/user': Read-only file system.  dconf will not work properly. +0ms\n  pw:browser [pid=68][err]  +0ms\n  pw:browser [pid=68][err] (electron:68): dconf-CRITICAL **: 18:11:20.044: unable to create file '/run/user/1000/dconf/user': Read-only file system.  dconf will not work properly. +0ms\n  pw:browser [pid=68][err]  +0ms\n  pw:browser [pid=68][err] (electron:68): dconf-CRITICAL **: 18:11:20.044: unable to create file '/run/user/1000/dconf/user': Read-only file system.  dconf will not work properly. +0ms\n  pw:browser [pid=68][err]  +1ms\n  pw:browser [pid=68][err] DevTools listening on ws://127.0.0.1:32871/devtools/browser/2203a68c-7b5d-4dd5-9fe3-7bb131a63b5f +1ms\n  pw:browser <ws connecting> ws://127.0.0.1:32871/devtools/browser/2203a68c-7b5d-4dd5-9fe3-7bb131a63b5f +0ms\n  pw:browser [pid=68][err]  +3ms\n  pw:browser [pid=68][err] (electron:68): dconf-CRITICAL **: 18:11:20.049: unable to create file '/run/user/1000/dconf/user': Read-only file system.  dconf will not work properly. +0ms\n  pw:browser [pid=68][err] (electron) 'console-message' arguments are deprecated and will be removed. Please use Event<WebContentsConsoleMessageEventParams> object instead. +15ms\n  pw:browser <ws connected> ws://127.0.0.1:32871/devtools/browser/2203a68c-7b5d-4dd5-9fe3-7bb131a63b5f +11ms\n  pw:browser [pid=68][err] [68:1029/181120.075744:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.systemd1.Manager.StartTransientUnit: object_path= /org/freedesktop/systemd1: org.freedesktop.DBus.Error.UnixProcessIdUnknown: Failed to set unit properties: No such process +1ms\n  pw:browser [pid=68][err]  +111ms\n  pw:browser [pid=68][err] (electron:68): dconf-CRITICAL **: 18:11:20.187: unable to create file '/run/user/1000/dconf/user': Read-only file system.  dconf will not work properly. +0ms\n  pw:browser [pid=68][err]  +0ms\n  pw:browser [pid=68][err] (electron:68): dconf-CRITICAL **: 18:11:20.187: unable to create file '/run/user/1000/dconf/user': Read-only file system.  dconf will not work properly. +0ms\n  pw:browser [pid=68][err]  +0ms\n  pw:browser [pid=68][err] (electron:68): dconf-CRITICAL **: 18:11:20.187: unable to create file '/run/user/1000/dconf/user': Read-only file system.  dconf will not work properly. +0ms\n  pw:browser [pid=68][err] [102:1029/181120.293320:ERROR:ui/gl/angle_platform_impl.cc:34] Display.cpp:1505 (initialize): ANGLE Display::initialize error 12289: Could not create a backing OpenGL context. +106ms\n  pw:browser [pid=68][err] ERR: Display.cpp:1505 (initialize): ANGLE Display::initialize error 12289: Could not create a backing OpenGL context. +0ms\n  pw:browser [pid=68][err] [102:1029/181120.293457:ERROR:ui/gl/egl_util.cc:92] EGL Driver message (Critical) eglInitialize: Could not create a backing OpenGL context. +0ms\n  pw:browser [pid=68][err] [102:1029/181120.293507:ERROR:ui/gl/gl_display.cc:613] eglInitialize OpenGL failed with error EGL_NOT_INITIALIZED, trying next display type +0ms\n  pw:browser [pid=68][err]  +0ms\n  pw:browser [pid=68][err] (electron:68): dconf-CRITICAL **: 18:11:20.293: unable to create file '/run/user/1000/dconf/user': Read-only file system.  dconf will not work properly. +0ms\n  pw:browser [pid=68][err]  +6ms\n  pw:browser [pid=68][err] (electron:68): dconf-CRITICAL **: 18:11:20.299: unable to create file '/run/user/1000/dconf/user': Read-only file system.  dconf will not work properly. +0ms\n  pw:browser [pid=68][err] [102:1029/181120.348801:ERROR:ui/gl/angle_platform_impl.cc:34] Display.cpp:1505 (initialize): ANGLE Display::initialize error 12289: Could not create a backing OpenGL context. +49ms\n  pw:browser [pid=68][err] ERR: Display.cpp:1505 (initialize): ANGLE Display::initialize error 12289: Could not create a backing OpenGL context. +1ms\n  pw:browser [pid=68][err] [102:1029/181120.348906:ERROR:ui/gl/egl_util.cc:92] EGL Driver message (Critical) eglInitialize: Could not create a backing OpenGL context. +0ms\n  pw:browser [pid=68][err] [102:1029/181120.348946:ERROR:ui/gl/gl_display.cc:613] eglInitialize OpenGLES failed with error EGL_NOT_INITIALIZED +0ms\n  pw:browser [pid=68][err] [102:1029/181120.348979:ERROR:ui/gl/gl_display.cc:648] Initialization of all (2) EGL display types failed. +0ms\n  pw:browser [pid=68][err] [102:1029/181120.349020:ERROR:ui/ozone/common/gl_ozone_egl.cc:26] GLDisplayEGL::Initialize failed. +0ms\n  pw:browser [pid=68][err] [102:1029/181120.459878:ERROR:ui/gl/angle_platform_impl.cc:34] Display.cpp:1505 (initialize): ANGLE Display::initialize error 12289: Could not create a backing OpenGL context. +111ms\n  pw:browser [pid=68][err] ERR: Display.cpp:1505 (initialize): ANGLE Display::initialize error 12289: Could not create a backing OpenGL context. +0ms\n  pw:browser [pid=68][err] [102:1029/181120.459975:ERROR:ui/gl/egl_util.cc:92] EGL Driver message (Critical) eglInitialize: Could not create a backing OpenGL context. +0ms\n  pw:browser [pid=68][err] [102:1029/181120.460023:ERROR:ui/gl/gl_display.cc:613] eglInitialize OpenGL failed with error EGL_NOT_INITIALIZED, trying next display type +0ms\n  pw:browser [pid=68][err] [102:1029/181120.503110:ERROR:ui/gl/angle_platform_impl.cc:34] Display.cpp:1505 (initialize): ANGLE Display::initialize error 12289: Could not create a backing OpenGL context. +43ms\n  pw:browser [pid=68][err] ERR: Display.cpp:1505 (initialize): ANGLE Display::initialize error 12289: Could not create a backing OpenGL context. +0ms\n  pw:browser [pid=68][err] [102:1029/181120.503219:ERROR:ui/gl/egl_util.cc:92] EGL Driver message (Critical) eglInitialize: Could not create a backing OpenGL context. +0ms\n  pw:browser [pid=68][err] [102:1029/181120.503256:ERROR:ui/gl/gl_display.cc:613] eglInitialize OpenGLES failed with error EGL_NOT_INITIALIZED +0ms\n  pw:browser [pid=68][err] [102:1029/181120.503291:ERROR:ui/gl/gl_display.cc:648] Initialization of all (2) EGL display types failed. +0ms\n  pw:browser [pid=68][err] [102:1029/181120.503365:ERROR:ui/ozone/common/gl_ozone_egl.cc:26] GLDisplayEGL::Initialize failed. +0ms\n  pw:browser [pid=68][err] [102:1029/181120.504669:ERROR:components/viz/service/main/viz_main_impl.cc:192] Exiting GPU process due to errors during initialization +1ms\n  pw:browser <ws disconnecting> ws://127.0.0.1:37379/0de65d92-1291-4c6f-9380-23493e3a7e17 +7s\n  pw:browser [pid=68][err] Debugger ending on ws://127.0.0.1:37379/0de65d92-1291-4c6f-9380-23493e3a7e17 +1ms\n  pw:browser [pid=68][err] For help, see: https://nodejs.org/learn/getting-started/debugging +0ms\n  pw:browser <ws disconnected> ws://127.0.0.1:37379/0de65d92-1291-4c6f-9380-23493e3a7e17 code=1005 reason= +1ms\n  pw:browser <ws disconnected> ws://127.0.0.1:32871/devtools/browser/2203a68c-7b5d-4dd5-9fe3-7bb131a63b5f code=1006 reason= +34ms\n  pw:browser [pid=68] <process did exit: exitCode=0, signal=null> +4ms\n  pw:browser [pid=68] starting temporary directories cleanup +0ms\n  pw:browser [pid=68] finished temporary directories cleanup +1ms\n  pw:browser <launching> /home/user/github.com/yarkovaleksei/yandex-music-downloader/node_modules/electron/dist/electron --no-sandbox --inspect=0 --remote-debugging-port=0 /tmp/music-desktop-e2e-NFjbYn/bootstrap.mjs +2ms\n  pw:browser <launched> pid=192 +3ms\n  pw:browser [pid=192][err] Debugger listening on ws://127.0.0.1:43849/a0429d85-3b24-4d7c-a9de-b86c9e01c284 +49ms\n  pw:browser [pid=192][err] For help, see: https://nodejs.org/learn/getting-started/debugging +0ms\n  pw:browser <ws connecting> ws://127.0.0.1:43849/a0429d85-3b24-4d7c-a9de-b86c9e01c284 +0ms\n  pw:browser <ws connected> ws://127.0.0.1:43849/a0429d85-3b24-4d7c-a9de-b86c9e01c284 +1ms\n  pw:browser [pid=192][err] Debugger attached. +1ms\n  pw:browser [pid=192][err] (node:192) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set. +11ms\n  pw:browser [pid=192][err] (Use `electron --trace-warnings ...` to show where the warning was created) +0ms\n  pw:browser [pid=192][err]  +120ms\n  pw:browser [pid=192][err] (electron:192): dconf-CRITICAL **: 18:11:27.959: unable to create file '/run/user/1000/dconf/user': Read-only file system.  dconf will not work properly. +0ms\n  pw:browser [pid=192][err]  +0ms\n  pw:browser [pid=192][err] (electron:192): dconf-CRITICAL **: 18:11:27.959: unable to create file '/run/user/1000/dconf/user': Read-only file system.  dconf will not work properly. +0ms\n  pw:browser [pid=192][err]  +0ms\n  pw:browser [pid=192][err] (electron:192): dconf-CRITICAL **: 18:11:27.959: unable to create file '/run/user/1000/dconf/user': Read-only file system.  dconf will not work properly. +0ms\n  pw:browser [pid=192][err]  +0ms\n  pw:browser [pid=192][err] (electron:192): dconf-CRITICAL **: 18:11:27.959: unable to create file '/run/user/1000/dconf/user': Read-only file system.  dconf will not work properly. +0ms\n  pw:browser [pid=192][err]  +1ms\n  pw:browser [pid=192][err] (electron:192): dconf-CRITICAL **: 18:11:27.959: unable to create file '/run/user/1000/dconf/user': Read-only file system.  dconf will not work properly. +0ms\n  pw:browser [pid=192][err]  +0ms\n  pw:browser [pid=192][err] (electron:192): dconf-CRITICAL **: 18:11:27.959: unable to create file '/run/user/1000/dconf/user': Read-only file system.  dconf will not work properly. +0ms\n  pw:browser [pid=192][err]  +0ms\n  pw:browser [pid=192][err] (electron:192): dconf-CRITICAL **: 18:11:27.959: unable to create file '/run/user/1000/dconf/user': Read-only file system.  dconf will not work properly. +0ms\n  pw:browser [pid=192][err]  +0ms\n  pw:browser [pid=192][err] (electron:192): dconf-CRITICAL **: 18:11:27.960: unable to create file '/run/user/1000/dconf/user': Read-only file system.  dconf will not work properly. +0ms\n  pw:browser [pid=192][err]  +0ms\n  pw:browser [pid=192][err] (electron:192): dconf-CRITICAL **: 18:11:27.960: unable to create file '/run/user/1000/dconf/user': Read-only file system.  dconf will not work properly. +0ms\n  pw:browser [pid=192][err]  +0ms\n  pw:browser [pid=192][err] (electron:192): dconf-CRITICAL **: 18:11:27.960: unable to create file '/run/user/1000/dconf/user': Read-only file system.  dconf will not work properly. +0ms\n  pw:browser [pid=192][err]  +0ms\n  pw:browser [pid=192][err] (electron:192): dconf-CRITICAL **: 18:11:27.960: unable to create file '/run/user/1000/dconf/user': Read-only file system.  dconf will not work properly. +0ms\n  pw:browser [pid=192][err]  +0ms\n  pw:browser [pid=192][err] (electron:192): dconf-CRITICAL **: 18:11:27.960: unable to create file '/run/user/1000/dconf/user': Read-only file system.  dconf will not work properly. +0ms\n  pw:browser [pid=192][err]  +0ms\n  pw:browser [pid=192][err] (electron:192): dconf-CRITICAL **: 18:11:27.960: unable to create file '/run/user/1000/dconf/user': Read-only file system.  dconf will not work properly. +0ms\n  pw:browser [pid=192][err]  +1ms\n  pw:browser [pid=192][err] DevTools listening on ws://127.0.0.1:32901/devtools/browser/e3cf050f-682c-42bd-81fc-207648c6523c +0ms\n  pw:browser <ws connecting> ws://127.0.0.1:32901/devtools/browser/e3cf050f-682c-42bd-81fc-207648c6523c +1ms\n  pw:browser [pid=192][err]  +4ms\n  pw:browser [pid=192][err] (electron:192): dconf-CRITICAL **: 18:11:27.966: unable to create file '/run/user/1000/dconf/user': Read-only file system.  dconf will not work properly. +0ms\n  pw:browser [pid=192][err] (electron) 'console-message' arguments are deprecated and will be removed. Please use Event<WebContentsConsoleMessageEventParams> object instead. +13ms\n  pw:browser <ws connected> ws://127.0.0.1:32901/devtools/browser/e3cf050f-682c-42bd-81fc-207648c6523c +10ms\n  pw:browser [pid=192][err] [192:1029/181127.989870:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.systemd1.Manager.StartTransientUnit: object_path= /org/freedesktop/systemd1: org.freedesktop.DBus.Error.InvalidArgs: Process 192 is a kernel thread, refusing. +0ms\n  pw:browser [pid=192][err] [226:1029/181128.209689:ERROR:ui/gl/angle_platform_impl.cc:34] Display.cpp:1505 (initialize): ANGLE Display::initialize error 12289: Could not create a backing OpenGL context. +220ms\n  pw:browser [pid=192][err] ERR: Display.cpp:1505 (initialize): ANGLE Display::initialize error 12289: Could not create a backing OpenGL context. +1ms\n  pw:browser [pid=192][err] [226:1029/181128.209870:ERROR:ui/gl/egl_util.cc:92] EGL Driver message (Critical) eglInitialize: Could not create a backing OpenGL context. +0ms\n  pw:browser [pid=192][err] [226:1029/181128.209929:ERROR:ui/gl/gl_display.cc:613] eglInitialize OpenGL failed with error EGL_NOT_INITIALIZED, trying next display type +0ms\n  pw:browser [pid=192][err]  +1ms\n  pw:browser [pid=192][err] (electron:192): dconf-CRITICAL **: 18:11:28.210: unable to create file '/run/user/1000/dconf/user': Read-only file system.  dconf will not work properly. +0ms\n  pw:browser [pid=192][err]  +6ms\n  pw:browser [pid=192][err] (electron:192): dconf-CRITICAL **: 18:11:28.217: unable to create file '/run/user/1000/dconf/user': Read-only file system.  dconf will not work properly. +0ms\n  pw:browser [pid=192][err]  +54ms\n  pw:browser [pid=192][err] (electron:192): dconf-CRITICAL **: 18:11:28.271: unable to create file '/run/user/1000/dconf/user': Read-only file system.  dconf will not work properly. +0ms\n  pw:browser [pid=192][err]  +0ms\n  pw:browser [pid=192][err] (electron:192): dconf-CRITICAL **: 18:11:28.271: unable to create file '/run/user/1000/dconf/user': Read-only file system.  dconf will not work properly. +0ms\n  pw:browser [pid=192][err]  +0ms\n  pw:browser [pid=192][err] (electron:192): dconf-CRITICAL **: 18:11:28.271: unable to create file '/run/user/1000/dconf/user': Read-only file system.  dconf will not work properly. +0ms\n  pw:browser [pid=192][err] [226:1029/181128.280558:ERROR:ui/gl/angle_platform_impl.cc:34] Display.cpp:1505 (initialize): ANGLE Display::initialize error 12289: Could not create a backing OpenGL context. +9ms\n  pw:browser [pid=192][err] ERR: Display.cpp:1505 (initialize): ANGLE Display::initialize error 12289: Could not create a backing OpenGL context. +0ms\n  pw:browser [pid=192][err] [226:1029/181128.280647:ERROR:ui/gl/egl_util.cc:92] EGL Driver message (Critical) eglInitialize: Could not create a backing OpenGL context. +0ms\n  pw:browser [pid=192][err] [226:1029/181128.280686:ERROR:ui/gl/gl_display.cc:613] eglInitialize OpenGLES failed with error EGL_NOT_INITIALIZED +0ms\n  pw:browser [pid=192][err] [226:1029/181128.280721:ERROR:ui/gl/gl_display.cc:648] Initialization of all (2) EGL display types failed. +0ms\n  pw:browser [pid=192][err] [226:1029/181128.280763:ERROR:ui/ozone/common/gl_ozone_egl.cc:26] GLDisplayEGL::Initialize failed. +0ms\n  pw:browser [pid=192][err] [226:1029/181128.386176:ERROR:ui/gl/angle_platform_impl.cc:34] Display.cpp:1505 (initialize): ANGLE Display::initialize error 12289: Could not create a backing OpenGL context. +106ms\n  pw:browser [pid=192][err] ERR: Display.cpp:1505 (initialize): ANGLE Display::initialize error 12289: Could not create a backing OpenGL context. +0ms\n  pw:browser [pid=192][err] [226:1029/181128.386291:ERROR:ui/gl/egl_util.cc:92] EGL Driver message (Critical) eglInitialize: Could not create a backing OpenGL context. +0ms\n  pw:browser [pid=192][err] [226:1029/181128.386327:ERROR:ui/gl/gl_display.cc:613] eglInitialize OpenGL failed with error EGL_NOT_INITIALIZED, trying next display type +0ms\n  pw:browser [pid=192][err] [226:1029/181128.427504:ERROR:ui/gl/angle_platform_impl.cc:34] Display.cpp:1505 (initialize): ANGLE Display::initialize error 12289: Could not create a backing OpenGL context. +41ms\n  pw:browser [pid=192][err] ERR: Display.cpp:1505 (initialize): ANGLE Display::initialize error 12289: Could not create a backing OpenGL context. +0ms\n  pw:browser [pid=192][err] [226:1029/181128.427600:ERROR:ui/gl/egl_util.cc:92] EGL Driver message (Critical) eglInitialize: Could not create a backing OpenGL context. +0ms\n  pw:browser [pid=192][err] [226:1029/181128.427637:ERROR:ui/gl/gl_display.cc:613] eglInitialize OpenGLES failed with error EGL_NOT_INITIALIZED +0ms\n  pw:browser [pid=192][err] [226:1029/181128.427671:ERROR:ui/gl/gl_display.cc:648] Initialization of all (2) EGL display types failed. +0ms\n  pw:browser [pid=192][err] [226:1029/181128.427702:ERROR:ui/ozone/common/gl_ozone_egl.cc:26] GLDisplayEGL::Initialize failed. +0ms\n  pw:browser [pid=192][err] [226:1029/181128.428783:ERROR:components/viz/service/main/viz_main_impl.cc:192] Exiting GPU process due to errors during initialization +1ms\n  pw:browser <ws disconnecting> ws://127.0.0.1:43849/a0429d85-3b24-4d7c-a9de-b86c9e01c284 +78ms\n  pw:browser [pid=192][err] Debugger ending on ws://127.0.0.1:43849/a0429d85-3b24-4d7c-a9de-b86c9e01c284 +0ms\n  pw:browser [pid=192][err] For help, see: https://nodejs.org/learn/getting-started/debugging +0ms\n  pw:browser <ws disconnected> ws://127.0.0.1:43849/a0429d85-3b24-4d7c-a9de-b86c9e01c284 code=1005 reason= +0ms\n  pw:browser <ws disconnected> ws://127.0.0.1:32901/devtools/browser/e3cf050f-682c-42bd-81fc-207648c6523c code=1006 reason= +29ms\n  pw:browser [pid=192] <process did exit: exitCode=0, signal=null> +4ms\n  pw:browser [pid=192] starting temporary directories cleanup +0ms\n  pw:browser [pid=192] finished temporary directories cleanup +0ms\n"
+  },
+  "integrityAfter": "PASS"
+}

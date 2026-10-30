@@ -11,6 +11,7 @@ import type {
   MusicProvider,
   PlannedTrack,
   QualityPreference,
+  VariantSelection,
 } from '@music-downloader/shared';
 import type { AudioValidator } from '@music-downloader/core-validation';
 
@@ -98,6 +99,7 @@ export interface MetadataProcessingContext {
   readonly plannedTrack: PlannedTrack;
   readonly sourceKind: MediaKind;
   readonly resultPath: string;
+  readonly writeTags?: boolean;
   readonly embedArtwork: boolean;
   readonly saveCoverFile: boolean;
 }
@@ -132,6 +134,7 @@ export interface DownloadManagerDependencies {
   readonly selectVariant: (
     variants: readonly AudioVariant[],
     quality: QualityPreference,
+    options?: { readonly variantSelection?: VariantSelection },
   ) =>
     | { readonly ok: true; readonly variant: AudioVariant }
     | { readonly ok: false; readonly error: unknown };
@@ -166,6 +169,10 @@ export interface DownloadManagerOptions {
   readonly progressFlushMs?: number;
   readonly overwrite?: boolean;
   readonly artworkSize?: number;
+  readonly variantSelection?: VariantSelection;
+  readonly writeTags?: boolean;
+  readonly saveCoverFile?: boolean;
+  readonly writeM3u8?: boolean;
 }
 
 export type StreamResult = AudioStream;

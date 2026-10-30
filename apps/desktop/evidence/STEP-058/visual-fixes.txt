@@ -1,0 +1,13 @@
+
+ RUN  v3.2.7 /home/user/github.com/yarkovaleksei/yandex-music-downloader
+
+ ✓ |@music-downloader/desktop| src/renderer/Account.test.tsx (2 tests) 163ms
+ ✓ |@music-downloader/desktop| src/renderer/Settings.test.tsx (4 tests) 1672ms
+   ✓ REQ-052: сохранённые settings загружаются, выбор путей передаёт только opaque refs и показывает restart hint  544ms
+   ✓ REQ-058: вкладки сохраняют переключатели файлов, автооткрытие и тему без изменения старых полей  657ms
+
+ Test Files  2 passed (2)
+      Tests  6 passed (6)
+   Start at  21:56:19
+   Duration  3.32s (transform 112ms, setup 0ms, collect 1.92s, tests 1.83s, environment 571ms, prepare 184ms)
+

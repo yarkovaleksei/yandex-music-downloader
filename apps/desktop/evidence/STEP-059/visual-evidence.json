@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "status": "PASS",
+  "platform": "Linux Chrome 1440x1000",
+  "data": "Только synthetic DesktopApi/account/artwork; native backend отдельно tests/Electron",
+  "folderRace": {
+    "before": {
+      "scrollY": 3524,
+      "counters": {
+        "history": 1,
+        "historyArtwork": 50,
+        "availability": 50,
+        "folder": 0,
+        "account": 1,
+        "avatar": 0,
+        "checkUpdate": 0
+      }
+    },
+    "after": {
+      "scrollY": 3524,
+      "viewport": 1000,
+      "alert": "Файл или папка недоступны. Возможно, они перемещены или удалены.",
+      "rect": {
+        "top": 928,
+        "bottom": 976
+      },
+      "counters": {
+        "history": 1,
+        "historyArtwork": 50,
+        "availability": 50,
+        "folder": 1,
+        "account": 1,
+        "avatar": 0,
+        "checkUpdate": 0
+      }
+    }
+  },
+  "otherObservations": [
+    "При deferred availability все50строк и фильтр доступны; поиск Архив49 даёт1строку до settleFolders. Missing Архив48 disabled; после отказа Архив49 disabled. Успешное открытие Архив50 не вызывает history/artwork refresh.",
+    "Settings: folderbutton160x37.125px whiteSpace nowrap; number width220px min1 max8 step1; 0 invalid и Save disabled, 8 сохранено; About0.0.0-synthetic(dev), checkUpdate0; auto-open отсутствует.",
+    "Synthetic Plus/unknown/fallback показаны с причиной и объяснением per-track formats. Pending avatar не блокирует account; logout перед settleAvatar не публикует старую фотографию. Console errors0."
+  ],
+  "sourceInputs": {
+    "apps/desktop/src/renderer/Updates.tsx": "8836e2eeddb2d23df576b8592ab07b3b86ae9e0615984cd31d9d6741660dd765",
+    "apps/desktop/src/renderer/Account.tsx": "9423337c1d0b1f0fd3515c0d4a43fad5bc862b55f6edec396ca4aaa54477fd27",
+    "apps/desktop/src/renderer/useDownloads.ts": "1f205d24a642b6da6319d9e281bdc3a1cfcb31663c342951e865595914ca5b10",
+    "apps/desktop/src/renderer/Downloads.tsx": "49c19632871214a4566bc06f07b8c34389d3c9dda8db26dfba3b8d8ca5d2d2f2",
+    "apps/desktop/src/renderer/Settings.tsx": "7f6f365cae70e91f5ebc547f65a68df221ec24a482dca00076a7a72dab46f4fb",
+    "apps/desktop/src/renderer/global.d.ts": "1a1e9c2c0d73ac9f60e23eed20eb3f7ae06100b754aac160fd02411323601ca6",
+    "apps/desktop/src/renderer/theme.ts": "25fafac0e368b2d01ffd0592e7fe6ccc19ae1b281e77160b3d2fc7eb9c13dce9",
+    "apps/desktop/src/renderer/main.tsx": "fa7c19f3d5d0c641a74a1f8a783e36df761465bf4bce44057a8dbea4237585cc",
+    "apps/desktop/src/renderer/quantity.ts": "229135f153f5513c4b2cc2d1fa2bd4da9a0c62c1752e23a6a77a5407ecfbe544",
+    "apps/desktop/src/renderer/History.tsx": "f5a63014520c715818095c309d671df20e734c440dc7e80a0c6727f0f4e8821a",
+    "apps/desktop/src/renderer/App.tsx": "17637a55c3994f14f65f55a93dff04c5b272705a18f3239ac2a60e4195f7dd91",
+    "apps/desktop/src/renderer/Diagnostics.tsx": "10a12aeda75b73f414a9538c85529fa38087fd93080c5290daf5bd523aa8f5ab",
+    "apps/desktop/e2e/STEP-059-visual-fixture.mjs": "71ee12218a1bba620531ba37b139156b61d14aae1b295a3dcf4f9e3bdd291b54"
+  },
+  "screenshots": {
+    "about.png": "f9d02ef61024dec0fb6f16ff5934ba9f49f4c0837db396e5b76ffcf061646f6d",
+    "account-avatar-pending.png": "23c89ab560e1b70937655b06a21c56e1faa09394faeba9a5509051bd6e419d39",
+    "account-logout-late.png": "6329e5cf4e340aa637e1ad11da59700258f5f008eb16219baf7093b7013d30cd",
+    "account-plus-avatar.png": "07287afed965e234100e5d0464671ff9f419108d82cb0c8b8b07461244640c89",
+    "account-unknown.png": "3e417843d2928d7bf135325cfc6c13e4090deac8ddb2d21888bdb852f125dba4",
+    "download-settings.png": "5bccfb65148c83504479ed1b947d16f084168b6dad2bacc02c5e021066c29804",
+    "history-missing.png": "5eae37d5562bc0f16a3ca887c1b44db702499cd883601afce6992efbf814a009",
+    "history-race-notice.png": "9ae52a7bf9022a14ed5e903c04b677433154cd0ddaeab90ebe0fc09fdf810ddf",
+    "settings-invalid.png": "396a2b7629f11ca35383ff2e10601016917d2b0c66245b7d310531954c5ae9b7",
+    "settings.png": "e1ee362501e33de94af0ed914143a5b38f83b97218301f5965f1eea787cf1d17"
+  },
+  "limitations": [
+    "Browser fixture не доказывает системное меню, filesystem recheck и persistent cache: они подтверждаются целевыми tests и real Electron canonical Verification.",
+    "Реальный live probe содержит только sanitized flags/HTTP статусы, персональная фотография и профиль не сохранялись.",
+    "Один inspector eval дал SyntaxError из-за экранирования, это ошибка диагностической команды; исправленный повтор captured в browser-commands.txt и folderRace выше.",
+    "Windows/macOS и packaging не проверялись; STEP058 immutable evidence сохранено."
+  ]
+}

@@ -21,7 +21,11 @@ function artwork(value: ArtworkRef | undefined): ArtworkRef | undefined {
 }
 
 function artist(value: Artist): Artist {
-  return { id: value.id, name: value.name };
+  return {
+    id: value.id,
+    name: value.name,
+    ...(value.artwork === undefined ? {} : { artwork: artwork(value.artwork) }),
+  };
 }
 
 function track(value: Track): Track {
@@ -82,6 +86,9 @@ export function encodeAlbum(value: Album): string | undefined {
     value: {
       id: value.id,
       title: value.title,
+      ...(value.description === undefined
+        ? {}
+        : { description: value.description }),
       artists: value.artists.map(artist),
       ...(value.year === undefined ? {} : { year: value.year }),
       ...(value.genre === undefined ? {} : { genre: value.genre }),
@@ -99,6 +106,12 @@ export function encodePlaylist(value: Playlist): string | undefined {
     value: {
       id: value.id,
       title: value.title,
+      ...(value.description === undefined
+        ? {}
+        : { description: value.description }),
+      ...(value.authorArtwork === undefined
+        ? {}
+        : { authorArtwork: artwork(value.authorArtwork) }),
       ...(value.owner === undefined ? {} : { owner: value.owner }),
       ...(artwork(value.artwork) === undefined
         ? {}
@@ -145,7 +158,8 @@ function isArtist(value: unknown): boolean {
   return (
     isRecord(value) &&
     typeof value.id === 'string' &&
-    typeof value.name === 'string'
+    typeof value.name === 'string' &&
+    (value.artwork === undefined || isArtwork(value.artwork))
   );
 }
 
@@ -198,6 +212,9 @@ function isAlbum(value: unknown): value is Album {
     isRecord(value) &&
     typeof value.id === 'string' &&
     typeof value.title === 'string' &&
+    (value.description === undefined ||
+      typeof value.description === 'string') &&
+    (value.authorArtwork === undefined || isArtwork(value.authorArtwork)) &&
     Array.isArray(value.artists) &&
     value.artists.every(isArtist) &&
     Array.isArray(value.tracks) &&
@@ -213,6 +230,9 @@ function isPlaylist(value: unknown): value is Playlist {
     isRecord(value) &&
     typeof value.id === 'string' &&
     typeof value.title === 'string' &&
+    (value.description === undefined ||
+      typeof value.description === 'string') &&
+    (value.authorArtwork === undefined || isArtwork(value.authorArtwork)) &&
     Array.isArray(value.tracks) &&
     value.tracks.every(
       (item) =>

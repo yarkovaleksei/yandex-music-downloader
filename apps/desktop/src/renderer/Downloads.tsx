@@ -1,6 +1,12 @@
 import { useState } from 'react';
 import {
   Box,
+  Avatar,
+  IconButton,
+  Menu,
+  MenuItem,
+  Tabs,
+  Tab,
   Collapse,
   Link,
   Button,
@@ -9,7 +15,13 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import type { JobSnapshot, JsonObject } from '@music-downloader/shared';
+import MoreVertRounded from '@mui/icons-material/MoreVertRounded';
+import MusicNoteRounded from '@mui/icons-material/MusicNoteRounded';
+import type {
+  ArtworkDto,
+  JobSnapshot,
+  JsonObject,
+} from '@music-downloader/shared';
 import { tracksQuantity } from './quantity.js';
 import { allowed, numberField, statusLabels } from './useDownloads.js';
 
@@ -23,6 +35,7 @@ const actions = {
 export type DownloadAction = keyof typeof actions;
 export function Downloads({
   jobs,
+  artwork = {},
   progress,
   trackProgress,
   pending,
@@ -34,6 +47,7 @@ export function Downloads({
   openSource,
 }: {
   jobs: readonly JobSnapshot[];
+  artwork?: Record<string, ArtworkDto>;
   progress: Record<string, JsonObject>;
   trackProgress: Record<string, JsonObject>;
   pending: Record<string, boolean>;
@@ -45,6 +59,16 @@ export function Downloads({
   openSource(url: string): Promise<void>;
 }) {
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
+  const [tab, setTab] = useState(1);
+  const [menu, setMenu] = useState<{ anchor: HTMLElement; job: JobSnapshot }>();
+  // Один predicate определяет и список, и счётчик: скрытые задания сюда не поступают.
+  const groups = [
+    ['queued', 'paused', 'interrupted'],
+    ['running'],
+    ['completed', 'cancelled'],
+    ['failed', 'completed_with_errors'],
+  ];
+  const visible = jobs.filter((job) => groups[tab]!.includes(job.status));
   const anyPending = Object.values(pending).some(Boolean);
   return (
     <Stack spacing={2}>
@@ -93,12 +117,28 @@ export function Downloads({
           Убрать завершённые
         </Button>
       </Stack>
-      {jobs.length === 0 && (
+      <Tabs
+        value={tab}
+        onChange={(_, next: number) => setTab(next)}
+        aria-label="Состояния загрузок"
+        sx={{ borderBottom: 1, borderColor: 'divider' }}
+      >
+        {['Очередь', 'Активные', 'Завершённые', 'Ошибки'].map(
+          (label, index) => (
+            <Tab
+              key={label}
+              value={index}
+              label={`${label} (${jobs.filter((job) => groups[index]!.includes(job.status)).length})`}
+            />
+          ),
+        )}
+      </Tabs>
+      {visible.length === 0 && (
         <Paper variant="outlined" sx={{ p: 5, textAlign: 'center' }}>
           Здесь появятся ваши загрузки. Добавьте ссылку на Главной.
         </Paper>
       )}
-      {jobs.map((job) => {
+      {visible.map((job) => {
         const payload = progress[job.jobId];
         const completed =
           numberField(payload, 'completed') ??
@@ -123,6 +163,17 @@ export function Downloads({
                 spacing={2}
                 sx={{ alignItems: 'center', flexWrap: 'wrap', gap: 1 }}
               >
+                <Avatar
+                  variant="rounded"
+                  src={
+                    artwork[job.jobId]
+                      ? `data:${artwork[job.jobId]!.mimeType};base64,${artwork[job.jobId]!.base64}`
+                      : undefined
+                  }
+                  sx={{ width: 56, height: 56 }}
+                >
+                  <MusicNoteRounded />
+                </Avatar>
                 <Button
                   aria-label={`Подробности ${job.source.id}`}
                   aria-expanded={!!expanded[job.jobId]}
@@ -150,10 +201,15 @@ export function Downloads({
                       void openSource(job.publicUrl!);
                     }}
                   >
-                    {job.source.id}
+                    {job.title || job.source.id}
                   </Link>
                 ) : (
-                  <Typography>{job.source.id}</Typography>
+                  <Typography>{job.title || job.source.id}</Typography>
+                )}
+                {job.author && (
+                  <Typography variant="body2" color="text.secondary">
+                    {job.author}
+                  </Typography>
                 )}
                 <Typography sx={{ ml: 'auto' }}>
                   {statusLabels[job.status]}
@@ -167,23 +223,28 @@ export function Downloads({
                   spacing={1}
                   sx={{ flexWrap: 'wrap', gap: 0.5, ml: 'auto' }}
                 >
-                  {(Object.keys(actions) as DownloadAction[]).map((action) => (
-                    <Button
-                      key={action}
-                      variant="outlined"
-                      size="small"
-                      disabled={
-                        !connected ||
-                        pending[job.jobId] ||
-                        (action === 'showItemInFolder'
-                          ? !job.tracks.some((track) => track.resultPath)
-                          : !allowed(job, action))
-                      }
-                      onClick={() => void command(job, action)}
-                    >
-                      {actions[action]}
-                    </Button>
-                  ))}
+                  {(['pause', 'resume'] as const)
+                    .filter((action) => allowed(job, action))
+                    .map((action) => (
+                      <Button
+                        key={action}
+                        variant="outlined"
+                        size="small"
+                        disabled={!connected || pending[job.jobId]}
+                        onClick={() => void command(job, action)}
+                      >
+                        {actions[action]}
+                      </Button>
+                    ))}
+                  <IconButton
+                    aria-label={`Действия ${job.title || job.source.id}`}
+                    aria-haspopup="menu"
+                    onClick={(event) =>
+                      setMenu({ anchor: event.currentTarget, job })
+                    }
+                  >
+                    <MoreVertRounded />
+                  </IconButton>
                 </Stack>
               </Stack>
               <LinearProgress
@@ -254,6 +315,32 @@ export function Downloads({
           </Paper>
         );
       })}
+      <Menu
+        open={!!menu}
+        anchorEl={menu?.anchor}
+        onClose={() => setMenu(undefined)}
+      >
+        {menu &&
+          (Object.keys(actions) as DownloadAction[]).map((action) => (
+            <MenuItem
+              key={action}
+              disabled={
+                !connected ||
+                pending[menu.job.jobId] ||
+                (action === 'showItemInFolder'
+                  ? !menu.job.tracks.some((track) => track.resultPath)
+                  : !allowed(menu.job, action))
+              }
+              onClick={() => {
+                const current = menu.job;
+                setMenu(undefined);
+                void command(current, action);
+              }}
+            >
+              {actions[action]}
+            </MenuItem>
+          ))}
+      </Menu>
     </Stack>
   );
 }

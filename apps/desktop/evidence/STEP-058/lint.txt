@@ -1,0 +1,4 @@
+
+> yandex-music-downloader@0.0.0 lint
+> eslint . --max-warnings 0 && eslint --no-inline-config -c eslint.boundaries.config.mjs . --max-warnings 0
+

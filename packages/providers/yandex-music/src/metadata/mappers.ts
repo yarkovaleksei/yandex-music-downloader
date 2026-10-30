@@ -36,6 +36,9 @@ export function mapTrack(
           artists: raw.artists.map((artist) => ({
             id: String(artist.id),
             name: artist.name,
+            ...(artist.cover?.uri === undefined
+              ? {}
+              : { artwork: artworkReference(artist.cover.uri) }),
           })),
         }),
     ...(album === undefined
@@ -76,9 +79,13 @@ export function mapAlbum(raw: RawAlbum, model?: { title?: string }): Album {
   const projected = {
     id: String(raw.id),
     title: model?.title ?? raw.title,
+    ...(raw.description === undefined ? {} : { description: raw.description }),
     artists: raw.artists.map((artist) => ({
       id: String(artist.id),
       name: artist.name,
+      ...(artist.cover?.uri === undefined
+        ? {}
+        : { artwork: artworkReference(artist.cover.uri) }),
     })),
     ...(raw.genre === undefined ? {} : { genre: raw.genre }),
     ...(raw.year === undefined ? {} : { year: raw.year }),
@@ -110,6 +117,7 @@ export function mapPlaylist(
   const projected = {
     id,
     title: model?.title ?? raw.title,
+    ...(raw.description === undefined ? {} : { description: raw.description }),
     ...(owner === undefined ? {} : { owner }),
     ...(raw.cover?.uri === undefined
       ? {}

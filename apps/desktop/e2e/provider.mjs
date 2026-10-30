@@ -9,7 +9,7 @@ export const track = {
   durationMs: 2000,
 };
 
-/** Синтетический offline-источник STEP-033; задержка потока оставляет наблюдаемое окно для pause. */
+/** Синтетический offline-источник STEP-033/058; задержка потока оставляет наблюдаемое окно для pause. */
 export function offlineProvider() {
   return {
     async authenticate() {

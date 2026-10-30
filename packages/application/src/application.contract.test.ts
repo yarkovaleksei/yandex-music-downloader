@@ -457,3 +457,66 @@ describe('публичный ApplicationApi', () => {
     }
   });
 });
+
+it('STEP-059 / H-002: accountAvatar возвращает только bytes DTO и не задерживает account', async () => {
+  const stateDir = await mkdtemp(path.join(os.tmpdir(), 'avatar-dto-'));
+  let complete!: () => void;
+  let started!: () => void;
+  const begun = new Promise<void>((resolve) => {
+    started = resolve;
+  });
+  const wait = new Promise<void>((resolve) => {
+    complete = resolve;
+  });
+  let signedIn = true;
+  const api = createApplication({
+    stateDir,
+    providerOverride: {
+      ...provider(),
+      getAccount: async () =>
+        signedIn ? { id: 'synthetic', displayName: 'Тест' } : null,
+      logout: async () => {
+        signedIn = false;
+      },
+      fetchAccountAvatar: async () => {
+        started();
+        await wait;
+        return {
+          mimeType: 'image/png',
+          bytes: new Uint8Array([1, 2, 3]),
+          ...{
+            token: 'synthetic-secret',
+            profile: 'synthetic-profile',
+            url: 'https://example.test/image',
+          },
+        };
+      },
+    },
+  });
+  try {
+    const pending = api.accountAvatar();
+    await begun;
+    expect(await api.account()).toMatchObject({
+      kind: 'result',
+      data: { id: 'synthetic' },
+    });
+    complete();
+    const result = await pending;
+    expect(result).toMatchObject({
+      kind: 'result',
+      data: { mimeType: 'image/png', base64: 'AQID' },
+    });
+    expect(JSON.stringify(result)).not.toMatch(
+      /synthetic-secret|synthetic-profile|https:/,
+    );
+    await api.logout();
+    expect(await api.accountAvatar()).toMatchObject({
+      kind: 'result',
+      data: null,
+    });
+  } finally {
+    complete();
+    await api.shutdown();
+    await rm(stateDir, { recursive: true, force: true });
+  }
+});

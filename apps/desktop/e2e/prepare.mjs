@@ -1,7 +1,6 @@
 import { cp, mkdir, mkdtemp, symlink, rm } from 'node:fs/promises';
 import path from 'node:path';
 import { tmpdir } from 'node:os';
-import { build } from 'esbuild';
 
 export const repository = path.resolve(import.meta.dirname, '../../..');
 
@@ -25,33 +24,47 @@ export async function prepare() {
     for (const name of ['state', 'user-data', 'output'])
       await mkdir(path.join(directory, name));
     const host = path.join(repository, 'apps/desktop/src/host/index.ts');
-    await build({
-      entryPoints: [host],
-      outfile: path.join(dist, 'host/index.js'),
-      bundle: true,
-      platform: 'node',
-      format: 'esm',
-      packages: 'external',
-      target: 'node24',
-      plugins: [
-        {
-          name: 'e2e-application',
-          setup(builder) {
-            builder.onResolve(
-              { filter: /^@music-downloader\/application$/ },
-              (args) =>
-                args.importer === host
-                  ? { path: path.join(import.meta.dirname, 'application.mjs') }
-                  : undefined,
-            );
+    // @link planning/tasks/STEP-054.md На госте разрешено только копирование Linux-built host.
+    if (process.env.MUSIC_FINAL_KIT === '1') {
+      await cp(
+        path.join(repository, 'apps/desktop/dist/prebuilt-host.js'),
+        path.join(dist, 'host/index.js'),
+      );
+    } else {
+      if (process.platform !== 'linux')
+        throw new Error('E2E host собирается только на Linux');
+      const { build } = await import('esbuild');
+      await build({
+        entryPoints: [host],
+        outfile: path.join(dist, 'host/index.js'),
+        bundle: true,
+        platform: 'node',
+        format: 'esm',
+        packages: 'external',
+        target: 'node24',
+        plugins: [
+          {
+            name: 'e2e-application',
+            setup(builder) {
+              builder.onResolve(
+                { filter: /^@music-downloader\/application$/ },
+                (args) =>
+                  args.importer === host
+                    ? {
+                        path: path.join(import.meta.dirname, 'application.mjs'),
+                      }
+                    : undefined,
+              );
+            },
           },
-        },
-      ],
-    });
+        ],
+      });
+    }
     return {
       directory,
       env: {
-        MUSIC_E2E_STATE: path.join(directory, 'state'),
+        MUSIC_E2E_STATE:
+          process.env.MUSIC_FINAL_STATE ?? path.join(directory, 'state'),
         MUSIC_E2E_USER_DATA: path.join(directory, 'user-data'),
         MUSIC_E2E_OUTPUT: path.join(directory, 'output'),
         MUSIC_E2E_AUDIO: path.join(import.meta.dirname, 'assets/tone.mp3'),

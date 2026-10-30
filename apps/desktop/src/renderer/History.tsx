@@ -1,10 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 import {
   Alert,
+  Snackbar,
+  CircularProgress,
   Avatar,
   IconButton,
   Link,
   Tooltip,
+  TableSortLabel,
   Box,
   Chip,
   MenuItem,
@@ -19,7 +22,10 @@ import DeleteOutlineRounded from '@mui/icons-material/DeleteOutlineRounded';
 import { tracksQuantity } from './quantity.js';
 import HistoryRounded from '@mui/icons-material/HistoryRounded';
 import type { HistoryEntry } from '@music-downloader/shared';
-import type { DesktopApi } from '../contract/desktop-api.js';
+import type {
+  JobFolderAvailability,
+  DesktopApi,
+} from '../contract/desktop-api.js';
 
 const kinds = { track: 'Трек', album: 'Альбом', playlist: 'Плейлист' };
 /** REQ-051: скрытие истории не удаляет файлы; legacy replay объясняется явно. */
@@ -34,7 +40,18 @@ export function History({
   const [query, setQuery] = useState('');
   const [kind, setKind] = useState('all');
   const [period, setPeriod] = useState('all');
+  const [from, setFrom] = useState('');
+  const [to, setTo] = useState('');
+  const [sort, setSort] = useState<
+    'title' | 'kind' | 'count' | 'bytes' | 'date'
+  >('date');
+  const [direction, setDirection] = useState<'asc' | 'desc'>('desc');
+  const invalidRange = !!from && !!to && from > to;
   const [notice, setNotice] = useState('');
+  const [folders, setFolders] = useState<Record<string, JobFolderAvailability>>(
+    {},
+  );
+  const [opening, setOpening] = useState<ReadonlySet<string>>(new Set());
   const [busy, setBusy] = useState(false);
   const revision = useRef(0);
   async function refresh() {
@@ -43,6 +60,34 @@ export function History({
     if (current !== revision.current) return;
     if (result.kind === 'result') {
       setEntries(result.data);
+      setFolders({});
+      // STEP-059: локальная доступность не ждёт provider/обложки и не скрывает строки.
+      for (const entry of result.data)
+        void api
+          .jobFolderAvailability({ jobId: entry.jobId })
+          .then((value) => {
+            if (current === revision.current)
+              setFolders((previous) => ({
+                ...previous,
+                [entry.jobId]:
+                  value.kind === 'result'
+                    ? value.data
+                    : {
+                        available: false,
+                        reason: 'Не удалось проверить папку.',
+                      },
+              }));
+          })
+          .catch(() => {
+            if (current === revision.current)
+              setFolders((previous) => ({
+                ...previous,
+                [entry.jobId]: {
+                  available: false,
+                  reason: 'Не удалось проверить папку.',
+                },
+              }));
+          });
       // F-001 STEP-056: строки и действия доступны до завершения необязательных обложек.
       // Ошибка/таймаут оставляет fallback, а поздний ответ не возвращает удалённую строку.
       for (const entry of result.data) {
@@ -74,10 +119,7 @@ export function History({
       revision.current++;
     };
   }, [api]);
-  async function act(
-    action: 'replay' | 'hideHistory' | 'showItemInFolder',
-    jobId: string,
-  ) {
+  async function act(action: 'replay' | 'hideHistory', jobId: string) {
     setBusy(true);
     setNotice('');
     try {
@@ -95,23 +137,92 @@ export function History({
       setBusy(false);
     }
   }
-  const filtered = entries.filter(
-    (entry) =>
-      (kind === 'all' || entry.source.kind === kind) &&
-      (period === 'all' ||
-        Date.parse(entry.completedAt) >=
-          Date.now() - Number(period) * 86400000) &&
-      `${entry.title} ${entry.artists.join(' ')} ${entry.source.id}`
-        .toLocaleLowerCase()
-        .includes(query.toLocaleLowerCase()),
-  );
+  async function openFolder(jobId: string) {
+    setOpening((previous) => new Set(previous).add(jobId));
+    setNotice('');
+    try {
+      const result = await api.showItemInFolder({ jobId });
+      if (result.kind === 'error') {
+        setNotice(result.error.message);
+        if (result.error.code === 'PERMISSION_DENIED')
+          setFolders((previous) => ({
+            ...previous,
+            [jobId]: { available: false, reason: result.error.message },
+          }));
+      }
+    } finally {
+      setOpening((previous) => {
+        const next = new Set(previous);
+        next.delete(jobId);
+        return next;
+      });
+    }
+  }
+  const filtered = entries
+    .filter(
+      (entry) =>
+        !invalidRange &&
+        (!from ||
+          Date.parse(entry.completedAt) >=
+            new Date(`${from}T00:00:00`).getTime()) &&
+        (!to ||
+          Date.parse(entry.completedAt) <=
+            new Date(`${to}T23:59:59.999`).getTime()) &&
+        (kind === 'all' || entry.source.kind === kind) &&
+        (period === 'all' ||
+          Date.parse(entry.completedAt) >=
+            Date.now() - Number(period) * 86400000) &&
+        `${entry.title} ${entry.artists.join(' ')} ${entry.source.id}`
+          .toLocaleLowerCase()
+          .includes(query.toLocaleLowerCase()),
+    )
+    .map((entry, index) => ({ entry, index }))
+    .sort((a, b) => {
+      const left =
+        sort === 'title'
+          ? a.entry.title
+          : sort === 'kind'
+            ? kinds[a.entry.source.kind]
+            : sort === 'count'
+              ? a.entry.count
+              : sort === 'bytes'
+                ? a.entry.bytes
+                : Date.parse(a.entry.completedAt);
+      const right =
+        sort === 'title'
+          ? b.entry.title
+          : sort === 'kind'
+            ? kinds[b.entry.source.kind]
+            : sort === 'count'
+              ? b.entry.count
+              : sort === 'bytes'
+                ? b.entry.bytes
+                : Date.parse(b.entry.completedAt);
+      // Неизвестный размер остаётся в конце при обоих направлениях; равенства стабильны.
+      if (left === null) return right === null ? a.index - b.index : 1;
+      if (right === null) return -1;
+      const delta =
+        typeof left === 'string'
+          ? left.localeCompare(String(right), 'ru')
+          : Number(left) - Number(right);
+      return (direction === 'asc' ? delta : -delta) || a.index - b.index;
+    })
+    .map(({ entry }) => entry);
   return (
     <Stack spacing={3}>
       <Typography variant="h1">История загрузок</Typography>
       <Typography color="text.secondary">
         Ваша коллекция загруженной музыки
       </Typography>
-      {notice && <Alert severity="warning">{notice}</Alert>}
+      <Snackbar
+        open={!!notice}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        onClose={() => setNotice('')}
+      >
+        <Alert severity="warning" onClose={() => setNotice('')}>
+          {notice}
+        </Alert>
+      </Snackbar>
       <Stack direction="row" spacing={2}>
         <TextField
           label="Поиск в истории"
@@ -145,6 +256,24 @@ export function History({
           <MenuItem value="30">Последние 30 дней</MenuItem>
         </TextField>
       </Stack>
+      <Stack direction="row" spacing={2}>
+        <TextField
+          type="date"
+          label="Дата с"
+          slotProps={{ inputLabel: { shrink: true } }}
+          value={from}
+          onChange={(event) => setFrom(event.target.value)}
+        />
+        <TextField
+          type="date"
+          label="Дата по"
+          slotProps={{ inputLabel: { shrink: true } }}
+          value={to}
+          onChange={(event) => setTo(event.target.value)}
+          error={invalidRange}
+          helperText={invalidRange ? 'Дата окончания раньше начала' : undefined}
+        />
+      </Stack>
       <Typography color="text.secondary">Найдено: {filtered.length}</Typography>
       {filtered.length === 0 ? (
         <Paper variant="outlined" sx={{ p: 7, textAlign: 'center' }}>
@@ -171,10 +300,30 @@ export function History({
           >
             <thead>
               <tr>
-                <th>Название</th>
-                <th>Тип</th>
-                <th>Треки / размер</th>
-                <th>Дата</th>
+                {(
+                  [
+                    ['title', 'Название'],
+                    ['kind', 'Тип'],
+                    ['count', 'Треки'],
+                    ['bytes', 'Размер'],
+                    ['date', 'Дата'],
+                  ] as const
+                ).map(([key, label]) => (
+                  <th key={key}>
+                    <TableSortLabel
+                      active={sort === key}
+                      direction={sort === key ? direction : 'asc'}
+                      onClick={() => {
+                        setSort(key);
+                        setDirection(
+                          sort === key && direction === 'asc' ? 'desc' : 'asc',
+                        );
+                      }}
+                    >
+                      {label}
+                    </TableSortLabel>
+                  </th>
+                ))}
                 <th>Действия</th>
               </tr>
             </thead>
@@ -228,8 +377,8 @@ export function History({
                   <td>
                     <Chip size="small" label={kinds[entry.source.kind]} />
                   </td>
+                  <td>{tracksQuantity(entry.count)}</td>
                   <td>
-                    {tracksQuantity(entry.count)}
                     <Typography variant="body2" color="text.secondary">
                       {entry.bytes === null
                         ? 'Размер неизвестен'
@@ -237,7 +386,10 @@ export function History({
                     </Typography>
                   </td>
                   <td>
-                    {new Date(entry.completedAt).toLocaleDateString('ru-RU')}
+                    {new Date(entry.completedAt).toLocaleString('ru-RU', {
+                      dateStyle: 'medium',
+                      timeStyle: 'short',
+                    })}
                   </td>
                   <td>
                     <Stack
@@ -271,16 +423,38 @@ export function History({
                           </IconButton>
                         </span>
                       </Tooltip>
-                      <Tooltip title="Открыть папку">
-                        <IconButton
-                          aria-label="Открыть папку"
-                          disabled={busy}
-                          onClick={() =>
-                            void act('showItemInFolder', entry.jobId)
+                      <Tooltip
+                        describeChild
+                        title={
+                          folders[entry.jobId]?.reason ??
+                          (folders[entry.jobId]?.available
+                            ? 'Открыть папку'
+                            : 'Проверяем доступность папки…')
+                        }
+                      >
+                        <span
+                          tabIndex={
+                            !folders[entry.jobId]?.available ? 0 : undefined
                           }
                         >
-                          <FolderOpenRounded />
-                        </IconButton>
+                          <IconButton
+                            aria-label="Открыть папку"
+                            disabled={
+                              !folders[entry.jobId]?.available ||
+                              opening.has(entry.jobId)
+                            }
+                            onClick={() => void openFolder(entry.jobId)}
+                          >
+                            {opening.has(entry.jobId) ? (
+                              <CircularProgress
+                                size={18}
+                                aria-label="Открываем папку"
+                              />
+                            ) : (
+                              <FolderOpenRounded />
+                            )}
+                          </IconButton>
+                        </span>
                       </Tooltip>
                       <Tooltip title="Убрать из истории">
                         <IconButton

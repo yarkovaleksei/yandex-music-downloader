@@ -231,3 +231,111 @@ it('REQ-057: миграция v2→v3 и очистка очереди сохр�
     (await readdir(stateDir)).some((name) => name.includes('.bak-v2-')),
   ).toBe(true);
 });
+
+it('REQ-058: новые параметры и точный selector переживают reopen, старый JSON сохраняет defaults', async () => {
+  const stateDir = await root();
+  const state = new SqliteDesktopStateStore({ stateDir });
+  const jobs = new SqliteManifestStore({ stateDir });
+  await jobs.create(manifestFixture('new'));
+  await jobs.create(manifestFixture('old'));
+  await jobs.close();
+  const settings = {
+    ...defaultDesktopSettings,
+    writeTags: false,
+    saveCoverFile: false,
+    writeM3u8: false,
+    openFolderOnComplete: true,
+    theme: 'dark' as const,
+  };
+  state.saveSettings(settings);
+  const snapshot = {
+    source: { provider: 'mock', kind: 'track' as const, id: '1' },
+    destination: path.join(stateDir, 'music'),
+    quality: 'best' as const,
+    overwrite: false,
+    naming: 'collection' as const,
+    writeTags: false,
+    saveCoverFile: true,
+    writeM3u8: false,
+    openFolderOnComplete: true,
+    variantSelection: {
+      codec: 'mp3',
+      container: 'mp3',
+      lossless: false,
+      bitrate: 192,
+    },
+  };
+  const unsafeSnapshot = {
+    ...snapshot,
+    token: 'fixture-secret',
+    variantSelection: { ...snapshot.variantSelection, key: 'fixture-secret' },
+  };
+  state.saveSnapshot('new', unsafeSnapshot);
+  state.close();
+  const reopened = new SqliteDesktopStateStore({ stateDir });
+  const { openFolderOnComplete: ignoredSetting, ...expectedSettings } =
+    settings;
+  expect(ignoredSetting).toBe(true);
+  expect(reopened.settings()).toEqual(expectedSettings);
+  const { openFolderOnComplete: ignoredSnapshot, ...expectedSnapshot } =
+    snapshot;
+  expect(ignoredSnapshot).toBe(true);
+  expect(reopened.snapshot('new')).toEqual(expectedSnapshot);
+  expect(reopened.snapshot('legacy')).toBeNull();
+  reopened.close();
+  // Исторические полные снимки читаются с прежними defaults, а не с текущими настройками.
+  const db = new Database(path.join(stateDir, 'state.sqlite3'));
+  const old = { ...snapshot };
+  for (const key of [
+    'writeTags',
+    'saveCoverFile',
+    'writeM3u8',
+    'openFolderOnComplete',
+    'variantSelection',
+  ])
+    delete (old as Record<string, unknown>)[key];
+  old.openFolderOnComplete = true;
+  db.prepare('INSERT INTO job_settings VALUES (?,?)').run(
+    'old',
+    JSON.stringify(old),
+  );
+  const legacySettings = { ...defaultDesktopSettings };
+  for (const key of [
+    'writeTags',
+    'saveCoverFile',
+    'writeM3u8',
+    'openFolderOnComplete',
+    'theme',
+  ])
+    delete (legacySettings as Record<string, unknown>)[key];
+  const storedLegacySettings = {
+    ...legacySettings,
+    openFolderOnComplete: true,
+  };
+  db.prepare('UPDATE desktop_settings SET value = ? WHERE id = 1').run(
+    JSON.stringify(storedLegacySettings),
+  );
+  expect(
+    db.prepare('SELECT value FROM job_settings WHERE job_id = ?').get('new'),
+  ).not.toEqual(
+    expect.objectContaining({
+      value: expect.stringContaining('fixture-secret'),
+    }),
+  );
+  db.close();
+  const restored = new SqliteDesktopStateStore({ stateDir });
+  expect(restored.settings()).toEqual(defaultDesktopSettings);
+  expect(restored.snapshot('old')).toMatchObject({
+    writeTags: true,
+    saveCoverFile: true,
+    writeM3u8: true,
+  });
+  restored.close();
+  const unchanged = new Database(path.join(stateDir, 'state.sqlite3'));
+  expect(
+    unchanged
+      .prepare('SELECT value FROM job_settings WHERE job_id = ?')
+      .get('old'),
+  ).toEqual({ value: JSON.stringify(old) });
+  unchanged.close();
+});

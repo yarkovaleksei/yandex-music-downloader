@@ -1,0 +1,10 @@
+
+ RUN  v3.2.7 /home/user/github.com/yarkovaleksei/yandex-music-downloader
+
+ ✓ |@music-downloader/desktop| src/renderer/theme.test.ts (2 tests) 3ms
+
+ Test Files  1 passed (1)
+      Tests  2 passed (2)
+   Start at  22:02:48
+   Duration  556ms (transform 37ms, setup 0ms, collect 200ms, tests 3ms, environment 0ms, prepare 78ms)
+

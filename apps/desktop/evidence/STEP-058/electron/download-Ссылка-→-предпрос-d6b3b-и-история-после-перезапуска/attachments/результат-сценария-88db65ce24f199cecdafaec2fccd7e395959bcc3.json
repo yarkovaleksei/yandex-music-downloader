@@ -1,0 +1,89 @@
+{
+  "platform": "linux",
+  "stateDir": "/tmp/music-desktop-e2e-jZCsoz/state",
+  "outputPath": "/tmp/music-desktop-e2e-jZCsoz/output/Тестовый исполнитель - Проверочный сигнал.mp3",
+  "fixtureDirectory": "/tmp/music-desktop-e2e-jZCsoz",
+  "jobId": "6573b513-030a-4542-8352-65e779075323",
+  "status": "completed",
+  "output": "Тестовый исполнитель - Проверочный сигнал.mp3",
+  "bytes": 49572,
+  "historyAfterRestart": [
+    {
+      "jobId": "6573b513-030a-4542-8352-65e779075323",
+      "source": {
+        "provider": "e2e-offline",
+        "kind": "track",
+        "id": "e2e-track"
+      },
+      "title": "Проверочный сигнал",
+      "artists": [
+        "Тестовый исполнитель"
+      ],
+      "count": 1,
+      "bytes": 49572,
+      "completedAt": "2026-10-29T18:46:53.591Z",
+      "replayAvailable": true,
+      "replayReason": null
+    }
+  ],
+  "restoredSettings": {
+    "writeTags": false,
+    "saveCoverFile": false,
+    "writeM3u8": false,
+    "openFolderOnComplete": false,
+    "theme": "dark",
+    "outputDirectory": null,
+    "quality": "best",
+    "concurrency": 4,
+    "naming": "collection",
+    "overwrite": false,
+    "ffmpegPath": null,
+    "logging": "info"
+  },
+  "exactVariant": {
+    "codec": "mp3",
+    "container": "mp3",
+    "bitrate": 192,
+    "lossless": false
+  },
+  "replayJobs": [
+    {
+      "title": "Проверочный сигнал",
+      "author": "Тестовый исполнитель",
+      "jobId": "4d707130-c55a-4321-83d6-3ae84c8e80b0",
+      "source": {
+        "provider": "e2e-offline",
+        "kind": "track",
+        "id": "e2e-track"
+      },
+      "status": "completed",
+      "tracks": [
+        {
+          "trackKey": "1",
+          "status": "skipped",
+          "resultPath": "/tmp/music-desktop-e2e-jZCsoz/output/Тестовый исполнитель - Проверочный сигнал.mp3"
+        }
+      ],
+      "openFolderOnComplete": false
+    },
+    {
+      "title": "Проверочный сигнал",
+      "author": "Тестовый исполнитель",
+      "jobId": "6573b513-030a-4542-8352-65e779075323",
+      "source": {
+        "provider": "e2e-offline",
+        "kind": "track",
+        "id": "e2e-track"
+      },
+      "status": "completed",
+      "tracks": [
+        {
+          "trackKey": "1",
+          "status": "completed",
+          "resultPath": "/tmp/music-desktop-e2e-jZCsoz/output/Тестовый исполнитель - Проверочный сигнал.mp3"
+        }
+      ],
+      "openFolderOnComplete": false
+    }
+  ]
+}

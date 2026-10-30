@@ -1,3 +1,4 @@
+import { fetchAccountPortrait } from './account-profile.js';
 import { publicYandexMusicUrl } from './url/resolve-yandex-music-url.js';
 import { Client, DeviceAuthError } from '@dvxch/yandex-music';
 import { z } from 'zod';
@@ -75,6 +76,7 @@ export interface YandexMusicAuthOptions {
 export class YandexMusicProviderAuth {
   private active?: AuthCredentials;
   private loggedOut = false;
+  private sessionGeneration = 0;
   private readonly fetch: AuthFetch;
   private readonly rawFetch: AuthFetch;
   private readonly now: () => number;
@@ -91,6 +93,7 @@ export class YandexMusicProviderAuth {
   }
 
   public async authenticate(): Promise<Account> {
+    this.sessionGeneration++;
     const controller = new AbortController();
     const oauth = this.client(undefined, controller.signal);
     let challenge: Awaited<ReturnType<typeof openPrivateChallenge>> | undefined;
@@ -138,6 +141,7 @@ export class YandexMusicProviderAuth {
       // Прежняя запись остаётся доступной, пока native store не подтвердит замену.
       await this.options.credentialStore.write(serializeCredentials(next));
       this.active = next;
+      this.sessionGeneration++;
       this.loggedOut = false;
       return account;
     } catch (error) {
@@ -151,10 +155,14 @@ export class YandexMusicProviderAuth {
   }
 
   public async getAccount(): Promise<Account | null> {
+    const generation = this.sessionGeneration;
     const credentials = await this.readCredentials();
-    if (!credentials) return null;
+    if (!credentials || generation !== this.sessionGeneration) return null;
     try {
       const account = await this.account(credentials.accessToken);
+      // STEP-059 F-002: независимый lookup аватара не восстанавливает старую сессию.
+      // Поколение меняется при logout и начале/подтверждении нового входа.
+      if (generation !== this.sessionGeneration || this.loggedOut) return null;
       this.active = credentials;
       return account;
     } catch (error) {
@@ -163,10 +171,28 @@ export class YandexMusicProviderAuth {
   }
 
   public async logout(): Promise<void> {
+    this.sessionGeneration++;
     // Память блокируется до clear, поэтому неудачное удаление не оставляет активный token.
     this.active = undefined;
     this.loggedOut = true;
     await this.options.credentialStore.clear();
+  }
+
+  /** STEP-059: позднее фото не публикуется после logout или замены credentials. */
+  public async fetchAccountAvatar(): Promise<ArtworkData | null> {
+    const generation = this.sessionGeneration;
+    const credentials = await this.readCredentials();
+    if (!credentials) return null;
+    const image = await fetchAccountPortrait(
+      this.rawFetch,
+      credentials.accessToken,
+    );
+    const current = await this.readCredentials();
+    return generation === this.sessionGeneration &&
+      current?.accessToken === credentials.accessToken &&
+      current.accountId === credentials.accountId
+      ? image
+      : null;
   }
 
   public publicUrl(source: MediaReference): string | undefined {
@@ -519,11 +545,39 @@ export class YandexMusicProviderAuth {
   ): Promise<Account> {
     const status = await this.client(accessToken, flowSignal).accountStatus();
     const raw = status as unknown as {
-      account?: { uid?: number | string; displayName?: string; login?: string };
+      defaultEmail?: string;
+      account?: {
+        uid?: number | string;
+        displayName?: string;
+        login?: string;
+        region?: number;
+        regionCode?: string;
+      };
+      plus?: { hasPlus?: boolean };
+      subscription?: {
+        familyAutoRenewable?: {
+          finished?: boolean;
+          product?: { title?: string };
+        }[];
+        operator?: { suspended?: boolean; title?: string }[];
+        nonAutoRenewable?: { start?: string; end?: string };
+        autoRenewable?: { finished?: boolean; product?: { title?: string } }[];
+      };
     } | null;
     const parsed = accountSchema.safeParse({
       id: raw?.account?.uid === undefined ? undefined : String(raw.account.uid),
       displayName: raw?.account?.displayName ?? raw?.account?.login,
+      ...(raw?.defaultEmail === undefined ? {} : { email: raw.defaultEmail }),
+      ...(raw?.account?.regionCode !== undefined
+        ? { region: raw.account.regionCode }
+        : raw?.account?.region === undefined
+          ? {}
+          : { region: String(raw.account.region) }),
+      ...subscriptionProjection(
+        raw?.plus?.hasPlus,
+        raw?.subscription,
+        this.now(),
+      ),
     });
     if (!parsed.success) throw invalidProviderResponse();
     return parsed.data;
@@ -543,4 +597,50 @@ function normalizeAuthError(error: unknown): Error {
       : undefined;
   if (status === 401 || status === 403) return authenticationRequired();
   return new ProviderError('NETWORK_ERROR', true);
+}
+
+/** STEP-059: поддержанные SDK формы проверяются по своим признакам, без вывода codec из Plus. */
+function subscriptionProjection(
+  hasPlus: boolean | undefined,
+  subscription:
+    | {
+        autoRenewable?: { finished?: boolean; product?: { title?: string } }[];
+        familyAutoRenewable?: {
+          finished?: boolean;
+          product?: { title?: string };
+        }[];
+        operator?: { suspended?: boolean; title?: string }[];
+        nonAutoRenewable?: { start?: string; end?: string };
+      }
+    | undefined,
+  now: number,
+): Pick<Account, 'subscription' | 'subscriptionReason'> {
+  const named = [
+    ...(subscription?.autoRenewable ?? []),
+    ...(subscription?.familyAutoRenewable ?? []),
+  ].find((item) => item.finished === false && item.product?.title)?.product
+    ?.title;
+  if (hasPlus === true)
+    return {
+      subscription: named ? `Яндекс Плюс — ${named}` : 'Яндекс Плюс активен',
+    };
+  if (named) return { subscription: named };
+  const operator = subscription?.operator?.find(
+    (item) => item.suspended === false && item.title,
+  )?.title;
+  if (operator) return { subscription: operator };
+  const period = subscription?.nonAutoRenewable;
+  if (
+    period?.start &&
+    period.end &&
+    Date.parse(period.start) <= now &&
+    Date.parse(period.end) > now
+  )
+    return { subscription: 'Подписка без автопродления активна' };
+  return {
+    subscriptionReason:
+      hasPlus === false
+        ? 'Яндекс Плюс не подтверждён; полных данных о других подписках сервис не передал.'
+        : 'Сервис не передал достаточно данных, чтобы определить подписку.',
+  };
 }

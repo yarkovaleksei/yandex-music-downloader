@@ -21,6 +21,12 @@ export const referenceSchema = z.strictObject({
   kind: z.enum(['track', 'album', 'playlist']),
   id,
 });
+export const variantSelectionSchema = z.strictObject({
+  codec: z.string().regex(/^[a-zA-Z0-9_-]{1,64}$/),
+  container: z.string().regex(/^[a-zA-Z0-9_-]{1,64}$/),
+  lossless: z.boolean(),
+  bitrate: z.number().finite().positive().optional(),
+});
 const jobInput = z.strictObject({ jobId: id });
 const referenceInput = z.strictObject({ source: referenceSchema });
 const directoryRef = z.union([
@@ -31,6 +37,12 @@ const executableRef = z.string().regex(/^exe:[a-f0-9-]{36}$/);
 
 /** Единственная таблица методов/каналов ADR-016; схемы закрыты для лишних полей. */
 export const methods = {
+  appInfo: { input: empty, executor: 'main' },
+  jobFolderAvailability: {
+    input: z.strictObject({ jobId: id, trackKey: id.optional() }),
+    executor: 'main',
+  },
+  accountAvatar: { input: empty, executor: 'host' },
   checkUpdate: { input: empty, executor: 'main' },
   downloadUpdate: { input: empty, executor: 'main' },
   openUpdateFolder: { input: empty, executor: 'main' },
@@ -47,6 +59,7 @@ export const methods = {
       source: referenceSchema,
       quality: z.enum(['best', 'lossless', 'high', 'normal']),
       directoryRef,
+      variantSelection: variantSelectionSchema.optional(),
       overwrite: z.boolean().optional(),
     }),
     executor: 'host',
@@ -68,6 +81,11 @@ export const methods = {
       naming: z.enum(['collection', 'album']),
       overwrite: z.boolean(),
       logging: z.enum(['error', 'warn', 'info', 'debug', 'trace']),
+      writeTags: z.boolean().optional(),
+      saveCoverFile: z.boolean().optional(),
+      writeM3u8: z.boolean().optional(),
+      openFolderOnComplete: z.boolean().optional(),
+      theme: z.enum(['light', 'dark']).optional(),
       directoryRef: directoryRef.optional(),
       ffmpegRef: executableRef.nullable().optional(),
     }),
@@ -75,6 +93,7 @@ export const methods = {
   },
   history: { input: empty, executor: 'host' },
   historyArtwork: { input: jobInput, executor: 'host' },
+  downloadArtwork: { input: jobInput, executor: 'host' },
   hideHistory: { input: jobInput, executor: 'host' },
   replay: { input: jobInput, executor: 'host' },
   lastDiagnostics: { input: empty, executor: 'host' },
@@ -103,7 +122,14 @@ export interface DirectorySelection {
   readonly directoryRef: string;
   readonly displayPath: string;
 }
+export interface JobFolderAvailability {
+  readonly available: boolean;
+  readonly reason?: string;
+}
 export interface Results {
+  appInfo: { readonly version: string; readonly dev: boolean };
+  jobFolderAvailability: JobFolderAvailability;
+  accountAvatar: ArtworkDto | null;
   checkUpdate: UpdateView;
   downloadUpdate: UpdateView;
   openUpdateFolder: UpdateView;
@@ -126,6 +152,7 @@ export interface Results {
   saveSettings: DesktopSettings;
   history: readonly HistoryEntry[];
   historyArtwork: ArtworkDto | null;
+  downloadArtwork: ArtworkDto | null;
   hideHistory: null;
   replay: JobSnapshot;
   lastDiagnostics: SavedDiagnostics | null;

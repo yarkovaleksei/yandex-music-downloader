@@ -445,6 +445,7 @@ export class DownloadManager {
     generation: number,
   ): Promise<void> {
     if (
+      this.options.writeM3u8 === false ||
       live.owner.current.plan.source.kind !== 'playlist' ||
       this.deps.files.writePlaylist === undefined
     )

@@ -1,0 +1,3785 @@
+
+$ ["resize", "1440", "1000"]
+### Ran Playwright code
+```js
+await page.setViewportSize({ width: 1440, height: 1000 });
+```
+
+$ ["snapshot"]
+### Page
+- Page URL: http://127.0.0.1:4189/?scenario=availability-delayed
+- Page Title: STEP-059 · синтетическая fixture
+### Snapshot
+```yaml
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - heading "Yandex Music Downloader" [level=3] [ref=e7]
+    - button [ref=e8] [cursor=pointer]
+    - button [ref=e12] [cursor=pointer]
+    - button [ref=e16] [cursor=pointer]
+    - button [ref=e20] [cursor=pointer]
+    - button [ref=e24] [cursor=pointer]
+    - button [ref=e28] [cursor=pointer]
+    - generic [ref=e33] [cursor=pointer]:
+      - switch "Тёмная тема" [ref=e36]
+      - generic [ref=e39]: Тёмная тема
+    - separator [ref=e40]
+    - paragraph [ref=e41]: Вы вошли как Тестовый пользователь
+    - button "Выйти" [ref=e42] [cursor=pointer]
+  - main [ref=e43]:
+    - generic [ref=e44]:
+      - generic [ref=e45]: Приложение подключено
+      - generic [ref=e48]:
+        - generic [ref=e49]:
+          - generic: Ссылка на музыку
+          - generic [ref=e50]:
+            - textbox "Ссылка на музыку" [ref=e51]:
+              - /placeholder: https://music.yandex.ru/…
+            - group [aria-hidden]:
+              - generic: Ссылка на музыку
+        - button "Анализировать" [disabled]
+      - generic [ref=e52]:
+        - heading "Вставьте ссылку на Яндекс Музыку" [level=2] [ref=e56]
+        - paragraph [ref=e57]: Скачивайте отдельные треки, альбомы и плейлисты с сохранением метаданных и обложек
+      - generic [ref=e58]:
+        - heading "Примеры ссылок" [level=3] [ref=e59]
+        - button "＋ https://music.yandex.ru/album/123456" [ref=e60] [cursor=pointer]
+        - button "＋ https://music.yandex.ru/track/987654" [ref=e61] [cursor=pointer]
+        - button "＋ https://music.yandex.ru/users/username/playlists/123456" [ref=e62] [cursor=pointer]
+```
+
+$ ["click", "aside button:has-text(\"История\")"]
+### Ran Playwright code
+```js
+await page.locator('aside button:has-text("История")').click();
+```
+### Page
+- Page URL: http://127.0.0.1:4189/?scenario=availability-delayed
+- Page Title: STEP-059 · синтетическая fixture
+### Snapshot
+- [Snapshot](.playwright-cli/page-2026-10-29T20-20-25-642Z.yml)
+
+$ ["snapshot"]
+### Page
+- Page URL: http://127.0.0.1:4189/?scenario=availability-delayed
+- Page Title: STEP-059 · синтетическая fixture
+### Snapshot
+```yaml
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - heading "Yandex Music Downloader" [level=3] [ref=e7]
+    - button [ref=e8] [cursor=pointer]
+    - button [ref=e12] [cursor=pointer]
+    - button [active] [ref=e16] [cursor=pointer]
+    - button [ref=e20] [cursor=pointer]
+    - button [ref=e24] [cursor=pointer]
+    - button [ref=e28] [cursor=pointer]
+    - generic [ref=e33] [cursor=pointer]:
+      - switch "Тёмная тема" [ref=e36]
+      - generic [ref=e39]: Тёмная тема
+    - separator [ref=e40]
+    - paragraph [ref=e41]: Вы вошли как Тестовый пользователь
+    - button "Выйти" [ref=e42] [cursor=pointer]
+  - main [ref=e43]:
+    - generic [ref=e44]:
+      - generic [ref=e45]: Приложение подключено
+      - generic [ref=e63]:
+        - heading "История загрузок" [level=1] [ref=e64]
+        - paragraph [ref=e65]: Ваша коллекция загруженной музыки
+        - generic [ref=e66]:
+          - generic [ref=e67]:
+            - generic: Поиск в истории
+            - generic [ref=e68]:
+              - textbox "Поиск в истории" [ref=e69]
+              - group [aria-hidden]:
+                - generic: Поиск в истории
+          - generic [ref=e70]:
+            - generic [ref=e71]: Тип
+            - generic [ref=e72]:
+              - combobox "Тип" [ref=e73] [cursor=pointer]: Все типы
+              - textbox [aria-hidden]: all
+              - group [aria-hidden]:
+                - generic: Тип
+          - generic [ref=e74]:
+            - generic [ref=e75]: Период
+            - generic [ref=e76]:
+              - combobox "Период" [ref=e77] [cursor=pointer]: За всё время
+              - textbox [aria-hidden]: all
+              - group [aria-hidden]:
+                - generic: Период
+        - generic [ref=e78]:
+          - generic [ref=e79]:
+            - generic [ref=e80]: Дата с
+            - generic [ref=e81]:
+              - textbox "Дата с" [ref=e82]
+              - group [aria-hidden]:
+                - generic: Дата с
+          - generic [ref=e83]:
+            - generic [ref=e84]: Дата по
+            - generic [ref=e85]:
+              - textbox "Дата по" [ref=e86]
+              - group [aria-hidden]:
+                - generic: Дата по
+        - paragraph [ref=e87]: "Найдено: 50"
+        - table [ref=e89]:
+          - rowgroup [ref=e90]:
+            - row [ref=e91]:
+              - columnheader [ref=e92]:
+                - button "Название" [ref=e93] [cursor=pointer]
+              - columnheader [ref=e96]:
+                - button "Тип" [ref=e97] [cursor=pointer]
+              - columnheader [ref=e100]:
+                - button "Треки" [ref=e101] [cursor=pointer]
+              - columnheader [ref=e104]:
+                - button "Размер" [ref=e105] [cursor=pointer]
+              - columnheader [ref=e108]:
+                - button "Дата" [ref=e109] [cursor=pointer]
+              - columnheader "Действия" [ref=e112]
+          - rowgroup [ref=e113]:
+            - row [ref=e114]:
+              - cell "Архив 01 — Вечерний вайб" [ref=e115]:
+                - link "Архив 01 — Вечерний вайб" [ref=e119] [cursor=pointer]:
+                  - /url: https://music.yandex.ru/album/1000
+              - cell "Плейлист" [ref=e120]
+              - cell "42 трека" [ref=e123]
+              - cell [ref=e124]:
+                - paragraph [ref=e125]: 12.4 МБ
+              - cell "28 окт. 2026 г., 18:24" [ref=e126]
+              - cell [ref=e127]:
+                - generic [ref=e128]:
+                  - generic "Скачать снова" [ref=e129]:
+                    - button "Скачать снова" [ref=e130] [cursor=pointer]
+                  - generic "Проверяем доступность папки…" [ref=e133]:
+                    - button "Открыть папку" [disabled]
+                  - button "Убрать из истории" [ref=e134] [cursor=pointer]
+            - row [ref=e137]:
+              - cell "Архив 02 — Сияй Тестовый исполнитель" [ref=e138]:
+                - generic [ref=e141]:
+                  - link "Архив 02 — Сияй" [ref=e142] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1001
+                  - paragraph [ref=e143]: Тестовый исполнитель
+              - cell "Трек" [ref=e144]
+              - cell "1 трек" [ref=e147]
+              - cell [ref=e148]:
+                - paragraph [ref=e149]: 24.8 МБ
+              - cell "27 окт. 2026 г., 18:24" [ref=e150]
+              - cell [ref=e151]:
+                - generic [ref=e152]:
+                  - generic "Скачать снова" [ref=e153]:
+                    - button "Скачать снова" [ref=e154] [cursor=pointer]
+                  - generic "Проверяем доступность папки…" [ref=e157]:
+                    - button "Открыть папку" [disabled]
+                  - button "Убрать из истории" [ref=e158] [cursor=pointer]
+            - row [ref=e161]:
+              - cell "Архив 03 — Лучшее Тестовый исполнитель" [ref=e162]:
+                - generic [ref=e165]:
+                  - link "Архив 03 — Лучшее" [ref=e166] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1002
+                  - paragraph [ref=e167]: Тестовый исполнитель
+              - cell "Альбом" [ref=e168]
+              - cell "12 треков" [ref=e171]
+              - cell [ref=e172]:
+                - paragraph [ref=e173]: 37.2 МБ
+              - cell "26 окт. 2026 г., 18:24" [ref=e174]
+              - cell [ref=e175]:
+                - generic [ref=e176]:
+                  - generic "Скачать снова" [ref=e177]:
+                    - button "Скачать снова" [ref=e178] [cursor=pointer]
+                  - generic "Проверяем доступность папки…" [ref=e181]:
+                    - button "Открыть папку" [disabled]
+                  - button "Убрать из истории" [ref=e182] [cursor=pointer]
+            - row [ref=e185]:
+              - cell "Архив 04 — Пламя" [ref=e186]:
+                - link "Архив 04 — Пламя" [ref=e190] [cursor=pointer]:
+                  - /url: https://music.yandex.ru/album/1003
+              - cell "Плейлист" [ref=e191]
+              - cell "42 трека" [ref=e194]
+              - cell [ref=e195]:
+                - paragraph [ref=e196]: 49.6 МБ
+              - cell "25 окт. 2026 г., 18:24" [ref=e197]
+              - cell [ref=e198]:
+                - generic [ref=e199]:
+                  - generic "Скачать снова" [ref=e200]:
+                    - button "Скачать снова" [ref=e201] [cursor=pointer]
+                  - generic "Проверяем доступность папки…" [ref=e204]:
+                    - button "Открыть папку" [disabled]
+                  - button "Убрать из истории" [ref=e205] [cursor=pointer]
+            - row [ref=e208]:
+              - cell "Архив 05 — Вечерний вайб Тестовый исполнитель" [ref=e209]:
+                - generic [ref=e212]:
+                  - link "Архив 05 — Вечерний вайб" [ref=e213] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1004
+                  - paragraph [ref=e214]: Тестовый исполнитель
+              - cell "Трек" [ref=e215]
+              - cell "1 трек" [ref=e218]
+              - cell [ref=e219]:
+                - paragraph [ref=e220]: 62.0 МБ
+              - cell "24 окт. 2026 г., 18:24" [ref=e221]
+              - cell [ref=e222]:
+                - generic [ref=e223]:
+                  - generic "Скачать снова" [ref=e224]:
+                    - button "Скачать снова" [ref=e225] [cursor=pointer]
+                  - generic "Проверяем доступность папки…" [ref=e228]:
+                    - button "Открыть папку" [disabled]
+                  - button "Убрать из истории" [ref=e229] [cursor=pointer]
+            - row [ref=e232]:
+              - cell "Архив 06 — Сияй Тестовый исполнитель" [ref=e233]:
+                - generic [ref=e236]:
+                  - link "Архив 06 — Сияй" [ref=e237] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1005
+                  - paragraph [ref=e238]: Тестовый исполнитель
+              - cell "Альбом" [ref=e239]
+              - cell "12 треков" [ref=e242]
+              - cell [ref=e243]:
+                - paragraph [ref=e244]: 74.4 МБ
+              - cell "23 окт. 2026 г., 18:24" [ref=e245]
+              - cell [ref=e246]:
+                - generic [ref=e247]:
+                  - generic "Скачать снова" [ref=e248]:
+                    - button "Скачать снова" [ref=e249] [cursor=pointer]
+                  - generic "Проверяем доступность папки…" [ref=e252]:
+                    - button "Открыть папку" [disabled]
+                  - button "Убрать из истории" [ref=e253] [cursor=pointer]
+            - row [ref=e256]:
+              - cell "Архив 07 — Лучшее" [ref=e257]:
+                - link "Архив 07 — Лучшее" [ref=e261] [cursor=pointer]:
+                  - /url: https://music.yandex.ru/album/1006
+              - cell "Плейлист" [ref=e262]
+              - cell "42 трека" [ref=e265]
+              - cell [ref=e266]:
+                - paragraph [ref=e267]: 86.8 МБ
+              - cell "22 окт. 2026 г., 18:24" [ref=e268]
+              - cell [ref=e269]:
+                - generic [ref=e270]:
+                  - generic "Скачать снова" [ref=e271]:
+                    - button "Скачать снова" [ref=e272] [cursor=pointer]
+                  - generic "Проверяем доступность папки…" [ref=e275]:
+                    - button "Открыть папку" [disabled]
+                  - button "Убрать из истории" [ref=e276] [cursor=pointer]
+            - row [ref=e279]:
+              - cell "Архив 08 — Пламя Тестовый исполнитель" [ref=e280]:
+                - generic [ref=e283]:
+                  - link "Архив 08 — Пламя" [ref=e284] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1007
+                  - paragraph [ref=e285]: Тестовый исполнитель
+              - cell "Трек" [ref=e286]
+              - cell "1 трек" [ref=e289]
+              - cell [ref=e290]:
+                - paragraph [ref=e291]: 99.2 МБ
+              - cell "21 окт. 2026 г., 18:24" [ref=e292]
+              - cell [ref=e293]:
+                - generic [ref=e294]:
+                  - generic "Скачать снова" [ref=e295]:
+                    - button "Скачать снова" [ref=e296] [cursor=pointer]
+                  - generic "Проверяем доступность папки…" [ref=e299]:
+                    - button "Открыть папку" [disabled]
+                  - button "Убрать из истории" [ref=e300] [cursor=pointer]
+            - row [ref=e303]:
+              - cell "Архив 09 — Вечерний вайб Тестовый исполнитель" [ref=e304]:
+                - generic [ref=e307]:
+                  - link "Архив 09 — Вечерний вайб" [ref=e308] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1008
+                  - paragraph [ref=e309]: Тестовый исполнитель
+              - cell "Альбом" [ref=e310]
+              - cell "12 треков" [ref=e313]
+              - cell [ref=e314]:
+                - paragraph [ref=e315]: 111.6 МБ
+              - cell "20 окт. 2026 г., 18:24" [ref=e316]
+              - cell [ref=e317]:
+                - generic [ref=e318]:
+                  - generic "Скачать снова" [ref=e319]:
+                    - button "Скачать снова" [ref=e320] [cursor=pointer]
+                  - generic "Проверяем доступность папки…" [ref=e323]:
+                    - button "Открыть папку" [disabled]
+                  - button "Убрать из истории" [ref=e324] [cursor=pointer]
+            - row [ref=e327]:
+              - cell "Архив 10 — Сияй" [ref=e328]:
+                - link "Архив 10 — Сияй" [ref=e332] [cursor=pointer]:
+                  - /url: https://music.yandex.ru/album/1009
+              - cell "Плейлист" [ref=e333]
+              - cell "42 трека" [ref=e336]
+              - cell [ref=e337]:
+                - paragraph [ref=e338]: 124.0 МБ
+              - cell "19 окт. 2026 г., 18:24" [ref=e339]
+              - cell [ref=e340]:
+                - generic [ref=e341]:
+                  - generic "Скачать снова" [ref=e342]:
+                    - button "Скачать снова" [ref=e343] [cursor=pointer]
+                  - generic "Проверяем доступность папки…" [ref=e346]:
+                    - button "Открыть папку" [disabled]
+                  - button "Убрать из истории" [ref=e347] [cursor=pointer]
+            - row [ref=e350]:
+              - cell "Архив 11 — Лучшее Тестовый исполнитель" [ref=e351]:
+                - generic [ref=e354]:
+                  - link "Архив 11 — Лучшее" [ref=e355] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1010
+                  - paragraph [ref=e356]: Тестовый исполнитель
+              - cell "Трек" [ref=e357]
+              - cell "1 трек" [ref=e360]
+              - cell [ref=e361]:
+                - paragraph [ref=e362]: 136.4 МБ
+              - cell "18 окт. 2026 г., 18:24" [ref=e363]
+              - cell [ref=e364]:
+                - generic [ref=e365]:
+                  - generic "Скачать снова" [ref=e366]:
+                    - button "Скачать снова" [ref=e367] [cursor=pointer]
+                  - generic "Проверяем доступность папки…" [ref=e370]:
+                    - button "Открыть папку" [disabled]
+                  - button "Убрать из истории" [ref=e371] [cursor=pointer]
+            - row [ref=e374]:
+              - cell "Архив 12 — Пламя Тестовый исполнитель" [ref=e375]:
+                - generic [ref=e378]:
+                  - link "Архив 12 — Пламя" [ref=e379] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1011
+                  - paragraph [ref=e380]: Тестовый исполнитель
+              - cell "Альбом" [ref=e381]
+              - cell "12 треков" [ref=e384]
+              - cell [ref=e385]:
+                - paragraph [ref=e386]: 148.8 МБ
+              - cell "17 окт. 2026 г., 18:24" [ref=e387]
+              - cell [ref=e388]:
+                - generic [ref=e389]:
+                  - generic "Скачать снова" [ref=e390]:
+                    - button "Скачать снова" [ref=e391] [cursor=pointer]
+                  - generic "Проверяем доступность папки…" [ref=e394]:
+                    - button "Открыть папку" [disabled]
+                  - button "Убрать из истории" [ref=e395] [cursor=pointer]
+            - row [ref=e398]:
+              - cell "Архив 13 — Вечерний вайб" [ref=e399]:
+                - link "Архив 13 — Вечерний вайб" [ref=e403] [cursor=pointer]:
+                  - /url: https://music.yandex.ru/album/1012
+              - cell "Плейлист" [ref=e404]
+              - cell "42 трека" [ref=e407]
+              - cell [ref=e408]:
+                - paragraph [ref=e409]: 161.2 МБ
+              - cell "16 окт. 2026 г., 18:24" [ref=e410]
+              - cell [ref=e411]:
+                - generic [ref=e412]:
+                  - generic "Скачать снова" [ref=e413]:
+                    - button "Скачать снова" [ref=e414] [cursor=pointer]
+                  - generic "Проверяем доступность папки…" [ref=e417]:
+                    - button "Открыть папку" [disabled]
+                  - button "Убрать из истории" [ref=e418] [cursor=pointer]
+            - row [ref=e421]:
+              - cell "Архив 14 — Сияй Тестовый исполнитель" [ref=e422]:
+                - generic [ref=e425]:
+                  - link "Архив 14 — Сияй" [ref=e426] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1013
+                  - paragraph [ref=e427]: Тестовый исполнитель
+              - cell "Трек" [ref=e428]
+              - cell "1 трек" [ref=e431]
+              - cell [ref=e432]:
+                - paragraph [ref=e433]: 173.6 МБ
+              - cell "15 окт. 2026 г., 18:24" [ref=e434]
+              - cell [ref=e435]:
+                - generic [ref=e436]:
+                  - generic "Скачать снова" [ref=e437]:
+                    - button "Скачать снова" [ref=e438] [cursor=pointer]
+                  - generic "Проверяем доступность папки…" [ref=e441]:
+                    - button "Открыть папку" [disabled]
+                  - button "Убрать из истории" [ref=e442] [cursor=pointer]
+            - row [ref=e445]:
+              - cell "Архив 15 — Лучшее Тестовый исполнитель" [ref=e446]:
+                - generic [ref=e449]:
+                  - link "Архив 15 — Лучшее" [ref=e450] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1014
+                  - paragraph [ref=e451]: Тестовый исполнитель
+              - cell "Альбом" [ref=e452]
+              - cell "12 треков" [ref=e455]
+              - cell [ref=e456]:
+                - paragraph [ref=e457]: 186.0 МБ
+              - cell "14 окт. 2026 г., 18:24" [ref=e458]
+              - cell [ref=e459]:
+                - generic [ref=e460]:
+                  - generic "Скачать снова" [ref=e461]:
+                    - button "Скачать снова" [ref=e462] [cursor=pointer]
+                  - generic "Проверяем доступность папки…" [ref=e465]:
+                    - button "Открыть папку" [disabled]
+                  - button "Убрать из истории" [ref=e466] [cursor=pointer]
+            - row [ref=e469]:
+              - cell "Архив 16 — Пламя" [ref=e470]:
+                - link "Архив 16 — Пламя" [ref=e474] [cursor=pointer]:
+                  - /url: https://music.yandex.ru/album/1015
+              - cell "Плейлист" [ref=e475]
+              - cell "42 трека" [ref=e478]
+              - cell [ref=e479]:
+                - paragraph [ref=e480]: 198.4 МБ
+              - cell "13 окт. 2026 г., 18:24" [ref=e481]
+              - cell [ref=e482]:
+                - generic [ref=e483]:
+                  - generic "Скачать снова" [ref=e484]:
+                    - button "Скачать снова" [ref=e485] [cursor=pointer]
+                  - generic "Проверяем доступность папки…" [ref=e488]:
+                    - button "Открыть папку" [disabled]
+                  - button "Убрать из истории" [ref=e489] [cursor=pointer]
+            - row [ref=e492]:
+              - cell "Архив 17 — Вечерний вайб Тестовый исполнитель" [ref=e493]:
+                - generic [ref=e496]:
+                  - link "Архив 17 — Вечерний вайб" [ref=e497] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1016
+                  - paragraph [ref=e498]: Тестовый исполнитель
+              - cell "Трек" [ref=e499]
+              - cell "1 трек" [ref=e502]
+              - cell [ref=e503]:
+                - paragraph [ref=e504]: 210.8 МБ
+              - cell "12 окт. 2026 г., 18:24" [ref=e505]
+              - cell [ref=e506]:
+                - generic [ref=e507]:
+                  - generic "Скачать снова" [ref=e508]:
+                    - button "Скачать снова" [ref=e509] [cursor=pointer]
+                  - generic "Проверяем доступность папки…" [ref=e512]:
+                    - button "Открыть папку" [disabled]
+                  - button "Убрать из истории" [ref=e513] [cursor=pointer]
+            - row [ref=e516]:
+              - cell "Архив 18 — Сияй Тестовый исполнитель" [ref=e517]:
+                - generic [ref=e520]:
+                  - link "Архив 18 — Сияй" [ref=e521] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1017
+                  - paragraph [ref=e522]: Тестовый исполнитель
+              - cell "Альбом" [ref=e523]
+              - cell "12 треков" [ref=e526]
+              - cell [ref=e527]:
+                - paragraph [ref=e528]: 223.2 МБ
+              - cell "11 окт. 2026 г., 18:24" [ref=e529]
+              - cell [ref=e530]:
+                - generic [ref=e531]:
+                  - generic "Скачать снова" [ref=e532]:
+                    - button "Скачать снова" [ref=e533] [cursor=pointer]
+                  - generic "Проверяем доступность папки…" [ref=e536]:
+                    - button "Открыть папку" [disabled]
+                  - button "Убрать из истории" [ref=e537] [cursor=pointer]
+            - row [ref=e540]:
+              - cell "Архив 19 — Лучшее" [ref=e541]:
+                - link "Архив 19 — Лучшее" [ref=e545] [cursor=pointer]:
+                  - /url: https://music.yandex.ru/album/1018
+              - cell "Плейлист" [ref=e546]
+              - cell "42 трека" [ref=e549]
+              - cell [ref=e550]:
+                - paragraph [ref=e551]: 235.6 МБ
+              - cell "10 окт. 2026 г., 18:24" [ref=e552]
+              - cell [ref=e553]:
+                - generic [ref=e554]:
+                  - generic "Скачать снова" [ref=e555]:
+                    - button "Скачать снова" [ref=e556] [cursor=pointer]
+                  - generic "Проверяем доступность папки…" [ref=e559]:
+                    - button "Открыть папку" [disabled]
+                  - button "Убрать из истории" [ref=e560] [cursor=pointer]
+            - row [ref=e563]:
+              - cell "Архив 20 — Пламя Тестовый исполнитель" [ref=e564]:
+                - generic [ref=e567]:
+                  - link "Архив 20 — Пламя" [ref=e568] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1019
+                  - paragraph [ref=e569]: Тестовый исполнитель
+              - cell "Трек" [ref=e570]
+              - cell "1 трек" [ref=e573]
+              - cell [ref=e574]:
+                - paragraph [ref=e575]: 248.0 МБ
+              - cell "9 окт. 2026 г., 18:24" [ref=e576]
+              - cell [ref=e577]:
+                - generic [ref=e578]:
+                  - generic "Скачать снова" [ref=e579]:
+                    - button "Скачать снова" [ref=e580] [cursor=pointer]
+                  - generic "Проверяем доступность папки…" [ref=e583]:
+                    - button "Открыть папку" [disabled]
+                  - button "Убрать из истории" [ref=e584] [cursor=pointer]
+            - row [ref=e587]:
+              - cell "Архив 21 — Вечерний вайб Тестовый исполнитель" [ref=e588]:
+                - generic [ref=e591]:
+                  - link "Архив 21 — Вечерний вайб" [ref=e592] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1020
+                  - paragraph [ref=e593]: Тестовый исполнитель
+              - cell "Альбом" [ref=e594]
+              - cell "12 треков" [ref=e597]
+              - cell [ref=e598]:
+                - paragraph [ref=e599]: 260.4 МБ
+              - cell "8 окт. 2026 г., 18:24" [ref=e600]
+              - cell [ref=e601]:
+                - generic [ref=e602]:
+                  - generic "Скачать снова" [ref=e603]:
+                    - button "Скачать снова" [ref=e604] [cursor=pointer]
+                  - generic "Проверяем доступность папки…" [ref=e607]:
+                    - button "Открыть папку" [disabled]
+                  - button "Убрать из истории" [ref=e608] [cursor=pointer]
+            - row [ref=e611]:
+              - cell "Архив 22 — Сияй" [ref=e612]:
+                - link "Архив 22 — Сияй" [ref=e616] [cursor=pointer]:
+                  - /url: https://music.yandex.ru/album/1021
+              - cell "Плейлист" [ref=e617]
+              - cell "42 трека" [ref=e620]
+              - cell [ref=e621]:
+                - paragraph [ref=e622]: 272.8 МБ
+              - cell "7 окт. 2026 г., 18:24" [ref=e623]
+              - cell [ref=e624]:
+                - generic [ref=e625]:
+                  - generic "Скачать снова" [ref=e626]:
+                    - button "Скачать снова" [ref=e627] [cursor=pointer]
+                  - generic "Проверяем доступность папки…" [ref=e630]:
+                    - button "Открыть папку" [disabled]
+                  - button "Убрать из истории" [ref=e631] [cursor=pointer]
+            - row [ref=e634]:
+              - cell "Архив 23 — Лучшее Тестовый исполнитель" [ref=e635]:
+                - generic [ref=e638]:
+                  - link "Архив 23 — Лучшее" [ref=e639] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1022
+                  - paragraph [ref=e640]: Тестовый исполнитель
+              - cell "Трек" [ref=e641]
+              - cell "1 трек" [ref=e644]
+              - cell [ref=e645]:
+                - paragraph [ref=e646]: 285.2 МБ
+              - cell "6 окт. 2026 г., 18:24" [ref=e647]
+              - cell [ref=e648]:
+                - generic [ref=e649]:
+                  - generic "Скачать снова" [ref=e650]:
+                    - button "Скачать снова" [ref=e651] [cursor=pointer]
+                  - generic "Проверяем доступность папки…" [ref=e654]:
+                    - button "Открыть папку" [disabled]
+                  - button "Убрать из истории" [ref=e655] [cursor=pointer]
+            - row [ref=e658]:
+              - cell "Архив 24 — Пламя Тестовый исполнитель" [ref=e659]:
+                - generic [ref=e662]:
+                  - link "Архив 24 — Пламя" [ref=e663] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1023
+                  - paragraph [ref=e664]: Тестовый исполнитель
+              - cell "Альбом" [ref=e665]
+              - cell "12 треков" [ref=e668]
+              - cell [ref=e669]:
+                - paragraph [ref=e670]: 297.6 МБ
+              - cell "5 окт. 2026 г., 18:24" [ref=e671]
+              - cell [ref=e672]:
+                - generic [ref=e673]:
+                  - generic "Скачать снова" [ref=e674]:
+                    - button "Скачать снова" [ref=e675] [cursor=pointer]
+                  - generic "Проверяем доступность папки…" [ref=e678]:
+                    - button "Открыть папку" [disabled]
+                  - button "Убрать из истории" [ref=e679] [cursor=pointer]
+            - row [ref=e682]:
+              - cell "Архив 25 — Вечерний вайб" [ref=e683]:
+                - link "Архив 25 — Вечерний вайб" [ref=e687] [cursor=pointer]:
+                  - /url: https://music.yandex.ru/album/1024
+              - cell "Плейлист" [ref=e688]
+              - cell "42 трека" [ref=e691]
+              - cell [ref=e692]:
+                - paragraph [ref=e693]: 310.0 МБ
+              - cell "4 окт. 2026 г., 18:24" [ref=e694]
+              - cell [ref=e695]:
+                - generic [ref=e696]:
+                  - generic "Скачать снова" [ref=e697]:
+                    - button "Скачать снова" [ref=e698] [cursor=pointer]
+                  - generic "Проверяем доступность папки…" [ref=e701]:
+                    - button "Открыть папку" [disabled]
+                  - button "Убрать из истории" [ref=e702] [cursor=pointer]
+            - row [ref=e705]:
+              - cell "Архив 26 — Сияй Тестовый исполнитель" [ref=e706]:
+                - generic [ref=e709]:
+                  - link "Архив 26 — Сияй" [ref=e710] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1025
+                  - paragraph [ref=e711]: Тестовый исполнитель
+              - cell "Трек" [ref=e712]
+              - cell "1 трек" [ref=e715]
+              - cell [ref=e716]:
+                - paragraph [ref=e717]: 322.4 МБ
+              - cell "3 окт. 2026 г., 18:24" [ref=e718]
+              - cell [ref=e719]:
+                - generic [ref=e720]:
+                  - generic "Скачать снова" [ref=e721]:
+                    - button "Скачать снова" [ref=e722] [cursor=pointer]
+                  - generic "Проверяем доступность папки…" [ref=e725]:
+                    - button "Открыть папку" [disabled]
+                  - button "Убрать из истории" [ref=e726] [cursor=pointer]
+            - row [ref=e729]:
+              - cell "Архив 27 — Лучшее Тестовый исполнитель" [ref=e730]:
+                - generic [ref=e733]:
+                  - link "Архив 27 — Лучшее" [ref=e734] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1026
+                  - paragraph [ref=e735]: Тестовый исполнитель
+              - cell "Альбом" [ref=e736]
+              - cell "12 треков" [ref=e739]
+              - cell [ref=e740]:
+                - paragraph [ref=e741]: 334.8 МБ
+              - cell "2 окт. 2026 г., 18:24" [ref=e742]
+              - cell [ref=e743]:
+                - generic [ref=e744]:
+                  - generic "Скачать снова" [ref=e745]:
+                    - button "Скачать снова" [ref=e746] [cursor=pointer]
+                  - generic "Проверяем доступность папки…" [ref=e749]:
+                    - button "Открыть папку" [disabled]
+                  - button "Убрать из истории" [ref=e750] [cursor=pointer]
+            - row [ref=e753]:
+              - cell "Архив 28 — Пламя" [ref=e754]:
+                - link "Архив 28 — Пламя" [ref=e758] [cursor=pointer]:
+                  - /url: https://music.yandex.ru/album/1027
+              - cell "Плейлист" [ref=e759]
+              - cell "42 трека" [ref=e762]
+              - cell [ref=e763]:
+                - paragraph [ref=e764]: 347.2 МБ
+              - cell "1 окт. 2026 г., 18:24" [ref=e765]
+              - cell [ref=e766]:
+                - generic [ref=e767]:
+                  - generic "Скачать снова" [ref=e768]:
+                    - button "Скачать снова" [ref=e769] [cursor=pointer]
+                  - generic "Проверяем доступность папки…" [ref=e772]:
+                    - button "Открыть папку" [disabled]
+                  - button "Убрать из истории" [ref=e773] [cursor=pointer]
+            - row [ref=e776]:
+              - cell "Архив 29 — Вечерний вайб Тестовый исполнитель" [ref=e777]:
+                - generic [ref=e780]:
+                  - link "Архив 29 — Вечерний вайб" [ref=e781] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1028
+                  - paragraph [ref=e782]: Тестовый исполнитель
+              - cell "Трек" [ref=e783]
+              - cell "1 трек" [ref=e786]
+              - cell [ref=e787]:
+                - paragraph [ref=e788]: 359.6 МБ
+              - cell "30 сент. 2026 г., 18:24" [ref=e789]
+              - cell [ref=e790]:
+                - generic [ref=e791]:
+                  - generic "Скачать снова" [ref=e792]:
+                    - button "Скачать снова" [ref=e793] [cursor=pointer]
+                  - generic "Проверяем доступность папки…" [ref=e796]:
+                    - button "Открыть папку" [disabled]
+                  - button "Убрать из истории" [ref=e797] [cursor=pointer]
+            - row [ref=e800]:
+              - cell "Архив 30 — Сияй Тестовый исполнитель" [ref=e801]:
+                - generic [ref=e804]:
+                  - link "Архив 30 — Сияй" [ref=e805] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1029
+                  - paragraph [ref=e806]: Тестовый исполнитель
+              - cell "Альбом" [ref=e807]
+              - cell "12 треков" [ref=e810]
+              - cell [ref=e811]:
+                - paragraph [ref=e812]: 372.0 МБ
+              - cell "29 сент. 2026 г., 18:24" [ref=e813]
+              - cell [ref=e814]:
+                - generic [ref=e815]:
+                  - generic "Скачать снова" [ref=e816]:
+                    - button "Скачать снова" [ref=e817] [cursor=pointer]
+                  - generic "Проверяем доступность папки…" [ref=e820]:
+                    - button "Открыть папку" [disabled]
+                  - button "Убрать из истории" [ref=e821] [cursor=pointer]
+            - row [ref=e824]:
+              - cell "Архив 31 — Лучшее" [ref=e825]:
+                - link "Архив 31 — Лучшее" [ref=e829] [cursor=pointer]:
+                  - /url: https://music.yandex.ru/album/1030
+              - cell "Плейлист" [ref=e830]
+              - cell "42 трека" [ref=e833]
+              - cell [ref=e834]:
+                - paragraph [ref=e835]: 384.4 МБ
+              - cell "28 сент. 2026 г., 18:24" [ref=e836]
+              - cell [ref=e837]:
+                - generic [ref=e838]:
+                  - generic "Скачать снова" [ref=e839]:
+                    - button "Скачать снова" [ref=e840] [cursor=pointer]
+                  - generic "Проверяем доступность папки…" [ref=e843]:
+                    - button "Открыть папку" [disabled]
+                  - button "Убрать из истории" [ref=e844] [cursor=pointer]
+            - row [ref=e847]:
+              - cell "Архив 32 — Пламя Тестовый исполнитель" [ref=e848]:
+                - generic [ref=e851]:
+                  - link "Архив 32 — Пламя" [ref=e852] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1031
+                  - paragraph [ref=e853]: Тестовый исполнитель
+              - cell "Трек" [ref=e854]
+              - cell "1 трек" [ref=e857]
+              - cell [ref=e858]:
+                - paragraph [ref=e859]: 396.8 МБ
+              - cell "27 сент. 2026 г., 18:24" [ref=e860]
+              - cell [ref=e861]:
+                - generic [ref=e862]:
+                  - generic "Скачать снова" [ref=e863]:
+                    - button "Скачать снова" [ref=e864] [cursor=pointer]
+                  - generic "Проверяем доступность папки…" [ref=e867]:
+                    - button "Открыть папку" [disabled]
+                  - button "Убрать из истории" [ref=e868] [cursor=pointer]
+            - row [ref=e871]:
+              - cell "Архив 33 — Вечерний вайб Тестовый исполнитель" [ref=e872]:
+                - generic [ref=e875]:
+                  - link "Архив 33 — Вечерний вайб" [ref=e876] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1032
+                  - paragraph [ref=e877]: Тестовый исполнитель
+              - cell "Альбом" [ref=e878]
+              - cell "12 треков" [ref=e881]
+              - cell [ref=e882]:
+                - paragraph [ref=e883]: 409.2 МБ
+              - cell "26 сент. 2026 г., 18:24" [ref=e884]
+              - cell [ref=e885]:
+                - generic [ref=e886]:
+                  - generic "Скачать снова" [ref=e887]:
+                    - button "Скачать снова" [ref=e888] [cursor=pointer]
+                  - generic "Проверяем доступность папки…" [ref=e891]:
+                    - button "Открыть папку" [disabled]
+                  - button "Убрать из истории" [ref=e892] [cursor=pointer]
+            - row [ref=e895]:
+              - cell "Архив 34 — Сияй" [ref=e896]:
+                - link "Архив 34 — Сияй" [ref=e900] [cursor=pointer]:
+                  - /url: https://music.yandex.ru/album/1033
+              - cell "Плейлист" [ref=e901]
+              - cell "42 трека" [ref=e904]
+              - cell [ref=e905]:
+                - paragraph [ref=e906]: 421.6 МБ
+              - cell "25 сент. 2026 г., 18:24" [ref=e907]
+              - cell [ref=e908]:
+                - generic [ref=e909]:
+                  - generic "Скачать снова" [ref=e910]:
+                    - button "Скачать снова" [ref=e911] [cursor=pointer]
+                  - generic "Проверяем доступность папки…" [ref=e914]:
+                    - button "Открыть папку" [disabled]
+                  - button "Убрать из истории" [ref=e915] [cursor=pointer]
+            - row [ref=e918]:
+              - cell "Архив 35 — Лучшее Тестовый исполнитель" [ref=e919]:
+                - generic [ref=e922]:
+                  - link "Архив 35 — Лучшее" [ref=e923] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1034
+                  - paragraph [ref=e924]: Тестовый исполнитель
+              - cell "Трек" [ref=e925]
+              - cell "1 трек" [ref=e928]
+              - cell [ref=e929]:
+                - paragraph [ref=e930]: 434.0 МБ
+              - cell "24 сент. 2026 г., 18:24" [ref=e931]
+              - cell [ref=e932]:
+                - generic [ref=e933]:
+                  - generic "Скачать снова" [ref=e934]:
+                    - button "Скачать снова" [ref=e935] [cursor=pointer]
+                  - generic "Проверяем доступность папки…" [ref=e938]:
+                    - button "Открыть папку" [disabled]
+                  - button "Убрать из истории" [ref=e939] [cursor=pointer]
+            - row [ref=e942]:
+              - cell "Архив 36 — Пламя Тестовый исполнитель" [ref=e943]:
+                - generic [ref=e946]:
+                  - link "Архив 36 — Пламя" [ref=e947] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1035
+                  - paragraph [ref=e948]: Тестовый исполнитель
+              - cell "Альбом" [ref=e949]
+              - cell "12 треков" [ref=e952]
+              - cell [ref=e953]:
+                - paragraph [ref=e954]: 446.4 МБ
+              - cell "23 сент. 2026 г., 18:24" [ref=e955]
+              - cell [ref=e956]:
+                - generic [ref=e957]:
+                  - generic "Скачать снова" [ref=e958]:
+                    - button "Скачать снова" [ref=e959] [cursor=pointer]
+                  - generic "Проверяем доступность папки…" [ref=e962]:
+                    - button "Открыть папку" [disabled]
+                  - button "Убрать из истории" [ref=e963] [cursor=pointer]
+            - row [ref=e966]:
+              - cell "Архив 37 — Вечерний вайб" [ref=e967]:
+                - link "Архив 37 — Вечерний вайб" [ref=e971] [cursor=pointer]:
+                  - /url: https://music.yandex.ru/album/1036
+              - cell "Плейлист" [ref=e972]
+              - cell "42 трека" [ref=e975]
+              - cell [ref=e976]:
+                - paragraph [ref=e977]: 458.8 МБ
+              - cell "22 сент. 2026 г., 18:24" [ref=e978]
+              - cell [ref=e979]:
+                - generic [ref=e980]:
+                  - generic "Скачать снова" [ref=e981]:
+                    - button "Скачать снова" [ref=e982] [cursor=pointer]
+                  - generic "Проверяем доступность папки…" [ref=e985]:
+                    - button "Открыть папку" [disabled]
+                  - button "Убрать из истории" [ref=e986] [cursor=pointer]
+            - row [ref=e989]:
+              - cell "Архив 38 — Сияй Тестовый исполнитель" [ref=e990]:
+                - generic [ref=e993]:
+                  - link "Архив 38 — Сияй" [ref=e994] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1037
+                  - paragraph [ref=e995]: Тестовый исполнитель
+              - cell "Трек" [ref=e996]
+              - cell "1 трек" [ref=e999]
+              - cell [ref=e1000]:
+                - paragraph [ref=e1001]: 471.2 МБ
+              - cell "21 сент. 2026 г., 18:24" [ref=e1002]
+              - cell [ref=e1003]:
+                - generic [ref=e1004]:
+                  - generic "Скачать снова" [ref=e1005]:
+                    - button "Скачать снова" [ref=e1006] [cursor=pointer]
+                  - generic "Проверяем доступность папки…" [ref=e1009]:
+                    - button "Открыть папку" [disabled]
+                  - button "Убрать из истории" [ref=e1010] [cursor=pointer]
+            - row [ref=e1013]:
+              - cell "Архив 39 — Лучшее Тестовый исполнитель" [ref=e1014]:
+                - generic [ref=e1017]:
+                  - link "Архив 39 — Лучшее" [ref=e1018] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1038
+                  - paragraph [ref=e1019]: Тестовый исполнитель
+              - cell "Альбом" [ref=e1020]
+              - cell "12 треков" [ref=e1023]
+              - cell [ref=e1024]:
+                - paragraph [ref=e1025]: 483.6 МБ
+              - cell "20 сент. 2026 г., 18:24" [ref=e1026]
+              - cell [ref=e1027]:
+                - generic [ref=e1028]:
+                  - generic "Скачать снова" [ref=e1029]:
+                    - button "Скачать снова" [ref=e1030] [cursor=pointer]
+                  - generic "Проверяем доступность папки…" [ref=e1033]:
+                    - button "Открыть папку" [disabled]
+                  - button "Убрать из истории" [ref=e1034] [cursor=pointer]
+            - row [ref=e1037]:
+              - cell "Архив 40 — Пламя" [ref=e1038]:
+                - link "Архив 40 — Пламя" [ref=e1042] [cursor=pointer]:
+                  - /url: https://music.yandex.ru/album/1039
+              - cell "Плейлист" [ref=e1043]
+              - cell "42 трека" [ref=e1046]
+              - cell [ref=e1047]:
+                - paragraph [ref=e1048]: 496.0 МБ
+              - cell "19 сент. 2026 г., 18:24" [ref=e1049]
+              - cell [ref=e1050]:
+                - generic [ref=e1051]:
+                  - generic "Скачать снова" [ref=e1052]:
+                    - button "Скачать снова" [ref=e1053] [cursor=pointer]
+                  - generic "Проверяем доступность папки…" [ref=e1056]:
+                    - button "Открыть папку" [disabled]
+                  - button "Убрать из истории" [ref=e1057] [cursor=pointer]
+            - row [ref=e1060]:
+              - cell "Архив 41 — Вечерний вайб Тестовый исполнитель" [ref=e1061]:
+                - generic [ref=e1064]:
+                  - link "Архив 41 — Вечерний вайб" [ref=e1065] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1040
+                  - paragraph [ref=e1066]: Тестовый исполнитель
+              - cell "Трек" [ref=e1067]
+              - cell "1 трек" [ref=e1070]
+              - cell [ref=e1071]:
+                - paragraph [ref=e1072]: 508.4 МБ
+              - cell "18 сент. 2026 г., 18:24" [ref=e1073]
+              - cell [ref=e1074]:
+                - generic [ref=e1075]:
+                  - generic "Скачать снова" [ref=e1076]:
+                    - button "Скачать снова" [ref=e1077] [cursor=pointer]
+                  - generic "Проверяем доступность папки…" [ref=e1080]:
+                    - button "Открыть папку" [disabled]
+                  - button "Убрать из истории" [ref=e1081] [cursor=pointer]
+            - row [ref=e1084]:
+              - cell "Архив 42 — Сияй Тестовый исполнитель" [ref=e1085]:
+                - generic [ref=e1088]:
+                  - link "Архив 42 — Сияй" [ref=e1089] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1041
+                  - paragraph [ref=e1090]: Тестовый исполнитель
+              - cell "Альбом" [ref=e1091]
+              - cell "12 треков" [ref=e1094]
+              - cell [ref=e1095]:
+                - paragraph [ref=e1096]: 520.8 МБ
+              - cell "17 сент. 2026 г., 18:24" [ref=e1097]
+              - cell [ref=e1098]:
+                - generic [ref=e1099]:
+                  - generic "Скачать снова" [ref=e1100]:
+                    - button "Скачать снова" [ref=e1101] [cursor=pointer]
+                  - generic "Проверяем доступность папки…" [ref=e1104]:
+                    - button "Открыть папку" [disabled]
+                  - button "Убрать из истории" [ref=e1105] [cursor=pointer]
+            - row [ref=e1108]:
+              - cell "Архив 43 — Лучшее" [ref=e1109]:
+                - link "Архив 43 — Лучшее" [ref=e1113] [cursor=pointer]:
+                  - /url: https://music.yandex.ru/album/1042
+              - cell "Плейлист" [ref=e1114]
+              - cell "42 трека" [ref=e1117]
+              - cell [ref=e1118]:
+                - paragraph [ref=e1119]: 533.2 МБ
+              - cell "16 сент. 2026 г., 18:24" [ref=e1120]
+              - cell [ref=e1121]:
+                - generic [ref=e1122]:
+                  - generic "Скачать снова" [ref=e1123]:
+                    - button "Скачать снова" [ref=e1124] [cursor=pointer]
+                  - generic "Проверяем доступность папки…" [ref=e1127]:
+                    - button "Открыть папку" [disabled]
+                  - button "Убрать из истории" [ref=e1128] [cursor=pointer]
+            - row [ref=e1131]:
+              - cell "Архив 44 — Пламя Тестовый исполнитель" [ref=e1132]:
+                - generic [ref=e1135]:
+                  - link "Архив 44 — Пламя" [ref=e1136] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1043
+                  - paragraph [ref=e1137]: Тестовый исполнитель
+              - cell "Трек" [ref=e1138]
+              - cell "1 трек" [ref=e1141]
+              - cell [ref=e1142]:
+                - paragraph [ref=e1143]: 545.6 МБ
+              - cell "15 сент. 2026 г., 18:24" [ref=e1144]
+              - cell [ref=e1145]:
+                - generic [ref=e1146]:
+                  - generic "Скачать снова" [ref=e1147]:
+                    - button "Скачать снова" [ref=e1148] [cursor=pointer]
+                  - generic "Проверяем доступность папки…" [ref=e1151]:
+                    - button "Открыть папку" [disabled]
+                  - button "Убрать из истории" [ref=e1152] [cursor=pointer]
+            - row [ref=e1155]:
+              - cell "Архив 45 — Вечерний вайб Тестовый исполнитель" [ref=e1156]:
+                - generic [ref=e1159]:
+                  - link "Архив 45 — Вечерний вайб" [ref=e1160] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1044
+                  - paragraph [ref=e1161]: Тестовый исполнитель
+              - cell "Альбом" [ref=e1162]
+              - cell "12 треков" [ref=e1165]
+              - cell [ref=e1166]:
+                - paragraph [ref=e1167]: 558.0 МБ
+              - cell "14 сент. 2026 г., 18:24" [ref=e1168]
+              - cell [ref=e1169]:
+                - generic [ref=e1170]:
+                  - generic "Скачать снова" [ref=e1171]:
+                    - button "Скачать снова" [ref=e1172] [cursor=pointer]
+                  - generic "Проверяем доступность папки…" [ref=e1175]:
+                    - button "Открыть папку" [disabled]
+                  - button "Убрать из истории" [ref=e1176] [cursor=pointer]
+            - row [ref=e1179]:
+              - cell "Архив 46 — Сияй" [ref=e1180]:
+                - link "Архив 46 — Сияй" [ref=e1184] [cursor=pointer]:
+                  - /url: https://music.yandex.ru/album/1045
+              - cell "Плейлист" [ref=e1185]
+              - cell "42 трека" [ref=e1188]
+              - cell [ref=e1189]:
+                - paragraph [ref=e1190]: 570.4 МБ
+              - cell "13 сент. 2026 г., 18:24" [ref=e1191]
+              - cell [ref=e1192]:
+                - generic [ref=e1193]:
+                  - generic "Скачать снова" [ref=e1194]:
+                    - button "Скачать снова" [ref=e1195] [cursor=pointer]
+                  - generic "Проверяем доступность папки…" [ref=e1198]:
+                    - button "Открыть папку" [disabled]
+                  - button "Убрать из истории" [ref=e1199] [cursor=pointer]
+            - row [ref=e1202]:
+              - cell "Архив 47 — Лучшее Тестовый исполнитель" [ref=e1203]:
+                - generic [ref=e1206]:
+                  - link "Архив 47 — Лучшее" [ref=e1207] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1046
+                  - paragraph [ref=e1208]: Тестовый исполнитель
+              - cell "Трек" [ref=e1209]
+              - cell "1 трек" [ref=e1212]
+              - cell [ref=e1213]:
+                - paragraph [ref=e1214]: 582.8 МБ
+              - cell "12 сент. 2026 г., 18:24" [ref=e1215]
+              - cell [ref=e1216]:
+                - generic [ref=e1217]:
+                  - generic "Скачать снова" [ref=e1218]:
+                    - button "Скачать снова" [ref=e1219] [cursor=pointer]
+                  - generic "Проверяем доступность папки…" [ref=e1222]:
+                    - button "Открыть папку" [disabled]
+                  - button "Убрать из истории" [ref=e1223] [cursor=pointer]
+            - row [ref=e1226]:
+              - cell "Архив 48 — Пламя Тестовый исполнитель" [ref=e1227]:
+                - generic [ref=e1230]:
+                  - link "Архив 48 — Пламя" [ref=e1231] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1047
+                  - paragraph [ref=e1232]: Тестовый исполнитель
+              - cell "Альбом" [ref=e1233]
+              - cell "12 треков" [ref=e1236]
+              - cell [ref=e1237]:
+                - paragraph [ref=e1238]: 595.2 МБ
+              - cell "11 сент. 2026 г., 18:24" [ref=e1239]
+              - cell [ref=e1240]:
+                - generic [ref=e1241]:
+                  - generic "Скачать снова" [ref=e1242]:
+                    - button "Скачать снова" [ref=e1243] [cursor=pointer]
+                  - generic "Проверяем доступность папки…" [ref=e1246]:
+                    - button "Открыть папку" [disabled]
+                  - button "Убрать из истории" [ref=e1247] [cursor=pointer]
+            - row [ref=e1250]:
+              - cell "Архив 49 — Вечерний вайб" [ref=e1251]:
+                - link "Архив 49 — Вечерний вайб" [ref=e1255] [cursor=pointer]:
+                  - /url: https://music.yandex.ru/album/1048
+              - cell "Плейлист" [ref=e1256]
+              - cell "42 трека" [ref=e1259]
+              - cell [ref=e1260]:
+                - paragraph [ref=e1261]: 607.6 МБ
+              - cell "10 сент. 2026 г., 18:24" [ref=e1262]
+              - cell [ref=e1263]:
+                - generic [ref=e1264]:
+                  - generic "Скачать снова" [ref=e1265]:
+                    - button "Скачать снова" [ref=e1266] [cursor=pointer]
+                  - generic "Проверяем доступность папки…" [ref=e1269]:
+                    - button "Открыть папку" [disabled]
+                  - button "Убрать из истории" [ref=e1270] [cursor=pointer]
+            - row [ref=e1273]:
+              - cell "Архив 50 — Сияй Тестовый исполнитель" [ref=e1274]:
+                - generic [ref=e1277]:
+                  - link "Архив 50 — Сияй" [ref=e1278] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1049
+                  - paragraph [ref=e1279]: Тестовый исполнитель
+              - cell "Трек" [ref=e1280]
+              - cell "1 трек" [ref=e1283]
+              - cell [ref=e1284]:
+                - paragraph [ref=e1285]: Размер неизвестен
+              - cell "9 сент. 2026 г., 18:24" [ref=e1286]
+              - cell [ref=e1287]:
+                - generic [ref=e1288]:
+                  - 'generic "Скачать снова: Откройте источник на Главной и выберите параметры." [ref=e1289]':
+                    - button "Скачать снова" [disabled]
+                  - generic "Проверяем доступность папки…" [ref=e1290]:
+                    - button "Открыть папку" [disabled]
+                  - button "Убрать из истории" [ref=e1291] [cursor=pointer]
+        - generic [ref=e1294]: Удаление записи из истории сохраняет аудиофайлы на диске.
+```
+
+$ ["eval", "() => ({rows:document.querySelectorAll(\"tbody tr\").length,counters:window.step059Fixture.counters,buttons:[...document.querySelectorAll(\"tbody tr:first-child button\")].map(b=>({label:b.getAttribute(\"aria-label\"),disabled:b.disabled}))})"]
+### Result
+{
+  "rows": 50,
+  "counters": {
+    "history": 1,
+    "historyArtwork": 50,
+    "availability": 50,
+    "folder": 0,
+    "account": 1,
+    "avatar": 0,
+    "checkUpdate": 0
+  },
+  "buttons": [
+    {
+      "label": "Скачать снова",
+      "disabled": false
+    },
+    {
+      "label": "Открыть папку",
+      "disabled": true
+    },
+    {
+      "label": "Убрать из истории",
+      "disabled": false
+    }
+  ]
+}
+### Ran Playwright code
+```js
+await page.evaluate('() => ({rows:document.querySelectorAll("tbody tr").length,counters:window.step059Fixture.counters,buttons:[...document.querySelectorAll("tbody tr:first-child button")].map(b=>({label:b.getAttribute("aria-label"),disabled:b.disabled}))})');
+```
+
+$ ["fill", "e69", "Архив 49"]
+### Ran Playwright code
+```js
+await page.getByRole('textbox', { name: 'Поиск в истории' }).fill('Архив 49');
+```
+
+$ ["eval", "() => ({rows:document.querySelectorAll(\"tbody tr\").length,folderPending:document.querySelector(\"tbody button[aria-label=\\\"Открыть папку\\\"]\").disabled,counters:window.step059Fixture.counters})"]
+### Result
+{
+  "rows": 1,
+  "folderPending": true,
+  "counters": {
+    "history": 1,
+    "historyArtwork": 50,
+    "availability": 50,
+    "folder": 0,
+    "account": 1,
+    "avatar": 0,
+    "checkUpdate": 0
+  }
+}
+### Ran Playwright code
+```js
+await page.evaluate('() => ({rows:document.querySelectorAll("tbody tr").length,folderPending:document.querySelector("tbody button[aria-label=\\"Открыть папку\\"]").disabled,counters:window.step059Fixture.counters})');
+```
+
+$ ["fill", "e69", ""]
+### Ran Playwright code
+```js
+await page.getByRole('textbox', { name: 'Поиск в истории' }).fill('');
+```
+
+$ ["eval", "() => window.step059Fixture.settleFolders()"]
+### Result
+undefined
+### Ran Playwright code
+```js
+await page.evaluate('() => window.step059Fixture.settleFolders()');
+```
+
+$ ["eval", "() => { [...document.querySelectorAll(\"tbody tr\")].find(r=>r.textContent.includes(\"Архив 49\")).scrollIntoView({block:\"center\"}); return {y:scrollY,mainScroll:document.querySelector(\"main\").scrollTop}; }"]
+### Result
+{
+  "y": 3524,
+  "mainScroll": 0
+}
+### Ran Playwright code
+```js
+await page.evaluate('() => { [...document.querySelectorAll("tbody tr")].find(r=>r.textContent.includes("Архив 49")).scrollIntoView({block:"center"}); return {y:scrollY,mainScroll:document.querySelector("main").scrollTop}; }');
+```
+
+$ ["screenshot", "--filename=/home/user/github.com/yarkovaleksei/yandex-music-downloader/apps/desktop/evidence/STEP-059/screenshots/history-missing.png"]
+### Result
+- [Screenshot of viewport](../../../../apps/desktop/evidence/STEP-059/screenshots/history-missing.png)
+### Ran Playwright code
+```js
+// Screenshot viewport and save it as ../../../../apps/desktop/evidence/STEP-059/screenshots/history-missing.png
+await page.screenshot({
+  path: '../../../../apps/desktop/evidence/STEP-059/screenshots/history-missing.png',
+  scale: 'css',
+  type: 'png'
+});
+```
+
+$ ["snapshot"]
+### Page
+- Page URL: http://127.0.0.1:4189/?scenario=availability-delayed
+- Page Title: STEP-059 · синтетическая fixture
+### Snapshot
+```yaml
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - heading "Yandex Music Downloader" [level=3] [ref=e7]
+    - button [ref=e8] [cursor=pointer]
+    - button [ref=e12] [cursor=pointer]
+    - button [ref=e16] [cursor=pointer]
+    - button [ref=e20] [cursor=pointer]
+    - button [ref=e24] [cursor=pointer]
+    - button [ref=e28] [cursor=pointer]
+    - generic [ref=e33] [cursor=pointer]:
+      - switch "Тёмная тема" [ref=e36]
+      - generic [ref=e39]: Тёмная тема
+    - separator [ref=e40]
+    - paragraph [ref=e41]: Вы вошли как Тестовый пользователь
+    - button "Выйти" [ref=e42] [cursor=pointer]
+  - main [ref=e43]:
+    - generic [ref=e44]:
+      - generic [ref=e45]: Приложение подключено
+      - generic [ref=e63]:
+        - heading "История загрузок" [level=1] [ref=e64]
+        - paragraph [ref=e65]: Ваша коллекция загруженной музыки
+        - generic [ref=e66]:
+          - generic [ref=e67]:
+            - generic [ref=e1295]: Поиск в истории
+            - generic [ref=e68]:
+              - textbox "Поиск в истории" [active] [ref=e69]
+              - group [aria-hidden]:
+                - generic: Поиск в истории
+          - generic [ref=e70]:
+            - generic [ref=e71]: Тип
+            - generic [ref=e72]:
+              - combobox "Тип" [ref=e73] [cursor=pointer]: Все типы
+              - textbox [aria-hidden]: all
+              - group [aria-hidden]:
+                - generic: Тип
+          - generic [ref=e74]:
+            - generic [ref=e75]: Период
+            - generic [ref=e76]:
+              - combobox "Период" [ref=e77] [cursor=pointer]: За всё время
+              - textbox [aria-hidden]: all
+              - group [aria-hidden]:
+                - generic: Период
+        - generic [ref=e78]:
+          - generic [ref=e79]:
+            - generic [ref=e80]: Дата с
+            - generic [ref=e81]:
+              - textbox "Дата с" [ref=e82]
+              - group [aria-hidden]:
+                - generic: Дата с
+          - generic [ref=e83]:
+            - generic [ref=e84]: Дата по
+            - generic [ref=e85]:
+              - textbox "Дата по" [ref=e86]
+              - group [aria-hidden]:
+                - generic: Дата по
+        - paragraph [ref=e87]: "Найдено: 50"
+        - table [ref=e89]:
+          - rowgroup [ref=e90]:
+            - row [ref=e91]:
+              - columnheader [ref=e92]:
+                - button "Название" [ref=e93] [cursor=pointer]
+              - columnheader [ref=e96]:
+                - button "Тип" [ref=e97] [cursor=pointer]
+              - columnheader [ref=e100]:
+                - button "Треки" [ref=e101] [cursor=pointer]
+              - columnheader [ref=e104]:
+                - button "Размер" [ref=e105] [cursor=pointer]
+              - columnheader [ref=e108]:
+                - button "Дата" [ref=e109] [cursor=pointer]
+              - columnheader "Действия" [ref=e112]
+          - rowgroup [ref=e113]:
+            - row [ref=e1296]:
+              - cell "Архив 01 — Вечерний вайб" [ref=e1297]:
+                - link "Архив 01 — Вечерний вайб" [ref=e1301] [cursor=pointer]:
+                  - /url: https://music.yandex.ru/album/1000
+              - cell "Плейлист" [ref=e1302]
+              - cell "42 трека" [ref=e1305]
+              - cell [ref=e1306]:
+                - paragraph [ref=e1307]: 12.4 МБ
+              - cell "28 окт. 2026 г., 18:24" [ref=e1308]
+              - cell [ref=e1309]:
+                - generic [ref=e1310]:
+                  - generic "Скачать снова" [ref=e1311]:
+                    - button "Скачать снова" [ref=e1312] [cursor=pointer]
+                  - generic "Открыть папку" [ref=e1315]:
+                    - button "Открыть папку" [ref=e1316] [cursor=pointer]
+                  - button "Убрать из истории" [ref=e1319] [cursor=pointer]
+            - row [ref=e1322]:
+              - cell "Архив 02 — Сияй Тестовый исполнитель" [ref=e1323]:
+                - generic [ref=e1326]:
+                  - link "Архив 02 — Сияй" [ref=e1327] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1001
+                  - paragraph [ref=e1328]: Тестовый исполнитель
+              - cell "Трек" [ref=e1329]
+              - cell "1 трек" [ref=e1332]
+              - cell [ref=e1333]:
+                - paragraph [ref=e1334]: 24.8 МБ
+              - cell "27 окт. 2026 г., 18:24" [ref=e1335]
+              - cell [ref=e1336]:
+                - generic [ref=e1337]:
+                  - generic "Скачать снова" [ref=e1338]:
+                    - button "Скачать снова" [ref=e1339] [cursor=pointer]
+                  - generic "Открыть папку" [ref=e1342]:
+                    - button "Открыть папку" [ref=e1343] [cursor=pointer]
+                  - button "Убрать из истории" [ref=e1346] [cursor=pointer]
+            - row [ref=e1349]:
+              - cell "Архив 03 — Лучшее Тестовый исполнитель" [ref=e1350]:
+                - generic [ref=e1353]:
+                  - link "Архив 03 — Лучшее" [ref=e1354] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1002
+                  - paragraph [ref=e1355]: Тестовый исполнитель
+              - cell "Альбом" [ref=e1356]
+              - cell "12 треков" [ref=e1359]
+              - cell [ref=e1360]:
+                - paragraph [ref=e1361]: 37.2 МБ
+              - cell "26 окт. 2026 г., 18:24" [ref=e1362]
+              - cell [ref=e1363]:
+                - generic [ref=e1364]:
+                  - generic "Скачать снова" [ref=e1365]:
+                    - button "Скачать снова" [ref=e1366] [cursor=pointer]
+                  - generic "Открыть папку" [ref=e1369]:
+                    - button "Открыть папку" [ref=e1370] [cursor=pointer]
+                  - button "Убрать из истории" [ref=e1373] [cursor=pointer]
+            - row [ref=e1376]:
+              - cell "Архив 04 — Пламя" [ref=e1377]:
+                - link "Архив 04 — Пламя" [ref=e1381] [cursor=pointer]:
+                  - /url: https://music.yandex.ru/album/1003
+              - cell "Плейлист" [ref=e1382]
+              - cell "42 трека" [ref=e1385]
+              - cell [ref=e1386]:
+                - paragraph [ref=e1387]: 49.6 МБ
+              - cell "25 окт. 2026 г., 18:24" [ref=e1388]
+              - cell [ref=e1389]:
+                - generic [ref=e1390]:
+                  - generic "Скачать снова" [ref=e1391]:
+                    - button "Скачать снова" [ref=e1392] [cursor=pointer]
+                  - generic "Открыть папку" [ref=e1395]:
+                    - button "Открыть папку" [ref=e1396] [cursor=pointer]
+                  - button "Убрать из истории" [ref=e1399] [cursor=pointer]
+            - row [ref=e1402]:
+              - cell "Архив 05 — Вечерний вайб Тестовый исполнитель" [ref=e1403]:
+                - generic [ref=e1406]:
+                  - link "Архив 05 — Вечерний вайб" [ref=e1407] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1004
+                  - paragraph [ref=e1408]: Тестовый исполнитель
+              - cell "Трек" [ref=e1409]
+              - cell "1 трек" [ref=e1412]
+              - cell [ref=e1413]:
+                - paragraph [ref=e1414]: 62.0 МБ
+              - cell "24 окт. 2026 г., 18:24" [ref=e1415]
+              - cell [ref=e1416]:
+                - generic [ref=e1417]:
+                  - generic "Скачать снова" [ref=e1418]:
+                    - button "Скачать снова" [ref=e1419] [cursor=pointer]
+                  - generic "Открыть папку" [ref=e1422]:
+                    - button "Открыть папку" [ref=e1423] [cursor=pointer]
+                  - button "Убрать из истории" [ref=e1426] [cursor=pointer]
+            - row [ref=e1429]:
+              - cell "Архив 06 — Сияй Тестовый исполнитель" [ref=e1430]:
+                - generic [ref=e1433]:
+                  - link "Архив 06 — Сияй" [ref=e1434] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1005
+                  - paragraph [ref=e1435]: Тестовый исполнитель
+              - cell "Альбом" [ref=e1436]
+              - cell "12 треков" [ref=e1439]
+              - cell [ref=e1440]:
+                - paragraph [ref=e1441]: 74.4 МБ
+              - cell "23 окт. 2026 г., 18:24" [ref=e1442]
+              - cell [ref=e1443]:
+                - generic [ref=e1444]:
+                  - generic "Скачать снова" [ref=e1445]:
+                    - button "Скачать снова" [ref=e1446] [cursor=pointer]
+                  - generic "Открыть папку" [ref=e1449]:
+                    - button "Открыть папку" [ref=e1450] [cursor=pointer]
+                  - button "Убрать из истории" [ref=e1453] [cursor=pointer]
+            - row [ref=e1456]:
+              - cell "Архив 07 — Лучшее" [ref=e1457]:
+                - link "Архив 07 — Лучшее" [ref=e1461] [cursor=pointer]:
+                  - /url: https://music.yandex.ru/album/1006
+              - cell "Плейлист" [ref=e1462]
+              - cell "42 трека" [ref=e1465]
+              - cell [ref=e1466]:
+                - paragraph [ref=e1467]: 86.8 МБ
+              - cell "22 окт. 2026 г., 18:24" [ref=e1468]
+              - cell [ref=e1469]:
+                - generic [ref=e1470]:
+                  - generic "Скачать снова" [ref=e1471]:
+                    - button "Скачать снова" [ref=e1472] [cursor=pointer]
+                  - generic "Открыть папку" [ref=e1475]:
+                    - button "Открыть папку" [ref=e1476] [cursor=pointer]
+                  - button "Убрать из истории" [ref=e1479] [cursor=pointer]
+            - row [ref=e1482]:
+              - cell "Архив 08 — Пламя Тестовый исполнитель" [ref=e1483]:
+                - generic [ref=e1486]:
+                  - link "Архив 08 — Пламя" [ref=e1487] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1007
+                  - paragraph [ref=e1488]: Тестовый исполнитель
+              - cell "Трек" [ref=e1489]
+              - cell "1 трек" [ref=e1492]
+              - cell [ref=e1493]:
+                - paragraph [ref=e1494]: 99.2 МБ
+              - cell "21 окт. 2026 г., 18:24" [ref=e1495]
+              - cell [ref=e1496]:
+                - generic [ref=e1497]:
+                  - generic "Скачать снова" [ref=e1498]:
+                    - button "Скачать снова" [ref=e1499] [cursor=pointer]
+                  - generic "Открыть папку" [ref=e1502]:
+                    - button "Открыть папку" [ref=e1503] [cursor=pointer]
+                  - button "Убрать из истории" [ref=e1506] [cursor=pointer]
+            - row [ref=e1509]:
+              - cell "Архив 09 — Вечерний вайб Тестовый исполнитель" [ref=e1510]:
+                - generic [ref=e1513]:
+                  - link "Архив 09 — Вечерний вайб" [ref=e1514] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1008
+                  - paragraph [ref=e1515]: Тестовый исполнитель
+              - cell "Альбом" [ref=e1516]
+              - cell "12 треков" [ref=e1519]
+              - cell [ref=e1520]:
+                - paragraph [ref=e1521]: 111.6 МБ
+              - cell "20 окт. 2026 г., 18:24" [ref=e1522]
+              - cell [ref=e1523]:
+                - generic [ref=e1524]:
+                  - generic "Скачать снова" [ref=e1525]:
+                    - button "Скачать снова" [ref=e1526] [cursor=pointer]
+                  - generic "Открыть папку" [ref=e1529]:
+                    - button "Открыть папку" [ref=e1530] [cursor=pointer]
+                  - button "Убрать из истории" [ref=e1533] [cursor=pointer]
+            - row [ref=e1536]:
+              - cell "Архив 10 — Сияй" [ref=e1537]:
+                - link "Архив 10 — Сияй" [ref=e1541] [cursor=pointer]:
+                  - /url: https://music.yandex.ru/album/1009
+              - cell "Плейлист" [ref=e1542]
+              - cell "42 трека" [ref=e1545]
+              - cell [ref=e1546]:
+                - paragraph [ref=e1547]: 124.0 МБ
+              - cell "19 окт. 2026 г., 18:24" [ref=e1548]
+              - cell [ref=e1549]:
+                - generic [ref=e1550]:
+                  - generic "Скачать снова" [ref=e1551]:
+                    - button "Скачать снова" [ref=e1552] [cursor=pointer]
+                  - generic "Открыть папку" [ref=e1555]:
+                    - button "Открыть папку" [ref=e1556] [cursor=pointer]
+                  - button "Убрать из истории" [ref=e1559] [cursor=pointer]
+            - row [ref=e1562]:
+              - cell "Архив 11 — Лучшее Тестовый исполнитель" [ref=e1563]:
+                - generic [ref=e1566]:
+                  - link "Архив 11 — Лучшее" [ref=e1567] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1010
+                  - paragraph [ref=e1568]: Тестовый исполнитель
+              - cell "Трек" [ref=e1569]
+              - cell "1 трек" [ref=e1572]
+              - cell [ref=e1573]:
+                - paragraph [ref=e1574]: 136.4 МБ
+              - cell "18 окт. 2026 г., 18:24" [ref=e1575]
+              - cell [ref=e1576]:
+                - generic [ref=e1577]:
+                  - generic "Скачать снова" [ref=e1578]:
+                    - button "Скачать снова" [ref=e1579] [cursor=pointer]
+                  - generic "Открыть папку" [ref=e1582]:
+                    - button "Открыть папку" [ref=e1583] [cursor=pointer]
+                  - button "Убрать из истории" [ref=e1586] [cursor=pointer]
+            - row [ref=e1589]:
+              - cell "Архив 12 — Пламя Тестовый исполнитель" [ref=e1590]:
+                - generic [ref=e1593]:
+                  - link "Архив 12 — Пламя" [ref=e1594] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1011
+                  - paragraph [ref=e1595]: Тестовый исполнитель
+              - cell "Альбом" [ref=e1596]
+              - cell "12 треков" [ref=e1599]
+              - cell [ref=e1600]:
+                - paragraph [ref=e1601]: 148.8 МБ
+              - cell "17 окт. 2026 г., 18:24" [ref=e1602]
+              - cell [ref=e1603]:
+                - generic [ref=e1604]:
+                  - generic "Скачать снова" [ref=e1605]:
+                    - button "Скачать снова" [ref=e1606] [cursor=pointer]
+                  - generic "Открыть папку" [ref=e1609]:
+                    - button "Открыть папку" [ref=e1610] [cursor=pointer]
+                  - button "Убрать из истории" [ref=e1613] [cursor=pointer]
+            - row [ref=e1616]:
+              - cell "Архив 13 — Вечерний вайб" [ref=e1617]:
+                - link "Архив 13 — Вечерний вайб" [ref=e1621] [cursor=pointer]:
+                  - /url: https://music.yandex.ru/album/1012
+              - cell "Плейлист" [ref=e1622]
+              - cell "42 трека" [ref=e1625]
+              - cell [ref=e1626]:
+                - paragraph [ref=e1627]: 161.2 МБ
+              - cell "16 окт. 2026 г., 18:24" [ref=e1628]
+              - cell [ref=e1629]:
+                - generic [ref=e1630]:
+                  - generic "Скачать снова" [ref=e1631]:
+                    - button "Скачать снова" [ref=e1632] [cursor=pointer]
+                  - generic "Открыть папку" [ref=e1635]:
+                    - button "Открыть папку" [ref=e1636] [cursor=pointer]
+                  - button "Убрать из истории" [ref=e1639] [cursor=pointer]
+            - row [ref=e1642]:
+              - cell "Архив 14 — Сияй Тестовый исполнитель" [ref=e1643]:
+                - generic [ref=e1646]:
+                  - link "Архив 14 — Сияй" [ref=e1647] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1013
+                  - paragraph [ref=e1648]: Тестовый исполнитель
+              - cell "Трек" [ref=e1649]
+              - cell "1 трек" [ref=e1652]
+              - cell [ref=e1653]:
+                - paragraph [ref=e1654]: 173.6 МБ
+              - cell "15 окт. 2026 г., 18:24" [ref=e1655]
+              - cell [ref=e1656]:
+                - generic [ref=e1657]:
+                  - generic "Скачать снова" [ref=e1658]:
+                    - button "Скачать снова" [ref=e1659] [cursor=pointer]
+                  - generic "Открыть папку" [ref=e1662]:
+                    - button "Открыть папку" [ref=e1663] [cursor=pointer]
+                  - button "Убрать из истории" [ref=e1666] [cursor=pointer]
+            - row [ref=e1669]:
+              - cell "Архив 15 — Лучшее Тестовый исполнитель" [ref=e1670]:
+                - generic [ref=e1673]:
+                  - link "Архив 15 — Лучшее" [ref=e1674] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1014
+                  - paragraph [ref=e1675]: Тестовый исполнитель
+              - cell "Альбом" [ref=e1676]
+              - cell "12 треков" [ref=e1679]
+              - cell [ref=e1680]:
+                - paragraph [ref=e1681]: 186.0 МБ
+              - cell "14 окт. 2026 г., 18:24" [ref=e1682]
+              - cell [ref=e1683]:
+                - generic [ref=e1684]:
+                  - generic "Скачать снова" [ref=e1685]:
+                    - button "Скачать снова" [ref=e1686] [cursor=pointer]
+                  - generic "Открыть папку" [ref=e1689]:
+                    - button "Открыть папку" [ref=e1690] [cursor=pointer]
+                  - button "Убрать из истории" [ref=e1693] [cursor=pointer]
+            - row [ref=e1696]:
+              - cell "Архив 16 — Пламя" [ref=e1697]:
+                - link "Архив 16 — Пламя" [ref=e1701] [cursor=pointer]:
+                  - /url: https://music.yandex.ru/album/1015
+              - cell "Плейлист" [ref=e1702]
+              - cell "42 трека" [ref=e1705]
+              - cell [ref=e1706]:
+                - paragraph [ref=e1707]: 198.4 МБ
+              - cell "13 окт. 2026 г., 18:24" [ref=e1708]
+              - cell [ref=e1709]:
+                - generic [ref=e1710]:
+                  - generic "Скачать снова" [ref=e1711]:
+                    - button "Скачать снова" [ref=e1712] [cursor=pointer]
+                  - generic "Открыть папку" [ref=e1715]:
+                    - button "Открыть папку" [ref=e1716] [cursor=pointer]
+                  - button "Убрать из истории" [ref=e1719] [cursor=pointer]
+            - row [ref=e1722]:
+              - cell "Архив 17 — Вечерний вайб Тестовый исполнитель" [ref=e1723]:
+                - generic [ref=e1726]:
+                  - link "Архив 17 — Вечерний вайб" [ref=e1727] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1016
+                  - paragraph [ref=e1728]: Тестовый исполнитель
+              - cell "Трек" [ref=e1729]
+              - cell "1 трек" [ref=e1732]
+              - cell [ref=e1733]:
+                - paragraph [ref=e1734]: 210.8 МБ
+              - cell "12 окт. 2026 г., 18:24" [ref=e1735]
+              - cell [ref=e1736]:
+                - generic [ref=e1737]:
+                  - generic "Скачать снова" [ref=e1738]:
+                    - button "Скачать снова" [ref=e1739] [cursor=pointer]
+                  - generic "Открыть папку" [ref=e1742]:
+                    - button "Открыть папку" [ref=e1743] [cursor=pointer]
+                  - button "Убрать из истории" [ref=e1746] [cursor=pointer]
+            - row [ref=e1749]:
+              - cell "Архив 18 — Сияй Тестовый исполнитель" [ref=e1750]:
+                - generic [ref=e1753]:
+                  - link "Архив 18 — Сияй" [ref=e1754] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1017
+                  - paragraph [ref=e1755]: Тестовый исполнитель
+              - cell "Альбом" [ref=e1756]
+              - cell "12 треков" [ref=e1759]
+              - cell [ref=e1760]:
+                - paragraph [ref=e1761]: 223.2 МБ
+              - cell "11 окт. 2026 г., 18:24" [ref=e1762]
+              - cell [ref=e1763]:
+                - generic [ref=e1764]:
+                  - generic "Скачать снова" [ref=e1765]:
+                    - button "Скачать снова" [ref=e1766] [cursor=pointer]
+                  - generic "Открыть папку" [ref=e1769]:
+                    - button "Открыть папку" [ref=e1770] [cursor=pointer]
+                  - button "Убрать из истории" [ref=e1773] [cursor=pointer]
+            - row [ref=e1776]:
+              - cell "Архив 19 — Лучшее" [ref=e1777]:
+                - link "Архив 19 — Лучшее" [ref=e1781] [cursor=pointer]:
+                  - /url: https://music.yandex.ru/album/1018
+              - cell "Плейлист" [ref=e1782]
+              - cell "42 трека" [ref=e1785]
+              - cell [ref=e1786]:
+                - paragraph [ref=e1787]: 235.6 МБ
+              - cell "10 окт. 2026 г., 18:24" [ref=e1788]
+              - cell [ref=e1789]:
+                - generic [ref=e1790]:
+                  - generic "Скачать снова" [ref=e1791]:
+                    - button "Скачать снова" [ref=e1792] [cursor=pointer]
+                  - generic "Открыть папку" [ref=e1795]:
+                    - button "Открыть папку" [ref=e1796] [cursor=pointer]
+                  - button "Убрать из истории" [ref=e1799] [cursor=pointer]
+            - row [ref=e1802]:
+              - cell "Архив 20 — Пламя Тестовый исполнитель" [ref=e1803]:
+                - generic [ref=e1806]:
+                  - link "Архив 20 — Пламя" [ref=e1807] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1019
+                  - paragraph [ref=e1808]: Тестовый исполнитель
+              - cell "Трек" [ref=e1809]
+              - cell "1 трек" [ref=e1812]
+              - cell [ref=e1813]:
+                - paragraph [ref=e1814]: 248.0 МБ
+              - cell "9 окт. 2026 г., 18:24" [ref=e1815]
+              - cell [ref=e1816]:
+                - generic [ref=e1817]:
+                  - generic "Скачать снова" [ref=e1818]:
+                    - button "Скачать снова" [ref=e1819] [cursor=pointer]
+                  - generic "Открыть папку" [ref=e1822]:
+                    - button "Открыть папку" [ref=e1823] [cursor=pointer]
+                  - button "Убрать из истории" [ref=e1826] [cursor=pointer]
+            - row [ref=e1829]:
+              - cell "Архив 21 — Вечерний вайб Тестовый исполнитель" [ref=e1830]:
+                - generic [ref=e1833]:
+                  - link "Архив 21 — Вечерний вайб" [ref=e1834] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1020
+                  - paragraph [ref=e1835]: Тестовый исполнитель
+              - cell "Альбом" [ref=e1836]
+              - cell "12 треков" [ref=e1839]
+              - cell [ref=e1840]:
+                - paragraph [ref=e1841]: 260.4 МБ
+              - cell "8 окт. 2026 г., 18:24" [ref=e1842]
+              - cell [ref=e1843]:
+                - generic [ref=e1844]:
+                  - generic "Скачать снова" [ref=e1845]:
+                    - button "Скачать снова" [ref=e1846] [cursor=pointer]
+                  - generic "Открыть папку" [ref=e1849]:
+                    - button "Открыть папку" [ref=e1850] [cursor=pointer]
+                  - button "Убрать из истории" [ref=e1853] [cursor=pointer]
+            - row [ref=e1856]:
+              - cell "Архив 22 — Сияй" [ref=e1857]:
+                - link "Архив 22 — Сияй" [ref=e1861] [cursor=pointer]:
+                  - /url: https://music.yandex.ru/album/1021
+              - cell "Плейлист" [ref=e1862]
+              - cell "42 трека" [ref=e1865]
+              - cell [ref=e1866]:
+                - paragraph [ref=e1867]: 272.8 МБ
+              - cell "7 окт. 2026 г., 18:24" [ref=e1868]
+              - cell [ref=e1869]:
+                - generic [ref=e1870]:
+                  - generic "Скачать снова" [ref=e1871]:
+                    - button "Скачать снова" [ref=e1872] [cursor=pointer]
+                  - generic "Открыть папку" [ref=e1875]:
+                    - button "Открыть папку" [ref=e1876] [cursor=pointer]
+                  - button "Убрать из истории" [ref=e1879] [cursor=pointer]
+            - row [ref=e1882]:
+              - cell "Архив 23 — Лучшее Тестовый исполнитель" [ref=e1883]:
+                - generic [ref=e1886]:
+                  - link "Архив 23 — Лучшее" [ref=e1887] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1022
+                  - paragraph [ref=e1888]: Тестовый исполнитель
+              - cell "Трек" [ref=e1889]
+              - cell "1 трек" [ref=e1892]
+              - cell [ref=e1893]:
+                - paragraph [ref=e1894]: 285.2 МБ
+              - cell "6 окт. 2026 г., 18:24" [ref=e1895]
+              - cell [ref=e1896]:
+                - generic [ref=e1897]:
+                  - generic "Скачать снова" [ref=e1898]:
+                    - button "Скачать снова" [ref=e1899] [cursor=pointer]
+                  - generic "Открыть папку" [ref=e1902]:
+                    - button "Открыть папку" [ref=e1903] [cursor=pointer]
+                  - button "Убрать из истории" [ref=e1906] [cursor=pointer]
+            - row [ref=e1909]:
+              - cell "Архив 24 — Пламя Тестовый исполнитель" [ref=e1910]:
+                - generic [ref=e1913]:
+                  - link "Архив 24 — Пламя" [ref=e1914] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1023
+                  - paragraph [ref=e1915]: Тестовый исполнитель
+              - cell "Альбом" [ref=e1916]
+              - cell "12 треков" [ref=e1919]
+              - cell [ref=e1920]:
+                - paragraph [ref=e1921]: 297.6 МБ
+              - cell "5 окт. 2026 г., 18:24" [ref=e1922]
+              - cell [ref=e1923]:
+                - generic [ref=e1924]:
+                  - generic "Скачать снова" [ref=e1925]:
+                    - button "Скачать снова" [ref=e1926] [cursor=pointer]
+                  - generic "Открыть папку" [ref=e1929]:
+                    - button "Открыть папку" [ref=e1930] [cursor=pointer]
+                  - button "Убрать из истории" [ref=e1933] [cursor=pointer]
+            - row [ref=e1936]:
+              - cell "Архив 25 — Вечерний вайб" [ref=e1937]:
+                - link "Архив 25 — Вечерний вайб" [ref=e1941] [cursor=pointer]:
+                  - /url: https://music.yandex.ru/album/1024
+              - cell "Плейлист" [ref=e1942]
+              - cell "42 трека" [ref=e1945]
+              - cell [ref=e1946]:
+                - paragraph [ref=e1947]: 310.0 МБ
+              - cell "4 окт. 2026 г., 18:24" [ref=e1948]
+              - cell [ref=e1949]:
+                - generic [ref=e1950]:
+                  - generic "Скачать снова" [ref=e1951]:
+                    - button "Скачать снова" [ref=e1952] [cursor=pointer]
+                  - generic "Открыть папку" [ref=e1955]:
+                    - button "Открыть папку" [ref=e1956] [cursor=pointer]
+                  - button "Убрать из истории" [ref=e1959] [cursor=pointer]
+            - row [ref=e1962]:
+              - cell "Архив 26 — Сияй Тестовый исполнитель" [ref=e1963]:
+                - generic [ref=e1966]:
+                  - link "Архив 26 — Сияй" [ref=e1967] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1025
+                  - paragraph [ref=e1968]: Тестовый исполнитель
+              - cell "Трек" [ref=e1969]
+              - cell "1 трек" [ref=e1972]
+              - cell [ref=e1973]:
+                - paragraph [ref=e1974]: 322.4 МБ
+              - cell "3 окт. 2026 г., 18:24" [ref=e1975]
+              - cell [ref=e1976]:
+                - generic [ref=e1977]:
+                  - generic "Скачать снова" [ref=e1978]:
+                    - button "Скачать снова" [ref=e1979] [cursor=pointer]
+                  - generic "Открыть папку" [ref=e1982]:
+                    - button "Открыть папку" [ref=e1983] [cursor=pointer]
+                  - button "Убрать из истории" [ref=e1986] [cursor=pointer]
+            - row [ref=e1989]:
+              - cell "Архив 27 — Лучшее Тестовый исполнитель" [ref=e1990]:
+                - generic [ref=e1993]:
+                  - link "Архив 27 — Лучшее" [ref=e1994] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1026
+                  - paragraph [ref=e1995]: Тестовый исполнитель
+              - cell "Альбом" [ref=e1996]
+              - cell "12 треков" [ref=e1999]
+              - cell [ref=e2000]:
+                - paragraph [ref=e2001]: 334.8 МБ
+              - cell "2 окт. 2026 г., 18:24" [ref=e2002]
+              - cell [ref=e2003]:
+                - generic [ref=e2004]:
+                  - generic "Скачать снова" [ref=e2005]:
+                    - button "Скачать снова" [ref=e2006] [cursor=pointer]
+                  - generic "Открыть папку" [ref=e2009]:
+                    - button "Открыть папку" [ref=e2010] [cursor=pointer]
+                  - button "Убрать из истории" [ref=e2013] [cursor=pointer]
+            - row [ref=e2016]:
+              - cell "Архив 28 — Пламя" [ref=e2017]:
+                - link "Архив 28 — Пламя" [ref=e2021] [cursor=pointer]:
+                  - /url: https://music.yandex.ru/album/1027
+              - cell "Плейлист" [ref=e2022]
+              - cell "42 трека" [ref=e2025]
+              - cell [ref=e2026]:
+                - paragraph [ref=e2027]: 347.2 МБ
+              - cell "1 окт. 2026 г., 18:24" [ref=e2028]
+              - cell [ref=e2029]:
+                - generic [ref=e2030]:
+                  - generic "Скачать снова" [ref=e2031]:
+                    - button "Скачать снова" [ref=e2032] [cursor=pointer]
+                  - generic "Открыть папку" [ref=e2035]:
+                    - button "Открыть папку" [ref=e2036] [cursor=pointer]
+                  - button "Убрать из истории" [ref=e2039] [cursor=pointer]
+            - row [ref=e2042]:
+              - cell "Архив 29 — Вечерний вайб Тестовый исполнитель" [ref=e2043]:
+                - generic [ref=e2046]:
+                  - link "Архив 29 — Вечерний вайб" [ref=e2047] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1028
+                  - paragraph [ref=e2048]: Тестовый исполнитель
+              - cell "Трек" [ref=e2049]
+              - cell "1 трек" [ref=e2052]
+              - cell [ref=e2053]:
+                - paragraph [ref=e2054]: 359.6 МБ
+              - cell "30 сент. 2026 г., 18:24" [ref=e2055]
+              - cell [ref=e2056]:
+                - generic [ref=e2057]:
+                  - generic "Скачать снова" [ref=e2058]:
+                    - button "Скачать снова" [ref=e2059] [cursor=pointer]
+                  - generic "Открыть папку" [ref=e2062]:
+                    - button "Открыть папку" [ref=e2063] [cursor=pointer]
+                  - button "Убрать из истории" [ref=e2066] [cursor=pointer]
+            - row [ref=e2069]:
+              - cell "Архив 30 — Сияй Тестовый исполнитель" [ref=e2070]:
+                - generic [ref=e2073]:
+                  - link "Архив 30 — Сияй" [ref=e2074] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1029
+                  - paragraph [ref=e2075]: Тестовый исполнитель
+              - cell "Альбом" [ref=e2076]
+              - cell "12 треков" [ref=e2079]
+              - cell [ref=e2080]:
+                - paragraph [ref=e2081]: 372.0 МБ
+              - cell "29 сент. 2026 г., 18:24" [ref=e2082]
+              - cell [ref=e2083]:
+                - generic [ref=e2084]:
+                  - generic "Скачать снова" [ref=e2085]:
+                    - button "Скачать снова" [ref=e2086] [cursor=pointer]
+                  - generic "Открыть папку" [ref=e2089]:
+                    - button "Открыть папку" [ref=e2090] [cursor=pointer]
+                  - button "Убрать из истории" [ref=e2093] [cursor=pointer]
+            - row [ref=e2096]:
+              - cell "Архив 31 — Лучшее" [ref=e2097]:
+                - link "Архив 31 — Лучшее" [ref=e2101] [cursor=pointer]:
+                  - /url: https://music.yandex.ru/album/1030
+              - cell "Плейлист" [ref=e2102]
+              - cell "42 трека" [ref=e2105]
+              - cell [ref=e2106]:
+                - paragraph [ref=e2107]: 384.4 МБ
+              - cell "28 сент. 2026 г., 18:24" [ref=e2108]
+              - cell [ref=e2109]:
+                - generic [ref=e2110]:
+                  - generic "Скачать снова" [ref=e2111]:
+                    - button "Скачать снова" [ref=e2112] [cursor=pointer]
+                  - generic "Открыть папку" [ref=e2115]:
+                    - button "Открыть папку" [ref=e2116] [cursor=pointer]
+                  - button "Убрать из истории" [ref=e2119] [cursor=pointer]
+            - row [ref=e2122]:
+              - cell "Архив 32 — Пламя Тестовый исполнитель" [ref=e2123]:
+                - generic [ref=e2126]:
+                  - link "Архив 32 — Пламя" [ref=e2127] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1031
+                  - paragraph [ref=e2128]: Тестовый исполнитель
+              - cell "Трек" [ref=e2129]
+              - cell "1 трек" [ref=e2132]
+              - cell [ref=e2133]:
+                - paragraph [ref=e2134]: 396.8 МБ
+              - cell "27 сент. 2026 г., 18:24" [ref=e2135]
+              - cell [ref=e2136]:
+                - generic [ref=e2137]:
+                  - generic "Скачать снова" [ref=e2138]:
+                    - button "Скачать снова" [ref=e2139] [cursor=pointer]
+                  - generic "Открыть папку" [ref=e2142]:
+                    - button "Открыть папку" [ref=e2143] [cursor=pointer]
+                  - button "Убрать из истории" [ref=e2146] [cursor=pointer]
+            - row [ref=e2149]:
+              - cell "Архив 33 — Вечерний вайб Тестовый исполнитель" [ref=e2150]:
+                - generic [ref=e2153]:
+                  - link "Архив 33 — Вечерний вайб" [ref=e2154] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1032
+                  - paragraph [ref=e2155]: Тестовый исполнитель
+              - cell "Альбом" [ref=e2156]
+              - cell "12 треков" [ref=e2159]
+              - cell [ref=e2160]:
+                - paragraph [ref=e2161]: 409.2 МБ
+              - cell "26 сент. 2026 г., 18:24" [ref=e2162]
+              - cell [ref=e2163]:
+                - generic [ref=e2164]:
+                  - generic "Скачать снова" [ref=e2165]:
+                    - button "Скачать снова" [ref=e2166] [cursor=pointer]
+                  - generic "Открыть папку" [ref=e2169]:
+                    - button "Открыть папку" [ref=e2170] [cursor=pointer]
+                  - button "Убрать из истории" [ref=e2173] [cursor=pointer]
+            - row [ref=e2176]:
+              - cell "Архив 34 — Сияй" [ref=e2177]:
+                - link "Архив 34 — Сияй" [ref=e2181] [cursor=pointer]:
+                  - /url: https://music.yandex.ru/album/1033
+              - cell "Плейлист" [ref=e2182]
+              - cell "42 трека" [ref=e2185]
+              - cell [ref=e2186]:
+                - paragraph [ref=e2187]: 421.6 МБ
+              - cell "25 сент. 2026 г., 18:24" [ref=e2188]
+              - cell [ref=e2189]:
+                - generic [ref=e2190]:
+                  - generic "Скачать снова" [ref=e2191]:
+                    - button "Скачать снова" [ref=e2192] [cursor=pointer]
+                  - generic "Открыть папку" [ref=e2195]:
+                    - button "Открыть папку" [ref=e2196] [cursor=pointer]
+                  - button "Убрать из истории" [ref=e2199] [cursor=pointer]
+            - row [ref=e2202]:
+              - cell "Архив 35 — Лучшее Тестовый исполнитель" [ref=e2203]:
+                - generic [ref=e2206]:
+                  - link "Архив 35 — Лучшее" [ref=e2207] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1034
+                  - paragraph [ref=e2208]: Тестовый исполнитель
+              - cell "Трек" [ref=e2209]
+              - cell "1 трек" [ref=e2212]
+              - cell [ref=e2213]:
+                - paragraph [ref=e2214]: 434.0 МБ
+              - cell "24 сент. 2026 г., 18:24" [ref=e2215]
+              - cell [ref=e2216]:
+                - generic [ref=e2217]:
+                  - generic "Скачать снова" [ref=e2218]:
+                    - button "Скачать снова" [ref=e2219] [cursor=pointer]
+                  - generic "Открыть папку" [ref=e2222]:
+                    - button "Открыть папку" [ref=e2223] [cursor=pointer]
+                  - button "Убрать из истории" [ref=e2226] [cursor=pointer]
+            - row [ref=e2229]:
+              - cell "Архив 36 — Пламя Тестовый исполнитель" [ref=e2230]:
+                - generic [ref=e2233]:
+                  - link "Архив 36 — Пламя" [ref=e2234] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1035
+                  - paragraph [ref=e2235]: Тестовый исполнитель
+              - cell "Альбом" [ref=e2236]
+              - cell "12 треков" [ref=e2239]
+              - cell [ref=e2240]:
+                - paragraph [ref=e2241]: 446.4 МБ
+              - cell "23 сент. 2026 г., 18:24" [ref=e2242]
+              - cell [ref=e2243]:
+                - generic [ref=e2244]:
+                  - generic "Скачать снова" [ref=e2245]:
+                    - button "Скачать снова" [ref=e2246] [cursor=pointer]
+                  - generic "Открыть папку" [ref=e2249]:
+                    - button "Открыть папку" [ref=e2250] [cursor=pointer]
+                  - button "Убрать из истории" [ref=e2253] [cursor=pointer]
+            - row [ref=e2256]:
+              - cell "Архив 37 — Вечерний вайб" [ref=e2257]:
+                - link "Архив 37 — Вечерний вайб" [ref=e2261] [cursor=pointer]:
+                  - /url: https://music.yandex.ru/album/1036
+              - cell "Плейлист" [ref=e2262]
+              - cell "42 трека" [ref=e2265]
+              - cell [ref=e2266]:
+                - paragraph [ref=e2267]: 458.8 МБ
+              - cell "22 сент. 2026 г., 18:24" [ref=e2268]
+              - cell [ref=e2269]:
+                - generic [ref=e2270]:
+                  - generic "Скачать снова" [ref=e2271]:
+                    - button "Скачать снова" [ref=e2272] [cursor=pointer]
+                  - generic "Открыть папку" [ref=e2275]:
+                    - button "Открыть папку" [ref=e2276] [cursor=pointer]
+                  - button "Убрать из истории" [ref=e2279] [cursor=pointer]
+            - row [ref=e2282]:
+              - cell "Архив 38 — Сияй Тестовый исполнитель" [ref=e2283]:
+                - generic [ref=e2286]:
+                  - link "Архив 38 — Сияй" [ref=e2287] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1037
+                  - paragraph [ref=e2288]: Тестовый исполнитель
+              - cell "Трек" [ref=e2289]
+              - cell "1 трек" [ref=e2292]
+              - cell [ref=e2293]:
+                - paragraph [ref=e2294]: 471.2 МБ
+              - cell "21 сент. 2026 г., 18:24" [ref=e2295]
+              - cell [ref=e2296]:
+                - generic [ref=e2297]:
+                  - generic "Скачать снова" [ref=e2298]:
+                    - button "Скачать снова" [ref=e2299] [cursor=pointer]
+                  - generic "Открыть папку" [ref=e2302]:
+                    - button "Открыть папку" [ref=e2303] [cursor=pointer]
+                  - button "Убрать из истории" [ref=e2306] [cursor=pointer]
+            - row [ref=e2309]:
+              - cell "Архив 39 — Лучшее Тестовый исполнитель" [ref=e2310]:
+                - generic [ref=e2313]:
+                  - link "Архив 39 — Лучшее" [ref=e2314] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1038
+                  - paragraph [ref=e2315]: Тестовый исполнитель
+              - cell "Альбом" [ref=e2316]
+              - cell "12 треков" [ref=e2319]
+              - cell [ref=e2320]:
+                - paragraph [ref=e2321]: 483.6 МБ
+              - cell "20 сент. 2026 г., 18:24" [ref=e2322]
+              - cell [ref=e2323]:
+                - generic [ref=e2324]:
+                  - generic "Скачать снова" [ref=e2325]:
+                    - button "Скачать снова" [ref=e2326] [cursor=pointer]
+                  - generic "Открыть папку" [ref=e2329]:
+                    - button "Открыть папку" [ref=e2330] [cursor=pointer]
+                  - button "Убрать из истории" [ref=e2333] [cursor=pointer]
+            - row [ref=e2336]:
+              - cell "Архив 40 — Пламя" [ref=e2337]:
+                - link "Архив 40 — Пламя" [ref=e2341] [cursor=pointer]:
+                  - /url: https://music.yandex.ru/album/1039
+              - cell "Плейлист" [ref=e2342]
+              - cell "42 трека" [ref=e2345]
+              - cell [ref=e2346]:
+                - paragraph [ref=e2347]: 496.0 МБ
+              - cell "19 сент. 2026 г., 18:24" [ref=e2348]
+              - cell [ref=e2349]:
+                - generic [ref=e2350]:
+                  - generic "Скачать снова" [ref=e2351]:
+                    - button "Скачать снова" [ref=e2352] [cursor=pointer]
+                  - generic "Открыть папку" [ref=e2355]:
+                    - button "Открыть папку" [ref=e2356] [cursor=pointer]
+                  - button "Убрать из истории" [ref=e2359] [cursor=pointer]
+            - row [ref=e2362]:
+              - cell "Архив 41 — Вечерний вайб Тестовый исполнитель" [ref=e2363]:
+                - generic [ref=e2366]:
+                  - link "Архив 41 — Вечерний вайб" [ref=e2367] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1040
+                  - paragraph [ref=e2368]: Тестовый исполнитель
+              - cell "Трек" [ref=e2369]
+              - cell "1 трек" [ref=e2372]
+              - cell [ref=e2373]:
+                - paragraph [ref=e2374]: 508.4 МБ
+              - cell "18 сент. 2026 г., 18:24" [ref=e2375]
+              - cell [ref=e2376]:
+                - generic [ref=e2377]:
+                  - generic "Скачать снова" [ref=e2378]:
+                    - button "Скачать снова" [ref=e2379] [cursor=pointer]
+                  - generic "Открыть папку" [ref=e2382]:
+                    - button "Открыть папку" [ref=e2383] [cursor=pointer]
+                  - button "Убрать из истории" [ref=e2386] [cursor=pointer]
+            - row [ref=e2389]:
+              - cell "Архив 42 — Сияй Тестовый исполнитель" [ref=e2390]:
+                - generic [ref=e2393]:
+                  - link "Архив 42 — Сияй" [ref=e2394] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1041
+                  - paragraph [ref=e2395]: Тестовый исполнитель
+              - cell "Альбом" [ref=e2396]
+              - cell "12 треков" [ref=e2399]
+              - cell [ref=e2400]:
+                - paragraph [ref=e2401]: 520.8 МБ
+              - cell "17 сент. 2026 г., 18:24" [ref=e2402]
+              - cell [ref=e2403]:
+                - generic [ref=e2404]:
+                  - generic "Скачать снова" [ref=e2405]:
+                    - button "Скачать снова" [ref=e2406] [cursor=pointer]
+                  - generic "Открыть папку" [ref=e2409]:
+                    - button "Открыть папку" [ref=e2410] [cursor=pointer]
+                  - button "Убрать из истории" [ref=e2413] [cursor=pointer]
+            - row [ref=e2416]:
+              - cell "Архив 43 — Лучшее" [ref=e2417]:
+                - link "Архив 43 — Лучшее" [ref=e2421] [cursor=pointer]:
+                  - /url: https://music.yandex.ru/album/1042
+              - cell "Плейлист" [ref=e2422]
+              - cell "42 трека" [ref=e2425]
+              - cell [ref=e2426]:
+                - paragraph [ref=e2427]: 533.2 МБ
+              - cell "16 сент. 2026 г., 18:24" [ref=e2428]
+              - cell [ref=e2429]:
+                - generic [ref=e2430]:
+                  - generic "Скачать снова" [ref=e2431]:
+                    - button "Скачать снова" [ref=e2432] [cursor=pointer]
+                  - generic "Открыть папку" [ref=e2435]:
+                    - button "Открыть папку" [ref=e2436] [cursor=pointer]
+                  - button "Убрать из истории" [ref=e2439] [cursor=pointer]
+            - row [ref=e2442]:
+              - cell "Архив 44 — Пламя Тестовый исполнитель" [ref=e2443]:
+                - generic [ref=e2446]:
+                  - link "Архив 44 — Пламя" [ref=e2447] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1043
+                  - paragraph [ref=e2448]: Тестовый исполнитель
+              - cell "Трек" [ref=e2449]
+              - cell "1 трек" [ref=e2452]
+              - cell [ref=e2453]:
+                - paragraph [ref=e2454]: 545.6 МБ
+              - cell "15 сент. 2026 г., 18:24" [ref=e2455]
+              - cell [ref=e2456]:
+                - generic [ref=e2457]:
+                  - generic "Скачать снова" [ref=e2458]:
+                    - button "Скачать снова" [ref=e2459] [cursor=pointer]
+                  - generic "Открыть папку" [ref=e2462]:
+                    - button "Открыть папку" [ref=e2463] [cursor=pointer]
+                  - button "Убрать из истории" [ref=e2466] [cursor=pointer]
+            - row [ref=e2469]:
+              - cell "Архив 45 — Вечерний вайб Тестовый исполнитель" [ref=e2470]:
+                - generic [ref=e2473]:
+                  - link "Архив 45 — Вечерний вайб" [ref=e2474] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1044
+                  - paragraph [ref=e2475]: Тестовый исполнитель
+              - cell "Альбом" [ref=e2476]
+              - cell "12 треков" [ref=e2479]
+              - cell [ref=e2480]:
+                - paragraph [ref=e2481]: 558.0 МБ
+              - cell "14 сент. 2026 г., 18:24" [ref=e2482]
+              - cell [ref=e2483]:
+                - generic [ref=e2484]:
+                  - generic "Скачать снова" [ref=e2485]:
+                    - button "Скачать снова" [ref=e2486] [cursor=pointer]
+                  - generic "Открыть папку" [ref=e2489]:
+                    - button "Открыть папку" [ref=e2490] [cursor=pointer]
+                  - button "Убрать из истории" [ref=e2493] [cursor=pointer]
+            - row [ref=e2496]:
+              - cell "Архив 46 — Сияй" [ref=e2497]:
+                - link "Архив 46 — Сияй" [ref=e2501] [cursor=pointer]:
+                  - /url: https://music.yandex.ru/album/1045
+              - cell "Плейлист" [ref=e2502]
+              - cell "42 трека" [ref=e2505]
+              - cell [ref=e2506]:
+                - paragraph [ref=e2507]: 570.4 МБ
+              - cell "13 сент. 2026 г., 18:24" [ref=e2508]
+              - cell [ref=e2509]:
+                - generic [ref=e2510]:
+                  - generic "Скачать снова" [ref=e2511]:
+                    - button "Скачать снова" [ref=e2512] [cursor=pointer]
+                  - generic "Открыть папку" [ref=e2515]:
+                    - button "Открыть папку" [ref=e2516] [cursor=pointer]
+                  - button "Убрать из истории" [ref=e2519] [cursor=pointer]
+            - row [ref=e2522]:
+              - cell "Архив 47 — Лучшее Тестовый исполнитель" [ref=e2523]:
+                - generic [ref=e2526]:
+                  - link "Архив 47 — Лучшее" [ref=e2527] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1046
+                  - paragraph [ref=e2528]: Тестовый исполнитель
+              - cell "Трек" [ref=e2529]
+              - cell "1 трек" [ref=e2532]
+              - cell [ref=e2533]:
+                - paragraph [ref=e2534]: 582.8 МБ
+              - cell "12 сент. 2026 г., 18:24" [ref=e2535]
+              - cell [ref=e2536]:
+                - generic [ref=e2537]:
+                  - generic "Скачать снова" [ref=e2538]:
+                    - button "Скачать снова" [ref=e2539] [cursor=pointer]
+                  - generic "Открыть папку" [ref=e2542]:
+                    - button "Открыть папку" [ref=e2543] [cursor=pointer]
+                  - button "Убрать из истории" [ref=e2546] [cursor=pointer]
+            - row [ref=e2549]:
+              - cell "Архив 48 — Пламя Тестовый исполнитель" [ref=e2550]:
+                - generic [ref=e2553]:
+                  - link "Архив 48 — Пламя" [ref=e2554] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1047
+                  - paragraph [ref=e2555]: Тестовый исполнитель
+              - cell "Альбом" [ref=e2556]
+              - cell "12 треков" [ref=e2559]
+              - cell [ref=e2560]:
+                - paragraph [ref=e2561]: 595.2 МБ
+              - cell "11 сент. 2026 г., 18:24" [ref=e2562]
+              - cell [ref=e2563]:
+                - generic [ref=e2564]:
+                  - generic "Скачать снова" [ref=e2565]:
+                    - button "Скачать снова" [ref=e2566] [cursor=pointer]
+                  - generic "Файл или папка недоступны. Возможно, они перемещены или удалены." [ref=e2569]:
+                    - button "Открыть папку" [disabled]
+                  - button "Убрать из истории" [ref=e2570] [cursor=pointer]
+            - row [ref=e1250]:
+              - cell "Архив 49 — Вечерний вайб" [ref=e1251]:
+                - link "Архив 49 — Вечерний вайб" [ref=e1255] [cursor=pointer]:
+                  - /url: https://music.yandex.ru/album/1048
+              - cell "Плейлист" [ref=e1256]
+              - cell "42 трека" [ref=e1259]
+              - cell [ref=e1260]:
+                - paragraph [ref=e1261]: 607.6 МБ
+              - cell "10 сент. 2026 г., 18:24" [ref=e1262]
+              - cell [ref=e1263]:
+                - generic [ref=e1264]:
+                  - generic "Скачать снова" [ref=e1265]:
+                    - button "Скачать снова" [ref=e1266] [cursor=pointer]
+                  - generic "Открыть папку" [ref=e2573]:
+                    - button "Открыть папку" [ref=e2574] [cursor=pointer]
+                  - button "Убрать из истории" [ref=e1270] [cursor=pointer]
+            - row [ref=e2577]:
+              - cell "Архив 50 — Сияй Тестовый исполнитель" [ref=e2578]:
+                - generic [ref=e2581]:
+                  - link "Архив 50 — Сияй" [ref=e2582] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1049
+                  - paragraph [ref=e2583]: Тестовый исполнитель
+              - cell "Трек" [ref=e2584]
+              - cell "1 трек" [ref=e2587]
+              - cell [ref=e2588]:
+                - paragraph [ref=e2589]: Размер неизвестен
+              - cell "9 сент. 2026 г., 18:24" [ref=e2590]
+              - cell [ref=e2591]:
+                - generic [ref=e2592]:
+                  - 'generic "Скачать снова: Откройте источник на Главной и выберите параметры." [ref=e2593]':
+                    - button "Скачать снова" [disabled]
+                  - generic "Открыть папку" [ref=e2594]:
+                    - button "Открыть папку" [ref=e2595] [cursor=pointer]
+                  - button "Убрать из истории" [ref=e2598] [cursor=pointer]
+        - generic [ref=e1294]: Удаление записи из истории сохраняет аудиофайлы на диске.
+```
+
+$ ["click", "e2574"]
+### Ran Playwright code
+```js
+await page.locator('tr:nth-child(49) > td:nth-child(6) > .MuiStack-root > span:nth-child(2) > .MuiButtonBase-root').click();
+```
+### Page
+- Page URL: http://127.0.0.1:4189/?scenario=availability-delayed
+- Page Title: STEP-059 · синтетическая fixture
+### Snapshot
+- [Snapshot](.playwright-cli/page-2026-10-29T20-21-08-003Z.yml)
+
+$ ["eval", "() => {const a=document.querySelector(\"[role=alert]\");const r=a?.getBoundingClientRect(); return {scrollY,viewport:innerHeight,alert:a?.textContent,rect:r?{top:r.top,bottom:r.bottom}:null,counters:window.step059Fixture.counters,missingDisabled:[...document.querySelectorAll(\"tbody tr\")].find(r=>r.textContent.includes(\"Архив 48\")).querySelector(\"button[aria-label=\\\\\"Открыть папку\\\\\"]\").disabled,raceDisabled:[...document.querySelectorAll(\"tbody tr\")].find(r=>r.textContent.includes(\"Архив 49\")).querySelector(\"button[aria-label=\\\\\"Открыть папку\\\\\"]\").disabled};}"]
+### Error
+SyntaxError: missing ) after argument list
+    at eval (eval at evaluate (:368:30), <anonymous>:2:38)
+    at UtilityScript.evaluate (<anonymous>:370:16)
+    at UtilityScript.<anonymous> (<anonymous>:1:44)
+
+$ ["screenshot", "--filename=/home/user/github.com/yarkovaleksei/yandex-music-downloader/apps/desktop/evidence/STEP-059/screenshots/history-race-notice.png"]
+### Result
+- [Screenshot of viewport](../../../../apps/desktop/evidence/STEP-059/screenshots/history-race-notice.png)
+### Ran Playwright code
+```js
+// Screenshot viewport and save it as ../../../../apps/desktop/evidence/STEP-059/screenshots/history-race-notice.png
+await page.screenshot({
+  path: '../../../../apps/desktop/evidence/STEP-059/screenshots/history-race-notice.png',
+  scale: 'css',
+  type: 'png'
+});
+```
+
+$ ["click", "tr:has-text(\"Архив 50\") button[aria-label=\"Открыть папку\"]"]
+### Ran Playwright code
+```js
+await page.locator('tr:has-text("Архив 50") button[aria-label="Открыть папку"]').click();
+```
+### Page
+- Page URL: http://127.0.0.1:4189/?scenario=availability-delayed
+- Page Title: STEP-059 · синтетическая fixture
+### Snapshot
+- [Snapshot](.playwright-cli/page-2026-10-29T20-21-09-956Z.yml)
+
+$ ["eval", "() => ({scrollY,counters:window.step059Fixture.counters,rows:document.querySelectorAll(\"tbody tr\").length})"]
+### Result
+{
+  "scrollY": 3524,
+  "counters": {
+    "history": 1,
+    "historyArtwork": 50,
+    "availability": 50,
+    "folder": 2,
+    "account": 1,
+    "avatar": 0,
+    "checkUpdate": 0
+  },
+  "rows": 50
+}
+### Ran Playwright code
+```js
+await page.evaluate('() => ({scrollY,counters:window.step059Fixture.counters,rows:document.querySelectorAll("tbody tr").length})');
+```
+
+$ ["eval", "() => ({missingDisabled:[...document.querySelectorAll(\"tbody tr\")].find(r=>r.textContent.includes(\"Архив 48\")).querySelectorAll(\"button\")[1].disabled,raceDisabled:[...document.querySelectorAll(\"tbody tr\")].find(r=>r.textContent.includes(\"Архив 49\")).querySelectorAll(\"button\")[1].disabled,counters:window.step059Fixture.counters})"]
+### Result
+{
+  "missingDisabled": true,
+  "raceDisabled": true,
+  "counters": {
+    "history": 1,
+    "historyArtwork": 50,
+    "availability": 50,
+    "folder": 2,
+    "account": 1,
+    "avatar": 0,
+    "checkUpdate": 0
+  }
+}
+### Ran Playwright code
+```js
+await page.evaluate('() => ({missingDisabled:[...document.querySelectorAll("tbody tr")].find(r=>r.textContent.includes("Архив 48")).querySelectorAll("button")[1].disabled,raceDisabled:[...document.querySelectorAll("tbody tr")].find(r=>r.textContent.includes("Архив 49")).querySelectorAll("button")[1].disabled,counters:window.step059Fixture.counters})');
+```
+
+$ ["click", "aside button:has-text(\"Настройки\")"]
+### Ran Playwright code
+```js
+await page.locator('aside button:has-text("Настройки")').click();
+```
+### Page
+- Page URL: http://127.0.0.1:4189/?scenario=availability-delayed
+- Page Title: STEP-059 · синтетическая fixture
+### Snapshot
+- [Snapshot](.playwright-cli/page-2026-10-29T20-21-27-601Z.yml)
+
+$ ["snapshot"]
+### Page
+- Page URL: http://127.0.0.1:4189/?scenario=availability-delayed
+- Page Title: STEP-059 · синтетическая fixture
+### Snapshot
+```yaml
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - heading "Yandex Music Downloader" [level=3] [ref=e7]
+    - button [ref=e8] [cursor=pointer]
+    - button [ref=e12] [cursor=pointer]
+    - button [ref=e16] [cursor=pointer]
+    - button [active] [ref=e20] [cursor=pointer]
+    - button [ref=e24] [cursor=pointer]
+    - button [ref=e28] [cursor=pointer]
+    - generic [ref=e33] [cursor=pointer]:
+      - switch "Тёмная тема" [ref=e36]
+      - generic [ref=e39]: Тёмная тема
+    - separator [ref=e40]
+    - paragraph [ref=e41]: Вы вошли как Тестовый пользователь
+    - button "Выйти" [ref=e42] [cursor=pointer]
+  - main [ref=e43]:
+    - generic [ref=e44]:
+      - generic [ref=e45]: Приложение подключено
+      - generic [ref=e2616]:
+        - heading "Настройки" [level=1] [ref=e2617]
+        - paragraph [ref=e2618]: Загрузка музыки и параметры приложения
+        - tablist "Разделы настроек" [ref=e2621]:
+          - tab "Основные" [selected] [ref=e2622] [cursor=pointer]
+          - tab "Загрузка" [ref=e2623] [cursor=pointer]
+          - tab "Файлы" [ref=e2624] [cursor=pointer]
+          - tab "Внешний вид" [ref=e2625] [cursor=pointer]
+          - tab "О программе" [ref=e2626] [cursor=pointer]
+        - generic [ref=e2629]:
+          - generic [ref=e2631]:
+            - generic [ref=e2632]:
+              - generic [ref=e2633]:
+                - generic [ref=e2634]: Папка загрузок
+                - generic [ref=e2635]:
+                  - textbox "Папка загрузок" [ref=e2636]: /Музыка/Yandex Music
+                  - group [aria-hidden]:
+                    - generic: Папка загрузок
+              - button "Выбрать папку" [ref=e2637] [cursor=pointer]
+            - generic [ref=e2638]:
+              - generic [ref=e2639]: Качество по умолчанию
+              - generic [ref=e2640]:
+                - combobox "Качество по умолчанию" [ref=e2641] [cursor=pointer]: Лучшее доступное
+                - textbox [aria-hidden]: best
+                - group [aria-hidden]:
+                  - generic: Качество по умолчанию
+            - generic [ref=e2642]:
+              - generic [ref=e2643]: Параллельных загрузок
+              - generic [ref=e2644]:
+                - spinbutton "Параллельных загрузок" [ref=e2645]: "4"
+                - group [aria-hidden]:
+                  - generic: Параллельных загрузок
+          - alert [ref=e2646]:
+            - generic [ref=e2650]: Параллельность и уровень журнала применяются после перезапуска. Остальные настройки используются новыми заданиями; текущие загрузки сохраняют свои параметры.
+          - button "Сохранить настройки" [ref=e2651] [cursor=pointer]
+```
+
+$ ["eval", "() => {const b=[...document.querySelectorAll(\"button\")].find(b=>b.textContent===\"Выбрать папку\");const n=document.querySelector(\"input[type=number]\");return {button:{whiteSpace:getComputedStyle(b).whiteSpace,width:b.getBoundingClientRect().width,height:b.getBoundingClientRect().height},number:{min:n.min,max:n.max,step:n.step,width:n.getBoundingClientRect().width},scrollY};}"]
+### Result
+{
+  "button": {
+    "whiteSpace": "nowrap",
+    "width": 160,
+    "height": 37.125
+  },
+  "number": {
+    "min": "1",
+    "max": "8",
+    "step": "1",
+    "width": 220
+  },
+  "scrollY": 0
+}
+### Ran Playwright code
+```js
+await page.evaluate('() => {const b=[...document.querySelectorAll("button")].find(b=>b.textContent==="Выбрать папку");const n=document.querySelector("input[type=number]");return {button:{whiteSpace:getComputedStyle(b).whiteSpace,width:b.getBoundingClientRect().width,height:b.getBoundingClientRect().height},number:{min:n.min,max:n.max,step:n.step,width:n.getBoundingClientRect().width},scrollY};}');
+```
+
+$ ["screenshot", "--filename=/home/user/github.com/yarkovaleksei/yandex-music-downloader/apps/desktop/evidence/STEP-059/screenshots/settings.png"]
+### Result
+- [Screenshot of viewport](../../../../apps/desktop/evidence/STEP-059/screenshots/settings.png)
+### Ran Playwright code
+```js
+// Screenshot viewport and save it as ../../../../apps/desktop/evidence/STEP-059/screenshots/settings.png
+await page.screenshot({
+  path: '../../../../apps/desktop/evidence/STEP-059/screenshots/settings.png',
+  scale: 'css',
+  type: 'png'
+});
+```
+
+$ ["fill", "e2645", "0"]
+### Ran Playwright code
+```js
+await page.getByRole('spinbutton', { name: 'Параллельных загрузок' }).fill('0');
+```
+
+$ ["snapshot"]
+### Page
+- Page URL: http://127.0.0.1:4189/?scenario=availability-delayed
+- Page Title: STEP-059 · синтетическая fixture
+### Snapshot
+```yaml
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - heading "Yandex Music Downloader" [level=3] [ref=e7]
+    - button [ref=e8] [cursor=pointer]
+    - button [ref=e12] [cursor=pointer]
+    - button [ref=e16] [cursor=pointer]
+    - button [ref=e20] [cursor=pointer]
+    - button [ref=e24] [cursor=pointer]
+    - button [ref=e28] [cursor=pointer]
+    - generic [ref=e33] [cursor=pointer]:
+      - switch "Тёмная тема" [ref=e36]
+      - generic [ref=e39]: Тёмная тема
+    - separator [ref=e40]
+    - paragraph [ref=e41]: Вы вошли как Тестовый пользователь
+    - button "Выйти" [ref=e42] [cursor=pointer]
+  - main [ref=e43]:
+    - generic [ref=e44]:
+      - generic [ref=e45]: Приложение подключено
+      - generic [ref=e2616]:
+        - heading "Настройки" [level=1] [ref=e2617]
+        - paragraph [ref=e2618]: Загрузка музыки и параметры приложения
+        - tablist "Разделы настроек" [ref=e2621]:
+          - tab "Основные" [selected] [ref=e2622] [cursor=pointer]
+          - tab "Загрузка" [ref=e2623] [cursor=pointer]
+          - tab "Файлы" [ref=e2624] [cursor=pointer]
+          - tab "Внешний вид" [ref=e2625] [cursor=pointer]
+          - tab "О программе" [ref=e2626] [cursor=pointer]
+        - generic [ref=e2629]:
+          - generic [ref=e2631]:
+            - generic [ref=e2632]:
+              - generic [ref=e2633]:
+                - generic [ref=e2634]: Папка загрузок
+                - generic [ref=e2635]:
+                  - textbox "Папка загрузок" [ref=e2636]: /Музыка/Yandex Music
+                  - group [aria-hidden]:
+                    - generic: Папка загрузок
+              - button "Выбрать папку" [ref=e2637] [cursor=pointer]
+            - generic [ref=e2638]:
+              - generic [ref=e2639]: Качество по умолчанию
+              - generic [ref=e2640]:
+                - combobox "Качество по умолчанию" [ref=e2641] [cursor=pointer]: Лучшее доступное
+                - textbox [aria-hidden]: best
+                - group [aria-hidden]:
+                  - generic: Качество по умолчанию
+            - generic [ref=e2642]:
+              - generic [ref=e2643]: Параллельных загрузок
+              - generic [ref=e2644]:
+                - spinbutton "Параллельных загрузок" [active] [invalid] [ref=e2645]: "0"
+                - group [aria-hidden]:
+                  - generic: Параллельных загрузок
+              - paragraph [ref=e2652]: Введите целое число от 1 до 8.
+          - alert [ref=e2646]:
+            - generic [ref=e2650]: Параллельность и уровень журнала применяются после перезапуска. Остальные настройки используются новыми заданиями; текущие загрузки сохраняют свои параметры.
+          - button "Сохранить настройки" [disabled]
+```
+
+$ ["screenshot", "--filename=/home/user/github.com/yarkovaleksei/yandex-music-downloader/apps/desktop/evidence/STEP-059/screenshots/settings-invalid.png"]
+### Result
+- [Screenshot of viewport](../../../../apps/desktop/evidence/STEP-059/screenshots/settings-invalid.png)
+### Ran Playwright code
+```js
+// Screenshot viewport and save it as ../../../../apps/desktop/evidence/STEP-059/screenshots/settings-invalid.png
+await page.screenshot({
+  path: '../../../../apps/desktop/evidence/STEP-059/screenshots/settings-invalid.png',
+  scale: 'css',
+  type: 'png'
+});
+```
+
+$ ["fill", "e2645", "8"]
+### Ran Playwright code
+```js
+await page.getByRole('spinbutton', { name: 'Параллельных загрузок' }).fill('8');
+```
+
+$ ["click", "button:has-text(\"Сохранить настройки\")"]
+### Ran Playwright code
+```js
+await page.locator('button:has-text("Сохранить настройки")').click();
+```
+### Page
+- Page URL: http://127.0.0.1:4189/?scenario=availability-delayed
+- Page Title: STEP-059 · синтетическая fixture
+### Snapshot
+- [Snapshot](.playwright-cli/page-2026-10-29T20-21-51-926Z.yml)
+
+$ ["click", "[role=tab]:has-text(\"О программе\")"]
+### Ran Playwright code
+```js
+await page.locator('[role=tab]:has-text("О программе")').click();
+```
+### Page
+- Page URL: http://127.0.0.1:4189/?scenario=availability-delayed
+- Page Title: STEP-059 · синтетическая fixture
+### Snapshot
+- [Snapshot](.playwright-cli/page-2026-10-29T20-21-52-808Z.yml)
+
+$ ["snapshot"]
+### Page
+- Page URL: http://127.0.0.1:4189/?scenario=availability-delayed
+- Page Title: STEP-059 · синтетическая fixture
+### Snapshot
+```yaml
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - heading "Yandex Music Downloader" [level=3] [ref=e7]
+    - button [ref=e8] [cursor=pointer]
+    - button [ref=e12] [cursor=pointer]
+    - button [ref=e16] [cursor=pointer]
+    - button [ref=e20] [cursor=pointer]
+    - button [ref=e24] [cursor=pointer]
+    - button [ref=e28] [cursor=pointer]
+    - generic [ref=e33] [cursor=pointer]:
+      - switch "Тёмная тема" [ref=e36]
+      - generic [ref=e39]: Тёмная тема
+    - separator [ref=e40]
+    - paragraph [ref=e41]: Вы вошли как Тестовый пользователь
+    - button "Выйти" [ref=e42] [cursor=pointer]
+  - main [ref=e43]:
+    - generic [ref=e44]:
+      - generic [ref=e45]: Приложение подключено
+      - generic [ref=e2616]:
+        - heading "Настройки" [level=1] [ref=e2617]
+        - paragraph [ref=e2618]: Загрузка музыки и параметры приложения
+        - tablist "Разделы настроек" [ref=e2621]:
+          - tab "Основные" [ref=e2622] [cursor=pointer]
+          - tab "Загрузка" [ref=e2623] [cursor=pointer]
+          - tab "Файлы" [ref=e2624] [cursor=pointer]
+          - tab "Внешний вид" [ref=e2625] [cursor=pointer]
+          - tab "О программе" [active] [selected] [ref=e2626] [cursor=pointer]
+        - heading "Yandex Music Downloader" [level=2] [ref=e2658]
+        - paragraph [ref=e2659]: Музыка с вами, даже офлайн
+        - paragraph [ref=e2660]: "Версия: 0.0.0-synthetic (dev)"
+        - generic [ref=e2662]:
+          - heading "Обновления приложения" [level=2] [ref=e2663]
+          - paragraph [ref=e2664]: Проверка и скачивание запускаются только по вашей команде. После скачивания закройте приложение и замените portable-файлы. Настройки и история останутся на месте.
+          - button "Проверить обновления" [ref=e2666] [cursor=pointer]
+        - alert [ref=e2653]:
+          - generic [ref=e2657]: Настройки сохранены. Изменения параллельности и логирования применятся после перезапуска.
+```
+
+$ ["screenshot", "--filename=/home/user/github.com/yarkovaleksei/yandex-music-downloader/apps/desktop/evidence/STEP-059/screenshots/about.png"]
+### Result
+- [Screenshot of viewport](../../../../apps/desktop/evidence/STEP-059/screenshots/about.png)
+### Ran Playwright code
+```js
+// Screenshot viewport and save it as ../../../../apps/desktop/evidence/STEP-059/screenshots/about.png
+await page.screenshot({
+  path: '../../../../apps/desktop/evidence/STEP-059/screenshots/about.png',
+  scale: 'css',
+  type: 'png'
+});
+```
+
+$ ["eval", "() => ({checkUpdate:window.step059Fixture.counters.checkUpdate,savedConcurrency:JSON.parse(localStorage.getItem(\"step059-settings\")).concurrency})"]
+### Result
+{
+  "checkUpdate": 0,
+  "savedConcurrency": 8
+}
+### Ran Playwright code
+```js
+await page.evaluate('() => ({checkUpdate:window.step059Fixture.counters.checkUpdate,savedConcurrency:JSON.parse(localStorage.getItem("step059-settings")).concurrency})');
+```
+
+$ ["click", "[role=tab]:has-text(\"Загрузка\")"]
+### Ran Playwright code
+```js
+await page.locator('[role=tab]:has-text("Загрузка")').click();
+```
+### Page
+- Page URL: http://127.0.0.1:4189/?scenario=availability-delayed
+- Page Title: STEP-059 · синтетическая fixture
+### Snapshot
+- [Snapshot](.playwright-cli/page-2026-10-29T20-22-05-752Z.yml)
+
+$ ["screenshot", "--filename=/home/user/github.com/yarkovaleksei/yandex-music-downloader/apps/desktop/evidence/STEP-059/screenshots/download-settings.png"]
+### Result
+- [Screenshot of viewport](../../../../apps/desktop/evidence/STEP-059/screenshots/download-settings.png)
+### Ran Playwright code
+```js
+// Screenshot viewport and save it as ../../../../apps/desktop/evidence/STEP-059/screenshots/download-settings.png
+await page.screenshot({
+  path: '../../../../apps/desktop/evidence/STEP-059/screenshots/download-settings.png',
+  scale: 'css',
+  type: 'png'
+});
+```
+
+$ ["click", "aside button:has-text(\"Аккаунт\")"]
+### Ran Playwright code
+```js
+await page.locator('aside button:has-text("Аккаунт")').click();
+```
+### Page
+- Page URL: http://127.0.0.1:4189/?scenario=availability-delayed
+- Page Title: STEP-059 · синтетическая fixture
+### Snapshot
+- [Snapshot](.playwright-cli/page-2026-10-29T20-22-07-090Z.yml)
+
+$ ["snapshot"]
+### Page
+- Page URL: http://127.0.0.1:4189/?scenario=availability-delayed
+- Page Title: STEP-059 · синтетическая fixture
+### Snapshot
+```yaml
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - heading "Yandex Music Downloader" [level=3] [ref=e7]
+    - button [ref=e8] [cursor=pointer]
+    - button [ref=e12] [cursor=pointer]
+    - button [ref=e16] [cursor=pointer]
+    - button [ref=e20] [cursor=pointer]
+    - button [active] [ref=e24] [cursor=pointer]
+    - button [ref=e28] [cursor=pointer]
+    - generic [ref=e33] [cursor=pointer]:
+      - switch "Тёмная тема" [ref=e36]
+      - generic [ref=e39]: Тёмная тема
+    - separator [ref=e40]
+    - paragraph [ref=e41]: Вы вошли как Тестовый пользователь
+    - button "Выйти" [ref=e42] [cursor=pointer]
+  - main [ref=e43]:
+    - generic [ref=e44]:
+      - generic [ref=e45]: Приложение подключено
+      - generic [ref=e2697]:
+        - heading "Аккаунт" [level=1] [ref=e2698]
+        - paragraph [ref=e2699]: Подключение к Яндекс Музыке
+        - generic [ref=e2701]:
+          - img "Аватар аккаунта" [ref=e2703]
+          - generic [ref=e2704]:
+            - heading "Тестовый пользователь" [level=2] [ref=e2705]
+            - paragraph [ref=e2706]: synthetic@example.test
+          - generic [ref=e2707]: Авторизация активна
+          - button "Выйти из аккаунта" [ref=e2710] [cursor=pointer]
+        - heading "Подписка" [level=2] [ref=e2711]
+        - paragraph [ref=e2713]: Яндекс Плюс активен
+        - heading "Информация" [level=2] [ref=e2714]
+        - generic [ref=e2716]:
+          - generic [ref=e2717]:
+            - term [ref=e2718]: ID аккаунта
+            - definition [ref=e2719]: synthetic-account
+          - generic [ref=e2720]:
+            - term [ref=e2721]: Email
+            - definition [ref=e2722]: synthetic@example.test
+          - generic [ref=e2723]:
+            - term [ref=e2724]: Регион
+            - definition [ref=e2725]: Тестовый регион
+          - generic [ref=e2726]:
+            - term [ref=e2727]: Тип подписки
+            - definition [ref=e2728]: Яндекс Плюс активен
+          - generic [ref=e2729]:
+            - term [ref=e2730]: Доступные форматы
+            - definition [ref=e2731]: "Общего перечня нет: сервис сообщает варианты при анализе конкретного трека. Подписка не гарантирует доступность отдельного формата."
+        - alert [ref=e2732]:
+          - generic [ref=e2736]: Данные входа находятся в защищённом хранилище операционной системы. Выход удаляет сохранённый токен этого приложения.
+```
+
+$ ["screenshot", "--filename=/home/user/github.com/yarkovaleksei/yandex-music-downloader/apps/desktop/evidence/STEP-059/screenshots/account-plus-avatar.png"]
+### Result
+- [Screenshot of viewport](../../../../apps/desktop/evidence/STEP-059/screenshots/account-plus-avatar.png)
+### Ran Playwright code
+```js
+// Screenshot viewport and save it as ../../../../apps/desktop/evidence/STEP-059/screenshots/account-plus-avatar.png
+await page.screenshot({
+  path: '../../../../apps/desktop/evidence/STEP-059/screenshots/account-plus-avatar.png',
+  scale: 'css',
+  type: 'png'
+});
+```
+
+$ ["goto", "http://127.0.0.1:4189/?scenario=unknown"]
+### Ran Playwright code
+```js
+await page.goto('http://127.0.0.1:4189/?scenario=unknown');
+```
+### Page
+- Page URL: http://127.0.0.1:4189/?scenario=unknown
+- Page Title: STEP-059 · синтетическая fixture
+### Snapshot
+- [Snapshot](.playwright-cli/page-2026-10-29T20-22-33-247Z.yml)
+### Events
+- New console entries: .playwright-cli/console-2026-10-29T20-22-33-075Z.log#L1
+
+$ ["click", "aside button:has-text(\"Аккаунт\")"]
+### Ran Playwright code
+```js
+await page.locator('aside button:has-text("Аккаунт")').click();
+```
+### Page
+- Page URL: http://127.0.0.1:4189/?scenario=unknown
+- Page Title: STEP-059 · синтетическая fixture
+### Snapshot
+- [Snapshot](.playwright-cli/page-2026-10-29T20-22-34-173Z.yml)
+
+$ ["snapshot"]
+### Page
+- Page URL: http://127.0.0.1:4189/?scenario=unknown
+- Page Title: STEP-059 · синтетическая fixture
+### Snapshot
+```yaml
+- generic [ref=f1e3]:
+  - complementary [ref=f1e4]:
+    - heading "Yandex Music Downloader" [level=3] [ref=f1e7]
+    - button [ref=f1e8] [cursor=pointer]
+    - button [ref=f1e12] [cursor=pointer]
+    - button [ref=f1e16] [cursor=pointer]
+    - button [ref=f1e20] [cursor=pointer]
+    - button [active] [ref=f1e24] [cursor=pointer]
+    - button [ref=f1e28] [cursor=pointer]
+    - generic [ref=f1e33] [cursor=pointer]:
+      - switch "Тёмная тема" [ref=f1e36]
+      - generic [ref=f1e39]: Тёмная тема
+    - separator [ref=f1e40]
+    - paragraph [ref=f1e41]: Вы вошли как Тестовый пользователь
+    - button "Выйти" [ref=f1e42] [cursor=pointer]
+  - main [ref=f1e43]:
+    - generic [ref=f1e44]:
+      - generic [ref=f1e45]: Приложение подключено
+      - generic [ref=f1e63]:
+        - heading "Аккаунт" [level=1] [ref=f1e64]
+        - paragraph [ref=f1e65]: Подключение к Яндекс Музыке
+        - generic [ref=f1e67]:
+          - generic [ref=f1e68]: Т
+          - generic [ref=f1e69]:
+            - heading "Тестовый пользователь" [level=2] [ref=f1e70]
+            - paragraph [ref=f1e71]: synthetic@example.test
+          - generic [ref=f1e72]: Авторизация активна
+          - button "Выйти из аккаунта" [ref=f1e75] [cursor=pointer]
+        - heading "Подписка" [level=2] [ref=f1e76]
+        - paragraph [ref=f1e78]: Сервис не передал достаточно данных, чтобы определить подписку.
+        - heading "Информация" [level=2] [ref=f1e79]
+        - generic [ref=f1e81]:
+          - generic [ref=f1e82]:
+            - term [ref=f1e83]: ID аккаунта
+            - definition [ref=f1e84]: synthetic-account
+          - generic [ref=f1e85]:
+            - term [ref=f1e86]: Email
+            - definition [ref=f1e87]: synthetic@example.test
+          - generic [ref=f1e88]:
+            - term [ref=f1e89]: Регион
+            - definition [ref=f1e90]: Тестовый регион
+          - generic [ref=f1e91]:
+            - term [ref=f1e92]: Тип подписки
+            - definition [ref=f1e93]: Сервис не передал достаточно данных, чтобы определить подписку.
+          - generic [ref=f1e94]:
+            - term [ref=f1e95]: Доступные форматы
+            - definition [ref=f1e96]: "Общего перечня нет: сервис сообщает варианты при анализе конкретного трека. Подписка не гарантирует доступность отдельного формата."
+        - alert [ref=f1e97]:
+          - generic [ref=f1e101]: Данные входа находятся в защищённом хранилище операционной системы. Выход удаляет сохранённый токен этого приложения.
+```
+
+$ ["screenshot", "--filename=/home/user/github.com/yarkovaleksei/yandex-music-downloader/apps/desktop/evidence/STEP-059/screenshots/account-unknown.png"]
+### Result
+- [Screenshot of viewport](../../../../apps/desktop/evidence/STEP-059/screenshots/account-unknown.png)
+### Ran Playwright code
+```js
+// Screenshot viewport and save it as ../../../../apps/desktop/evidence/STEP-059/screenshots/account-unknown.png
+await page.screenshot({
+  path: '../../../../apps/desktop/evidence/STEP-059/screenshots/account-unknown.png',
+  scale: 'css',
+  type: 'png'
+});
+```
+
+$ ["goto", "http://127.0.0.1:4189/?scenario=avatar-late"]
+### Ran Playwright code
+```js
+await page.goto('http://127.0.0.1:4189/?scenario=avatar-late');
+```
+### Page
+- Page URL: http://127.0.0.1:4189/?scenario=avatar-late
+- Page Title: STEP-059 · синтетическая fixture
+### Snapshot
+- [Snapshot](.playwright-cli/page-2026-10-29T20-22-35-533Z.yml)
+### Events
+- New console entries: .playwright-cli/console-2026-10-29T20-22-35-371Z.log#L1
+
+$ ["click", "aside button:has-text(\"Аккаунт\")"]
+### Ran Playwright code
+```js
+await page.locator('aside button:has-text("Аккаунт")').click();
+```
+### Page
+- Page URL: http://127.0.0.1:4189/?scenario=avatar-late
+- Page Title: STEP-059 · синтетическая fixture
+### Snapshot
+- [Snapshot](.playwright-cli/page-2026-10-29T20-22-36-439Z.yml)
+
+$ ["eval", "() => ({content:document.querySelector(\"main\").innerText,avatarImages:[...document.images].filter(i=>i.alt===\"Аватар аккаунта\").length,counters:window.step059Fixture.counters})"]
+### Result
+{
+  "content": "Приложение подключено\nАккаунт\n\nПодключение к Яндекс Музыке\n\nТ\nТестовый пользователь\n\nsynthetic@example.test\n\nАвторизация активна\nВыйти из аккаунта\nПодписка\n\nЯндекс Плюс активен\n\nИнформация\nID аккаунта\nsynthetic-account\nEmail\nsynthetic@example.test\nРегион\nТестовый регион\nТип подписки\nЯндекс Плюс активен\nДоступные форматы\nОбщего перечня нет: сервис сообщает варианты при анализе конкретного трека. Подписка не гарантирует доступность отдельного формата.\nДанные входа находятся в защищённом хранилище операционной системы. Выход удаляет сохранённый токен этого приложения.",
+  "avatarImages": 0,
+  "counters": {
+    "history": 0,
+    "historyArtwork": 0,
+    "availability": 0,
+    "folder": 0,
+    "account": 2,
+    "avatar": 1,
+    "checkUpdate": 0
+  }
+}
+### Ran Playwright code
+```js
+await page.evaluate('() => ({content:document.querySelector("main").innerText,avatarImages:[...document.images].filter(i=>i.alt==="Аватар аккаунта").length,counters:window.step059Fixture.counters})');
+```
+
+$ ["screenshot", "--filename=/home/user/github.com/yarkovaleksei/yandex-music-downloader/apps/desktop/evidence/STEP-059/screenshots/account-avatar-pending.png"]
+### Result
+- [Screenshot of viewport](../../../../apps/desktop/evidence/STEP-059/screenshots/account-avatar-pending.png)
+### Ran Playwright code
+```js
+// Screenshot viewport and save it as ../../../../apps/desktop/evidence/STEP-059/screenshots/account-avatar-pending.png
+await page.screenshot({
+  path: '../../../../apps/desktop/evidence/STEP-059/screenshots/account-avatar-pending.png',
+  scale: 'css',
+  type: 'png'
+});
+```
+
+$ ["click", "button:has-text(\"Выйти из аккаунта\")"]
+### Ran Playwright code
+```js
+await page.locator('button:has-text("Выйти из аккаунта")').click();
+```
+### Page
+- Page URL: http://127.0.0.1:4189/?scenario=avatar-late
+- Page Title: STEP-059 · синтетическая fixture
+### Snapshot
+- [Snapshot](.playwright-cli/page-2026-10-29T20-22-38-638Z.yml)
+
+$ ["eval", "() => window.step059Fixture.settleAvatar()"]
+### Result
+undefined
+### Ran Playwright code
+```js
+await page.evaluate('() => window.step059Fixture.settleAvatar()');
+```
+
+$ ["snapshot"]
+### Page
+- Page URL: http://127.0.0.1:4189/?scenario=avatar-late
+- Page Title: STEP-059 · синтетическая fixture
+### Snapshot
+```yaml
+- generic [ref=f2e3]:
+  - complementary [ref=f2e4]:
+    - heading "Yandex Music Downloader" [level=3] [ref=f2e7]
+    - button [ref=f2e8] [cursor=pointer]
+    - button [ref=f2e12] [cursor=pointer]
+    - button [ref=f2e16] [cursor=pointer]
+    - button [ref=f2e20] [cursor=pointer]
+    - button [ref=f2e24] [cursor=pointer]
+    - button [ref=f2e28] [cursor=pointer]
+    - generic [ref=f2e33] [cursor=pointer]:
+      - switch "Тёмная тема" [ref=f2e36]
+      - generic [ref=f2e39]: Тёмная тема
+    - separator [ref=f2e40]
+    - paragraph [ref=f2e41]: Войдите, чтобы подключить музыку
+    - button "Войти через браузер" [ref=f2e102] [cursor=pointer]
+    - generic [ref=f2e103]: Данные входа сохраняются в защищённом хранилище операционной системы.
+  - main [ref=f2e43]:
+    - generic [ref=f2e44]:
+      - generic [ref=f2e45]: Приложение подключено
+      - generic [ref=f2e63]:
+        - heading "Аккаунт" [level=1] [ref=f2e64]
+        - paragraph [ref=f2e65]: Подключение к Яндекс Музыке
+        - generic [ref=f2e67]:
+          - generic [ref=f2e68]: Я
+          - generic [ref=f2e69]:
+            - heading "Аккаунт не подключён" [level=2] [ref=f2e104]
+            - paragraph [ref=f2e71]: "Email: нет данных"
+          - generic [ref=f2e72]: Войдите через браузер, чтобы загружать доступную вам музыку
+          - button "Войти через браузер" [active] [ref=f2e105] [cursor=pointer]
+        - alert [ref=f2e97]:
+          - generic [ref=f2e101]: Данные входа находятся в защищённом хранилище операционной системы. Выход удаляет сохранённый токен этого приложения.
+```
+
+$ ["screenshot", "--filename=/home/user/github.com/yarkovaleksei/yandex-music-downloader/apps/desktop/evidence/STEP-059/screenshots/account-logout-late.png"]
+### Result
+- [Screenshot of viewport](../../../../apps/desktop/evidence/STEP-059/screenshots/account-logout-late.png)
+### Ran Playwright code
+```js
+// Screenshot viewport and save it as ../../../../apps/desktop/evidence/STEP-059/screenshots/account-logout-late.png
+await page.screenshot({
+  path: '../../../../apps/desktop/evidence/STEP-059/screenshots/account-logout-late.png',
+  scale: 'css',
+  type: 'png'
+});
+```
+
+$ ["console", "error"]
+### Result
+Total messages: 1 (Errors: 0, Warnings: 0)
+Returning 0 messages for level "error"
+
+
+$ ["goto", "http://127.0.0.1:4189/?scenario=normal"]
+### Ran Playwright code
+```js
+await page.goto('http://127.0.0.1:4189/?scenario=normal');
+```
+### Page
+- Page URL: http://127.0.0.1:4189/?scenario=normal
+- Page Title: STEP-059 · синтетическая fixture
+### Snapshot
+- [Snapshot](.playwright-cli/page-2026-10-29T20-23-36-194Z.yml)
+### Events
+- New console entries: .playwright-cli/console-2026-10-29T20-23-35-656Z.log#L1
+
+$ ["click", "aside button:has-text(\"История\")"]
+### Ran Playwright code
+```js
+await page.locator('aside button:has-text("История")').click();
+```
+### Page
+- Page URL: http://127.0.0.1:4189/?scenario=normal
+- Page Title: STEP-059 · синтетическая fixture
+### Snapshot
+- [Snapshot](.playwright-cli/page-2026-10-29T20-23-39-089Z.yml)
+
+$ ["snapshot"]
+### Page
+- Page URL: http://127.0.0.1:4189/?scenario=normal
+- Page Title: STEP-059 · синтетическая fixture
+### Snapshot
+```yaml
+- generic [ref=f3e3]:
+  - complementary [ref=f3e4]:
+    - heading "Yandex Music Downloader" [level=3] [ref=f3e7]
+    - button [ref=f3e8] [cursor=pointer]
+    - button [ref=f3e12] [cursor=pointer]
+    - button [active] [ref=f3e16] [cursor=pointer]
+    - button [ref=f3e20] [cursor=pointer]
+    - button [ref=f3e24] [cursor=pointer]
+    - button [ref=f3e28] [cursor=pointer]
+    - generic [ref=f3e33] [cursor=pointer]:
+      - switch "Тёмная тема" [ref=f3e36]
+      - generic [ref=f3e39]: Тёмная тема
+    - separator [ref=f3e40]
+    - paragraph [ref=f3e41]: Вы вошли как Тестовый пользователь
+    - button "Выйти" [ref=f3e42] [cursor=pointer]
+  - main [ref=f3e43]:
+    - generic [ref=f3e44]:
+      - generic [ref=f3e45]: Приложение подключено
+      - generic [ref=f3e63]:
+        - heading "История загрузок" [level=1] [ref=f3e64]
+        - paragraph [ref=f3e65]: Ваша коллекция загруженной музыки
+        - generic [ref=f3e66]:
+          - generic [ref=f3e67]:
+            - generic: Поиск в истории
+            - generic [ref=f3e68]:
+              - textbox "Поиск в истории" [ref=f3e69]
+              - group [aria-hidden]:
+                - generic: Поиск в истории
+          - generic [ref=f3e70]:
+            - generic [ref=f3e71]: Тип
+            - generic [ref=f3e72]:
+              - combobox "Тип" [ref=f3e73] [cursor=pointer]: Все типы
+              - textbox [aria-hidden]: all
+              - group [aria-hidden]:
+                - generic: Тип
+          - generic [ref=f3e74]:
+            - generic [ref=f3e75]: Период
+            - generic [ref=f3e76]:
+              - combobox "Период" [ref=f3e77] [cursor=pointer]: За всё время
+              - textbox [aria-hidden]: all
+              - group [aria-hidden]:
+                - generic: Период
+        - generic [ref=f3e78]:
+          - generic [ref=f3e79]:
+            - generic [ref=f3e80]: Дата с
+            - generic [ref=f3e81]:
+              - textbox "Дата с" [ref=f3e82]
+              - group [aria-hidden]:
+                - generic: Дата с
+          - generic [ref=f3e83]:
+            - generic [ref=f3e84]: Дата по
+            - generic [ref=f3e85]:
+              - textbox "Дата по" [ref=f3e86]
+              - group [aria-hidden]:
+                - generic: Дата по
+        - paragraph [ref=f3e87]: "Найдено: 50"
+        - table [ref=f3e89]:
+          - rowgroup [ref=f3e90]:
+            - row [ref=f3e91]:
+              - columnheader [ref=f3e92]:
+                - button "Название" [ref=f3e93] [cursor=pointer]
+              - columnheader [ref=f3e96]:
+                - button "Тип" [ref=f3e97] [cursor=pointer]
+              - columnheader [ref=f3e100]:
+                - button "Треки" [ref=f3e101] [cursor=pointer]
+              - columnheader [ref=f3e104]:
+                - button "Размер" [ref=f3e105] [cursor=pointer]
+              - columnheader [ref=f3e108]:
+                - button "Дата" [ref=f3e109] [cursor=pointer]
+              - columnheader "Действия" [ref=f3e112]
+          - rowgroup [ref=f3e113]:
+            - row [ref=f3e114]:
+              - cell "Архив 01 — Вечерний вайб" [ref=f3e115]:
+                - link "Архив 01 — Вечерний вайб" [ref=f3e119] [cursor=pointer]:
+                  - /url: https://music.yandex.ru/album/1000
+              - cell "Плейлист" [ref=f3e120]
+              - cell "42 трека" [ref=f3e123]
+              - cell [ref=f3e124]:
+                - paragraph [ref=f3e125]: 12.4 МБ
+              - cell "28 окт. 2026 г., 18:24" [ref=f3e126]
+              - cell [ref=f3e127]:
+                - generic [ref=f3e128]:
+                  - generic "Скачать снова" [ref=f3e129]:
+                    - button "Скачать снова" [ref=f3e130] [cursor=pointer]
+                  - generic "Открыть папку" [ref=f3e133]:
+                    - button "Открыть папку" [ref=f3e134] [cursor=pointer]
+                  - button "Убрать из истории" [ref=f3e137] [cursor=pointer]
+            - row [ref=f3e140]:
+              - cell "Архив 02 — Сияй Тестовый исполнитель" [ref=f3e141]:
+                - generic [ref=f3e144]:
+                  - link "Архив 02 — Сияй" [ref=f3e145] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1001
+                  - paragraph [ref=f3e146]: Тестовый исполнитель
+              - cell "Трек" [ref=f3e147]
+              - cell "1 трек" [ref=f3e150]
+              - cell [ref=f3e151]:
+                - paragraph [ref=f3e152]: 24.8 МБ
+              - cell "27 окт. 2026 г., 18:24" [ref=f3e153]
+              - cell [ref=f3e154]:
+                - generic [ref=f3e155]:
+                  - generic "Скачать снова" [ref=f3e156]:
+                    - button "Скачать снова" [ref=f3e157] [cursor=pointer]
+                  - generic "Открыть папку" [ref=f3e160]:
+                    - button "Открыть папку" [ref=f3e161] [cursor=pointer]
+                  - button "Убрать из истории" [ref=f3e164] [cursor=pointer]
+            - row [ref=f3e167]:
+              - cell "Архив 03 — Лучшее Тестовый исполнитель" [ref=f3e168]:
+                - generic [ref=f3e171]:
+                  - link "Архив 03 — Лучшее" [ref=f3e172] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1002
+                  - paragraph [ref=f3e173]: Тестовый исполнитель
+              - cell "Альбом" [ref=f3e174]
+              - cell "12 треков" [ref=f3e177]
+              - cell [ref=f3e178]:
+                - paragraph [ref=f3e179]: 37.2 МБ
+              - cell "26 окт. 2026 г., 18:24" [ref=f3e180]
+              - cell [ref=f3e181]:
+                - generic [ref=f3e182]:
+                  - generic "Скачать снова" [ref=f3e183]:
+                    - button "Скачать снова" [ref=f3e184] [cursor=pointer]
+                  - generic "Открыть папку" [ref=f3e187]:
+                    - button "Открыть папку" [ref=f3e188] [cursor=pointer]
+                  - button "Убрать из истории" [ref=f3e191] [cursor=pointer]
+            - row [ref=f3e194]:
+              - cell "Архив 04 — Пламя" [ref=f3e195]:
+                - link "Архив 04 — Пламя" [ref=f3e199] [cursor=pointer]:
+                  - /url: https://music.yandex.ru/album/1003
+              - cell "Плейлист" [ref=f3e200]
+              - cell "42 трека" [ref=f3e203]
+              - cell [ref=f3e204]:
+                - paragraph [ref=f3e205]: 49.6 МБ
+              - cell "25 окт. 2026 г., 18:24" [ref=f3e206]
+              - cell [ref=f3e207]:
+                - generic [ref=f3e208]:
+                  - generic "Скачать снова" [ref=f3e209]:
+                    - button "Скачать снова" [ref=f3e210] [cursor=pointer]
+                  - generic "Открыть папку" [ref=f3e213]:
+                    - button "Открыть папку" [ref=f3e214] [cursor=pointer]
+                  - button "Убрать из истории" [ref=f3e217] [cursor=pointer]
+            - row [ref=f3e220]:
+              - cell "Архив 05 — Вечерний вайб Тестовый исполнитель" [ref=f3e221]:
+                - generic [ref=f3e224]:
+                  - link "Архив 05 — Вечерний вайб" [ref=f3e225] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1004
+                  - paragraph [ref=f3e226]: Тестовый исполнитель
+              - cell "Трек" [ref=f3e227]
+              - cell "1 трек" [ref=f3e230]
+              - cell [ref=f3e231]:
+                - paragraph [ref=f3e232]: 62.0 МБ
+              - cell "24 окт. 2026 г., 18:24" [ref=f3e233]
+              - cell [ref=f3e234]:
+                - generic [ref=f3e235]:
+                  - generic "Скачать снова" [ref=f3e236]:
+                    - button "Скачать снова" [ref=f3e237] [cursor=pointer]
+                  - generic "Открыть папку" [ref=f3e240]:
+                    - button "Открыть папку" [ref=f3e241] [cursor=pointer]
+                  - button "Убрать из истории" [ref=f3e244] [cursor=pointer]
+            - row [ref=f3e247]:
+              - cell "Архив 06 — Сияй Тестовый исполнитель" [ref=f3e248]:
+                - generic [ref=f3e251]:
+                  - link "Архив 06 — Сияй" [ref=f3e252] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1005
+                  - paragraph [ref=f3e253]: Тестовый исполнитель
+              - cell "Альбом" [ref=f3e254]
+              - cell "12 треков" [ref=f3e257]
+              - cell [ref=f3e258]:
+                - paragraph [ref=f3e259]: 74.4 МБ
+              - cell "23 окт. 2026 г., 18:24" [ref=f3e260]
+              - cell [ref=f3e261]:
+                - generic [ref=f3e262]:
+                  - generic "Скачать снова" [ref=f3e263]:
+                    - button "Скачать снова" [ref=f3e264] [cursor=pointer]
+                  - generic "Открыть папку" [ref=f3e267]:
+                    - button "Открыть папку" [ref=f3e268] [cursor=pointer]
+                  - button "Убрать из истории" [ref=f3e271] [cursor=pointer]
+            - row [ref=f3e274]:
+              - cell "Архив 07 — Лучшее" [ref=f3e275]:
+                - link "Архив 07 — Лучшее" [ref=f3e279] [cursor=pointer]:
+                  - /url: https://music.yandex.ru/album/1006
+              - cell "Плейлист" [ref=f3e280]
+              - cell "42 трека" [ref=f3e283]
+              - cell [ref=f3e284]:
+                - paragraph [ref=f3e285]: 86.8 МБ
+              - cell "22 окт. 2026 г., 18:24" [ref=f3e286]
+              - cell [ref=f3e287]:
+                - generic [ref=f3e288]:
+                  - generic "Скачать снова" [ref=f3e289]:
+                    - button "Скачать снова" [ref=f3e290] [cursor=pointer]
+                  - generic "Открыть папку" [ref=f3e293]:
+                    - button "Открыть папку" [ref=f3e294] [cursor=pointer]
+                  - button "Убрать из истории" [ref=f3e297] [cursor=pointer]
+            - row [ref=f3e300]:
+              - cell "Архив 08 — Пламя Тестовый исполнитель" [ref=f3e301]:
+                - generic [ref=f3e304]:
+                  - link "Архив 08 — Пламя" [ref=f3e305] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1007
+                  - paragraph [ref=f3e306]: Тестовый исполнитель
+              - cell "Трек" [ref=f3e307]
+              - cell "1 трек" [ref=f3e310]
+              - cell [ref=f3e311]:
+                - paragraph [ref=f3e312]: 99.2 МБ
+              - cell "21 окт. 2026 г., 18:24" [ref=f3e313]
+              - cell [ref=f3e314]:
+                - generic [ref=f3e315]:
+                  - generic "Скачать снова" [ref=f3e316]:
+                    - button "Скачать снова" [ref=f3e317] [cursor=pointer]
+                  - generic "Открыть папку" [ref=f3e320]:
+                    - button "Открыть папку" [ref=f3e321] [cursor=pointer]
+                  - button "Убрать из истории" [ref=f3e324] [cursor=pointer]
+            - row [ref=f3e327]:
+              - cell "Архив 09 — Вечерний вайб Тестовый исполнитель" [ref=f3e328]:
+                - generic [ref=f3e331]:
+                  - link "Архив 09 — Вечерний вайб" [ref=f3e332] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1008
+                  - paragraph [ref=f3e333]: Тестовый исполнитель
+              - cell "Альбом" [ref=f3e334]
+              - cell "12 треков" [ref=f3e337]
+              - cell [ref=f3e338]:
+                - paragraph [ref=f3e339]: 111.6 МБ
+              - cell "20 окт. 2026 г., 18:24" [ref=f3e340]
+              - cell [ref=f3e341]:
+                - generic [ref=f3e342]:
+                  - generic "Скачать снова" [ref=f3e343]:
+                    - button "Скачать снова" [ref=f3e344] [cursor=pointer]
+                  - generic "Открыть папку" [ref=f3e347]:
+                    - button "Открыть папку" [ref=f3e348] [cursor=pointer]
+                  - button "Убрать из истории" [ref=f3e351] [cursor=pointer]
+            - row [ref=f3e354]:
+              - cell "Архив 10 — Сияй" [ref=f3e355]:
+                - link "Архив 10 — Сияй" [ref=f3e359] [cursor=pointer]:
+                  - /url: https://music.yandex.ru/album/1009
+              - cell "Плейлист" [ref=f3e360]
+              - cell "42 трека" [ref=f3e363]
+              - cell [ref=f3e364]:
+                - paragraph [ref=f3e365]: 124.0 МБ
+              - cell "19 окт. 2026 г., 18:24" [ref=f3e366]
+              - cell [ref=f3e367]:
+                - generic [ref=f3e368]:
+                  - generic "Скачать снова" [ref=f3e369]:
+                    - button "Скачать снова" [ref=f3e370] [cursor=pointer]
+                  - generic "Открыть папку" [ref=f3e373]:
+                    - button "Открыть папку" [ref=f3e374] [cursor=pointer]
+                  - button "Убрать из истории" [ref=f3e377] [cursor=pointer]
+            - row [ref=f3e380]:
+              - cell "Архив 11 — Лучшее Тестовый исполнитель" [ref=f3e381]:
+                - generic [ref=f3e384]:
+                  - link "Архив 11 — Лучшее" [ref=f3e385] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1010
+                  - paragraph [ref=f3e386]: Тестовый исполнитель
+              - cell "Трек" [ref=f3e387]
+              - cell "1 трек" [ref=f3e390]
+              - cell [ref=f3e391]:
+                - paragraph [ref=f3e392]: 136.4 МБ
+              - cell "18 окт. 2026 г., 18:24" [ref=f3e393]
+              - cell [ref=f3e394]:
+                - generic [ref=f3e395]:
+                  - generic "Скачать снова" [ref=f3e396]:
+                    - button "Скачать снова" [ref=f3e397] [cursor=pointer]
+                  - generic "Открыть папку" [ref=f3e400]:
+                    - button "Открыть папку" [ref=f3e401] [cursor=pointer]
+                  - button "Убрать из истории" [ref=f3e404] [cursor=pointer]
+            - row [ref=f3e407]:
+              - cell "Архив 12 — Пламя Тестовый исполнитель" [ref=f3e408]:
+                - generic [ref=f3e411]:
+                  - link "Архив 12 — Пламя" [ref=f3e412] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1011
+                  - paragraph [ref=f3e413]: Тестовый исполнитель
+              - cell "Альбом" [ref=f3e414]
+              - cell "12 треков" [ref=f3e417]
+              - cell [ref=f3e418]:
+                - paragraph [ref=f3e419]: 148.8 МБ
+              - cell "17 окт. 2026 г., 18:24" [ref=f3e420]
+              - cell [ref=f3e421]:
+                - generic [ref=f3e422]:
+                  - generic "Скачать снова" [ref=f3e423]:
+                    - button "Скачать снова" [ref=f3e424] [cursor=pointer]
+                  - generic "Открыть папку" [ref=f3e427]:
+                    - button "Открыть папку" [ref=f3e428] [cursor=pointer]
+                  - button "Убрать из истории" [ref=f3e431] [cursor=pointer]
+            - row [ref=f3e434]:
+              - cell "Архив 13 — Вечерний вайб" [ref=f3e435]:
+                - link "Архив 13 — Вечерний вайб" [ref=f3e439] [cursor=pointer]:
+                  - /url: https://music.yandex.ru/album/1012
+              - cell "Плейлист" [ref=f3e440]
+              - cell "42 трека" [ref=f3e443]
+              - cell [ref=f3e444]:
+                - paragraph [ref=f3e445]: 161.2 МБ
+              - cell "16 окт. 2026 г., 18:24" [ref=f3e446]
+              - cell [ref=f3e447]:
+                - generic [ref=f3e448]:
+                  - generic "Скачать снова" [ref=f3e449]:
+                    - button "Скачать снова" [ref=f3e450] [cursor=pointer]
+                  - generic "Открыть папку" [ref=f3e453]:
+                    - button "Открыть папку" [ref=f3e454] [cursor=pointer]
+                  - button "Убрать из истории" [ref=f3e457] [cursor=pointer]
+            - row [ref=f3e460]:
+              - cell "Архив 14 — Сияй Тестовый исполнитель" [ref=f3e461]:
+                - generic [ref=f3e464]:
+                  - link "Архив 14 — Сияй" [ref=f3e465] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1013
+                  - paragraph [ref=f3e466]: Тестовый исполнитель
+              - cell "Трек" [ref=f3e467]
+              - cell "1 трек" [ref=f3e470]
+              - cell [ref=f3e471]:
+                - paragraph [ref=f3e472]: 173.6 МБ
+              - cell "15 окт. 2026 г., 18:24" [ref=f3e473]
+              - cell [ref=f3e474]:
+                - generic [ref=f3e475]:
+                  - generic "Скачать снова" [ref=f3e476]:
+                    - button "Скачать снова" [ref=f3e477] [cursor=pointer]
+                  - generic "Открыть папку" [ref=f3e480]:
+                    - button "Открыть папку" [ref=f3e481] [cursor=pointer]
+                  - button "Убрать из истории" [ref=f3e484] [cursor=pointer]
+            - row [ref=f3e487]:
+              - cell "Архив 15 — Лучшее Тестовый исполнитель" [ref=f3e488]:
+                - generic [ref=f3e491]:
+                  - link "Архив 15 — Лучшее" [ref=f3e492] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1014
+                  - paragraph [ref=f3e493]: Тестовый исполнитель
+              - cell "Альбом" [ref=f3e494]
+              - cell "12 треков" [ref=f3e497]
+              - cell [ref=f3e498]:
+                - paragraph [ref=f3e499]: 186.0 МБ
+              - cell "14 окт. 2026 г., 18:24" [ref=f3e500]
+              - cell [ref=f3e501]:
+                - generic [ref=f3e502]:
+                  - generic "Скачать снова" [ref=f3e503]:
+                    - button "Скачать снова" [ref=f3e504] [cursor=pointer]
+                  - generic "Открыть папку" [ref=f3e507]:
+                    - button "Открыть папку" [ref=f3e508] [cursor=pointer]
+                  - button "Убрать из истории" [ref=f3e511] [cursor=pointer]
+            - row [ref=f3e514]:
+              - cell "Архив 16 — Пламя" [ref=f3e515]:
+                - link "Архив 16 — Пламя" [ref=f3e519] [cursor=pointer]:
+                  - /url: https://music.yandex.ru/album/1015
+              - cell "Плейлист" [ref=f3e520]
+              - cell "42 трека" [ref=f3e523]
+              - cell [ref=f3e524]:
+                - paragraph [ref=f3e525]: 198.4 МБ
+              - cell "13 окт. 2026 г., 18:24" [ref=f3e526]
+              - cell [ref=f3e527]:
+                - generic [ref=f3e528]:
+                  - generic "Скачать снова" [ref=f3e529]:
+                    - button "Скачать снова" [ref=f3e530] [cursor=pointer]
+                  - generic "Открыть папку" [ref=f3e533]:
+                    - button "Открыть папку" [ref=f3e534] [cursor=pointer]
+                  - button "Убрать из истории" [ref=f3e537] [cursor=pointer]
+            - row [ref=f3e540]:
+              - cell "Архив 17 — Вечерний вайб Тестовый исполнитель" [ref=f3e541]:
+                - generic [ref=f3e544]:
+                  - link "Архив 17 — Вечерний вайб" [ref=f3e545] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1016
+                  - paragraph [ref=f3e546]: Тестовый исполнитель
+              - cell "Трек" [ref=f3e547]
+              - cell "1 трек" [ref=f3e550]
+              - cell [ref=f3e551]:
+                - paragraph [ref=f3e552]: 210.8 МБ
+              - cell "12 окт. 2026 г., 18:24" [ref=f3e553]
+              - cell [ref=f3e554]:
+                - generic [ref=f3e555]:
+                  - generic "Скачать снова" [ref=f3e556]:
+                    - button "Скачать снова" [ref=f3e557] [cursor=pointer]
+                  - generic "Открыть папку" [ref=f3e560]:
+                    - button "Открыть папку" [ref=f3e561] [cursor=pointer]
+                  - button "Убрать из истории" [ref=f3e564] [cursor=pointer]
+            - row [ref=f3e567]:
+              - cell "Архив 18 — Сияй Тестовый исполнитель" [ref=f3e568]:
+                - generic [ref=f3e571]:
+                  - link "Архив 18 — Сияй" [ref=f3e572] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1017
+                  - paragraph [ref=f3e573]: Тестовый исполнитель
+              - cell "Альбом" [ref=f3e574]
+              - cell "12 треков" [ref=f3e577]
+              - cell [ref=f3e578]:
+                - paragraph [ref=f3e579]: 223.2 МБ
+              - cell "11 окт. 2026 г., 18:24" [ref=f3e580]
+              - cell [ref=f3e581]:
+                - generic [ref=f3e582]:
+                  - generic "Скачать снова" [ref=f3e583]:
+                    - button "Скачать снова" [ref=f3e584] [cursor=pointer]
+                  - generic "Открыть папку" [ref=f3e587]:
+                    - button "Открыть папку" [ref=f3e588] [cursor=pointer]
+                  - button "Убрать из истории" [ref=f3e591] [cursor=pointer]
+            - row [ref=f3e594]:
+              - cell "Архив 19 — Лучшее" [ref=f3e595]:
+                - link "Архив 19 — Лучшее" [ref=f3e599] [cursor=pointer]:
+                  - /url: https://music.yandex.ru/album/1018
+              - cell "Плейлист" [ref=f3e600]
+              - cell "42 трека" [ref=f3e603]
+              - cell [ref=f3e604]:
+                - paragraph [ref=f3e605]: 235.6 МБ
+              - cell "10 окт. 2026 г., 18:24" [ref=f3e606]
+              - cell [ref=f3e607]:
+                - generic [ref=f3e608]:
+                  - generic "Скачать снова" [ref=f3e609]:
+                    - button "Скачать снова" [ref=f3e610] [cursor=pointer]
+                  - generic "Открыть папку" [ref=f3e613]:
+                    - button "Открыть папку" [ref=f3e614] [cursor=pointer]
+                  - button "Убрать из истории" [ref=f3e617] [cursor=pointer]
+            - row [ref=f3e620]:
+              - cell "Архив 20 — Пламя Тестовый исполнитель" [ref=f3e621]:
+                - generic [ref=f3e624]:
+                  - link "Архив 20 — Пламя" [ref=f3e625] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1019
+                  - paragraph [ref=f3e626]: Тестовый исполнитель
+              - cell "Трек" [ref=f3e627]
+              - cell "1 трек" [ref=f3e630]
+              - cell [ref=f3e631]:
+                - paragraph [ref=f3e632]: 248.0 МБ
+              - cell "9 окт. 2026 г., 18:24" [ref=f3e633]
+              - cell [ref=f3e634]:
+                - generic [ref=f3e635]:
+                  - generic "Скачать снова" [ref=f3e636]:
+                    - button "Скачать снова" [ref=f3e637] [cursor=pointer]
+                  - generic "Открыть папку" [ref=f3e640]:
+                    - button "Открыть папку" [ref=f3e641] [cursor=pointer]
+                  - button "Убрать из истории" [ref=f3e644] [cursor=pointer]
+            - row [ref=f3e647]:
+              - cell "Архив 21 — Вечерний вайб Тестовый исполнитель" [ref=f3e648]:
+                - generic [ref=f3e651]:
+                  - link "Архив 21 — Вечерний вайб" [ref=f3e652] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1020
+                  - paragraph [ref=f3e653]: Тестовый исполнитель
+              - cell "Альбом" [ref=f3e654]
+              - cell "12 треков" [ref=f3e657]
+              - cell [ref=f3e658]:
+                - paragraph [ref=f3e659]: 260.4 МБ
+              - cell "8 окт. 2026 г., 18:24" [ref=f3e660]
+              - cell [ref=f3e661]:
+                - generic [ref=f3e662]:
+                  - generic "Скачать снова" [ref=f3e663]:
+                    - button "Скачать снова" [ref=f3e664] [cursor=pointer]
+                  - generic "Открыть папку" [ref=f3e667]:
+                    - button "Открыть папку" [ref=f3e668] [cursor=pointer]
+                  - button "Убрать из истории" [ref=f3e671] [cursor=pointer]
+            - row [ref=f3e674]:
+              - cell "Архив 22 — Сияй" [ref=f3e675]:
+                - link "Архив 22 — Сияй" [ref=f3e679] [cursor=pointer]:
+                  - /url: https://music.yandex.ru/album/1021
+              - cell "Плейлист" [ref=f3e680]
+              - cell "42 трека" [ref=f3e683]
+              - cell [ref=f3e684]:
+                - paragraph [ref=f3e685]: 272.8 МБ
+              - cell "7 окт. 2026 г., 18:24" [ref=f3e686]
+              - cell [ref=f3e687]:
+                - generic [ref=f3e688]:
+                  - generic "Скачать снова" [ref=f3e689]:
+                    - button "Скачать снова" [ref=f3e690] [cursor=pointer]
+                  - generic "Открыть папку" [ref=f3e693]:
+                    - button "Открыть папку" [ref=f3e694] [cursor=pointer]
+                  - button "Убрать из истории" [ref=f3e697] [cursor=pointer]
+            - row [ref=f3e700]:
+              - cell "Архив 23 — Лучшее Тестовый исполнитель" [ref=f3e701]:
+                - generic [ref=f3e704]:
+                  - link "Архив 23 — Лучшее" [ref=f3e705] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1022
+                  - paragraph [ref=f3e706]: Тестовый исполнитель
+              - cell "Трек" [ref=f3e707]
+              - cell "1 трек" [ref=f3e710]
+              - cell [ref=f3e711]:
+                - paragraph [ref=f3e712]: 285.2 МБ
+              - cell "6 окт. 2026 г., 18:24" [ref=f3e713]
+              - cell [ref=f3e714]:
+                - generic [ref=f3e715]:
+                  - generic "Скачать снова" [ref=f3e716]:
+                    - button "Скачать снова" [ref=f3e717] [cursor=pointer]
+                  - generic "Открыть папку" [ref=f3e720]:
+                    - button "Открыть папку" [ref=f3e721] [cursor=pointer]
+                  - button "Убрать из истории" [ref=f3e724] [cursor=pointer]
+            - row [ref=f3e727]:
+              - cell "Архив 24 — Пламя Тестовый исполнитель" [ref=f3e728]:
+                - generic [ref=f3e731]:
+                  - link "Архив 24 — Пламя" [ref=f3e732] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1023
+                  - paragraph [ref=f3e733]: Тестовый исполнитель
+              - cell "Альбом" [ref=f3e734]
+              - cell "12 треков" [ref=f3e737]
+              - cell [ref=f3e738]:
+                - paragraph [ref=f3e739]: 297.6 МБ
+              - cell "5 окт. 2026 г., 18:24" [ref=f3e740]
+              - cell [ref=f3e741]:
+                - generic [ref=f3e742]:
+                  - generic "Скачать снова" [ref=f3e743]:
+                    - button "Скачать снова" [ref=f3e744] [cursor=pointer]
+                  - generic "Открыть папку" [ref=f3e747]:
+                    - button "Открыть папку" [ref=f3e748] [cursor=pointer]
+                  - button "Убрать из истории" [ref=f3e751] [cursor=pointer]
+            - row [ref=f3e754]:
+              - cell "Архив 25 — Вечерний вайб" [ref=f3e755]:
+                - link "Архив 25 — Вечерний вайб" [ref=f3e759] [cursor=pointer]:
+                  - /url: https://music.yandex.ru/album/1024
+              - cell "Плейлист" [ref=f3e760]
+              - cell "42 трека" [ref=f3e763]
+              - cell [ref=f3e764]:
+                - paragraph [ref=f3e765]: 310.0 МБ
+              - cell "4 окт. 2026 г., 18:24" [ref=f3e766]
+              - cell [ref=f3e767]:
+                - generic [ref=f3e768]:
+                  - generic "Скачать снова" [ref=f3e769]:
+                    - button "Скачать снова" [ref=f3e770] [cursor=pointer]
+                  - generic "Открыть папку" [ref=f3e773]:
+                    - button "Открыть папку" [ref=f3e774] [cursor=pointer]
+                  - button "Убрать из истории" [ref=f3e777] [cursor=pointer]
+            - row [ref=f3e780]:
+              - cell "Архив 26 — Сияй Тестовый исполнитель" [ref=f3e781]:
+                - generic [ref=f3e784]:
+                  - link "Архив 26 — Сияй" [ref=f3e785] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1025
+                  - paragraph [ref=f3e786]: Тестовый исполнитель
+              - cell "Трек" [ref=f3e787]
+              - cell "1 трек" [ref=f3e790]
+              - cell [ref=f3e791]:
+                - paragraph [ref=f3e792]: 322.4 МБ
+              - cell "3 окт. 2026 г., 18:24" [ref=f3e793]
+              - cell [ref=f3e794]:
+                - generic [ref=f3e795]:
+                  - generic "Скачать снова" [ref=f3e796]:
+                    - button "Скачать снова" [ref=f3e797] [cursor=pointer]
+                  - generic "Открыть папку" [ref=f3e800]:
+                    - button "Открыть папку" [ref=f3e801] [cursor=pointer]
+                  - button "Убрать из истории" [ref=f3e804] [cursor=pointer]
+            - row [ref=f3e807]:
+              - cell "Архив 27 — Лучшее Тестовый исполнитель" [ref=f3e808]:
+                - generic [ref=f3e811]:
+                  - link "Архив 27 — Лучшее" [ref=f3e812] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1026
+                  - paragraph [ref=f3e813]: Тестовый исполнитель
+              - cell "Альбом" [ref=f3e814]
+              - cell "12 треков" [ref=f3e817]
+              - cell [ref=f3e818]:
+                - paragraph [ref=f3e819]: 334.8 МБ
+              - cell "2 окт. 2026 г., 18:24" [ref=f3e820]
+              - cell [ref=f3e821]:
+                - generic [ref=f3e822]:
+                  - generic "Скачать снова" [ref=f3e823]:
+                    - button "Скачать снова" [ref=f3e824] [cursor=pointer]
+                  - generic "Открыть папку" [ref=f3e827]:
+                    - button "Открыть папку" [ref=f3e828] [cursor=pointer]
+                  - button "Убрать из истории" [ref=f3e831] [cursor=pointer]
+            - row [ref=f3e834]:
+              - cell "Архив 28 — Пламя" [ref=f3e835]:
+                - link "Архив 28 — Пламя" [ref=f3e839] [cursor=pointer]:
+                  - /url: https://music.yandex.ru/album/1027
+              - cell "Плейлист" [ref=f3e840]
+              - cell "42 трека" [ref=f3e843]
+              - cell [ref=f3e844]:
+                - paragraph [ref=f3e845]: 347.2 МБ
+              - cell "1 окт. 2026 г., 18:24" [ref=f3e846]
+              - cell [ref=f3e847]:
+                - generic [ref=f3e848]:
+                  - generic "Скачать снова" [ref=f3e849]:
+                    - button "Скачать снова" [ref=f3e850] [cursor=pointer]
+                  - generic "Открыть папку" [ref=f3e853]:
+                    - button "Открыть папку" [ref=f3e854] [cursor=pointer]
+                  - button "Убрать из истории" [ref=f3e857] [cursor=pointer]
+            - row [ref=f3e860]:
+              - cell "Архив 29 — Вечерний вайб Тестовый исполнитель" [ref=f3e861]:
+                - generic [ref=f3e864]:
+                  - link "Архив 29 — Вечерний вайб" [ref=f3e865] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1028
+                  - paragraph [ref=f3e866]: Тестовый исполнитель
+              - cell "Трек" [ref=f3e867]
+              - cell "1 трек" [ref=f3e870]
+              - cell [ref=f3e871]:
+                - paragraph [ref=f3e872]: 359.6 МБ
+              - cell "30 сент. 2026 г., 18:24" [ref=f3e873]
+              - cell [ref=f3e874]:
+                - generic [ref=f3e875]:
+                  - generic "Скачать снова" [ref=f3e876]:
+                    - button "Скачать снова" [ref=f3e877] [cursor=pointer]
+                  - generic "Открыть папку" [ref=f3e880]:
+                    - button "Открыть папку" [ref=f3e881] [cursor=pointer]
+                  - button "Убрать из истории" [ref=f3e884] [cursor=pointer]
+            - row [ref=f3e887]:
+              - cell "Архив 30 — Сияй Тестовый исполнитель" [ref=f3e888]:
+                - generic [ref=f3e891]:
+                  - link "Архив 30 — Сияй" [ref=f3e892] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1029
+                  - paragraph [ref=f3e893]: Тестовый исполнитель
+              - cell "Альбом" [ref=f3e894]
+              - cell "12 треков" [ref=f3e897]
+              - cell [ref=f3e898]:
+                - paragraph [ref=f3e899]: 372.0 МБ
+              - cell "29 сент. 2026 г., 18:24" [ref=f3e900]
+              - cell [ref=f3e901]:
+                - generic [ref=f3e902]:
+                  - generic "Скачать снова" [ref=f3e903]:
+                    - button "Скачать снова" [ref=f3e904] [cursor=pointer]
+                  - generic "Открыть папку" [ref=f3e907]:
+                    - button "Открыть папку" [ref=f3e908] [cursor=pointer]
+                  - button "Убрать из истории" [ref=f3e911] [cursor=pointer]
+            - row [ref=f3e914]:
+              - cell "Архив 31 — Лучшее" [ref=f3e915]:
+                - link "Архив 31 — Лучшее" [ref=f3e919] [cursor=pointer]:
+                  - /url: https://music.yandex.ru/album/1030
+              - cell "Плейлист" [ref=f3e920]
+              - cell "42 трека" [ref=f3e923]
+              - cell [ref=f3e924]:
+                - paragraph [ref=f3e925]: 384.4 МБ
+              - cell "28 сент. 2026 г., 18:24" [ref=f3e926]
+              - cell [ref=f3e927]:
+                - generic [ref=f3e928]:
+                  - generic "Скачать снова" [ref=f3e929]:
+                    - button "Скачать снова" [ref=f3e930] [cursor=pointer]
+                  - generic "Открыть папку" [ref=f3e933]:
+                    - button "Открыть папку" [ref=f3e934] [cursor=pointer]
+                  - button "Убрать из истории" [ref=f3e937] [cursor=pointer]
+            - row [ref=f3e940]:
+              - cell "Архив 32 — Пламя Тестовый исполнитель" [ref=f3e941]:
+                - generic [ref=f3e944]:
+                  - link "Архив 32 — Пламя" [ref=f3e945] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1031
+                  - paragraph [ref=f3e946]: Тестовый исполнитель
+              - cell "Трек" [ref=f3e947]
+              - cell "1 трек" [ref=f3e950]
+              - cell [ref=f3e951]:
+                - paragraph [ref=f3e952]: 396.8 МБ
+              - cell "27 сент. 2026 г., 18:24" [ref=f3e953]
+              - cell [ref=f3e954]:
+                - generic [ref=f3e955]:
+                  - generic "Скачать снова" [ref=f3e956]:
+                    - button "Скачать снова" [ref=f3e957] [cursor=pointer]
+                  - generic "Открыть папку" [ref=f3e960]:
+                    - button "Открыть папку" [ref=f3e961] [cursor=pointer]
+                  - button "Убрать из истории" [ref=f3e964] [cursor=pointer]
+            - row [ref=f3e967]:
+              - cell "Архив 33 — Вечерний вайб Тестовый исполнитель" [ref=f3e968]:
+                - generic [ref=f3e971]:
+                  - link "Архив 33 — Вечерний вайб" [ref=f3e972] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1032
+                  - paragraph [ref=f3e973]: Тестовый исполнитель
+              - cell "Альбом" [ref=f3e974]
+              - cell "12 треков" [ref=f3e977]
+              - cell [ref=f3e978]:
+                - paragraph [ref=f3e979]: 409.2 МБ
+              - cell "26 сент. 2026 г., 18:24" [ref=f3e980]
+              - cell [ref=f3e981]:
+                - generic [ref=f3e982]:
+                  - generic "Скачать снова" [ref=f3e983]:
+                    - button "Скачать снова" [ref=f3e984] [cursor=pointer]
+                  - generic "Открыть папку" [ref=f3e987]:
+                    - button "Открыть папку" [ref=f3e988] [cursor=pointer]
+                  - button "Убрать из истории" [ref=f3e991] [cursor=pointer]
+            - row [ref=f3e994]:
+              - cell "Архив 34 — Сияй" [ref=f3e995]:
+                - link "Архив 34 — Сияй" [ref=f3e999] [cursor=pointer]:
+                  - /url: https://music.yandex.ru/album/1033
+              - cell "Плейлист" [ref=f3e1000]
+              - cell "42 трека" [ref=f3e1003]
+              - cell [ref=f3e1004]:
+                - paragraph [ref=f3e1005]: 421.6 МБ
+              - cell "25 сент. 2026 г., 18:24" [ref=f3e1006]
+              - cell [ref=f3e1007]:
+                - generic [ref=f3e1008]:
+                  - generic "Скачать снова" [ref=f3e1009]:
+                    - button "Скачать снова" [ref=f3e1010] [cursor=pointer]
+                  - generic "Открыть папку" [ref=f3e1013]:
+                    - button "Открыть папку" [ref=f3e1014] [cursor=pointer]
+                  - button "Убрать из истории" [ref=f3e1017] [cursor=pointer]
+            - row [ref=f3e1020]:
+              - cell "Архив 35 — Лучшее Тестовый исполнитель" [ref=f3e1021]:
+                - generic [ref=f3e1024]:
+                  - link "Архив 35 — Лучшее" [ref=f3e1025] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1034
+                  - paragraph [ref=f3e1026]: Тестовый исполнитель
+              - cell "Трек" [ref=f3e1027]
+              - cell "1 трек" [ref=f3e1030]
+              - cell [ref=f3e1031]:
+                - paragraph [ref=f3e1032]: 434.0 МБ
+              - cell "24 сент. 2026 г., 18:24" [ref=f3e1033]
+              - cell [ref=f3e1034]:
+                - generic [ref=f3e1035]:
+                  - generic "Скачать снова" [ref=f3e1036]:
+                    - button "Скачать снова" [ref=f3e1037] [cursor=pointer]
+                  - generic "Открыть папку" [ref=f3e1040]:
+                    - button "Открыть папку" [ref=f3e1041] [cursor=pointer]
+                  - button "Убрать из истории" [ref=f3e1044] [cursor=pointer]
+            - row [ref=f3e1047]:
+              - cell "Архив 36 — Пламя Тестовый исполнитель" [ref=f3e1048]:
+                - generic [ref=f3e1051]:
+                  - link "Архив 36 — Пламя" [ref=f3e1052] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1035
+                  - paragraph [ref=f3e1053]: Тестовый исполнитель
+              - cell "Альбом" [ref=f3e1054]
+              - cell "12 треков" [ref=f3e1057]
+              - cell [ref=f3e1058]:
+                - paragraph [ref=f3e1059]: 446.4 МБ
+              - cell "23 сент. 2026 г., 18:24" [ref=f3e1060]
+              - cell [ref=f3e1061]:
+                - generic [ref=f3e1062]:
+                  - generic "Скачать снова" [ref=f3e1063]:
+                    - button "Скачать снова" [ref=f3e1064] [cursor=pointer]
+                  - generic "Открыть папку" [ref=f3e1067]:
+                    - button "Открыть папку" [ref=f3e1068] [cursor=pointer]
+                  - button "Убрать из истории" [ref=f3e1071] [cursor=pointer]
+            - row [ref=f3e1074]:
+              - cell "Архив 37 — Вечерний вайб" [ref=f3e1075]:
+                - link "Архив 37 — Вечерний вайб" [ref=f3e1079] [cursor=pointer]:
+                  - /url: https://music.yandex.ru/album/1036
+              - cell "Плейлист" [ref=f3e1080]
+              - cell "42 трека" [ref=f3e1083]
+              - cell [ref=f3e1084]:
+                - paragraph [ref=f3e1085]: 458.8 МБ
+              - cell "22 сент. 2026 г., 18:24" [ref=f3e1086]
+              - cell [ref=f3e1087]:
+                - generic [ref=f3e1088]:
+                  - generic "Скачать снова" [ref=f3e1089]:
+                    - button "Скачать снова" [ref=f3e1090] [cursor=pointer]
+                  - generic "Открыть папку" [ref=f3e1093]:
+                    - button "Открыть папку" [ref=f3e1094] [cursor=pointer]
+                  - button "Убрать из истории" [ref=f3e1097] [cursor=pointer]
+            - row [ref=f3e1100]:
+              - cell "Архив 38 — Сияй Тестовый исполнитель" [ref=f3e1101]:
+                - generic [ref=f3e1104]:
+                  - link "Архив 38 — Сияй" [ref=f3e1105] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1037
+                  - paragraph [ref=f3e1106]: Тестовый исполнитель
+              - cell "Трек" [ref=f3e1107]
+              - cell "1 трек" [ref=f3e1110]
+              - cell [ref=f3e1111]:
+                - paragraph [ref=f3e1112]: 471.2 МБ
+              - cell "21 сент. 2026 г., 18:24" [ref=f3e1113]
+              - cell [ref=f3e1114]:
+                - generic [ref=f3e1115]:
+                  - generic "Скачать снова" [ref=f3e1116]:
+                    - button "Скачать снова" [ref=f3e1117] [cursor=pointer]
+                  - generic "Открыть папку" [ref=f3e1120]:
+                    - button "Открыть папку" [ref=f3e1121] [cursor=pointer]
+                  - button "Убрать из истории" [ref=f3e1124] [cursor=pointer]
+            - row [ref=f3e1127]:
+              - cell "Архив 39 — Лучшее Тестовый исполнитель" [ref=f3e1128]:
+                - generic [ref=f3e1131]:
+                  - link "Архив 39 — Лучшее" [ref=f3e1132] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1038
+                  - paragraph [ref=f3e1133]: Тестовый исполнитель
+              - cell "Альбом" [ref=f3e1134]
+              - cell "12 треков" [ref=f3e1137]
+              - cell [ref=f3e1138]:
+                - paragraph [ref=f3e1139]: 483.6 МБ
+              - cell "20 сент. 2026 г., 18:24" [ref=f3e1140]
+              - cell [ref=f3e1141]:
+                - generic [ref=f3e1142]:
+                  - generic "Скачать снова" [ref=f3e1143]:
+                    - button "Скачать снова" [ref=f3e1144] [cursor=pointer]
+                  - generic "Открыть папку" [ref=f3e1147]:
+                    - button "Открыть папку" [ref=f3e1148] [cursor=pointer]
+                  - button "Убрать из истории" [ref=f3e1151] [cursor=pointer]
+            - row [ref=f3e1154]:
+              - cell "Архив 40 — Пламя" [ref=f3e1155]:
+                - link "Архив 40 — Пламя" [ref=f3e1159] [cursor=pointer]:
+                  - /url: https://music.yandex.ru/album/1039
+              - cell "Плейлист" [ref=f3e1160]
+              - cell "42 трека" [ref=f3e1163]
+              - cell [ref=f3e1164]:
+                - paragraph [ref=f3e1165]: 496.0 МБ
+              - cell "19 сент. 2026 г., 18:24" [ref=f3e1166]
+              - cell [ref=f3e1167]:
+                - generic [ref=f3e1168]:
+                  - generic "Скачать снова" [ref=f3e1169]:
+                    - button "Скачать снова" [ref=f3e1170] [cursor=pointer]
+                  - generic "Открыть папку" [ref=f3e1173]:
+                    - button "Открыть папку" [ref=f3e1174] [cursor=pointer]
+                  - button "Убрать из истории" [ref=f3e1177] [cursor=pointer]
+            - row [ref=f3e1180]:
+              - cell "Архив 41 — Вечерний вайб Тестовый исполнитель" [ref=f3e1181]:
+                - generic [ref=f3e1184]:
+                  - link "Архив 41 — Вечерний вайб" [ref=f3e1185] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1040
+                  - paragraph [ref=f3e1186]: Тестовый исполнитель
+              - cell "Трек" [ref=f3e1187]
+              - cell "1 трек" [ref=f3e1190]
+              - cell [ref=f3e1191]:
+                - paragraph [ref=f3e1192]: 508.4 МБ
+              - cell "18 сент. 2026 г., 18:24" [ref=f3e1193]
+              - cell [ref=f3e1194]:
+                - generic [ref=f3e1195]:
+                  - generic "Скачать снова" [ref=f3e1196]:
+                    - button "Скачать снова" [ref=f3e1197] [cursor=pointer]
+                  - generic "Открыть папку" [ref=f3e1200]:
+                    - button "Открыть папку" [ref=f3e1201] [cursor=pointer]
+                  - button "Убрать из истории" [ref=f3e1204] [cursor=pointer]
+            - row [ref=f3e1207]:
+              - cell "Архив 42 — Сияй Тестовый исполнитель" [ref=f3e1208]:
+                - generic [ref=f3e1211]:
+                  - link "Архив 42 — Сияй" [ref=f3e1212] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1041
+                  - paragraph [ref=f3e1213]: Тестовый исполнитель
+              - cell "Альбом" [ref=f3e1214]
+              - cell "12 треков" [ref=f3e1217]
+              - cell [ref=f3e1218]:
+                - paragraph [ref=f3e1219]: 520.8 МБ
+              - cell "17 сент. 2026 г., 18:24" [ref=f3e1220]
+              - cell [ref=f3e1221]:
+                - generic [ref=f3e1222]:
+                  - generic "Скачать снова" [ref=f3e1223]:
+                    - button "Скачать снова" [ref=f3e1224] [cursor=pointer]
+                  - generic "Открыть папку" [ref=f3e1227]:
+                    - button "Открыть папку" [ref=f3e1228] [cursor=pointer]
+                  - button "Убрать из истории" [ref=f3e1231] [cursor=pointer]
+            - row [ref=f3e1234]:
+              - cell "Архив 43 — Лучшее" [ref=f3e1235]:
+                - link "Архив 43 — Лучшее" [ref=f3e1239] [cursor=pointer]:
+                  - /url: https://music.yandex.ru/album/1042
+              - cell "Плейлист" [ref=f3e1240]
+              - cell "42 трека" [ref=f3e1243]
+              - cell [ref=f3e1244]:
+                - paragraph [ref=f3e1245]: 533.2 МБ
+              - cell "16 сент. 2026 г., 18:24" [ref=f3e1246]
+              - cell [ref=f3e1247]:
+                - generic [ref=f3e1248]:
+                  - generic "Скачать снова" [ref=f3e1249]:
+                    - button "Скачать снова" [ref=f3e1250] [cursor=pointer]
+                  - generic "Открыть папку" [ref=f3e1253]:
+                    - button "Открыть папку" [ref=f3e1254] [cursor=pointer]
+                  - button "Убрать из истории" [ref=f3e1257] [cursor=pointer]
+            - row [ref=f3e1260]:
+              - cell "Архив 44 — Пламя Тестовый исполнитель" [ref=f3e1261]:
+                - generic [ref=f3e1264]:
+                  - link "Архив 44 — Пламя" [ref=f3e1265] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1043
+                  - paragraph [ref=f3e1266]: Тестовый исполнитель
+              - cell "Трек" [ref=f3e1267]
+              - cell "1 трек" [ref=f3e1270]
+              - cell [ref=f3e1271]:
+                - paragraph [ref=f3e1272]: 545.6 МБ
+              - cell "15 сент. 2026 г., 18:24" [ref=f3e1273]
+              - cell [ref=f3e1274]:
+                - generic [ref=f3e1275]:
+                  - generic "Скачать снова" [ref=f3e1276]:
+                    - button "Скачать снова" [ref=f3e1277] [cursor=pointer]
+                  - generic "Открыть папку" [ref=f3e1280]:
+                    - button "Открыть папку" [ref=f3e1281] [cursor=pointer]
+                  - button "Убрать из истории" [ref=f3e1284] [cursor=pointer]
+            - row [ref=f3e1287]:
+              - cell "Архив 45 — Вечерний вайб Тестовый исполнитель" [ref=f3e1288]:
+                - generic [ref=f3e1291]:
+                  - link "Архив 45 — Вечерний вайб" [ref=f3e1292] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1044
+                  - paragraph [ref=f3e1293]: Тестовый исполнитель
+              - cell "Альбом" [ref=f3e1294]
+              - cell "12 треков" [ref=f3e1297]
+              - cell [ref=f3e1298]:
+                - paragraph [ref=f3e1299]: 558.0 МБ
+              - cell "14 сент. 2026 г., 18:24" [ref=f3e1300]
+              - cell [ref=f3e1301]:
+                - generic [ref=f3e1302]:
+                  - generic "Скачать снова" [ref=f3e1303]:
+                    - button "Скачать снова" [ref=f3e1304] [cursor=pointer]
+                  - generic "Открыть папку" [ref=f3e1307]:
+                    - button "Открыть папку" [ref=f3e1308] [cursor=pointer]
+                  - button "Убрать из истории" [ref=f3e1311] [cursor=pointer]
+            - row [ref=f3e1314]:
+              - cell "Архив 46 — Сияй" [ref=f3e1315]:
+                - link "Архив 46 — Сияй" [ref=f3e1319] [cursor=pointer]:
+                  - /url: https://music.yandex.ru/album/1045
+              - cell "Плейлист" [ref=f3e1320]
+              - cell "42 трека" [ref=f3e1323]
+              - cell [ref=f3e1324]:
+                - paragraph [ref=f3e1325]: 570.4 МБ
+              - cell "13 сент. 2026 г., 18:24" [ref=f3e1326]
+              - cell [ref=f3e1327]:
+                - generic [ref=f3e1328]:
+                  - generic "Скачать снова" [ref=f3e1329]:
+                    - button "Скачать снова" [ref=f3e1330] [cursor=pointer]
+                  - generic "Открыть папку" [ref=f3e1333]:
+                    - button "Открыть папку" [ref=f3e1334] [cursor=pointer]
+                  - button "Убрать из истории" [ref=f3e1337] [cursor=pointer]
+            - row [ref=f3e1340]:
+              - cell "Архив 47 — Лучшее Тестовый исполнитель" [ref=f3e1341]:
+                - generic [ref=f3e1344]:
+                  - link "Архив 47 — Лучшее" [ref=f3e1345] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1046
+                  - paragraph [ref=f3e1346]: Тестовый исполнитель
+              - cell "Трек" [ref=f3e1347]
+              - cell "1 трек" [ref=f3e1350]
+              - cell [ref=f3e1351]:
+                - paragraph [ref=f3e1352]: 582.8 МБ
+              - cell "12 сент. 2026 г., 18:24" [ref=f3e1353]
+              - cell [ref=f3e1354]:
+                - generic [ref=f3e1355]:
+                  - generic "Скачать снова" [ref=f3e1356]:
+                    - button "Скачать снова" [ref=f3e1357] [cursor=pointer]
+                  - generic "Открыть папку" [ref=f3e1360]:
+                    - button "Открыть папку" [ref=f3e1361] [cursor=pointer]
+                  - button "Убрать из истории" [ref=f3e1364] [cursor=pointer]
+            - row [ref=f3e1367]:
+              - cell "Архив 48 — Пламя Тестовый исполнитель" [ref=f3e1368]:
+                - generic [ref=f3e1371]:
+                  - link "Архив 48 — Пламя" [ref=f3e1372] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1047
+                  - paragraph [ref=f3e1373]: Тестовый исполнитель
+              - cell "Альбом" [ref=f3e1374]
+              - cell "12 треков" [ref=f3e1377]
+              - cell [ref=f3e1378]:
+                - paragraph [ref=f3e1379]: 595.2 МБ
+              - cell "11 сент. 2026 г., 18:24" [ref=f3e1380]
+              - cell [ref=f3e1381]:
+                - generic [ref=f3e1382]:
+                  - generic "Скачать снова" [ref=f3e1383]:
+                    - button "Скачать снова" [ref=f3e1384] [cursor=pointer]
+                  - generic "Файл или папка недоступны. Возможно, они перемещены или удалены." [ref=f3e1387]:
+                    - button "Открыть папку" [disabled]
+                  - button "Убрать из истории" [ref=f3e1388] [cursor=pointer]
+            - row [ref=f3e1391]:
+              - cell "Архив 49 — Вечерний вайб" [ref=f3e1392]:
+                - link "Архив 49 — Вечерний вайб" [ref=f3e1396] [cursor=pointer]:
+                  - /url: https://music.yandex.ru/album/1048
+              - cell "Плейлист" [ref=f3e1397]
+              - cell "42 трека" [ref=f3e1400]
+              - cell [ref=f3e1401]:
+                - paragraph [ref=f3e1402]: 607.6 МБ
+              - cell "10 сент. 2026 г., 18:24" [ref=f3e1403]
+              - cell [ref=f3e1404]:
+                - generic [ref=f3e1405]:
+                  - generic "Скачать снова" [ref=f3e1406]:
+                    - button "Скачать снова" [ref=f3e1407] [cursor=pointer]
+                  - generic "Открыть папку" [ref=f3e1410]:
+                    - button "Открыть папку" [ref=f3e1411] [cursor=pointer]
+                  - button "Убрать из истории" [ref=f3e1414] [cursor=pointer]
+            - row [ref=f3e1417]:
+              - cell "Архив 50 — Сияй Тестовый исполнитель" [ref=f3e1418]:
+                - generic [ref=f3e1421]:
+                  - link "Архив 50 — Сияй" [ref=f3e1422] [cursor=pointer]:
+                    - /url: https://music.yandex.ru/album/1049
+                  - paragraph [ref=f3e1423]: Тестовый исполнитель
+              - cell "Трек" [ref=f3e1424]
+              - cell "1 трек" [ref=f3e1427]
+              - cell [ref=f3e1428]:
+                - paragraph [ref=f3e1429]: Размер неизвестен
+              - cell "9 сент. 2026 г., 18:24" [ref=f3e1430]
+              - cell [ref=f3e1431]:
+                - generic [ref=f3e1432]:
+                  - 'generic "Скачать снова: Откройте источник на Главной и выберите параметры." [ref=f3e1433]':
+                    - button "Скачать снова" [disabled]
+                  - generic "Открыть папку" [ref=f3e1434]:
+                    - button "Открыть папку" [ref=f3e1435] [cursor=pointer]
+                  - button "Убрать из истории" [ref=f3e1438] [cursor=pointer]
+        - generic [ref=f3e1441]: Удаление записи из истории сохраняет аудиофайлы на диске.
+```
+
+$ ["eval", "() => { [...document.querySelectorAll(\"tbody tr\")].find(r=>r.textContent.includes(\"Архив 49\")).scrollIntoView({block:\"center\"});return {scrollY,counters:{...window.step059Fixture.counters}};}"]
+### Result
+{
+  "scrollY": 3524,
+  "counters": {
+    "history": 1,
+    "historyArtwork": 50,
+    "availability": 50,
+    "folder": 0,
+    "account": 1,
+    "avatar": 0,
+    "checkUpdate": 0
+  }
+}
+### Ran Playwright code
+```js
+await page.evaluate('() => { [...document.querySelectorAll("tbody tr")].find(r=>r.textContent.includes("Архив 49")).scrollIntoView({block:"center"});return {scrollY,counters:{...window.step059Fixture.counters}};}');
+```
+
+$ ["click", "tr:has-text(\"Архив 49\") button[aria-label=\"Открыть папку\"]"]
+### Ran Playwright code
+```js
+await page.locator('tr:has-text("Архив 49") button[aria-label="Открыть папку"]').click();
+```
+### Page
+- Page URL: http://127.0.0.1:4189/?scenario=normal
+- Page Title: STEP-059 · синтетическая fixture
+### Snapshot
+- [Snapshot](.playwright-cli/page-2026-10-29T20-23-42-930Z.yml)
+
+$ ["eval", "() => {const a=document.querySelector(\"[role=alert]\");const r=a.getBoundingClientRect();return {scrollY,viewport:innerHeight,alert:a.textContent,rect:{top:r.top,bottom:r.bottom},counters:{...window.step059Fixture.counters}};}"]
+### Result
+{
+  "scrollY": 3524,
+  "viewport": 1000,
+  "alert": "Файл или папка недоступны. Возможно, они перемещены или удалены.",
+  "rect": {
+    "top": 928,
+    "bottom": 976
+  },
+  "counters": {
+    "history": 1,
+    "historyArtwork": 50,
+    "availability": 50,
+    "folder": 1,
+    "account": 1,
+    "avatar": 0,
+    "checkUpdate": 0
+  }
+}
+### Ran Playwright code
+```js
+await page.evaluate('() => {const a=document.querySelector("[role=alert]");const r=a.getBoundingClientRect();return {scrollY,viewport:innerHeight,alert:a.textContent,rect:{top:r.top,bottom:r.bottom},counters:{...window.step059Fixture.counters}};}');
+```
+
+$ ["screenshot", "--filename=/home/user/github.com/yarkovaleksei/yandex-music-downloader/apps/desktop/evidence/STEP-059/screenshots/history-race-notice.png"]
+### Result
+- [Screenshot of viewport](../../../../apps/desktop/evidence/STEP-059/screenshots/history-race-notice.png)
+### Ran Playwright code
+```js
+// Screenshot viewport and save it as ../../../../apps/desktop/evidence/STEP-059/screenshots/history-race-notice.png
+await page.screenshot({
+  path: '../../../../apps/desktop/evidence/STEP-059/screenshots/history-race-notice.png',
+  scale: 'css',
+  type: 'png'
+});
+```

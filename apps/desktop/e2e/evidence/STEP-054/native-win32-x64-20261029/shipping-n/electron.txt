@@ -1,0 +1,1 @@
+[2856:1029/202956.432:ERROR:ui\gl\direct_composition_support.cc:255] GetGpuDriverOverlayInfo: Failed to retrieve video device

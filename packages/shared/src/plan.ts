@@ -12,5 +12,6 @@ export interface PlannedTrack {
 export interface DownloadPlan {
   readonly source: MediaReference;
   readonly title: string;
+  readonly author?: string;
   readonly tracks: readonly PlannedTrack[];
 }

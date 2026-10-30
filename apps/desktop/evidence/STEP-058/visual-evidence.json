@@ -1,0 +1,126 @@
+{
+  "schemaVersion": 1,
+  "status": "PASS",
+  "platform": "linux",
+  "data": "synthetic mock DesktopApi; actual provider-owned auth HTML with TEST-0058",
+  "viewport": {
+    "width": 1440,
+    "height": 1000
+  },
+  "wideViewport": {
+    "width": 1920,
+    "height": 1080
+  },
+  "observations": [
+    {
+      "check": "Контраст активной навигации light",
+      "result": {
+        "color": "rgb(66, 71, 217)",
+        "background": "rgb(238, 242, 255)"
+      },
+      "ratio": 5.99
+    },
+    {
+      "check": "Календарь 25–27 октября включительно + сортировка имени",
+      "result": {
+        "count": "Найдено: 3",
+        "titles": [
+          "Лучшее\n\nТестовый исполнитель",
+          "Пламя",
+          "Сияй\n\nТестовый исполнитель"
+        ],
+        "dates": [
+          "2026-10-25",
+          "2026-10-27"
+        ]
+      }
+    },
+    {
+      "check": "Контраст активной навигации dark",
+      "result": {
+        "color": "rgb(129, 140, 248)",
+        "background": "rgb(34, 40, 73)"
+      },
+      "ratio": 4.8
+    },
+    {
+      "check": "Широкое окно без горизонтального overflow, фиксированная навигация",
+      "result": {
+        "viewport": 1920,
+        "scrollWidth": 1920,
+        "sidebar": 224,
+        "main": 1696
+      }
+    }
+  ],
+  "screenshots": {
+    "01-home-empty.png": "411dedc59c8bfb371be9f4c20763450661166ff30b42f9ad6ba2e0c2263327dc",
+    "02-playlist-preview.png": "381d983e2e49dea587f62c99c00cd99f2755ae058e75109926c1e93fa2a02c52",
+    "02-preview-dark.png": "5905dbc2bdbfa8dac528b62e48ea88ce65ce21de70a9c4b3107d731fd2e09529",
+    "02-preview-fallback.png": "d147d82e18bfbbfeaa79883c3d92ce14421aab85b7962a9914dcf3d425653716",
+    "03-downloads-completed.png": "f85a9ee823ed24cd244ac7320e4532cf4e952853a55963d72a69a0c7109e6250",
+    "03-downloads-dark.png": "eb6ebbd8cd86575f6c920451be6e53d39a7b01c852b3c69ee75abbc1f3b2b88b",
+    "03-downloads-errors.png": "327639b58c5175c975be14722c5921a5b66a00ecc1c6699455f16d6420f6bc12",
+    "03-downloads-menu.png": "19a7c02875f03c7d7eeeb3eb938c02c9c81c689454d1662e657eb0dbc75f5e63",
+    "03-downloads-queue.png": "b5b1302c649c290b74d5c48535fe77001748b9083c1b9ab8e1ef7979b19c58ff",
+    "03-downloads-wide.png": "21e8f6d020f0647b2072849d2f915cb4d60b0b7459b1ae39200e524fe509d959",
+    "03-downloads.png": "297729e1dc9b1f093d43492ac76d773233c2b17ab8b4f0103c1754a571a6e4d9",
+    "04-history-calendar.png": "cc63ff2a88e6067aaae3b2210349c75a61ac50da4e8afd34694d68c63418151f",
+    "04-history-dark.png": "0e09193d766212f3614bff8c304112e6baced0cc10de58e036e848423da9c232",
+    "04-history.png": "25d22373d985f45bfa39e26598c2bbd357d7f1c2e57086828236eb75e601e623",
+    "05-about.png": "ab5cfce49e36345fe3eff5320ff5ee96cefd57e31e4b46befb5ff8513020dcce",
+    "05-settings-appearance.png": "fa2399409d08064bdc678c439531c7fee17b555dcc8ea77c65798ab5ead0b53c",
+    "05-settings-dark.png": "9bcbecbfac7b818c980c844e76c59be54f85acfddb89bbe1af318bbeb51b14fd",
+    "05-settings-download.png": "578361ba641d4f1185ab3c2a477772849cfd1a34bdcb3d4b752e7ba2687a6966",
+    "05-settings-files.png": "313667d891919a7d9ed903723204bdc919b4822a0c9d67580b2fe293f498b177",
+    "05-settings.png": "d40de50070716e3fd97889e4c6630adb49fbee24675d41f70ddbd30050732916",
+    "06-account-dark.png": "38115598a9884eef2fb8deb904c226e567337165dd02d20460462696a3dfc075",
+    "06-account-fallback.png": "6e6cec6e01aab3138a84933665461f0ea619c9afd891cbb1aae5834452f803d5",
+    "06-account.png": "171c2b028af555808072d44f2d90ea99382f95c3dba78cda27b59f6633e70ec8",
+    "07-home-dark.png": "a64d709bcd49f3230612b7bb50040f7151d18f821ee8ba7ae288a87bdb69a3b0",
+    "08-quality-dialog.png": "44c3cffbeb3c507ec1c3e416394ff412db0ee25a892ec6025130840e40e9df05",
+    "09-notification-cancelled.png": "c4ea174805bd20c50afed7756f97b118eb15373155f019524744ea68a6262730",
+    "09-notification-error.png": "ca4ba94616e24006c316ab96272f61c4cb9d1858b73d1781ce53c50b11399b9e",
+    "09-notification-partial.png": "3f69efb42710d7b91d4c0cc5f1af887eec8ba71ba5b1cef086c71de60480e4ca",
+    "09-notification-success.png": "ba51d960e5d7ed7f8b8cfb82a9fbeda7bafbf993828fe7cc594299fd641c5276",
+    "09-update.png": "81a3efe4f022392915c82ce7cd516668f3b18930a108eebefce1780e8b656ee6",
+    "10-auth.png": "74c12053f725ce3b854fcc3d919ba5084f9bb1d9912d9ce61575f1412b7a0438"
+  },
+  "limitations": [
+    "Иллюстративные музыкальные и account данные синтетические; production feed не настраивается",
+    "Нативные отчёты STEP-054 не переносятся на новую UI-сборку",
+    "Auth страница не меняет theme desktop и сверяется с отдельным светлым макетом10"
+  ],
+  "gitHead": "c9bb8326e85d7c5ffa15573603b62beab4667a9e",
+  "inputs": {
+    "apps/desktop/src/renderer/Updates.tsx": "8836e2eeddb2d23df576b8592ab07b3b86ae9e0615984cd31d9d6741660dd765",
+    "apps/desktop/src/renderer/Account.tsx": "ee6adb00e1a8b92692393e4d2ba44a414c22c699fa2b10d7950e8317bdaece73",
+    "apps/desktop/src/renderer/useDownloads.ts": "0c5aae18aa1ab24655130df54b609df63b002c3a4cfc752a8f976931df279d3a",
+    "apps/desktop/src/renderer/Downloads.tsx": "49c19632871214a4566bc06f07b8c34389d3c9dda8db26dfba3b8d8ca5d2d2f2",
+    "apps/desktop/src/renderer/Settings.tsx": "8d39385caa68dac0811eb049b02b4cbeda20ed087bb5cdf31090e5e88ce29d38",
+    "apps/desktop/src/renderer/global.d.ts": "1a1e9c2c0d73ac9f60e23eed20eb3f7ae06100b754aac160fd02411323601ca6",
+    "apps/desktop/src/renderer/theme.ts": "25fafac0e368b2d01ffd0592e7fe6ccc19ae1b281e77160b3d2fc7eb9c13dce9",
+    "apps/desktop/src/renderer/main.tsx": "fa7c19f3d5d0c641a74a1f8a783e36df761465bf4bce44057a8dbea4237585cc",
+    "apps/desktop/src/renderer/quantity.ts": "229135f153f5513c4b2cc2d1fa2bd4da9a0c62c1752e23a6a77a5407ecfbe544",
+    "apps/desktop/src/renderer/History.tsx": "05e94860836cb1ef309095cad595d84d8cf66c6fc75210b1941ae24456fea569",
+    "apps/desktop/src/renderer/App.tsx": "a189245ae64822e9e50712ee9d8fca7a4c93eb13f0f2fa412b4065faa64666c6",
+    "apps/desktop/src/renderer/Diagnostics.tsx": "10a12aeda75b73f414a9538c85529fa38087fd93080c5290daf5bd523aa8f5ab",
+    "apps/desktop/e2e/STEP-058-visual-fixture.mjs": "c3c966065d6a3c5db8b9c3b4753026d5a6776b48748e7381a8300d3c63ae0307",
+    "packages/providers/yandex-music/src/auth-page.ts": "babb6653ae15b23bc9467fae718334b1c9297e8f139dc3bd766dbfe89d9ef5dd",
+    "docs/brand/brandbook.md": "47044d0e2dc86c22aedf7cbe5a1b6f76d82df47f18de0fddd49b8fc96abbcc82",
+    "docs/brand/icon.png": "0ce4c87f4ec22959d4cb65321be98513b32fb414a2f334021b2b7db611889d46"
+  },
+  "referenceMockups": {
+    "01-home-empty.png": "e862a8f437b866849edcaf6aac963449b71a67aec649ad6b0557e05b9c47e37d",
+    "02-playlist-preview.png": "da29ed1e96a5ab27a919791ef4a880acde2ad2ebd19753d54ed1cf3dc10579ac",
+    "03-downloads.png": "56f4eb3769c0914226306b4aa8e9d220006e6039e470db5f1fa91e102b84a0e7",
+    "04-history.png": "bdd88656068bd3d099c8a6d7c22350141ab43c4ccc2fbd447ab5e4c8ab26eaa9",
+    "05-settings.png": "c6e789c088bd193299ca96197de99a41846a11117ddc8bdfaf08dd3f05b0820e",
+    "06-account.png": "33b1689f8a19446b1add92e61aa51202d37b78a5caac4b87f55e330474d7f797",
+    "07-home-dark.png": "b6f3318e9212393587186edacf305150235e01b0541236d940a9859c689ab122",
+    "08-quality-dialog.png": "62f8b51a711cade3c6f2c21bfee200742e8f9abb64f0dc648ca2bce64b557bac",
+    "09-notifications.png": "e27f039dedb3bd8a992015769ba511488f8e3550adebcb5d3ac6427624f53e6a",
+    "10-auth.png": "390e1d9a74e63264768251ad5262fb3b49172265d3e00304937db78e633fb70b"
+  },
+  "manualReview": "PASS: все десять макетов сверены; допустимые отличия и ограничения — CHECKLIST.md"
+}

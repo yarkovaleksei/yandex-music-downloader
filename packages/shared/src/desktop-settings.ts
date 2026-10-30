@@ -1,9 +1,13 @@
-import type { QualityPreference } from './domain.js';
+import type { VariantSelection, QualityPreference } from './domain.js';
 import { ValidationError } from './errors.js';
 
 /** Закрытые presets используют только существующие безопасные layout helpers. */
 export type NamingPreset = 'collection' | 'album';
 export interface DesktopSettings {
+  readonly writeTags?: boolean;
+  readonly saveCoverFile?: boolean;
+  readonly writeM3u8?: boolean;
+  readonly theme?: 'light' | 'dark';
   readonly outputDirectory: string | null;
   readonly quality: QualityPreference;
   readonly concurrency: number;
@@ -13,6 +17,10 @@ export interface DesktopSettings {
   readonly logging: 'error' | 'warn' | 'info' | 'debug' | 'trace';
 }
 export const defaultDesktopSettings: DesktopSettings = {
+  writeTags: true,
+  saveCoverFile: true,
+  writeM3u8: true,
+  theme: 'light',
   outputDirectory: null,
   quality: 'best',
   concurrency: 4,
@@ -26,6 +34,11 @@ export const defaultDesktopSettings: DesktopSettings = {
 export function desktopSettings(value: DesktopSettings): DesktopSettings {
   if (
     !value ||
+    ['writeTags', 'saveCoverFile', 'writeM3u8'].some((key) => {
+      const field = value[key as keyof DesktopSettings];
+      return field !== undefined && typeof field !== 'boolean';
+    }) ||
+    (value.theme !== undefined && !['light', 'dark'].includes(value.theme)) ||
     !['best', 'lossless', 'high', 'normal'].includes(value.quality) ||
     !Number.isInteger(value.concurrency) ||
     value.concurrency < 1 ||
@@ -37,7 +50,12 @@ export function desktopSettings(value: DesktopSettings): DesktopSettings {
     !localPath(value.ffmpegPath)
   )
     throw new ValidationError();
+  // REQ-058: старый JSON нормализуется без записи и без текущих пользовательских defaults.
   return {
+    writeTags: value.writeTags ?? true,
+    saveCoverFile: value.saveCoverFile ?? true,
+    writeM3u8: value.writeM3u8 ?? true,
+    theme: value.theme ?? 'light',
     outputDirectory: value.outputDirectory,
     quality: value.quality,
     concurrency: value.concurrency,
@@ -57,4 +75,23 @@ function localPath(value: unknown): boolean {
       !/^\\\\|^\/\/|^[a-z]+:\/\//i.test(value) &&
       (value.startsWith('/') || /^[a-z]:[\\/]/i.test(value)))
   );
+}
+
+/** Закрытая проекция selector: отсутствие bitrate означает только вариант без bitrate (REQ-010). */
+export function variantSelection(value: VariantSelection): VariantSelection {
+  if (
+    !value ||
+    !/^[a-zA-Z0-9_-]{1,64}$/.test(value.codec) ||
+    !/^[a-zA-Z0-9_-]{1,64}$/.test(value.container) ||
+    typeof value.lossless !== 'boolean' ||
+    (value.bitrate !== undefined &&
+      (!Number.isFinite(value.bitrate) || value.bitrate <= 0))
+  )
+    throw new ValidationError();
+  return {
+    codec: value.codec,
+    container: value.container,
+    lossless: value.lossless,
+    ...(value.bitrate === undefined ? {} : { bitrate: value.bitrate }),
+  };
 }

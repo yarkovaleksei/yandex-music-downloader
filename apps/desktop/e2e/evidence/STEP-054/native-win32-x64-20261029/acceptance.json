@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "platform": "win32-x64",
+  "status": "PASS",
+  "nativeAcceptance": "PASS",
+  "buildId": "20261029T152446475Z-94fa63b4",
+  "revision": "94fa63b4dbbc9ae40b2e18c850c8e986df1d6d62",
+  "decision": "Решение владельца от 2026-10-29: наличие системных Node.js/FFmpeg не блокирует приёмку при использовании встроенных runtime; Windows засчитать по текущим отчётам без повторного прогона.",
+  "basis": "Все функциональные проверки и integrity PASS; команды используют встроенные Node/Electron по абсолютным путям. Старое nativeAcceptance=PENDING вызвано ошибочным критерием наличия Node.js в PATH.",
+  "rerunPerformed": false,
+  "sourceReports": {
+    "before.json": "091704f32bc15400d83233bbaf016dca606edc57b031e1d89d5a76a6dc527554",
+    "after.json": "5b6cbddff004a0f82c431cdaa5e3e86ecd54ad4148b9bdb4b5f6f79618b096b0",
+    "provenance.json": "478b75d477dc1fb628212cf38ce3d947f38c5f7f40f6be00ac09a2ccbbd3a384"
+  },
+  "observedSystemNode": "C:\\Program Files\\nodejs\\node.exe",
+  "rawReportsUnmodified": true,
+  "checks": {
+    "bundledRuntimePaths": "PASS",
+    "shippingNAndNPlus1": "PASS",
+    "offlineE2EAndRestart": "PASS",
+    "signedFixtureAndRejections": "PASS",
+    "manualReplacement": "PASS",
+    "fileAndHistoryPreserved": "PASS",
+    "artifactBindingAndIntegrity": "PASS"
+  }
+}

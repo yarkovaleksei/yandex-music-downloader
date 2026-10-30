@@ -13,6 +13,9 @@ import type { DesktopSettings, NamingPreset } from './desktop-settings.js';
 export interface EffectiveDownload extends DownloadRequest {
   readonly overwrite: boolean;
   readonly naming: NamingPreset;
+  readonly writeTags?: boolean;
+  readonly saveCoverFile?: boolean;
+  readonly writeM3u8?: boolean;
 }
 export interface HistoryEntry {
   readonly jobId: string;
@@ -47,6 +50,7 @@ export interface DesktopStateStore {
 }
 /** Отдельное расширение сохраняет совместимость существующего ApplicationApi и CLI. */
 export interface DesktopApplicationApi extends ApplicationApi {
+  accountAvatar(): Promise<ApplicationResult<ArtworkDto | null>>;
   getSettings(): Promise<ApplicationResult<DesktopSettings>>;
   saveSettings(
     value: DesktopSettings,
@@ -55,6 +59,7 @@ export interface DesktopApplicationApi extends ApplicationApi {
   listDownloads(): Promise<ApplicationResult<readonly JobSnapshot[]>>;
   clearDownloads(): Promise<ApplicationResult<number>>;
   history(): Promise<ApplicationResult<readonly HistoryEntry[]>>;
+  downloadArtwork(jobId: string): Promise<ApplicationResult<ArtworkDto | null>>;
   historyArtwork(jobId: string): Promise<ApplicationResult<ArtworkDto | null>>;
   hideHistory(jobId: string): Promise<ApplicationResult<null>>;
   replay(jobId: string): Promise<ApplicationResult<JobSnapshot>>;

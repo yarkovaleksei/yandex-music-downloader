@@ -1,0 +1,19 @@
+Наблюдения implementer, 2026-10-29. Это summary, не реконструкция terminal output.
+
+Команды после renderer implementation:
+- npx vitest run apps/desktop/src/renderer: exit 0, 9 файлов, 46 tests PASS. Literal captured output: renderer-tests.txt.
+- npx tsc -b: exit 0.
+- npx tsc -p tsconfig.tests.json: exit 0.
+- npx eslint apps/desktop/src/renderer --max-warnings 0: exit 0.
+- npx eslint --no-inline-config -c eslint.boundaries.config.mjs apps/desktop/src/renderer --max-warnings 0: exit 0.
+
+После перехода к evidence group:
+- node apps/desktop/scripts/build.mjs: exit 0; advisory о chunk size сохранён в desktop-build.txt.
+- MUSIC_E2E_ARTIFACTS=apps/desktop/evidence/STEP-058/electron node apps/desktop/e2e/run.mjs: exit 0, 1 Linux Electron test PASS. Captured output: electron-run.txt.
+- Новое Electron-наблюдение: flags writeTags/saveCoverFile/writeM3u8=false и theme=dark восстановлены после restart; exact MP3/MP3/192 выбор отменён и применён; после паузы/продолжения задание завершилось, файл сохранён, history восстановлена после restart, replay завершился после изменения текущих settings.
+- H-001 фактическая независимость tags/embedded cover/cover.jpg/m3u8 и original replay/resume snapshot дополнительно доказывается integration tests core-группы (ссылки и результаты фиксирует root). Один track Electron scenario сам по себе не доказывает output коллекции .m3u8/cover.
+
+Полный canonical verification запускает dispatcher/root; этот файл не объявляет STEP завершённым и не заменяет independent REVIEW.
+Visual screenshot/checklist создаёт root независимо по server fixture.
+
+Fixture: e2e ESLint и boundary ESLint PASS; node --check PASS; /docs/brand/icon.png HTTP 200 image/png; fixture.css содержит 21 inline @font-face Inter (400/600/700), поэтому отдельных font network requests нет. /auth вернул фактический provider HTML с синтетическим кодом TEST-0058 через изолированный Node subprocess.

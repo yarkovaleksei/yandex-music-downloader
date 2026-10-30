@@ -44,9 +44,7 @@ it('REQ-057: заголовок свёрнутого задания содерж
   const toggle = screen.getByRole('button', { name: 'Подробности one' });
   expect(toggle.getAttribute('aria-expanded')).toBe('false');
   expect(screen.queryByText('Трек 1 · Загрузка')).toBeNull();
-  fireEvent.click(
-    screen.getByRole('button', { name: 'Приостановить' }),
-  );
+  fireEvent.click(screen.getByRole('button', { name: 'Приостановить' }));
   expect(command).toHaveBeenCalledWith(current, 'pause');
   fireEvent.click(screen.getByRole('link', { name: 'one' }));
   expect(openSource).toHaveBeenCalledWith(current.publicUrl);
@@ -88,4 +86,57 @@ it('REQ-057: массовые действия выбирают допустим
   await act(() => hook.result.current.clearCompleted());
   expect(api.clearDownloads).toHaveBeenCalledOnce();
   expect(hook.result.current.jobs).toHaveLength(3);
+});
+
+it('REQ-058: четыре вкладки используют единые состояния и реальные подписи; меню не раскрывает строку', async () => {
+  const states = [
+    'queued',
+    'paused',
+    'interrupted',
+    'running',
+    'completed',
+    'cancelled',
+    'failed',
+    'completed_with_errors',
+  ] as const;
+  const jobs = states.map((status) => ({
+    ...job(status, status),
+    title: `Название ${status}`,
+    author: 'Тестовый автор',
+  }));
+  const command = vi.fn();
+  render(
+    <Downloads
+      jobs={jobs}
+      progress={{}}
+      trackProgress={{}}
+      pending={{}}
+      connected
+      command={command}
+      batch={vi.fn()}
+      clearCompleted={vi.fn()}
+      openFolder={vi.fn()}
+      openSource={vi.fn()}
+    />,
+  );
+  for (const [label, count] of [
+    ['Очередь (3)', 3],
+    ['Активные (1)', 1],
+    ['Завершённые (2)', 2],
+    ['Ошибки (2)', 2],
+  ] as const) {
+    fireEvent.click(screen.getByRole('tab', { name: label }));
+    expect(screen.getAllByRole('article')).toHaveLength(count);
+  }
+  const row = screen.getByRole('button', { name: 'Подробности failed' });
+  fireEvent.click(
+    screen.getByRole('button', { name: 'Действия Название failed' }),
+  );
+  expect(
+    screen
+      .getByRole('menuitem', { name: 'Отменить' })
+      .getAttribute('aria-disabled'),
+  ).toBe('true');
+  expect(row.getAttribute('aria-expanded')).toBe('false');
+  expect(screen.getByText('Название failed')).toBeTruthy();
 });

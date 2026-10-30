@@ -3,6 +3,7 @@ import type {
   DownloadRequest,
   MediaReference,
   QualityPreference,
+  VariantSelection,
 } from './domain.js';
 import type { Account } from './provider.js';
 import type { CommandErrorDto, JsonObject, JobEvent } from './events.js';
@@ -12,6 +13,8 @@ export interface JobSnapshot {
   readonly jobId: string;
   readonly source: MediaReference;
   readonly status: DownloadJobStatus;
+  readonly title?: string;
+  readonly author?: string;
   readonly publicUrl?: string;
   readonly pauseReason?: string;
   readonly tracks: readonly {
@@ -33,6 +36,14 @@ export interface PreviewDto {
   readonly tracks: readonly JsonObject[];
   readonly artwork?: ArtworkDto;
   readonly author?: string;
+  readonly description?: string;
+  readonly durationMs?: number;
+  readonly authorArtwork?: ArtworkDto;
+  readonly variants?: readonly {
+    readonly selection: VariantSelection;
+    readonly available: number;
+    readonly total: number;
+  }[];
   readonly qualities?: readonly {
     readonly preference: QualityPreference;
     readonly available: number;

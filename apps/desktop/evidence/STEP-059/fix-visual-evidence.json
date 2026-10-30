@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "status": "PASS",
+  "data": "Только synthetic browser account, Linux Chrome1440x1000",
+  "observations": [
+    {
+      "scenario": "normal",
+      "before": {
+        "avatarImages": 1,
+        "text": "Приложение подключено\nАккаунт\n\nПодключение к Яндекс Музыке\n\nТестовый пользователь\n\nsynthetic@example.test\n\nАвторизация активна\nВыйти из аккаунта\nПодписка\n\nЯндекс Плюс активен\n\nИнформация\nID аккаунта\nsynthetic-account\nEmail\nsynthetic@example.test\nРегион\nТестовый регион\nТип подписки\nЯндекс Плюс активен\nДоступные форматы\nОбщего перечня нет: сервис сообщает варианты при анализе конкретного трека. Подписка не гарантирует доступность отдельного формата.\nДанные входа находятся в защищённом хранилище операционной системы. Выход удаляет сохранённый токен этого приложения."
+      },
+      "after": {
+        "avatarImages": 0,
+        "text": "Приложение подключено\nАккаунт\n\nПодключение к Яндекс Музыке\n\nЯ\nАккаунт не подключён\n\nEmail: нет данных\n\nВойдите через браузер, чтобы загружать доступную вам музыку\nВойти через браузер\nДанные входа находятся в защищённом хранилище операционной системы. Выход удаляет сохранённый токен этого приложения."
+      }
+    },
+    {
+      "scenario": "avatar-late",
+      "before": {
+        "avatarImages": 0,
+        "text": "Приложение подключено\nАккаунт\n\nПодключение к Яндекс Музыке\n\nТ\nТестовый пользователь\n\nsynthetic@example.test\n\nАвторизация активна\nВыйти из аккаунта\nПодписка\n\nЯндекс Плюс активен\n\nИнформация\nID аккаунта\nsynthetic-account\nEmail\nsynthetic@example.test\nРегион\nТестовый регион\nТип подписки\nЯндекс Плюс активен\nДоступные форматы\nОбщего перечня нет: сервис сообщает варианты при анализе конкретного трека. Подписка не гарантирует доступность отдельного формата.\nДанные входа находятся в защищённом хранилище операционной системы. Выход удаляет сохранённый токен этого приложения."
+      },
+      "after": {
+        "avatarImages": 0,
+        "text": "Приложение подключено\nАккаунт\n\nПодключение к Яндекс Музыке\n\nЯ\nАккаунт не подключён\n\nEmail: нет данных\n\nВойдите через браузер, чтобы загружать доступную вам музыку\nВойти через браузер\nДанные входа находятся в защищённом хранилище операционной системы. Выход удаляет сохранённый токен этого приложения."
+      }
+    }
+  ],
+  "sourceInputs": {
+    "apps/desktop/src/renderer/App.tsx": "9d23d7afcbc6877ca81e19b81124d3fbd90e3ae034d646ab3f0174bf0d02e61d",
+    "apps/desktop/src/renderer/App.test.tsx": "f49ccfff3fc2d8efaa634c6331ce440f2c500b3e3052642adae1dc43f1f69fb4",
+    "packages/providers/yandex-music/src/yandex-music-auth.ts": "526374b6ed85afce0eb9981733f388571e4074eafb9f378d9fbbaccfb8dedbec",
+    "packages/providers/yandex-music/src/yandex-music-auth.test.ts": "b438ad063e845b150e4d1cfb11643f6249c9451d433f37c258571471aefb2ef4"
+  },
+  "screenshots": {
+    "fix-sidebar-logout-avatar-late.png": "ef7cf41374ed24565f3fd33725106edb9b741d32efd5bb8805051a420d1bd57f",
+    "fix-sidebar-logout-normal.png": "b37fb255b22fcbea55e16e8f3a6cd56d88926afd84975ea979b8a728d71526dc"
+  },
+  "proofs": [
+    "F001 original independent1/1PASS; F002 original realcomposition1/1PASS, authenticated/observed/persisted=B и avatar=null.",
+    "Affected7files101testsPASS; финальныйUI regression2PASS, targetedlint/typesPASS."
+  ],
+  "limitations": [
+    "Первоначальные10screenshots/source hashes сохранены как capture до этих4 source fixes; layout прочих экранов не изменён.",
+    "Фото и профиль реального аккаунта не сохранялись; functional provider race проверен отдельным synthetic composition repro, не browserfixture.",
+    "Все временные QA runtime будут остановлены; пользователь запретил запуск dev после завершения."
+  ]
+}

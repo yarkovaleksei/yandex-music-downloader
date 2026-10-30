@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "reason": "Несколько existing integration test files запускают root build и конкурируют за один apps/desktop/dist; воспроизведён ENOENT unlink dist/update-trust.json в beforeAll download-manager.integration.test. Изолированные recovery tests7/7PASS, рабочий source этих fixtures не менялся.",
+  "environment": {
+    "VITEST_MAX_FORKS": "1",
+    "VITEST_MIN_FORKS": "1",
+    "VITEST_MAX_THREADS": "1",
+    "VITEST_MIN_THREADS": "1"
+  },
+  "method": "Официальные env settings установленного Vitest3.2.7 применены только к запуску canonical verification; exact commands не изменены, все test files/cases выполняются. Внутренние concurrency/process проверки внутри test file не заменены последовательными сценариями.",
+  "sourceEvidence": [
+    "packages/application/src/manifest-recovery.integration.test.ts:beforeAll root build",
+    "packages/application/src/download-manager.integration.test.ts:beforeAll root build",
+    "apps/desktop/scripts/build.mjs:47 cp update-trust",
+    "node_modules/vitest/dist/chunks/coverage.DfSpMS-b.js:3719–3760 env pool settings"
+  ],
+  "limitation": "Этот PASS не заявляет безопасность одновременных отдельных root build процессов; существующая общая build-fixture гонка не исправлялась в STEP-059."
+}

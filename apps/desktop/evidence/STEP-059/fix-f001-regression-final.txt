@@ -1,0 +1,11 @@
+
+ RUN  v3.2.7 /home/user/github.com/yarkovaleksei/yandex-music-downloader
+
+ ✓ |@music-downloader/desktop| src/renderer/App.test.tsx (23 tests | 21 skipped) 514ms
+   ✓ STEP-059 F-001: sidebar logout очищает открытый Account и отбрасывает поздний avatar (pending=false)  348ms
+
+ Test Files  1 passed (1)
+      Tests  2 passed | 21 skipped (23)
+   Start at  23:52:17
+   Duration  2.20s (transform 198ms, setup 0ms, collect 1.07s, tests 514ms, environment 271ms, prepare 86ms)
+

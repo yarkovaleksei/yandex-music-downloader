@@ -37,17 +37,28 @@ export function jobNotifications(
     if (result.kind !== 'result' || !result.data) return;
     observe(result.data);
     const status = result.data.status;
-    if (!['completed', 'completed_with_errors', 'failed'].includes(status))
+    if (
+      !['completed', 'completed_with_errors', 'failed', 'cancelled'].includes(
+        status,
+      )
+    )
       return;
     const key = `${event.jobId}:${event.seq}:${status}`;
     if (notified.has(key)) return;
     notified.add(key);
     display(
-      status === 'completed' ? 'Загрузка завершена' : 'Ошибка загрузки',
+      status === 'completed'
+        ? 'Загрузка завершена'
+        : status === 'cancelled'
+          ? 'Загрузка отменена'
+          : 'Ошибка загрузки',
       status === 'completed'
         ? 'Музыка сохранена в выбранной папке.'
-        : 'Некоторые треки не загружены. Подробности — на экране загрузок.',
+        : status === 'cancelled'
+          ? 'Загрузка остановлена пользователем.'
+          : 'Некоторые треки не загружены. Подробности — на экране загрузок.',
     );
+    // STEP-059: завершение сообщает исход, папку открывает только явное действие.
   };
   return Object.assign(notify, {
     beginResume(jobId: string) {
@@ -73,7 +84,18 @@ export function jobNotifications(
       if (result.kind !== 'result' || !result.data) return;
       if (method === 'listJobs')
         for (const job of result.data as readonly JobSnapshot[]) observe(job);
-      else observe(result.data as JobSnapshot);
+      else {
+        const job = result.data as JobSnapshot;
+        observe(job);
+        // Cancel не создаёт job.completed в core; подтверждённый ответ уже доступен main.
+        if (method === 'cancel' && job.status === 'cancelled') {
+          const key = `${job.jobId}:cancelled`;
+          if (!notified.has(key)) {
+            notified.add(key);
+            display('Загрузка отменена', 'Загрузка остановлена пользователем.');
+          }
+        }
+      }
     },
   });
 }

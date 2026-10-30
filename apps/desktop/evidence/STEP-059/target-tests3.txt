@@ -1,0 +1,18 @@
+
+ RUN  v3.2.7 /home/user/github.com/yarkovaleksei/yandex-music-downloader
+
+{"level":"warn","time":"2026-10-29T20:18:49.986Z","message":"Команда application завершилась ошибкой.","context":{},"data":{"command":"logout","code":"DOWNLOAD_ERROR"}}
+{"level":"warn","time":"2026-10-29T20:18:49.988Z","message":"Команда application завершилась ошибкой.","context":{},"data":{"command":"getJob","code":"DOWNLOAD_ERROR"}}
+{"level":"warn","time":"2026-10-29T20:18:49.989Z","message":"Команда application завершилась ошибкой.","context":{},"data":{"command":"getJob","code":"DOWNLOAD_ERROR"}}
+{"level":"warn","time":"2026-10-29T20:18:49.989Z","message":"Команда application завершилась ошибкой.","context":{},"data":{"command":"listJobs","code":"DOWNLOAD_ERROR"}}
+{"level":"warn","time":"2026-10-29T20:18:49.989Z","message":"Команда application завершилась ошибкой.","context":{},"data":{"command":"getJob","code":"DOWNLOAD_ERROR"}}
+{"level":"warn","time":"2026-10-29T20:18:49.990Z","message":"Команда application завершилась ошибкой.","context":{},"data":{"command":"listJobs","code":"DOWNLOAD_ERROR"}}
+ ✓ |@music-downloader/application| src/application.contract.test.ts (10 tests) 87ms
+ ✓ |@music-downloader/desktop| src/renderer/History.test.tsx (8 tests) 1574ms
+   ✓ REQ-051: поиск metadata и фильтр типа меняют список, legacy replay объяснён и выключен  548ms
+
+ Test Files  2 passed (2)
+      Tests  18 passed (18)
+   Start at  23:18:48
+   Duration  3.01s (transform 596ms, setup 0ms, collect 1.70s, tests 1.66s, environment 267ms, prepare 159ms)
+

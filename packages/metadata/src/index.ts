@@ -23,6 +23,7 @@ export interface MetadataWriteRequest {
   readonly resultPath: string;
   readonly container: 'mp3' | 'mp4';
   readonly tags: MetadataTags;
+  readonly writeTags?: boolean;
   readonly artwork?: ArtworkData;
   readonly sourceKind: 'track' | 'album' | 'playlist';
   readonly embedArtwork: boolean;
@@ -72,7 +73,9 @@ function tag(request: MetadataWriteRequest, file: AudioFile): Uint8Array {
     // Явный container защищает от записи MP4-тегов в bytes MP3 и наоборот.
     if (file.getFormat() !== expectedFormat(request.container))
       throw new MetadataError();
-    file.setProperties(properties(request.tags));
+    // REQ-025/058: выключение тегов пропускает properties, не затрагивая pictures.
+    if (request.writeTags !== false)
+      file.setProperties(properties(request.tags));
     if (request.embedArtwork && request.artwork !== undefined) {
       file.setPictures([
         {

@@ -11,7 +11,7 @@ import {
 import { PortableUpdates } from './update/service.js';
 import type { UpdateTrust } from './update/service.js';
 import { randomBytes } from 'node:crypto';
-import { readFile, stat } from 'node:fs/promises';
+import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import type { ApplicationResult, JobSnapshot } from '@music-downloader/shared';
@@ -27,6 +27,7 @@ import { DirectoryRegistry } from './directory-registry.js';
 import { HostSupervisor } from './host-supervisor.js';
 import { registerIpc } from '../transport/main-ipc.js';
 import type { Method } from '../contract/desktop-api.js';
+import { jobFolders } from './job-folders.js';
 import { jobNotifications } from './job-notifications.js';
 import { sendEvent } from '../transport/window-events.js';
 
@@ -102,6 +103,8 @@ void app.whenReady().then(async () => {
   window = new BrowserWindow(
     windowOptions(path.resolve(import.meta.dirname, '../preload.cjs')),
   );
+  // STEP-059: служебное меню не занимает клиентскую область Linux/Windows.
+  if (process.platform !== 'darwin') window.setMenu(null);
   window.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
   window.webContents.on('will-navigate', (event, url) => {
     if (!isAppUrl(url)) event.preventDefault();
@@ -132,6 +135,8 @@ void app.whenReady().then(async () => {
     directories,
     {
       updates,
+      appInfo: () => ({ version: app.getVersion(), dev: !app.isPackaged }),
+      jobFolderAvailability: folders.availability,
       selectFfmpeg: async () => {
         if (!window) return undefined;
         const result = await dialog.showOpenDialog(window, {
@@ -147,23 +152,7 @@ void app.whenReady().then(async () => {
         });
         return result.canceled ? undefined : result.filePaths[0];
       },
-      showItemInFolder: async (jobId, trackKey) => {
-        const response = (await invokeHost('getJob', {
-          jobId,
-        })) as ApplicationResult<JobSnapshot | null>;
-        if (response.kind !== 'result' || !response.data) return false;
-        const track = trackKey
-          ? response.data.tracks.find((item) => item.trackKey === trackKey)
-          : response.data.tracks.find((item) => item.resultPath);
-        if (!track?.resultPath) return false;
-        try {
-          await stat(track.resultPath);
-          shell.showItemInFolder(track.resultPath);
-          return true;
-        } catch {
-          return false;
-        }
-      },
+      showItemInFolder: folders.open,
       openDirectory: async (directory) =>
         (await shell.openPath(directory)) === '',
       openExternal: async (url) => {
@@ -188,3 +177,11 @@ app.on('before-quit', (event) => {
   void host.close().finally(() => app.quit());
 });
 app.on('window-all-closed', () => app.quit());
+
+const folders = jobFolders(
+  async (jobId) =>
+    (await invokeHost('getJob', {
+      jobId,
+    })) as ApplicationResult<JobSnapshot | null>,
+  (file) => shell.showItemInFolder(file),
+);

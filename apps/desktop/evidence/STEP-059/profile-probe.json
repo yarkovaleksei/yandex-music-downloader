@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "status": "PASS",
+  "observedAt": "2026-10-29",
+  "method": "Read-only desktop keyring credential → fixed official login.yandex.ru/info → allowlisted avatars.yandex.net/get-yapic; installed SDK accountStatus",
+  "account": {
+    "hasPlus": true,
+    "autoRenewableCount": 1,
+    "familyAutoRenewableCount": 0,
+    "activeNamedAutoRenewable": false
+  },
+  "avatar": {
+    "profileHttpStatus": 200,
+    "customAvatar": true,
+    "avatarImageHttpStatus": 200,
+    "contentType": "image/jpeg",
+    "bytes": 9827
+  },
+  "limitations": [
+    "Сохранены только признаки/HTTP-статусы; токен, ID, имя и содержимое ответа/фотографии не сохранены.",
+    "Первый probe отклонил составной avatar ID локальной слишком строгой проверкой; после разрешения документированного пути изображение получено.",
+    "Наличие Plus не доказывает доступность каждого codec для каждого трека."
+  ]
+}

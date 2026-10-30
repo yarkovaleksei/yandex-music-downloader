@@ -75,6 +75,7 @@ export class TrackPipeline {
         const selected = this.deps.selectVariant(
           variants,
           owner.current.quality as QualityPreference,
+          { variantSelection: this.options.variantSelection },
         );
         if (!selected.ok) throw selected.error;
         // @link planning/tasks/STEP-048.md
@@ -224,8 +225,10 @@ export class TrackPipeline {
                     plannedTrack: planned,
                     sourceKind: owner.current.plan.source.kind,
                     resultPath: track.resultPath!,
+                    // REQ-058: текстовые теги и отдельная обложка независимы от встраивания.
+                    writeTags: this.options.writeTags ?? true,
                     embedArtwork: true,
-                    saveCoverFile: true,
+                    saveCoverFile: this.options.saveCoverFile ?? true,
                   },
                 );
                 await context.emit('metadata.written', key);

@@ -1,0 +1,2 @@
+[11796:1029/203025.873:ERROR:ui\gl\direct_composition_support.cc:255] GetGpuDriverOverlayInfo: Failed to retrieve video device
+[7620:1029/203026.179:INFO:CONSOLE:1] "STEP-054: журнал renderer подключён", source:  (1)

@@ -386,3 +386,110 @@ describe('cache application integration', () => {
     }
   });
 });
+
+it('STEP-059 / H-002: avatar persistent account cache переживает reopen, TTL и clear обновляют только bytes/MIME', async () => {
+  const stateDir = await mkdtemp(path.join(os.tmpdir(), 'avatar-cache-'));
+  let clock = 100;
+  let account = 'first';
+  const source = provider(() => account);
+  const fetchAvatar = vi.fn(async () => ({
+    mimeType: 'image/png',
+    bytes: new Uint8Array([1, 2, 3]),
+    profile: 'secret-marker',
+    url: 'https://profile.example.test',
+    token: 'secret-marker',
+  }));
+  source.fetchAccountAvatar = fetchAvatar;
+  const store = new FileCacheStore({
+    stateDir,
+    ttlMs: 300_000,
+    now: () => clock,
+  });
+  const create = () =>
+    new CachedProvider(source, store, {
+      providerId: 'synthetic',
+      schemaVersion: '1',
+    });
+  try {
+    await create().fetchAccountAvatar();
+    expect(await create().fetchAccountAvatar()).toEqual({
+      mimeType: 'image/png',
+      bytes: new Uint8Array([1, 2, 3]),
+    });
+    expect(fetchAvatar).toHaveBeenCalledTimes(1);
+    const files = await readdir(path.join(stateDir, 'cache'));
+    expect(files).toHaveLength(1);
+    const payload = await readFile(
+      path.join(stateDir, 'cache', files[0]!),
+      'utf8',
+    );
+    expect(payload).not.toMatch(/secret-marker|https:|profile|token|first/);
+    clock += 300_000;
+    await create().fetchAccountAvatar();
+    expect(fetchAvatar).toHaveBeenCalledTimes(2);
+    await store.clear();
+    await create().fetchAccountAvatar();
+    expect(fetchAvatar).toHaveBeenCalledTimes(3);
+    account = 'second';
+    await create().fetchAccountAvatar();
+    expect(fetchAvatar).toHaveBeenCalledTimes(4);
+  } finally {
+    await rm(stateDir, { recursive: true, force: true });
+  }
+});
+
+it('STEP-059 / H-002: deferred avatar не задерживает account/metadata/auth/logout и не загрязняет cache другого account', async () => {
+  const stateDir = await mkdtemp(path.join(os.tmpdir(), 'avatar-pending-'));
+  let account: string | null = 'first';
+  const source = provider(() => account);
+  const pending = deferred();
+  const started = deferred();
+  source.fetchAccountAvatar = vi.fn(async () => {
+    started.resolve();
+    await pending.promise;
+    return { mimeType: 'image/png', bytes: new Uint8Array([1]) };
+  });
+  source.logout = async () => {
+    account = null;
+  };
+  source.authenticate = async () => {
+    account = 'second';
+    return { id: 'second', displayName: 'Второй' };
+  };
+  const store = new FileCacheStore({ stateDir, ttlMs: 300_000 });
+  const cached = new CachedProvider(source, store, {
+    providerId: 'synthetic',
+    schemaVersion: '1',
+  });
+  try {
+    const photo = cached.fetchAccountAvatar();
+    await started.promise;
+    expect(await cached.getAccount()).toMatchObject({ id: 'first' });
+    expect(await cached.getTrack('1')).toMatchObject({ id: '1' });
+    await cached.logout();
+    expect(await cached.authenticate()).toMatchObject({ id: 'second' });
+    pending.resolve();
+    expect(await photo).toBeNull();
+    expect(
+      await store.read({
+        providerId: 'synthetic',
+        schemaVersion: '1',
+        accountId: 'first',
+        method: 'fetchAccountAvatar',
+        arguments: [],
+      }),
+    ).toBeUndefined();
+    expect(
+      await store.read({
+        providerId: 'synthetic',
+        schemaVersion: '1',
+        accountId: 'second',
+        method: 'fetchAccountAvatar',
+        arguments: [],
+      }),
+    ).toBeUndefined();
+  } finally {
+    pending.resolve();
+    await rm(stateDir, { recursive: true, force: true });
+  }
+});

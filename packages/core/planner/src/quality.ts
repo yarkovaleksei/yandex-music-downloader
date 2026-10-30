@@ -3,9 +3,11 @@ import {
   type AudioVariant,
   type DownloadPlan,
   type QualityPreference,
+  type VariantSelection,
 } from '@music-downloader/shared';
 
 export interface QualityOptions {
+  readonly variantSelection?: VariantSelection;
   /** Внедряемый фильтр поддерживаемых вариантов; по умолчанию принимает все. */
   readonly supports?: (variant: AudioVariant) => boolean;
   /** Внедряемое ранжирование codec (больше — лучше); по умолчанию порядок provider. */
@@ -79,6 +81,13 @@ export function resolveVariant(
 ): VariantResult {
   const supports = options.supports ?? (() => true);
   const usable = variants.filter((variant) => supports(variant));
+  // REQ-058: exact selector имеет приоритет над preset; undefined bitrate не wildcard.
+  if (options.variantSelection !== undefined) {
+    const selected = usable.find((item) =>
+      matchesVariant(item, options.variantSelection!),
+    );
+    return selected ? { ok: true, variant: selected } : unavailable();
+  }
   const lossless = usable.filter((variant) => variant.lossless);
   const lossy = usable.filter((variant) => !variant.lossless);
   switch (quality) {
@@ -121,4 +130,16 @@ export function resolvePlanVariants(
         : unavailable(),
     };
   });
+}
+
+export function matchesVariant(
+  variant: AudioVariant,
+  selection: VariantSelection,
+): boolean {
+  return (
+    variant.codec === selection.codec &&
+    variant.container === selection.container &&
+    variant.lossless === selection.lossless &&
+    variant.bitrate === selection.bitrate
+  );
 }

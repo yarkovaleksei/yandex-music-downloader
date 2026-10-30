@@ -1,0 +1,1 @@
+PASS: synthetic shipping FAIL сохранён; ровно один diagnostic E2E с prebuilt guest branch завершился PASS, raw load/renderer journal сохранён; native PENDING

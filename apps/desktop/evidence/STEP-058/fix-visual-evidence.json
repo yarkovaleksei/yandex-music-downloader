@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "status": "PASS",
+  "data": "synthetic mock DesktopApi; Linux Chrome 1440x1000",
+  "sourceInputs": {
+    "apps/desktop/src/renderer/App.tsx": "0c4e78e3bd1832db38973c1844f75961c2480667479e266036ba6d1d960e7df1",
+    "apps/desktop/src/renderer/Settings.tsx": "28cdcb301af33bd6393b62d972391748cb867ea52b1ed1c9d448861e5a0b9c87",
+    "apps/desktop/src/renderer/useDownloads.ts": "1f205d24a642b6da6319d9e281bdc3a1cfcb31663c342951e865595914ca5b10",
+    "apps/desktop/src/renderer/App.test.tsx": "fa525c61dbbcdf4239669d5696532e68ea510652df3a186b19ee9655ed3cbeb8",
+    "apps/desktop/e2e/STEP-058-visual-fixture.mjs": "07a6434c2f9afa41c0640a878a84492f65ae7247465f52eea02fd95e5247104a"
+  },
+  "screenshots": {
+    "fix-theme-saved.png": "34a4f332498ce3815fe3a13341fb55aa349ac33530e76cf2aa2774e71de434e5",
+    "fix-cancel-confirmed.png": "562a8a9f97bb6d6fe2389a1c6908ce942986b173cbb6a213ec27e055e67620ae"
+  },
+  "observations": [
+    "F-001: Настройки открыты при light; sidebar dark; сразу Сохранить настройки. localStorage theme=dark, sidebar checked=true, сохранение подтверждено.",
+    "F-002: Загрузки→Действия Вечерний вайб→Отменить. API fixture возвращает cancelled без job.completed; появился alert «Отменено: Вечерний вайб», counters Active0/Completed3.",
+    "Browser console errors=0; raw CLI output в fix-browser-commands.txt."
+  ],
+  "limitations": [
+    "Исходные 31 screenshots и visual-evidence.json сохраняют исторические hashes capture до FIX. Эти два screenshots дополняют их проверкой исправленного поведения.",
+    "Отмена в исходном screenshot09 была visual-only synthetic event; доказательство настоящего UI command path — текущий FIX и renderer tests.",
+    "Нативные Windows/macOS и packaging не выполнялись."
+  ]
+}

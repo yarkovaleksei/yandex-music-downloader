@@ -6,6 +6,9 @@ import {
   Box,
   Button,
   Chip,
+  IconButton,
+  InputAdornment,
+  AlertTitle,
   CssBaseline,
   Dialog,
   DialogActions,
@@ -23,6 +26,8 @@ import {
 } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import DownloadRounded from '@mui/icons-material/DownloadRounded';
+import CloseRounded from '@mui/icons-material/CloseRounded';
+import MusicNoteRounded from '@mui/icons-material/MusicNoteRounded';
 import HomeRounded from '@mui/icons-material/HomeRounded';
 import HistoryRounded from '@mui/icons-material/HistoryRounded';
 import SettingsRounded from '@mui/icons-material/SettingsRounded';
@@ -35,6 +40,8 @@ import type {
   JsonObject,
   PreviewDto,
   QualityPreference,
+  VariantSelection,
+  ArtworkDto,
 } from '@music-downloader/shared';
 import type {
   DesktopApi,
@@ -54,6 +61,14 @@ const qualityNames: Record<QualityPreference, string> = {
   high: 'Высокое',
   normal: 'Обычное',
 };
+function artworkUrl(artwork?: ArtworkDto) {
+  return artwork
+    ? `data:${artwork.mimeType};base64,${artwork.base64}`
+    : undefined;
+}
+function variantName(value: VariantSelection) {
+  return `${value.codec.toUpperCase()} / ${value.container.toUpperCase()}${value.bitrate === undefined ? ' · битрейт не указан' : ` · ${value.bitrate} кбит/с`}${value.lossless ? ' · без потерь' : ''}`;
+}
 const kindNames = { track: 'Трек', album: 'Альбом', playlist: 'Плейлист' };
 function metadata(item: JsonObject): JsonObject {
   return typeof item.track === 'object' &&
@@ -88,6 +103,10 @@ export function App({ api = window.desktopApi }: { api?: DesktopApi }) {
   const [previewBusy, setPreviewBusy] = useState(false);
   const [urlError, setUrlError] = useState('');
   const [quality, setQuality] = useState<QualityPreference>();
+  const [variant, setVariant] = useState<VariantSelection>();
+  const [draftQuality, setDraftQuality] = useState<QualityPreference>();
+  const [draftVariant, setDraftVariant] = useState<VariantSelection>();
+  const [themeBusy, setThemeBusy] = useState(false);
   const [qualityOpen, setQualityOpen] = useState(false);
   const [directory, setDirectory] = useState<DirectorySelection>();
   const [settings, setSettings] = useState<DesktopSettings>();
@@ -100,6 +119,7 @@ export function App({ api = window.desktopApi }: { api?: DesktopApi }) {
     const result = await api.getSettings();
     if (result.kind === 'result') {
       setSettings(result.data);
+      setDark(result.data.theme === 'dark');
       if (result.data.outputDirectory)
         setDirectory((previous) =>
           previous?.directoryRef.startsWith('dir:')
@@ -144,6 +164,7 @@ export function App({ api = window.desktopApi }: { api?: DesktopApi }) {
     setPreviewBusy(true);
     setPreview(undefined);
     setQuality(undefined);
+    setVariant(undefined);
     setUrlError('');
     try {
       const resolved = await api.resolve({ url });
@@ -170,6 +191,44 @@ export function App({ api = window.desktopApi }: { api?: DesktopApi }) {
       if (revision === request.current) setPreviewBusy(false);
     }
   }
+  // REQ-058: тема подтверждается сохранённым снимком; неизвестный исход перечитывается без повтора.
+  async function saveTheme(checked: boolean) {
+    if (!settings) return;
+    setThemeBusy(true);
+    try {
+      const result = await api.saveSettings({
+        quality: settings.quality,
+        concurrency: settings.concurrency,
+        naming: settings.naming,
+        overwrite: settings.overwrite,
+        logging: settings.logging,
+        writeTags: settings.writeTags ?? true,
+        saveCoverFile: settings.saveCoverFile ?? true,
+        writeM3u8: settings.writeM3u8 ?? true,
+
+        theme: checked ? 'dark' : 'light',
+      });
+      if (result.kind === 'result') {
+        setSettings(result.data);
+        setDark(result.data.theme === 'dark');
+      } else {
+        setNotice({ severity: 'error', message: result.error.message });
+        await refreshSettings();
+      }
+    } finally {
+      setThemeBusy(false);
+    }
+  }
+  function changeUrl(value: string) {
+    request.current++;
+    setUrl(value);
+    setPreview(undefined);
+    setQuality(undefined);
+    setVariant(undefined);
+    setQualityOpen(false);
+    setPreviewBusy(false);
+    setUrlError('');
+  }
   async function chooseDirectory() {
     const result = await api.selectDirectory();
     if (result.kind === 'result') {
@@ -184,6 +243,7 @@ export function App({ api = window.desktopApi }: { api?: DesktopApi }) {
       const result = await api.createDownload({
         source: preview.source,
         quality,
+        ...(variant ? { variantSelection: variant } : {}),
         directoryRef: directory.directoryRef,
       });
       if (result.kind === 'error')
@@ -201,7 +261,8 @@ export function App({ api = window.desktopApi }: { api?: DesktopApi }) {
   }
   return (
     <ThemeProvider theme={dark ? darkTheme : theme}>
-      <CssBaseline />
+      {/* Цветовая схема распространяется и на встроенный календарь браузера. */}
+      <CssBaseline enableColorScheme />
       <Box sx={{ display: 'flex', minHeight: '100vh' }}>
         <Box
           component="aside"
@@ -213,6 +274,12 @@ export function App({ api = window.desktopApi }: { api?: DesktopApi }) {
             overflowY: 'auto',
             '& > .MuiButton-root': {
               justifyContent: 'flex-start',
+              boxShadow: 'none',
+              '&.MuiButton-contained': {
+                bgcolor: 'action.selected',
+                // @link docs/brand/brandbook.md Активный пункт сохраняет контраст AA в обеих темах.
+                color: dark ? 'primary.main' : 'primary.dark',
+              },
               textAlign: 'left',
             },
             flexShrink: 0,
@@ -222,7 +289,7 @@ export function App({ api = window.desktopApi }: { api?: DesktopApi }) {
             p: 2,
             display: 'flex',
             flexDirection: 'column',
-            gap: 2,
+            gap: 1,
           }}
         >
           <Stack
@@ -279,7 +346,8 @@ export function App({ api = window.desktopApi }: { api?: DesktopApi }) {
             control={
               <Switch
                 checked={dark}
-                onChange={(_, checked) => setDark(checked)}
+                disabled={themeBusy}
+                onChange={(_, checked) => void saveTheme(checked)}
               />
             }
             label="Тёмная тема"
@@ -334,7 +402,19 @@ export function App({ api = window.desktopApi }: { api?: DesktopApi }) {
                 severity={downloads.notice.severity}
                 closeText="Закрыть"
                 onClose={() => setNotice(undefined)}
+                sx={{
+                  border: 1,
+                  borderColor: `${downloads.notice.severity}.light`,
+                  borderRadius: 2,
+                }}
               >
+                <AlertTitle>
+                  {downloads.notice.severity === 'success'
+                    ? 'Загрузка завершена'
+                    : downloads.notice.severity === 'error'
+                      ? 'Ошибка загрузки'
+                      : 'Уведомление'}
+                </AlertTitle>
                 {downloads.notice.message}
               </Alert>
             )}
@@ -347,9 +427,15 @@ export function App({ api = window.desktopApi }: { api?: DesktopApi }) {
                 }}
               />
             ) : page === 'settings' ? (
-              <Settings api={api} onSaved={() => void refreshSettings()} />
+              <Settings
+                api={api}
+                confirmedTheme={settings?.theme}
+                onSaved={() => void refreshSettings()}
+              />
             ) : page === 'account' ? (
+              // STEP-059 F-001: смена аккаунта в sidebar сбрасывает данные и pending avatar страницы.
               <AccountPage
+                key={account?.id ?? 'signed-out'}
                 api={api}
                 onChanged={() => setAccountRevision((value) => value + 1)}
               />
@@ -359,10 +445,6 @@ export function App({ api = window.desktopApi }: { api?: DesktopApi }) {
               <Downloads {...downloads} />
             ) : (
               <>
-                <Typography variant="h1">Музыка — в вашей коллекции</Typography>
-                <Typography color="text.secondary">
-                  Вставьте ссылку на трек, альбом или плейлист Яндекс Музыки
-                </Typography>
                 <Stack
                   component="form"
                   direction="row"
@@ -379,14 +461,21 @@ export function App({ api = window.desktopApi }: { api?: DesktopApi }) {
                     value={url}
                     error={Boolean(urlError)}
                     helperText={urlError}
-                    onChange={(event) => {
-                      request.current++;
-                      setUrl(event.target.value);
-                      setPreview(undefined);
-                      setQuality(undefined);
-                      setPreviewBusy(false);
-                      setUrlError('');
+                    slotProps={{
+                      input: {
+                        endAdornment: url ? (
+                          <InputAdornment position="end">
+                            <IconButton
+                              aria-label="Очистить ссылку"
+                              onClick={() => changeUrl('')}
+                            >
+                              <CloseRounded />
+                            </IconButton>
+                          </InputAdornment>
+                        ) : undefined,
+                      },
                     }}
+                    onChange={(event) => changeUrl(event.target.value)}
                   />
                   <Button
                     type="submit"
@@ -406,14 +495,50 @@ export function App({ api = window.desktopApi }: { api?: DesktopApi }) {
                     variant="outlined"
                     sx={{ p: 7, textAlign: 'center', borderStyle: 'dashed' }}
                   >
-                    <DownloadRounded
-                      sx={{ fontSize: 48, color: 'primary.main', mb: 2 }}
-                    />
-                    <Typography variant="h2">Начните со ссылки</Typography>
+                    <Avatar
+                      variant="rounded"
+                      sx={{
+                        width: 80,
+                        height: 80,
+                        bgcolor: 'primary.main',
+                        mx: 'auto',
+                        mb: 3,
+                      }}
+                    >
+                      <MusicNoteRounded sx={{ fontSize: 48 }} />
+                    </Avatar>
+                    <Typography variant="h2">
+                      Вставьте ссылку на Яндекс Музыку
+                    </Typography>
                     <Typography color="text.secondary" sx={{ mt: 1 }}>
-                      Посмотрите состав и доступное качество перед загрузкой
+                      Скачивайте отдельные треки, альбомы и плейлисты с
+                      сохранением метаданных и обложек
                     </Typography>
                   </Paper>
+                )}
+                {!preview && !previewBusy && (
+                  <Stack
+                    spacing={1}
+                    sx={{ pl: 2, borderLeft: 1, borderColor: 'divider' }}
+                  >
+                    <Typography variant="h3">Примеры ссылок</Typography>
+                    {[
+                      'https://music.yandex.ru/album/123456',
+                      'https://music.yandex.ru/track/987654',
+                      'https://music.yandex.ru/users/username/playlists/123456',
+                    ].map((example) => (
+                      <Button
+                        key={example}
+                        sx={{
+                          justifyContent: 'flex-start',
+                          color: 'text.secondary',
+                        }}
+                        onClick={() => changeUrl(example)}
+                      >
+                        ＋ {example}
+                      </Button>
+                    ))}
+                  </Stack>
                 )}
                 {preview && (
                   <Paper variant="outlined" sx={{ p: 3 }}>
@@ -432,8 +557,8 @@ export function App({ api = window.desktopApi }: { api?: DesktopApi }) {
                           }
                           alt="Обложка"
                           sx={{
-                            width: 112,
-                            height: 112,
+                            width: 144,
+                            height: 144,
                             bgcolor: 'primary.main',
                           }}
                         >
@@ -447,8 +572,29 @@ export function App({ api = window.desktopApi }: { api?: DesktopApi }) {
                             {kindNames[preview.kind]} · Треков:{' '}
                             {preview.tracks.length}
                           </Typography>
-                          <Typography sx={{ mt: 2 }}>
-                            Автор: {preview.author || 'не указан'}
+                          <Typography color="text.secondary" sx={{ mt: 1 }}>
+                            {preview.description || 'Описание не указано'}
+                          </Typography>
+                          <Stack
+                            direction="row"
+                            spacing={1}
+                            sx={{ alignItems: 'center', mt: 2 }}
+                          >
+                            <Avatar
+                              src={artworkUrl(preview.authorArtwork)}
+                              sx={{ width: 28, height: 28 }}
+                            >
+                              <PersonRounded fontSize="small" />
+                            </Avatar>
+                            <Typography>
+                              Автор: {preview.author || 'не указан'}
+                            </Typography>
+                          </Stack>
+                          <Typography color="text.secondary">
+                            Продолжительность:{' '}
+                            {preview.durationMs === undefined
+                              ? 'не указана'
+                              : `${Math.floor(preview.durationMs / 3600000)} ч ${Math.floor(preview.durationMs / 60000) % 60} мин`}
                           </Typography>
                           <Typography color="text.secondary">
                             Объём не определён
@@ -492,6 +638,23 @@ export function App({ api = window.desktopApi }: { api?: DesktopApi }) {
                                       : index + 1}
                                   </td>
                                   <td>
+                                    <Avatar
+                                      variant="rounded"
+                                      src={artworkUrl(
+                                        (item.artwork ??
+                                          track.artwork) as unknown as
+                                          ArtworkDto | undefined,
+                                      )}
+                                      sx={{
+                                        display: 'inline-flex',
+                                        width: 32,
+                                        height: 32,
+                                        mr: 1,
+                                        verticalAlign: 'middle',
+                                      }}
+                                    >
+                                      <MusicNoteRounded fontSize="small" />
+                                    </Avatar>
                                     {String(
                                       track.title ?? 'Название не указано',
                                     )}
@@ -525,7 +688,11 @@ export function App({ api = window.desktopApi }: { api?: DesktopApi }) {
                       >
                         <Button
                           variant="outlined"
-                          onClick={() => setQualityOpen(true)}
+                          onClick={() => {
+                            setDraftQuality(quality);
+                            setDraftVariant(variant);
+                            setQualityOpen(true);
+                          }}
                           disabled={
                             !preview.qualities?.some(
                               (item) => item.available > 0,
@@ -533,7 +700,11 @@ export function App({ api = window.desktopApi }: { api?: DesktopApi }) {
                           }
                         >
                           Качество:{' '}
-                          {quality ? qualityNames[quality] : 'Нет доступного'}
+                          {variant
+                            ? variantName(variant)
+                            : quality
+                              ? qualityNames[quality]
+                              : 'Нет доступного'}
                         </Button>
                         <Button
                           variant="outlined"
@@ -562,7 +733,7 @@ export function App({ api = window.desktopApi }: { api?: DesktopApi }) {
                           ? `Папка: ${directory.displayPath}`
                           : 'Папка не выбрана'}
                         {quality &&
-                          ` · Покрытие качества: ${preview.qualities?.find((item) => item.preference === quality)?.available} / ${preview.tracks.length}`}
+                          ` · Покрытие качества: ${variant ? preview.variants?.find((item) => JSON.stringify(item.selection) === JSON.stringify(variant))?.available : preview.qualities?.find((item) => item.preference === quality)?.available} / ${preview.tracks.length}`}
                       </Typography>
                     </Stack>
                   </Paper>
@@ -592,17 +763,49 @@ export function App({ api = window.desktopApi }: { api?: DesktopApi }) {
                   key={item.preference}
                   control={
                     <Radio
-                      checked={quality === item.preference}
-                      onChange={() => setQuality(item.preference)}
+                      checked={
+                        !draftVariant && draftQuality === item.preference
+                      }
+                      onChange={() => {
+                        setDraftQuality(item.preference);
+                        setDraftVariant(undefined);
+                      }}
                     />
                   }
                   label={`${qualityNames[item.preference]} · ${item.available} / ${tracksQuantity(item.total)}`}
                 />
               ))}
+            {preview?.variants?.map((item) => (
+              <FormControlLabel
+                key={JSON.stringify(item.selection)}
+                disabled={item.available === 0}
+                control={
+                  <Radio
+                    checked={
+                      JSON.stringify(draftVariant) ===
+                      JSON.stringify(item.selection)
+                    }
+                    onChange={() => setDraftVariant(item.selection)}
+                  />
+                }
+                label={`${variantName(item.selection)} · ${item.available} / ${tracksQuantity(item.total)}${item.available === 0 ? ' · недоступно' : ''}`}
+              />
+            ))}
           </Stack>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setQualityOpen(false)}>Готово</Button>
+          <Button onClick={() => setQualityOpen(false)}>Отмена</Button>
+          <Button
+            variant="contained"
+            disabled={!draftQuality && !draftVariant}
+            onClick={() => {
+              setQuality(draftQuality);
+              setVariant(draftVariant);
+              setQualityOpen(false);
+            }}
+          >
+            Применить
+          </Button>
         </DialogActions>
       </Dialog>
     </ThemeProvider>
