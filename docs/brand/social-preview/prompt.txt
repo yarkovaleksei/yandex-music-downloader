@@ -1,0 +1,11 @@
+Use case: ads-marketing.
+Create a finished GitHub repository Social preview banner for the existing desktop app Yandex Music Downloader. Exact canvas 1280 × 640 pixels, landscape 2:1. This is a new marketing composition; the attached image is an identity reference for the app icon, not a banner to copy.
+Composition: generous 64–80px safe margins, strong readability when reduced to 640×320. A large faithful rendering of the attached yellow rounded-square music-note icon on the left (around 300px wide), preserving the black musical note and white circular download-arrow badge, without its surrounding white image border. On the right, carefully composed large bold clean Inter-like typography over two lines: "Yandex Music" then "Downloader". Beneath it, one short Russian tagline and a quieter feature line. Bottom-right a restrained platform line.
+Text must be exactly:
+"Yandex Music"
+"Downloader"
+"Любимая музыка — в вашей коллекции"
+"Треки · Альбомы · Плейлисты"
+"Windows · macOS · Linux"
+Visual style: polished modern independent desktop-product identity, calm editorial clarity and a beautiful subtle dimensional yellow icon. Near-white #F7F8FC background, deep ink #0F172A typography, restrained indigo #5B5FEF / lavender #818CF8 accents. A delicate abstract flowing audio waveform or layered curved ribbon connects the icon to the right edge behind the composition, very low contrast, creating depth without hurting legibility. Precise spacing, sharp type, plenty of whitespace. The icon is the visual focal point, the product name is unmistakable.
+Constraints: no screenshots, no browser chrome, no fake app controls, no repository statistics, no version number, no GitHub logo, no official Yandex logo or red Yandex wordmark, no extra words or tiny disclaimers, no watermark. Output the entire finished opaque banner, not a mockup, with no external border.
