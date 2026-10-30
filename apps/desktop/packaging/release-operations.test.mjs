@@ -390,3 +390,22 @@ test('GitHub CLI получает явный репозиторий, draft, veri
   assert(commands.slice(1).every((args) => args.includes(repository)));
   assert(!commands.some((args) => args.includes('--clobber')));
 });
+
+test('готовый комплект публикуется без пересборки, когда инструмент публикации новее исходного коммита в main', async () => {
+  await fixture(async ({ cwd, git, notes, operations, builds }) => {
+    const prepared = await operations.prepare('0.2.0', notes);
+    await writeFile(
+      path.join(cwd, 'инструмент.txt'),
+      'Изменён только инструмент публикации',
+    );
+    await git('add', '.');
+    await git('commit', '-m', 'Исправить инструмент публикации');
+    await git('push', 'origin', 'main');
+    const published = await operations.publish('0.2.0');
+    assert.equal(published.assetsVerified, true);
+    assert.equal(published.revision, prepared.revision);
+    assert.equal(await git('rev-parse', 'v0.2.0^{commit}'), prepared.revision);
+    assert.notEqual(await git('rev-parse', 'HEAD'), prepared.revision);
+    assert.equal(builds(), 1);
+  });
+});

@@ -434,18 +434,31 @@ export function createReleaseOperations(options = {}) {
     requireState(current.clean, 'Публикация требует чистого рабочего дерева.');
     requireState(
       current.refs.get('refs/heads/main') === current.revision,
-      'Перед публикацией отправьте подготовленный commit в main на GitHub.',
+      'Перед публикацией отправьте текущий commit в main на GitHub.',
     );
     requireState(
       !current.newest ||
         compareVersions(current.tag, current.newest.tag_name) >= 0,
       'На GitHub уже есть более новая stable-версия; latest не будет понижен.',
     );
-    await assertLocalTag(current.tag, current.revision);
-    const prepared = await readPrepared(current);
+    const metadata = await json(
+      path.join(directoryFor(current.tag), 'release.json'),
+    );
+    const revision = metadata.revision;
+    await assertLocalTag(current.tag, revision);
+    // Источник готового комплекта закреплён тегом; инструмент публикации может быть новее.
+    // Исходный commit должен находиться в main, а manifest и байты остаются неизменными.
+    try {
+      await git('merge-base', '--is-ancestor', revision, current.revision);
+    } catch {
+      throw new ReleaseError(
+        'Исходный commit комплекта отсутствует в main на GitHub.',
+      );
+    }
+    const prepared = await readPrepared({ ...current, revision });
     const { assets, directory, notes, manifest } = prepared;
     requireState(
-      !current.remoteTag || current.remoteTag === current.revision,
+      !current.remoteTag || current.remoteTag === revision,
       'Удалённый тег не соответствует подготовленному комплекту.',
     );
     if (!current.remoteTag)
@@ -505,7 +518,7 @@ export function createReleaseOperations(options = {}) {
     requireState(
       fresh.clean &&
         fresh.revision === current.revision &&
-        fresh.remoteTag === current.revision &&
+        fresh.remoteTag === revision &&
         fresh.refs.get('refs/heads/main') === current.revision,
       'Git-состояние изменилось во время загрузки; публикация остановлена.',
     );
@@ -538,7 +551,7 @@ export function createReleaseOperations(options = {}) {
     const receipt = {
       schema: 1,
       tag: current.tag,
-      revision: current.revision,
+      revision,
       verification: 'github-api-sha256',
       assets: verifiedAssets,
     };
@@ -555,7 +568,7 @@ export function createReleaseOperations(options = {}) {
     await save(path.join(directory, 'public-release.json'), receipt);
     return {
       tag: current.tag,
-      revision: current.revision,
+      revision,
       published: true,
       assetsVerified: true,
       verification: 'github-api-sha256',
