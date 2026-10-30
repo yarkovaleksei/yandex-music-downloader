@@ -13,6 +13,10 @@ import {
   invalidProviderResponse,
 } from './auth-errors.js';
 
+// Музыкальный каталог и чтение плейлистов нужны загрузчику, фото — странице аккаунта.
+// Логин доступен в базовом ответе Яндекс ID; остальные права OAuth-клиента не запрашиваем.
+const deviceScopes = 'music:content music:read login:avatar';
+
 export interface AuthFetchResponse {
   readonly status: number;
   readonly headers?: { get(name: string): string | null };
@@ -38,6 +42,17 @@ export type AuthFetch = (
  */
 export function createAuthFetch(fetchImpl: AuthFetch): AuthFetch {
   return async (url, init) => {
+    // SDK не передаёт scope и по умолчанию запрашивает все права официального клиента.
+    // Сужаем только запрос выдачи кода, сохраняя стандартный обмен и polling SDK.
+    if (
+      url === 'https://oauth.yandex.ru/device/code' &&
+      init.method === 'POST'
+    ) {
+      const body = new URLSearchParams(init.body);
+      body.set('scope', deviceScopes);
+      body.delete('optional_scope');
+      init = { ...init, body: body.toString() };
+    }
     let response: AuthFetchResponse;
     try {
       response = await fetchImpl(url, init);

@@ -7,7 +7,10 @@ import type { Port } from '../contract/host-protocol.js';
 export class HostClient {
   private readonly pending = new Map<
     string,
-    { resolve: (value: unknown) => void; timer: ReturnType<typeof setTimeout> }
+    {
+      resolve: (value: unknown) => void;
+      timer: ReturnType<typeof setTimeout> | undefined;
+    }
   >();
   private connected = true;
   public constructor(
@@ -37,10 +40,15 @@ export class HostClient {
     if (!this.connected) return Promise.resolve(failure(method));
     const id = randomUUID();
     return new Promise((resolve) => {
-      const timer = setTimeout(() => {
-        this.pending.delete(id);
-        resolve(failure(method, 'OUTCOME_UNKNOWN'));
-      }, this.timeoutMs);
+      // Вход ждёт действий пользователя: его срок и отмена принадлежат provider.
+      // Общий таймаут отбрасывал успешный ответ после сохранения credentials.
+      const timer =
+        method === 'authenticate'
+          ? undefined
+          : setTimeout(() => {
+              this.pending.delete(id);
+              resolve(failure(method, 'OUTCOME_UNKNOWN'));
+            }, this.timeoutMs);
       this.pending.set(id, { resolve, timer });
       try {
         this.port.postMessage({ v: 1, id, method, payload });

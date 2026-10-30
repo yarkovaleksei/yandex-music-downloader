@@ -6,6 +6,7 @@ import {
   Chip,
   Box,
   Paper,
+  Skeleton,
   Stack,
   Typography,
 } from '@mui/material';
@@ -16,11 +17,17 @@ import type { DesktopApi } from '../contract/desktop-api.js';
 export function Account({
   api,
   onChanged,
+  initialAccount,
 }: {
   api: DesktopApi;
   onChanged: () => void;
+  initialAccount?: AccountDto | null | undefined;
 }) {
-  const [account, setAccount] = useState<AccountDto | null>();
+  // Подтверждённый snapshot из App сохраняет карточку при возвращении на страницу.
+  // undefined означает ожидание ответа, а null — подтверждённое отсутствие аккаунта.
+  const [account, setAccount] = useState<AccountDto | null | undefined>(
+    initialAccount,
+  );
   const [avatar, setAvatar] = useState<string>();
   const revision = useRef(0);
   const [message, setMessage] = useState('');
@@ -91,14 +98,24 @@ export function Account({
           </Avatar>
           <Box sx={{ flex: 1 }}>
             <Typography variant="h2">
-              {account?.displayName ?? 'Аккаунт не подключён'}
+              {account === undefined ? (
+                <Skeleton width={220} />
+              ) : (
+                (account?.displayName ?? 'Аккаунт не подключён')
+              )}
             </Typography>
             <Typography color="text.secondary">
-              {account?.email || 'Email: нет данных'}
+              {account === undefined ? (
+                <Skeleton width={180} />
+              ) : (
+                account?.email || 'Email: нет данных'
+              )}
             </Typography>
           </Box>
           <Typography component="div">
-            {account ? (
+            {account === undefined ? (
+              'Загружаем аккаунт…'
+            ) : account ? (
               <Chip color="success" label="Авторизация активна" />
             ) : (
               'Войдите через браузер, чтобы загружать доступную вам музыку'
@@ -109,7 +126,11 @@ export function Account({
             disabled={busy || account === undefined}
             onClick={() => void action()}
           >
-            {account ? 'Выйти из аккаунта' : 'Войти через браузер'}
+            {account === undefined
+              ? 'Загрузка…'
+              : account
+                ? 'Выйти из аккаунта'
+                : 'Войти через браузер'}
           </Button>
         </Stack>
       </Paper>

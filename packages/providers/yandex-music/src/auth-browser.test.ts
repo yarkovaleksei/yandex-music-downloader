@@ -99,3 +99,43 @@ describe('приватная browser-страница', () => {
     }
   });
 });
+
+it.each(['completed', 'cancelled', 'closed'] as const)(
+  'приватный запрос получает только итог входа: %s',
+  async (status) => {
+    let address = '';
+    const challenge = await openPrivateChallenge(
+      'canary-user-code',
+      'https://ya.ru/device',
+      { deadline: Date.now() + 60_000, duration: 60_000 },
+      {
+        async open(url) {
+          address = url;
+        },
+      },
+    );
+    const pending = fetch(`${address}/status`, requestOptions);
+    try {
+      if (status === 'completed') challenge.complete();
+      else if (status === 'cancelled')
+        await fetch(`${address}/cancel`, { ...requestOptions, method: 'POST' });
+      // Перед закрытием запрос должен дойти до listener; без этого проверялся бы отказ соединения.
+      else {
+        await fetch(address, requestOptions);
+        await challenge.close();
+      }
+      const response = await pending;
+      expect(response.headers.get('cache-control')).toBe('no-store');
+      expect(await response.json()).toEqual({ status });
+      if (status !== 'closed') {
+        const unknown = await fetch(
+          `${address}-unknown/status`,
+          requestOptions,
+        );
+        expect(unknown.status).toBe(404);
+      }
+    } finally {
+      await challenge.close();
+    }
+  },
+);

@@ -35,7 +35,7 @@ export function renderAuthPage(
       <div class="header-meta"><span class="auth-label"><span class="dot green"></span>Авторизация через Яндекс</span><span class="loopback">127.0.0.1</span></div>
     </div>
   </header>
-  <main class="container" id="challenge" data-deadline="${timing.deadline}" data-duration="${timing.duration}">
+  <main class="container" id="challenge" data-deadline="${timing.deadline}" data-duration="${timing.duration}" data-status-url="${escapeHtml(`${path}/status`)}">
     <section class="intro" aria-labelledby="page-title">
       <p class="intro-badge">${info}Быстро и без пароля в приложении</p>
       <h1 id="page-title">Вход в Яндекс Музыку</h1>
@@ -100,6 +100,7 @@ function symbol(
 }
 
 const styles = `
+  .waiting-chip.completed { color: #15803D; background: #ECFDF3; }
   :root { color-scheme: light; font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #0F172A; background: #F7F8FC; }
   * { box-sizing: border-box; }
   body { margin: 0; font-size: 16px; line-height: 1.5; }
@@ -193,16 +194,23 @@ const browserScript = `
   const deadline = Number(root.dataset.deadline);
   const duration = Number(root.dataset.duration);
   let stopped = false;
-  function stop(label, description) {
+  let timer;
+  function stop(label, description, completed = false) {
     stopped = true;
     document.getElementById('waiting-label').textContent = label;
     document.getElementById('wait-title').textContent = label;
     document.getElementById('wait-description').textContent = description;
-    document.querySelector('.spinner').style.animation = 'none';
+    document.querySelector('.spinner').style.display = 'none';
+    document.querySelector('.remaining').style.display = 'none';
+    document.getElementById('expiry-progress').style.display = 'none';
+    if (completed) document.getElementById('waiting-chip').classList.add('completed');
+    cancel.disabled = true;
+    clearInterval(timer);
     copy.disabled = true;
     link.setAttribute('aria-disabled', 'true');
   }
   function updateTime() {
+    if (stopped) return;
     const remaining = Math.max(0, Math.min(duration, deadline - Date.now()));
     const seconds = Math.ceil(remaining / 1000);
     document.getElementById('remaining-time').textContent = String(Math.floor(seconds / 60)).padStart(2, '0') + ':' + String(seconds % 60).padStart(2, '0');
@@ -210,7 +218,25 @@ const browserScript = `
     if (remaining === 0 && !stopped) stop('Срок действия кода истёк', 'Запустите авторизацию заново в приложении.');
   }
   updateTime();
-  const timer = setInterval(updateTime, 250);
+  if (!stopped) timer = setInterval(updateTime, 250);
+  // Итог сообщает локальный provider; закрытие вкладки Яндекса не доказывает успех.
+  fetch(root.dataset.statusUrl, { cache: 'no-store', referrerPolicy: 'no-referrer' })
+    .then(async (response) => {
+      if (!response.ok) throw new Error();
+      const result = await response.json();
+      if (stopped) return;
+      if (result.status === 'completed') {
+        stop('Вход выполнен', 'Закройте эту страницу и вернитесь в приложение.', true);
+        flowStatus.textContent = 'Аккаунт подключён. Можно вернуться в приложение.';
+      } else if (result.status === 'cancelled') {
+        stop('Вход отменён', 'Закройте эту страницу и вернитесь в приложение.');
+      } else {
+        stop('Вход не завершён', 'Вернитесь в приложение, чтобы проверить результат или повторить вход.');
+      }
+    })
+    .catch(() => {
+      if (!stopped) stop('Связь с приложением прервана', 'Закройте эту страницу и проверьте результат входа в приложении.');
+    });
   copy.addEventListener('click', async () => {
     try {
       await navigator.clipboard.writeText(code.textContent);

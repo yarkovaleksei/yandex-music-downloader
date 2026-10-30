@@ -143,6 +143,8 @@ export class YandexMusicProviderAuth {
       this.active = next;
       this.sessionGeneration++;
       this.loggedOut = false;
+      // Страница получает успех только после подтверждённой записи credentials.
+      challenge.complete();
       return account;
     } catch (error) {
       if (controller.signal.aborted) throw authenticationRequired();

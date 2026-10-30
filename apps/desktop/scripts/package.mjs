@@ -37,7 +37,9 @@ const args = process.argv.slice(2);
 const explicitVersion = args[0] === '--local-version' ? args[1] : undefined;
 if (explicitVersion) versionFromTag('v' + explicitVersion);
 const linuxOnly = args.at(-1) === '--linux-only';
-const modeArgs = linuxOnly ? args.slice(0, -1) : args;
+// Ручная проверка Windows не требует повторной упаковки Linux и обеих macOS-целей.
+const windowsOnly = args.at(-1) === '--windows-only';
+const modeArgs = linuxOnly || windowsOnly ? args.slice(0, -1) : args;
 const local =
   (modeArgs.length === 1 && modeArgs[0] === '--local') ||
   (modeArgs.length === 2 && Boolean(explicitVersion));
@@ -45,7 +47,11 @@ const tag =
   modeArgs.length === 2 && modeArgs[0] === '--tag' ? modeArgs[1] : null;
 if (!local && !tag)
   throw new Error('Укажите --local, --local-version 0.0.1 либо --tag v1.2.3');
-const targets = linuxOnly ? ['linux-x64'] : allTargets;
+const targets = linuxOnly
+  ? ['linux-x64']
+  : windowsOnly
+    ? ['win32-x64']
+    : allTargets;
 if (
   spawnSync('wine', ['--version'], { stdio: 'ignore' }).error?.code === 'ENOENT'
 ) {

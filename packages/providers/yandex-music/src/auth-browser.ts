@@ -1,5 +1,5 @@
 import { randomBytes } from 'node:crypto';
-import { createServer, type Server } from 'node:http';
+import { createServer, type Server, type ServerResponse } from 'node:http';
 import { spawn } from 'node:child_process';
 import { authIcon } from './auth-icon.js';
 import { renderAuthPage, type ChallengeTiming } from './auth-page.js';
@@ -10,6 +10,7 @@ export interface AuthBrowser {
 
 export interface PrivateChallenge {
   readonly cancel: Promise<void>;
+  complete(): void;
   close(): Promise<void>;
 }
 
@@ -23,6 +24,24 @@ export async function openPrivateChallenge(
   browser: AuthBrowser = { open: systemBrowser },
 ): Promise<PrivateChallenge> {
   const path = `/${randomBytes(24).toString('base64url')}`;
+  type Status = 'completed' | 'cancelled' | 'closed';
+  let status: Status | undefined;
+  const waiting = new Set<ServerResponse>();
+  const sendStatus = (response: ServerResponse) => {
+    response.writeHead(200, {
+      'content-type': 'application/json',
+      'cache-control': 'no-store',
+      'referrer-policy': 'no-referrer',
+    });
+    response.end(JSON.stringify({ status }));
+  };
+  // Один ожидающий запрос получает только итог входа; credentials и код в ответ не входят.
+  const finish = (next: Status) => {
+    if (status) return;
+    status = next;
+    for (const response of waiting) sendStatus(response);
+    waiting.clear();
+  };
   const server: Server = createServer((request, response) => {
     if (request.url === path && request.method === 'GET') {
       response.writeHead(200, {
@@ -42,9 +61,18 @@ export async function openPrivateChallenge(
       response.end(authIcon);
       return;
     }
+    if (request.url === `${path}/status` && request.method === 'GET') {
+      if (status) sendStatus(response);
+      else {
+        waiting.add(response);
+        response.once('close', () => waiting.delete(response));
+      }
+      return;
+    }
     if (request.url === `${path}/cancel` && request.method === 'POST') {
       response.writeHead(204, { 'cache-control': 'no-store' });
       response.end();
+      finish('cancelled');
       cancel();
       return;
     }
@@ -70,7 +98,15 @@ export async function openPrivateChallenge(
     await closeServer(server);
     throw error;
   }
-  return { cancel: cancelled, close: () => closeServer(server!) };
+  return {
+    cancel: cancelled,
+    complete: () => finish('completed'),
+    close: () => {
+      // Отказ/закрытие сервера не означает успешный вход; отвечаем перед остановкой listener.
+      finish('closed');
+      return closeServer(server);
+    },
+  };
 }
 
 async function systemBrowser(url: string): Promise<void> {

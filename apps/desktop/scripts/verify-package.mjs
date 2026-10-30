@@ -29,10 +29,15 @@ const snapshot =
   options[0] === '--inputs-snapshot' && options.length === 2
     ? path.resolve(options[1])
     : undefined;
+// Одноплатформенная локальная проверка сверяет ту же цель, которую собрал package.mjs.
+const selectedTarget =
+  options[0] === '--linux-only'
+    ? 'linux-x64'
+    : options[0] === '--windows-only'
+      ? 'win32-x64'
+      : undefined;
 assert(
-  !options.length ||
-    snapshot ||
-    (options.length === 1 && options[0] === '--linux-only'),
+  !options.length || snapshot || (options.length === 1 && selectedTarget),
   'Неизвестные параметры verifier',
 );
 const run = (command, args, options = {}) => {
@@ -52,7 +57,7 @@ assert.equal(manifest.signed, false);
 assert.equal(manifest.published, false);
 assert.deepEqual(
   Object.keys(manifest.targets).sort(),
-  process.argv[3] === '--linux-only' ? ['linux-x64'] : [...targets].sort(),
+  selectedTarget ? [selectedTarget] : [...targets].sort(),
 );
 const reports = {};
 for (const target of Object.keys(manifest.targets)) {

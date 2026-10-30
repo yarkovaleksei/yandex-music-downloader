@@ -366,3 +366,61 @@ it('missing folder disabled и имеет доступное объяснени�
     ).disabled,
   ).toBe(true);
 });
+
+it('длинный список исполнителей сокращён, но полностью доступен в подсказке и поиске', async () => {
+  const { api } = fixture();
+  const artists = ['Первый', 'Второй', 'Третий', 'Четвёртый', 'Пятый'];
+  render(
+    <History
+      api={{
+        ...api,
+        history: async () =>
+          success('history', [
+            { ...entry('many', 'album', 'Сборник'), artists },
+          ]),
+      }}
+      onReplay={() => {}}
+    />,
+  );
+  const summary = await screen.findByText('Первый, Второй, Третий и ещё 2');
+  expect(screen.queryByText(artists.join(', '))).toBeNull();
+  fireEvent.mouseOver(summary);
+  expect((await screen.findByRole('tooltip')).textContent).toBe(
+    artists.join(', '),
+  );
+  fireEvent.mouseLeave(summary);
+  fireEvent.change(screen.getByLabelText('Поиск в истории'), {
+    target: { value: 'Пятый' },
+  });
+  expect(screen.getByText('Сборник')).toBeTruthy();
+});
+
+it('общая очистка требует подтверждения и убирает всю историю независимо от фильтра', async () => {
+  const { api, mocks } = fixture();
+  render(<History api={api} onReplay={() => {}} />);
+  const clear = screen.getByRole('button', { name: 'Очистить историю' });
+  expect(clear.hasAttribute('disabled')).toBe(true);
+  await screen.findByText('Новый альбом');
+  fireEvent.change(screen.getByLabelText('Поиск в истории'), {
+    target: { value: 'Новый' },
+  });
+  expect(screen.queryByText('Старый плейлист')).toBeNull();
+  fireEvent.click(clear);
+  let dialog = screen.getByRole('dialog');
+  expect(dialog.textContent).toContain('Скачанные файлы останутся на диске.');
+  fireEvent.click(within(dialog).getByRole('button', { name: 'Отмена' }));
+  expect(mocks.hideHistory).not.toHaveBeenCalled();
+  await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
+  fireEvent.click(clear);
+  dialog = screen.getByRole('dialog');
+  fireEvent.click(within(dialog).getByRole('button', { name: 'Очистить' }));
+  await waitFor(() => expect(mocks.hideHistory).toHaveBeenCalledTimes(2));
+  expect(mocks.hideHistory).toHaveBeenNthCalledWith(1, { jobId: 'new' });
+  expect(mocks.hideHistory).toHaveBeenNthCalledWith(2, { jobId: 'old' });
+  await waitFor(() => expect(clear.hasAttribute('disabled')).toBe(true));
+  fireEvent.change(screen.getByLabelText('Поиск в истории'), {
+    target: { value: '' },
+  });
+  expect(screen.queryByText('Новый альбом')).toBeNull();
+  expect(screen.queryByText('Старый плейлист')).toBeNull();
+});

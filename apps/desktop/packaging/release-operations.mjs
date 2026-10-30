@@ -1,6 +1,5 @@
 import path from 'node:path';
 import { spawn } from 'node:child_process';
-import { createHash } from 'node:crypto';
 import { readFile, writeFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { root, json, save, sha } from './lib.mjs';
@@ -39,7 +38,7 @@ export function compareVersions(left, right) {
 export function runCommand(
   command,
   args,
-  { cwd = root, inherit = false, digestSize } = {},
+  { cwd = root, inherit = false } = {},
 ) {
   return new Promise((resolve, reject) => {
     const child = spawn(command, args, {
@@ -48,7 +47,6 @@ export function runCommand(
     });
     let bytes = 0;
     const chunks = [];
-    const hash = digestSize === undefined ? null : createHash('sha256');
     let invalid = false;
     child.on('error', () =>
       reject(new ReleaseError(`Не удалось запустить ${command}.`)),
@@ -56,11 +54,10 @@ export function runCommand(
     child.stderr?.resume();
     child.stdout?.on('data', (chunk) => {
       bytes += chunk.length;
-      if (bytes > (digestSize ?? 32 * 1024 * 1024)) {
+      if (bytes > 32 * 1024 * 1024) {
         invalid = true;
         child.kill();
-      } else if (hash) hash.update(chunk);
-      else chunks.push(chunk);
+      } else chunks.push(chunk);
     });
     child.on('close', (code) => {
       if (code !== 0 || invalid)
@@ -69,7 +66,6 @@ export function runCommand(
             `Команда ${command} завершилась ошибкой; публикация остановлена.`,
           ),
         );
-      else if (hash) resolve({ size: bytes, sha256: hash.digest('hex') });
       else resolve(Buffer.concat(chunks).toString('utf8').trim());
     });
   });
@@ -117,17 +113,6 @@ export function githubClient(run = runCommand) {
         'DELETE',
         `repos/${repository}/releases/assets/${asset.id}`,
       ]),
-    digest: (asset, size) =>
-      run(
-        'gh',
-        [
-          'api',
-          `repos/${repository}/releases/assets/${asset.id}`,
-          '--header',
-          'Accept: application/octet-stream',
-        ],
-        { digestSize: size },
-      ),
     latest: async () =>
       JSON.parse(
         await run('gh', ['api', `repos/${repository}/releases/latest`]),
@@ -135,49 +120,26 @@ export function githubClient(run = runCommand) {
   };
 }
 
-/** Публичная проверка не использует gh/токен и не сохраняет подписанные адреса перенаправлений. */
-export async function publicDigest(
-  url,
-  expectedSize,
-  origins,
-  fetcher = fetch,
-) {
-  const allowed = new Set(origins);
-  const signal = AbortSignal.timeout(5 * 60_000);
-  for (let redirects = 0; redirects <= 5; redirects++) {
-    const parsed = new URL(url);
-    requireState(
-      parsed.protocol === 'https:' &&
-        allowed.has(parsed.origin) &&
-        !parsed.username &&
-        !parsed.password,
-      'Публичная загрузка перешла на недоверенный адрес.',
-    );
-    const response = await fetcher(url, { redirect: 'manual', signal });
-    if ([301, 302, 303, 307, 308].includes(response.status)) {
-      const location = response.headers.get('location');
-      await response.body?.cancel();
-      requireState(location, 'В перенаправлении отсутствует адрес.');
-      url = new URL(location, url).href;
-      continue;
-    }
-    requireState(
-      response.status === 200 && response.body,
-      'Публичное вложение недоступно; повторите publish для проверки уже опубликованного релиза.',
-    );
-    const hash = createHash('sha256');
-    let size = 0;
-    for await (const chunk of response.body) {
-      size += chunk.length;
-      requireState(
-        size <= expectedSize,
-        'Размер публичного вложения превышает ожидаемый.',
-      );
-      hash.update(chunk);
-    }
-    return { size, sha256: hash.digest('hex') };
-  }
-  throw new ReleaseError('Слишком много перенаправлений публичной загрузки.');
+/** GitHub вычисляет digest загруженного файла; проверяем метаданные без скачивания содержимого. */
+function verifyRemoteAsset(remote, asset) {
+  requireState(
+    remote?.state === 'uploaded' && remote.size === asset.size,
+    'Размер или состояние вложения на GitHub не совпадает; автоматическая замена запрещена.',
+  );
+  requireState(
+    remote.digest === `sha256:${asset.sha256}`,
+    'SHA-256 вложения отсутствует или не совпадает с локальным файлом; публикация остановлена.',
+  );
+  requireState(
+    remote.browser_download_url === asset.url,
+    'Адрес вложения на GitHub не совпадает с подготовленным комплектом.',
+  );
+  return {
+    name: asset.name,
+    url: asset.url,
+    size: remote.size,
+    sha256: asset.sha256,
+  };
 }
 
 export function createReleaseOperations(options = {}) {
@@ -480,7 +442,7 @@ export function createReleaseOperations(options = {}) {
     );
     await assertLocalTag(current.tag, current.revision);
     const prepared = await readPrepared(current);
-    const { assets, directory, notes, trust, manifest } = prepared;
+    const { assets, directory, notes, manifest } = prepared;
     requireState(
       !current.remoteTag || current.remoteTag === current.revision,
       'Удалённый тег не соответствует подготовленному комплекту.',
@@ -530,15 +492,7 @@ export function createReleaseOperations(options = {}) {
         const uploaded = await github.assets(current.existing);
         remote = uploaded.find((item) => item.name === asset.name);
       }
-      requireState(
-        remote?.state === 'uploaded' && remote.size === asset.size,
-        'Размер или состояние вложения на GitHub не совпадает; автоматическая замена запрещена.',
-      );
-      const digest = await github.digest(remote, asset.size);
-      requireState(
-        digest.size === asset.size && digest.sha256 === asset.sha256,
-        'SHA-256 вложения на GitHub не совпадает; автоматическая замена запрещена.',
-      );
+      verifyRemoteAsset(remote, asset);
     }
     const finalAssets = await github.assets(current.existing);
     requireState(
@@ -564,23 +518,26 @@ export function createReleaseOperations(options = {}) {
       latest.tag_name === current.tag && !latest.draft && !latest.prerelease,
       'Релиз не выбран как latest; проверьте состояние GitHub.',
     );
-    const verifiedAssets = [];
-    for (const asset of assets) {
-      const digest = await (options.publicDigest ?? publicDigest)(
-        asset.url,
-        asset.size,
-        trust.origins,
-      );
-      requireState(
-        digest.size === asset.size && digest.sha256 === asset.sha256,
-        'Публичное вложение не совпадает с подготовленным комплектом. Повторите publish после проверки GitHub.',
-      );
-      verifiedAssets.push({ name: asset.name, url: asset.url, ...digest });
-    }
+    // После публикации повторно читаем весь список: draft-проверка не заменяет проверку опубликованного выпуска.
+    const publishedAssets = await github.assets(latest);
+    requireState(
+      publishedAssets.length === assets.length &&
+        new Set(publishedAssets.map((asset) => asset.name)).size ===
+          assets.length &&
+        publishedAssets.every((asset) => names.has(asset.name)),
+      'Опубликованный релиз должен содержать ровно 12 ожидаемых вложений.',
+    );
+    const verifiedAssets = assets.map((asset) =>
+      verifyRemoteAsset(
+        publishedAssets.find((item) => item.name === asset.name),
+        asset,
+      ),
+    );
     const receipt = {
       schema: 1,
       tag: current.tag,
       revision: current.revision,
+      verification: 'github-api-sha256',
       assets: verifiedAssets,
     };
     validatePublicReceipt(
@@ -598,7 +555,8 @@ export function createReleaseOperations(options = {}) {
       tag: current.tag,
       revision: current.revision,
       published: true,
-      publiclyVerified: true,
+      assetsVerified: true,
+      verification: 'github-api-sha256',
       assets: verifiedAssets.length,
     };
   }

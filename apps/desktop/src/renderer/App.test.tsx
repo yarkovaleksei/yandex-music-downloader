@@ -12,6 +12,7 @@ import {
 import { afterEach, expect, it, vi } from 'vitest';
 import type {
   ApplicationResult,
+  Account as AccountDto,
   DesktopSettings,
   JobSnapshot,
   MediaReference,
@@ -840,3 +841,68 @@ it.each([false, true])(
     expect(mocks.authenticate).not.toHaveBeenCalled();
   },
 );
+
+it('возвращение на страницу аккаунта сохраняет подтверждённую карточку, пока новый запрос ожидает ответа', async () => {
+  const { api } = mockApi();
+  const account: AccountDto = { id: 'fixture', displayName: 'Текущий аккаунт' };
+  let finish!: (value: ApplicationResult<AccountDto | null>) => void;
+  const pending = new Promise<ApplicationResult<AccountDto | null>>(
+    (resolve) => {
+      finish = resolve;
+    },
+  );
+  const readAccount = vi
+    .fn<DesktopApi['account']>()
+    .mockReturnValue(pending)
+    .mockResolvedValueOnce(result(account));
+  render(<App api={{ ...api, account: readAccount }} />);
+  await screen.findByText('Вы вошли как Текущий аккаунт');
+  fireEvent.click(screen.getByRole('button', { name: 'Аккаунт' }));
+  expect(screen.getByText('Текущий аккаунт')).toBeTruthy();
+  expect(screen.queryByText('Аккаунт не подключён')).toBeNull();
+  fireEvent.click(screen.getByRole('button', { name: 'Главная' }));
+  fireEvent.click(screen.getByRole('button', { name: 'Аккаунт' }));
+  expect(screen.getByText('Текущий аккаунт')).toBeTruthy();
+  expect(screen.queryByText('Аккаунт не подключён')).toBeNull();
+  expect(screen.queryByText('Загружаем аккаунт…')).toBeNull();
+  await act(async () => finish(result(account)));
+  expect(screen.getByText('Текущий аккаунт')).toBeTruthy();
+});
+
+it('подтверждение очистки списка не переносится в настройки и не возвращается при повторном открытии загрузок', async () => {
+  const { api } = mockApi();
+  let jobs: readonly JobSnapshot[] = [job('completed')];
+  const clearDownloads = vi.fn(async () => {
+    jobs = [];
+    return result(1);
+  });
+  render(
+    <App
+      api={{
+        ...api,
+        listJobs: async () => result(jobs),
+        clearDownloads,
+        ffmpegHelp: async () =>
+          result({
+            url: 'https://ffmpeg.org/download.html',
+            instruction: 'Тестовая инструкция',
+            platform: 'linux',
+          }),
+      }}
+    />,
+  );
+  fireEvent.click(screen.getByRole('button', { name: /^Загрузки/ }));
+  const clear = await screen.findByRole('button', {
+    name: 'Убрать завершённые',
+  });
+  await waitFor(() => expect(clear.hasAttribute('disabled')).toBe(false));
+  fireEvent.click(clear);
+  await screen.findByText('Убрано из списка: 1. История и файлы сохранены.');
+  expect(clearDownloads).toHaveBeenCalledOnce();
+  fireEvent.click(screen.getByRole('button', { name: 'Настройки' }));
+  await waitFor(() =>
+    expect(screen.queryByText(/Убрано из списка:/)).toBeNull(),
+  );
+  fireEvent.click(screen.getByRole('button', { name: /^Загрузки/ }));
+  expect(screen.queryByText(/Убрано из списка:/)).toBeNull();
+});

@@ -1,6 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import {
   Alert,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   Snackbar,
   CircularProgress,
   Avatar,
@@ -53,6 +59,7 @@ export function History({
   );
   const [opening, setOpening] = useState<ReadonlySet<string>>(new Set());
   const [busy, setBusy] = useState(false);
+  const [clearOpen, setClearOpen] = useState(false);
   const revision = useRef(0);
   async function refresh() {
     const current = ++revision.current;
@@ -137,6 +144,32 @@ export function History({
       setBusy(false);
     }
   }
+  async function clearHistory() {
+    setClearOpen(false);
+    setBusy(true);
+    setNotice('');
+    try {
+      // Очищаем всю загруженную историю, а не только результат поиска; файлы не удаляются.
+      // После частичной ошибки перечитываем записи без повторения неизвестной операции.
+      for (const entry of entries) {
+        const result = await api.hideHistory({ jobId: entry.jobId });
+        if (result.kind === 'error') {
+          setNotice(
+            result.error.code === 'OUTCOME_UNKNOWN'
+              ? 'Исход очистки неизвестен. История перечитана; проверьте оставшиеся записи.'
+              : result.error.message,
+          );
+          break;
+        }
+      }
+    } finally {
+      try {
+        await refresh();
+      } finally {
+        setBusy(false);
+      }
+    }
+  }
   async function openFolder(jobId: string) {
     setOpening((previous) => new Set(previous).add(jobId));
     setNotice('');
@@ -210,7 +243,43 @@ export function History({
     .map(({ entry }) => entry);
   return (
     <Stack spacing={3}>
-      <Typography variant="h1">История загрузок</Typography>
+      <Stack
+        direction="row"
+        spacing={2}
+        sx={{ alignItems: 'center', justifyContent: 'space-between' }}
+      >
+        <Typography variant="h1">История загрузок</Typography>
+        <Button
+          color="error"
+          startIcon={<DeleteOutlineRounded />}
+          disabled={busy || entries.length === 0}
+          onClick={() => setClearOpen(true)}
+        >
+          Очистить историю
+        </Button>
+      </Stack>
+      <Dialog
+        open={clearOpen}
+        onClose={() => setClearOpen(false)}
+        aria-labelledby="clear-history-title"
+        aria-describedby="clear-history-description"
+      >
+        <DialogTitle id="clear-history-title">
+          Очистить всю историю?
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="clear-history-description">
+            Будут убраны все записи: {entries.length}, включая скрытые
+            фильтрами. Скачанные файлы останутся на диске.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setClearOpen(false)}>Отмена</Button>
+          <Button color="error" onClick={() => void clearHistory()}>
+            Очистить
+          </Button>
+        </DialogActions>
+      </Dialog>
       <Typography color="text.secondary">
         Ваша коллекция загруженной музыки
       </Typography>
@@ -284,12 +353,21 @@ export function History({
           </Typography>
         </Paper>
       ) : (
-        <Paper variant="outlined">
+        <Paper variant="outlined" sx={{ overflowX: 'auto' }}>
           <Box
             component="table"
             sx={{
               width: '100%',
+              minWidth: 800,
               borderCollapse: 'collapse',
+              // Первая колонка занимает остаток ширины; длинный текст не растягивает таблицу.
+              '& th:first-of-type, & td:first-of-type': {
+                width: '100%',
+                maxWidth: 0,
+              },
+              '& th:not(:first-of-type), & td:not(:first-of-type)': {
+                whiteSpace: 'nowrap',
+              },
               '& th, & td': {
                 textAlign: 'left',
                 p: 2,
@@ -344,15 +422,22 @@ export function History({
                             : undefined
                         }
                         alt=""
-                        sx={{ width: 48, height: 48 }}
+                        sx={{ width: 48, height: 48, flexShrink: 0 }}
                       >
                         <HistoryRounded />
                       </Avatar>
-                      <Box sx={{ minWidth: 0 }}>
+                      <Box sx={{ minWidth: 0, flex: 1 }}>
                         {entry.publicUrl ? (
                           <Link
                             href={entry.publicUrl}
-                            sx={{ fontWeight: 600 }}
+                            title={entry.title}
+                            sx={{
+                              fontWeight: 600,
+                              display: 'block',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              whiteSpace: 'nowrap',
+                            }}
                             onClick={(event) => {
                               event.preventDefault();
                               void api.openExternal({ url: entry.publicUrl! });
@@ -361,15 +446,29 @@ export function History({
                             {entry.title}
                           </Link>
                         ) : (
-                          <Typography sx={{ fontWeight: 600 }}>
+                          <Typography
+                            noWrap
+                            title={entry.title}
+                            sx={{ fontWeight: 600 }}
+                          >
                             {entry.title}
                           </Typography>
                         )}
                         {entry.source.kind !== 'playlist' && (
-                          <Typography variant="body2" color="text.secondary">
-                            {entry.artists.join(', ') ||
-                              'Исполнитель не указан'}
-                          </Typography>
+                          <Tooltip title={entry.artists.join(', ')}>
+                            <Typography
+                              variant="body2"
+                              color="text.secondary"
+                              noWrap
+                            >
+                              {/* Сборник может содержать десятки исполнителей; полный список остаётся в подсказке и поиске. */}
+                              {entry.artists.slice(0, 3).join(', ') ||
+                                'Исполнитель не указан'}
+                              {entry.artists.length > 3
+                                ? ` и ещё ${entry.artists.length - 3}`
+                                : ''}
+                            </Typography>
+                          </Tooltip>
                         )}
                       </Box>
                     </Stack>

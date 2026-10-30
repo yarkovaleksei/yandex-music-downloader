@@ -9,7 +9,6 @@ import {
   createReleaseOperations,
   compareVersions,
   githubClient,
-  publicDigest,
   ReleaseError,
   runCommand,
   repository,
@@ -60,15 +59,18 @@ async function fixture(action) {
   await writeFile(notes, 'Первый выпуск продукта.\n');
   const calls = [];
   const releases = [];
-  const bytes = new Map();
   let nextId = 1;
   let builds = 0;
   let failUpload = false;
-  let failPublic = false;
+  let failVerification = false;
   const github = {
     releases: async () => structuredClone(releases),
-    assets: async (release) =>
-      structuredClone(releases.find((item) => item.id === release.id).assets),
+    assets: async (release) => {
+      const current = releases.find((item) => item.id === release.id);
+      return structuredClone(current.assets).map((asset) =>
+        failVerification && !current.draft ? { ...asset, digest: null } : asset,
+      );
+    },
     create: async (tag, version, file) => {
       calls.push(['create', tag]);
       releases.push({
@@ -102,10 +104,11 @@ async function fixture(action) {
         name: path.basename(file),
         size: content.length,
         state: 'uploaded',
+        digest: `sha256:${sha(content)}`,
+        browser_download_url: `${releaseBase}download/${tag}/${path.basename(file)}`,
       };
       calls.push(['upload', asset.name]);
       releases.find((item) => item.tag_name === tag).assets.push(asset);
-      bytes.set(asset.id, content);
     },
     removeIncomplete: async (asset) => {
       calls.push(['removeIncomplete', asset.name]);
@@ -115,10 +118,6 @@ async function fixture(action) {
       assert(release.draft && asset.state === 'starter' && asset.size === 0);
       release.assets = release.assets.filter((entry) => entry.id !== asset.id);
     },
-    digest: async (asset) => ({
-      size: bytes.get(asset.id).length,
-      sha256: sha(bytes.get(asset.id)),
-    }),
     publish: async (tag) => {
       calls.push(['publish', tag]);
       const release = releases.find((item) => item.tag_name === tag);
@@ -189,16 +188,6 @@ async function fixture(action) {
         }),
       );
     },
-    publicDigest: async (url) => {
-      if (failPublic)
-        throw new ReleaseError('Публичная загрузка временно недоступна');
-      const name = decodeURIComponent(new URL(url).pathname.split('/').at(-1));
-      const tag = new URL(url).pathname.split('/').at(-2);
-      const asset = releases
-        .find((item) => item.tag_name === tag)
-        .assets.find((item) => item.name === name);
-      return github.digest(asset);
-    },
   });
   try {
     await action({
@@ -207,14 +196,13 @@ async function fixture(action) {
       notes,
       calls,
       releases,
-      bytes,
       operations,
       builds: () => builds,
       failUpload: (value) => {
         failUpload = value;
       },
-      failPublic: (value) => {
-        failPublic = value;
+      failVerification: (value) => {
+        failVerification = value;
       },
     });
   } finally {
@@ -254,7 +242,7 @@ test('prepare создаёт только локальный аннотиров�
   });
 });
 
-test('publish продолжает прерванную загрузку draft и проверяет публичные байты всех 12 вложений', async () => {
+test('publish продолжает прерванную загрузку draft и проверяет SHA-256 всех 12 вложений по API', async () => {
   await fixture(
     async ({ cwd, notes, operations, calls, releases, failUpload }) => {
       await operations.prepare('0.2.0', notes);
@@ -268,7 +256,7 @@ test('publish продолжает прерванную загрузку draft �
       );
       assert(!calls.some(([call]) => call === 'publish'));
       failUpload(false);
-      assert.equal((await operations.publish('0.2.0')).publiclyVerified, true);
+      assert.equal((await operations.publish('0.2.0')).assetsVerified, true);
       assert.equal(
         calls.filter(([call]) => call === 'removeIncomplete').length,
         1,
@@ -282,6 +270,7 @@ test('publish продолжает прерванную загрузку draft �
         ),
       );
       assert.equal(receipt.assets.length, 12);
+      assert.equal(receipt.verification, 'github-api-sha256');
       assert(
         receipt.assets.every((asset) =>
           asset.url.startsWith(releaseBase + 'download/v0.2.0/'),
@@ -291,17 +280,17 @@ test('publish продолжает прерванную загрузку draft �
   );
 });
 
-test('после сбоя анонимной проверки повторный publish не меняет опубликованный релиз', async () => {
-  await fixture(async ({ cwd, notes, operations, calls, failPublic }) => {
+test('после отсутствующего SHA-256 опубликованных вложений повторный publish проверяет метаданные без перезагрузки файлов', async () => {
+  await fixture(async ({ cwd, notes, operations, calls, failVerification }) => {
     await operations.prepare('0.2.0', notes);
-    failPublic(true);
-    await assert.rejects(operations.publish('0.2.0'), /Публичная загрузка/);
+    failVerification(true);
+    await assert.rejects(operations.publish('0.2.0'), /SHA-256/);
     assert(
       !existsSync(
         path.join(cwd, '.cache/desktop-packaging/v0.2.0/public-release.json'),
       ),
     );
-    failPublic(false);
+    failVerification(false);
     await operations.publish('0.2.0');
     assert.equal(calls.filter(([call]) => call === 'publish').length, 1);
     assert.equal(calls.filter(([call]) => call === 'upload').length, 12);
@@ -309,21 +298,17 @@ test('после сбоя анонимной проверки повторный
 });
 
 test('повреждённое вложение draft не заменяется автоматически и не публикуется', async () => {
-  await fixture(
-    async ({ notes, operations, releases, bytes, calls, failUpload }) => {
-      await operations.prepare('0.2.0', notes);
-      failUpload(true);
-      await assert.rejects(operations.publish('0.2.0'));
-      failUpload(false);
-      const asset = releases[0].assets[0];
-      const altered = Buffer.from(bytes.get(asset.id));
-      altered[0] ^= 1;
-      bytes.set(asset.id, altered);
-      await assert.rejects(operations.publish('0.2.0'), /SHA-256/);
-      assert.equal(releases[0].draft, true);
-      assert.equal(calls.filter(([call]) => call === 'upload').length, 3);
-    },
-  );
+  await fixture(async ({ notes, operations, releases, calls, failUpload }) => {
+    await operations.prepare('0.2.0', notes);
+    failUpload(true);
+    await assert.rejects(operations.publish('0.2.0'));
+    failUpload(false);
+    const asset = releases[0].assets[0];
+    asset.digest = `sha256:${'0'.repeat(64)}`;
+    await assert.rejects(operations.publish('0.2.0'), /SHA-256/);
+    assert.equal(releases[0].draft, true);
+    assert.equal(calls.filter(([call]) => call === 'upload').length, 3);
+  });
 });
 
 test('публикация отклоняет изменённое описание, подпись пакета и неопубликованный commit', async () => {
@@ -383,55 +368,6 @@ test('три последовательных выпуска независим�
     );
     await assert.rejects(operations.prepare('0.2.9', notes), /выше последнего/);
   });
-});
-
-test('публичная загрузка следует только доверенным HTTPS origins и не использует авторизацию', async () => {
-  const content = Buffer.from('Публичный пакет');
-  const origins = [
-    'https://github.com',
-    'https://release-assets.githubusercontent.com',
-  ];
-  const requests = [];
-  const fetcher = async (url, options) => {
-    requests.push({ url, options });
-    return requests.length === 1
-      ? new Response(null, {
-          status: 302,
-          headers: { location: origins[1] + '/asset?signature=test-only' },
-        })
-      : new Response(content);
-  };
-  assert.deepEqual(
-    await publicDigest(origins[0] + '/asset', content.length, origins, fetcher),
-    { size: content.length, sha256: sha(content) },
-  );
-  assert(
-    requests.every(
-      ({ options }) => !options.headers && options.redirect === 'manual',
-    ),
-  );
-  await assert.rejects(
-    publicDigest(
-      origins[0] + '/asset',
-      content.length,
-      origins,
-      async () =>
-        new Response(null, {
-          status: 302,
-          headers: { location: 'http://other.invalid/asset' },
-        }),
-    ),
-    /недоверенный/,
-  );
-  await assert.rejects(
-    publicDigest(
-      origins[0] + '/asset',
-      1,
-      origins,
-      async () => new Response(content),
-    ),
-    /превышает/,
-  );
 });
 
 test('GitHub CLI получает явный репозиторий, draft, verify-tag и notes-file; загрузка не использует clobber', async () => {

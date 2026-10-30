@@ -9,6 +9,7 @@ import type { DesktopApi } from '../contract/desktop-api.js';
 export interface Notice {
   severity: 'success' | 'error' | 'info';
   message: string;
+  scope?: 'downloads';
 }
 export const statusLabels: Record<string, string> = {
   queued: 'В очереди',
@@ -286,6 +287,8 @@ export function useDownloads(api: DesktopApi) {
         result.kind === 'result'
           ? {
               severity: 'info',
+              // Подтверждение очистки относится к этому экрану, а не к фоновым загрузкам.
+              scope: 'downloads',
               message: `Убрано из списка: ${result.data}. История и файлы сохранены.`,
             }
           : { severity: 'error', message: result.error.message },

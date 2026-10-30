@@ -20,6 +20,7 @@ import {
   Paper,
   Radio,
   Stack,
+  Snackbar,
   Switch,
   TextField,
   Typography,
@@ -91,7 +92,7 @@ function artists(track: JsonObject) {
 }
 /** Главная работает только через DesktopApi; временный выбор не становится Settings. */
 export function App({ api = window.desktopApi }: { api?: DesktopApi }) {
-  const [account, setAccount] = useState<Account | null>(null);
+  const [account, setAccount] = useState<Account | null>();
   const [authBusy, setAuthBusy] = useState(false);
   const [authNotice, setAuthNotice] = useState('');
   const [page, setPage] = useState<
@@ -115,6 +116,13 @@ export function App({ api = window.desktopApi }: { api?: DesktopApi }) {
   const request = useRef(0);
   const downloads = useDownloads(api);
   const { setNotice } = downloads;
+  const localNotice =
+    downloads.notice?.scope === 'downloads' ? downloads.notice : undefined;
+  useEffect(() => {
+    // Однократное подтверждение не переносится на другие страницы и не возвращается с навигацией.
+    if (page !== 'downloads' && downloads.notice?.scope === 'downloads')
+      setNotice(undefined);
+  }, [page, downloads.notice, setNotice]);
   async function refreshSettings() {
     const result = await api.getSettings();
     if (result.kind === 'result') {
@@ -397,7 +405,24 @@ export function App({ api = window.desktopApi }: { api?: DesktopApi }) {
               </Alert>
             )}
             {authNotice && <Alert severity="info">{authNotice}</Alert>}
-            {downloads.notice && (
+            <Snackbar
+              open={page === 'downloads' && !!localNotice}
+              autoHideDuration={5000}
+              anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+              onClose={(_, reason) => {
+                if (reason !== 'clickaway') setNotice(undefined);
+              }}
+            >
+              {localNotice ? (
+                <Alert
+                  severity={localNotice.severity}
+                  onClose={() => setNotice(undefined)}
+                >
+                  {localNotice.message}
+                </Alert>
+              ) : undefined}
+            </Snackbar>
+            {downloads.notice && downloads.notice.scope !== 'downloads' && (
               <Alert
                 severity={downloads.notice.severity}
                 closeText="Закрыть"
@@ -437,6 +462,7 @@ export function App({ api = window.desktopApi }: { api?: DesktopApi }) {
               <AccountPage
                 key={account?.id ?? 'signed-out'}
                 api={api}
+                initialAccount={account}
                 onChanged={() => setAccountRevision((value) => value + 1)}
               />
             ) : page === 'diagnostics' ? (

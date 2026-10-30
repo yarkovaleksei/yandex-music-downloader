@@ -37,11 +37,14 @@ function store(
 describe('YandexMusicProviderAuth', () => {
   it('проверяет account до успешной записи credentials', async () => {
     const events: string[] = [];
+    let browserStatus: Promise<unknown> | undefined;
+    let completed = false;
     const credentials: CredentialStore = {
       async read() {
         return null;
       },
       async write(value) {
+        expect(completed).toBe(false);
         events.push(
           value.includes('canary-access') ? 'write' : 'invalid-write',
         );
@@ -56,13 +59,24 @@ describe('YandexMusicProviderAuth', () => {
         },
       },
       browser: {
-        async open() {
+        async open(url) {
           events.push('browser');
+          browserStatus = fetch(`${url}/status`, {
+            headers: { connection: 'close' },
+          })
+            .then((response) => response.json())
+            .then((status: unknown) => {
+              completed = true;
+              return status;
+            });
         },
       },
       now: () => 100,
-      fetch: async (url) => {
-        if (url.includes('/device/code'))
+      fetch: async (url, init) => {
+        if (url.includes('/device/code')) {
+          expect(new URLSearchParams(init.body).get('scope')).toBe(
+            'music:content music:read login:avatar',
+          );
           return response(200, {
             device_code: 'canary-device',
             user_code: 'canary-user',
@@ -70,6 +84,7 @@ describe('YandexMusicProviderAuth', () => {
             expires_in: 60,
             interval: 1,
           });
+        }
         if (url.includes('/token'))
           return response(200, {
             access_token: 'canary-access',
@@ -89,6 +104,7 @@ describe('YandexMusicProviderAuth', () => {
         'Сервис не передал достаточно данных, чтобы определить подписку.',
     });
     expect(events).toEqual(['browser', 'notify', 'account', 'write']);
+    await expect(browserStatus).resolves.toEqual({ status: 'completed' });
   });
 
   it('продолжает authorization_pending без retry и завершает следующий poll', async () => {

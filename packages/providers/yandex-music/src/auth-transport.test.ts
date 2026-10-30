@@ -100,3 +100,59 @@ describe('auth transport', () => {
     expect(calls).toBe(1);
   });
 });
+
+it('запрашивает только музыку, чтение плейлистов и аватар, сохраняя параметры устройства', async () => {
+  let outgoing = new URLSearchParams();
+  let calls = 0;
+  const fetch: AuthFetch = async (_url, init) => {
+    calls++;
+    outgoing = new URLSearchParams(init.body);
+    return response(
+      200,
+      JSON.stringify({
+        device_code: 'test-device-code',
+        user_code: 'test-user-code',
+        verification_url: 'https://ya.ru/device',
+        expires_in: 600,
+        interval: 5,
+      }),
+    );
+  };
+  await createAuthFetch(fetch)('https://oauth.yandex.ru/device/code', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    signal: new AbortController().signal,
+    body: new URLSearchParams({
+      client_id: 'test-client',
+      device_id: 'test-device',
+      device_name: 'Тестовое устройство',
+      scope: 'payments:all',
+      optional_scope: 'yadisk:disk',
+    }).toString(),
+  });
+  expect(outgoing.get('scope')).toBe('music:content music:read login:avatar');
+  expect(outgoing.has('optional_scope')).toBe(false);
+  expect(outgoing.get('client_id')).toBe('test-client');
+  expect(outgoing.get('device_id')).toBe('test-device');
+  expect(outgoing.get('device_name')).toBe('Тестовое устройство');
+  expect(calls).toBe(1);
+});
+
+it('отказ ограниченных прав не запускает повтор с полными правами', async () => {
+  const scopes: (string | null)[] = [];
+  const fetch: AuthFetch = async (_url, init) => {
+    scopes.push(new URLSearchParams(init.body).get('scope'));
+    return response(400, '{"error":"invalid_scope"}');
+  };
+  const result = await createAuthFetch(fetch)(
+    'https://oauth.yandex.ru/device/code',
+    {
+      method: 'POST',
+      headers: {},
+      signal: new AbortController().signal,
+      body: 'client_id=test-client',
+    },
+  );
+  expect(result.status).toBe(400);
+  expect(scopes).toEqual(['music:content music:read login:avatar']);
+});

@@ -1,5 +1,6 @@
 // @vitest-environment jsdom
 import {
+  act,
   cleanup,
   fireEvent,
   render,
@@ -109,4 +110,29 @@ it('безопасный avatar отображается, unknown объяснё
   expect(
     screen.getAllByText('Сервис не передал сведения о подписке.'),
   ).toHaveLength(2);
+});
+
+it('до первого ответа показывает загрузку, а отсутствие аккаунта — только после подтверждённого null', async () => {
+  let finish!: (value: ReturnType<typeof success<AccountDto | null>>) => void;
+  const pending = new Promise<ReturnType<typeof success<AccountDto | null>>>(
+    (resolve) => {
+      finish = resolve;
+    },
+  );
+  const api = {
+    account: () => pending,
+    accountAvatar: vi.fn(),
+  } as unknown as DesktopApi;
+  render(<Account api={api} onChanged={() => {}} />);
+  expect(screen.queryByText('Аккаунт не подключён')).toBeNull();
+  expect(screen.queryByText(/Войдите через браузер/)).toBeNull();
+  expect(screen.queryByText('Email: нет данных')).toBeNull();
+  expect(screen.getByText('Загружаем аккаунт…')).toBeTruthy();
+  expect(
+    (screen.getByRole('button', { name: 'Загрузка…' }) as HTMLButtonElement)
+      .disabled,
+  ).toBe(true);
+  await act(async () => finish(success('account', null)));
+  expect(screen.getByText('Аккаунт не подключён')).toBeTruthy();
+  expect(screen.queryByText('Загружаем аккаунт…')).toBeNull();
 });
