@@ -105,7 +105,7 @@ async function fixture(action) {
         size: content.length,
         state: 'uploaded',
         digest: `sha256:${sha(content)}`,
-        browser_download_url: `${releaseBase}download/${tag}/${path.basename(file)}`,
+        browser_download_url: `${releaseBase}download/untagged-fixture/${path.basename(file)}`,
       };
       calls.push(['upload', asset.name]);
       releases.find((item) => item.tag_name === tag).assets.push(asset);
@@ -123,6 +123,8 @@ async function fixture(action) {
       const release = releases.find((item) => item.tag_name === tag);
       assert.equal(release.assets.length, 12);
       release.draft = false;
+      for (const asset of release.assets)
+        asset.browser_download_url = `${releaseBase}download/${tag}/${asset.name}`;
     },
     latest: async () =>
       releases
@@ -242,7 +244,7 @@ test('prepare создаёт только локальный аннотиров�
   });
 });
 
-test('publish продолжает прерванную загрузку draft и проверяет SHA-256 всех 12 вложений по API', async () => {
+test('publish принимает временные URL draft, продолжает загрузку и проверяет SHA-256 и окончательные URL всех 12 вложений', async () => {
   await fixture(
     async ({ cwd, notes, operations, calls, releases, failUpload }) => {
       await operations.prepare('0.2.0', notes);

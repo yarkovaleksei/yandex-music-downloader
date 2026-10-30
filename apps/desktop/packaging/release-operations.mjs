@@ -121,7 +121,7 @@ export function githubClient(run = runCommand) {
 }
 
 /** GitHub вычисляет digest загруженного файла; проверяем метаданные без скачивания содержимого. */
-function verifyRemoteAsset(remote, asset) {
+function verifyRemoteAsset(remote, asset, published = false) {
   requireState(
     remote?.state === 'uploaded' && remote.size === asset.size,
     'Размер или состояние вложения на GitHub не совпадает; автоматическая замена запрещена.',
@@ -130,8 +130,9 @@ function verifyRemoteAsset(remote, asset) {
     remote.digest === `sha256:${asset.sha256}`,
     'SHA-256 вложения отсутствует или не совпадает с локальным файлом; публикация остановлена.',
   );
+  // В draft GitHub использует временный untagged URL; окончательный адрес проверяется после публикации.
   requireState(
-    remote.browser_download_url === asset.url,
+    !published || remote.browser_download_url === asset.url,
     'Адрес вложения на GitHub не совпадает с подготовленным комплектом.',
   );
   return {
@@ -531,6 +532,7 @@ export function createReleaseOperations(options = {}) {
       verifyRemoteAsset(
         publishedAssets.find((item) => item.name === asset.name),
         asset,
+        true,
       ),
     );
     const receipt = {
