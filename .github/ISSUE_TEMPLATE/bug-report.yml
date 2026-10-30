@@ -1,0 +1,133 @@
+name: Сообщить об ошибке
+description: Ошибка в приложении, загрузке музыки, авторизации или обновлении.
+title: "[Ошибка] "
+body:
+  - type: dropdown
+    id: operating-system
+    attributes:
+      label: Операционная система
+      options:
+        - Windows
+        - macOS
+        - Linux
+        - Другая
+    validations:
+      required: true
+
+  - type: input
+    id: os-version
+    attributes:
+      label: Версия ОС
+      description: Для Linux укажите название и версию дистрибутива.
+      placeholder: "Например: Windows 11 24H2, macOS 15.4, Ubuntu 24.04"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: architecture
+    attributes:
+      label: Архитектура системы
+      options:
+        - x64 (Intel / AMD)
+        - arm64 (Apple Silicon / ARM)
+        - Другая
+        - Не знаю
+    validations:
+      required: true
+
+  - type: input
+    id: app-version
+    attributes:
+      label: Версия приложения
+      description: >-
+        Откройте «Настройки» → «О программе». Если приложение не запускается,
+        укажите версию из имени скачанного пакета. Для запуска из исходников
+        укажите commit или тег.
+      placeholder: "Например: 0.2.0 или commit исходников"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: launch-method
+    attributes:
+      label: Как запущено приложение
+      options:
+        - Готовый пакет из GitHub Releases (ZIP / AppImage)
+        - Собственная сборка из исходников
+        - Режим разработки (dev)
+        - Командная строка (CLI)
+        - Другое
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Шаги воспроизведения
+      description: Опишите действия по порядку, начиная с запуска приложения.
+      placeholder: |
+        1. Запускаю приложение и открываю…
+        2. Нажимаю…
+        3. Получаю ошибку…
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Ожидаемый результат
+      placeholder: Что должно было произойти?
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Фактический результат
+      description: Если появилось сообщение об ошибке, приведите его точный текст.
+      placeholder: Что произошло вместо ожидаемого результата?
+    validations:
+      required: true
+
+  - type: dropdown
+    id: frequency
+    attributes:
+      label: Как часто повторяется ошибка
+      options:
+        - При каждом повторении этих действий
+        - Иногда
+        - Случилось один раз, повторить не удалось
+        - Пока не проверял повторно
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Дополнительные условия
+      description: Заполните только то, что относится к вашей ошибке.
+      placeholder: |
+        Проблема с музыкой: публичная ссылка, трек / альбом / плейлист, выбранное качество; открывается ли этот контент в браузере.
+        Проблема со входом: название и версия браузера.
+        Linux: рабочий стол и Wayland / X11, если известны.
+        Виртуальная машина, VPN или прокси: используются ли они.
+        CLI или исходники: команда запуска, версии Node.js и FFmpeg, если используются.
+        Другие настройки, влияющие на воспроизведение ошибки.
+
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: Диагностика и логи
+      description: >-
+        В приложении откройте «Диагностика», нажмите «Повторить проверки»
+        и укажите проверки с ошибками. Можно добавить вывод CLI или фрагмент журнала.
+        Удалите из него токены, cookies, данные входа и личные пути.
+        Если приложение не запускается, это поле можно оставить пустым.
+      placeholder: Результаты диагностики, код ошибки или фрагмент журнала.
+      render: text
+
+  - type: textarea
+    id: attachments
+    attributes:
+      label: Скриншоты и файлы
+      description: >-
+        Перетащите сюда скриншоты, короткую запись экрана или файл журнала,
+        если они помогают показать ошибку. Скройте данные аккаунта и личные пути.
