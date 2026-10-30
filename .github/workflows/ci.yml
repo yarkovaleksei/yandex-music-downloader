@@ -13,10 +13,10 @@ on:
 permissions:
   contents: read
 
-# Новые изменения отменяют устаревшую проверку PR, но не выполняющийся запуск main.
+# Новый запуск для той же ветки или PR отменяет предыдущий.
 concurrency:
   group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+  cancel-in-progress: true
 
 jobs:
   quality:
