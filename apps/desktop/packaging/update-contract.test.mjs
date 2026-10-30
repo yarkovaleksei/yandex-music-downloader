@@ -200,3 +200,119 @@ test('REQ-055: без trust/feed нет сети; старые версии не
   assert.equal(newer('0.0.1', '0.0.1'), false);
   assert.throws(() => newer('../bad', '0.0.0'));
 });
+
+/** STEP-060/H-001: переключение latest между двумя запросами даёт отказ, повтор — согласованные bytes. */
+test('GitHub assets: плоские имена, разрешённые redirects и безопасная гонка latest', async () => {
+  const directory = await mkdtemp(path.join(tmpdir(), 'ymd-github-'));
+  const base = 'https://github.com/owner/repo/releases/';
+  const cdn = 'https://release-assets.githubusercontent.com';
+  let mixed = true;
+  const value = {
+    ...descriptor(base),
+    version: '1.0.1',
+    url: base + 'download/v1.0.1/package.AppImage',
+  };
+  const bytes = Buffer.from(JSON.stringify(value));
+  const signature = sign(null, bytes, pair.privateKey);
+  const staleSignature = sign(
+    null,
+    Buffer.from(JSON.stringify({ ...value, version: '1.0.2' })),
+    pair.privateKey,
+  );
+  const requested = [];
+  const updates = new PortableUpdates({
+    trust: {
+      feedBaseUrl: base + 'latest/download/',
+      publicKey,
+      origins: ['https://github.com', cdn],
+      channel: 'stable',
+    },
+    currentVersion: '1.0.0',
+    target: 'linux-x64',
+    directory,
+    reveal: () => {},
+    fetch: async (url) => {
+      requested.push(url);
+      const address = new URL(url);
+      if (address.origin === 'https://github.com')
+        return new Response(null, {
+          status: 302,
+          headers: { location: cdn + address.pathname + '?temporary=fixture' },
+        });
+      return new Response(
+        address.pathname.endsWith('.sig')
+          ? mixed
+            ? staleSignature
+            : signature
+          : address.pathname.endsWith('.AppImage')
+            ? payload
+            : bytes,
+      );
+    },
+  });
+  try {
+    assert.equal((await updates.check()).status, 'error');
+    assert.equal((await updates.download()).status, 'error');
+    assert.deepEqual(await readdir(directory), []);
+    mixed = false;
+    assert.equal((await updates.check()).status, 'available');
+    assert.equal((await updates.download()).status, 'ready');
+    assert(
+      requested.includes(base + 'latest/download/update-stable-linux-x64.json'),
+    );
+    assert(
+      requested.includes(
+        base + 'latest/download/update-stable-linux-x64.json.sig',
+      ),
+    );
+    assert(!JSON.stringify(await updates.reveal()).includes('temporary='));
+  } finally {
+    await rm(directory, { recursive: true, force: true });
+  }
+});
+
+for (const scenario of [
+  'prerelease',
+  'latest-package',
+  'network',
+  'partial-signature',
+]) {
+  test(`STEP-060: рабочий stable канал отклоняет ${scenario}`, async () => {
+    const base = 'https://github.com/owner/repo/releases/';
+    const value = {
+      ...descriptor(base),
+      version: scenario === 'prerelease' ? '1.0.1-beta.1' : '1.0.1',
+      url:
+        base +
+        (scenario === 'latest-package'
+          ? 'latest/download/package.AppImage'
+          : 'download/v1.0.1/package.AppImage'),
+    };
+    const bytes = Buffer.from(JSON.stringify(value));
+    const signature = sign(null, bytes, pair.privateKey);
+    const updates = new PortableUpdates({
+      trust: {
+        feedBaseUrl: base + 'latest/download/',
+        publicKey,
+        origins: ['https://github.com'],
+        channel: 'stable',
+      },
+      currentVersion: '1.0.0',
+      target: 'linux-x64',
+      directory: '/unused',
+      reveal: () => assert.fail(),
+      fetch: async (url) => {
+        if (scenario === 'network') throw new Error('недоступно');
+        return new Response(
+          url.endsWith('.sig')
+            ? scenario === 'partial-signature'
+              ? signature.subarray(1)
+              : signature
+            : bytes,
+        );
+      },
+    });
+    assert.equal((await updates.check()).status, 'error');
+    assert.equal((await updates.download()).status, 'error');
+  });
+}

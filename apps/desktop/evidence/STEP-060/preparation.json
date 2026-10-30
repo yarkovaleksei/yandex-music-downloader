@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-10-30T11:28:15.608786+00:00",
+  "captureKind": "summary",
+  "repository": {
+    "url": "https://github.com/yarkovaleksei/yandex-music-downloader",
+    "anonymousApi": true,
+    "private": false,
+    "visibility": "public",
+    "releases": [],
+    "tags": []
+  },
+  "key": {
+    "command": "node apps/desktop/scripts/release-update.mjs init-key",
+    "exitCode": 0,
+    "algorithm": "Ed25519",
+    "publicKeyMatchesCredentialStoreSignature": true,
+    "privateKeyExported": false
+  },
+  "redirectProbe": {
+    "initialUrl": "https://github.com/electron/electron/releases/latest/download/SHASUMS256.txt",
+    "method": "HEAD",
+    "hops": [
+      {
+        "origin": "https://github.com",
+        "status": 302
+      },
+      {
+        "origin": "https://github.com",
+        "status": 302
+      },
+      {
+        "origin": "https://release-assets.githubusercontent.com",
+        "status": 200
+      }
+    ],
+    "scope": "Проверочный сторонний GitHub Release asset; точный текущий канал ещё не опубликован.",
+    "signedRedirectUrlsSaved": false
+  },
+  "targetedSecretCheck": {
+    "historyCommand": "git log --all -G <high-confidence private-key/GitHub-token/AWS-key patterns> --format=<commit> --name-only",
+    "historyExitCode": 0,
+    "historyMatchingPaths": [],
+    "currentScope": "git ls-files --cached --others --exclude-standard; regular non-symlink files",
+    "currentFilesChecked": 1741,
+    "currentMatchingPaths": [],
+    "limitations": "Проверены узнаваемые private PEM/OpenSSH/GitHub token/AWS access key patterns; это не универсальный поиск всех секретов. Значения не выводились."
+  },
+  "pending": [
+    "Фиксация реализации через canonical Git workflow по отдельной команде владельца",
+    "Точные production теги N и N+1, созданные/опубликованные владельцем",
+    "Чистые tagged сборки и полный комплект подписанных assets",
+    "Публикация владельцем и анонимная проверка точного канала",
+    "Реальный UI Linux N → N+1 с сохранением состояния"
+  ]
+}

@@ -337,8 +337,7 @@ async function selfCheck() {
     verifyFixture(proof, bytes);
     assert.throws(() => verifyFixture(proof, Buffer.from('Подмена')));
     // Синтетическая запись обязана проходить production decoder и попадать в реальную историю.
-    const { createApplication } =
-      await import('../../../packages/application/dist/index.js');
+    const { createApplication } = await import('@music-downloader/application');
     const fixtureKit = path.join(tmp, 'baseline-kit');
     const assets = path.join(fixtureKit, 'project/apps/desktop/e2e/assets');
     await mkdir(assets, { recursive: true });

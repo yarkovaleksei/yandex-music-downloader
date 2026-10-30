@@ -4,6 +4,7 @@ import { existsSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import assert from 'node:assert/strict';
 import asar from '@electron/asar';
+import { validateBuildInputs } from '../packaging/build-inputs.mjs';
 import { getCurrentFuseWire, FuseV1Options } from '@electron/fuses';
 import {
   root,
@@ -21,7 +22,19 @@ import {
 if (process.platform !== 'linux')
   throw new Error('Проверка состава выполняется только на Linux');
 const directory = process.argv[2] ? path.resolve(process.argv[2]) : output;
-const manifest = await json(path.join(directory, 'manifest.json'));
+const manifestFile = path.join(directory, 'manifest.json');
+const manifest = await json(manifestFile);
+const options = process.argv.slice(3);
+const snapshot =
+  options[0] === '--inputs-snapshot' && options.length === 2
+    ? path.resolve(options[1])
+    : undefined;
+assert(
+  !options.length ||
+    snapshot ||
+    (options.length === 1 && options[0] === '--linux-only'),
+  'Неизвестные параметры verifier',
+);
 const run = (command, args, options = {}) => {
   const result = spawnSync(command, args, {
     encoding: 'utf8',
@@ -32,12 +45,8 @@ const run = (command, args, options = {}) => {
     throw result.error ?? new Error(`${command}: ${result.stderr}`);
   return result.stdout;
 };
-for (const [relative, expected] of Object.entries(manifest.inputs))
-  assert.equal(
-    sha(await readFile(path.join(root, relative))),
-    expected,
-    `Устаревший input: ${relative}`,
-  );
+// Исторический N использует snapshot exact bytes; все проверки самого пакета ниже сохраняются.
+await validateBuildInputs(manifestFile, root, snapshot);
 assert.equal(manifest.builtOn.platform, 'linux');
 assert.equal(manifest.signed, false);
 assert.equal(manifest.published, false);
