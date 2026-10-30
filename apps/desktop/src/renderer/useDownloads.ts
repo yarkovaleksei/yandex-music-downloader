@@ -1,5 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { JobSnapshot, JsonObject } from '@music-downloader/shared';
+import type {
+  ArtworkDto,
+  JobSnapshot,
+  JsonObject,
+} from '@music-downloader/shared';
 import type { DesktopApi } from '../contract/desktop-api.js';
 
 export interface Notice {
@@ -46,6 +50,8 @@ export function numberField(payload: JsonObject | undefined, key: string) {
 /** События дают прогресс, но команды и исход определяет свежий snapshot (ADR-016). */
 export function useDownloads(api: DesktopApi) {
   const [jobs, setJobs] = useState<readonly JobSnapshot[]>([]);
+  const [artwork, setArtwork] = useState<Record<string, ArtworkDto>>({});
+  const artworkRequested = useRef(new Set<string>());
   const [progress, setProgress] = useState<Record<string, JsonObject>>({});
   const [trackProgress, setTrackProgress] = useState<
     Record<string, JsonObject>
@@ -53,6 +59,24 @@ export function useDownloads(api: DesktopApi) {
   const [connected, setConnected] = useState(true);
   const [notice, setNotice] = useState<Notice>();
   const [pending, setPending] = useState<Record<string, boolean>>({});
+  useEffect(() => {
+    for (const job of jobs) {
+      if (artworkRequested.current.has(job.jobId)) continue;
+      artworkRequested.current.add(job.jobId);
+      // Обложка не задерживает управление очередью; ошибка оставляет музыкальный fallback.
+      if (typeof api.downloadArtwork !== 'function') continue;
+      void api
+        .downloadArtwork({ jobId: job.jobId })
+        .then((result) => {
+          if (result.kind === 'result' && result.data)
+            setArtwork((previous) => ({
+              ...previous,
+              [job.jobId]: result.data!,
+            }));
+        })
+        .catch(() => {});
+    }
+  }, [api, jobs]);
   const notified = useRef(new Set<string>());
   const errorPauses = useRef(new Map<string, string>());
   const observePause = useCallback((job: JobSnapshot) => {
@@ -121,8 +145,12 @@ export function useDownloads(api: DesktopApi) {
         'completed',
         'completed_with_errors',
         'failed',
+        'cancelled',
       ].includes(job.status);
-      const key = `${jobId}:${completionPending.current.get(jobId)}:${job.status}`;
+      const key =
+        job.status === 'cancelled'
+          ? `${jobId}:cancelled`
+          : `${jobId}:${completionPending.current.get(jobId)}:${job.status}`;
       if (
         completionPending.current.has(jobId) &&
         terminal &&
@@ -131,8 +159,13 @@ export function useDownloads(api: DesktopApi) {
         notified.current.add(key);
         completionPending.current.delete(jobId);
         setNotice({
-          severity: job.status === 'completed' ? 'success' : 'error',
-          message: `${statusLabels[job.status]}: ${job.source.kind === 'track' ? 'трек' : 'коллекция'} ${job.source.id}`,
+          severity:
+            job.status === 'completed'
+              ? 'success'
+              : job.status === 'cancelled'
+                ? 'info'
+                : 'error',
+          message: `${statusLabels[job.status]}: ${job.title || `${job.source.kind === 'track' ? 'трек' : 'коллекция'} ${job.source.id}`}`,
         });
       }
     },
@@ -179,6 +212,22 @@ export function useDownloads(api: DesktopApi) {
               ? 'Исход операции неизвестен. Состояние обновлено; проверьте задание перед новым действием.'
               : result.error.message,
         });
+      // F-002: core не публикует job.completed при cancel; уведомляет подтверждённый ответ.
+      // @link planning/reviews/STEP-058/REVIEW-20261029T193045Z.md
+      if (
+        action === 'cancel' &&
+        result.kind === 'result' &&
+        result.data?.status === 'cancelled'
+      ) {
+        const key = `${job.jobId}:cancelled`;
+        if (!notified.current.has(key)) {
+          notified.current.add(key);
+          setNotice({
+            severity: 'info',
+            message: `${statusLabels.cancelled}: ${result.data.title || `${job.source.kind === 'track' ? 'трек' : 'коллекция'} ${job.source.id}`}`,
+          });
+        }
+      }
       await readJob(job.jobId);
     } finally {
       setPending((previous) => ({ ...previous, [job.jobId]: false }));
@@ -266,6 +315,7 @@ export function useDownloads(api: DesktopApi) {
     openFolder,
     openSource,
     jobs,
+    artwork,
     progress,
     trackProgress,
     connected,

@@ -20,6 +20,10 @@ export async function executeApplication(
       case 'authenticate':
         result = await api.authenticate();
         break;
+      case 'accountAvatar':
+        parseInput(method, payload);
+        result = await desktop.accountAvatar();
+        break;
       case 'account':
         result = await api.account();
         break;
@@ -73,6 +77,11 @@ export async function executeApplication(
         break;
       case 'history':
         result = await desktop.history();
+        break;
+      case 'downloadArtwork':
+        result = await desktop.downloadArtwork(
+          parseInput(method, payload).jobId,
+        );
         break;
       case 'historyArtwork':
         result = await desktop.historyArtwork(

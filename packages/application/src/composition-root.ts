@@ -1,3 +1,4 @@
+import { supportsDownloadVariant } from './preview.js';
 import { createDownloadFiles } from './adapters/download-files.js';
 import { createArtworkCache } from './adapters/artwork-cache.js';
 import { createRecovery } from './adapters/recovery.js';
@@ -112,7 +113,11 @@ export function createApplication(
       files,
       artworkCache: createArtworkCache(stateDir),
       recover: createRecovery(files),
-      selectVariant: resolveVariant,
+      selectVariant: (variants, quality, options) =>
+        resolveVariant(variants, quality, {
+          supports: supportsDownloadVariant,
+          ...options,
+        }),
       retry: (error, failedAttempts) =>
         decideRetry({
           error,
@@ -142,6 +147,7 @@ export function createApplication(
             },
             artwork,
             sourceKind: context.sourceKind,
+            writeTags: context.writeTags,
             embedArtwork: context.embedArtwork,
             saveCoverFile: context.saveCoverFile,
           });

@@ -1,0 +1,69 @@
+
+ RUN  v3.2.7 /home/user/github.com/yarkovaleksei/yandex-music-downloader
+
+ ✓ |@music-downloader/desktop| src/renderer/quantity.test.ts (8 tests) 3ms
+ ✓ |@music-downloader/desktop| src/renderer/theme.test.ts (1 test) 2ms
+ ✓ |@music-downloader/desktop| src/renderer/Updates.test.tsx (2 tests) 188ms
+stderr | src/renderer/Account.test.tsx > REQ-052: показывает подтверждённый account и после logout перечитывает состояние
+In HTML, <div> cannot be a descendant of <p>.
+This will cause a hydration error.
+
+  <Account api={{...}} onChanged={function spy}>
+    <Grid spacing={3}>
+      <MuiStack-root as="div" ownerState={{...}} ref={null} className="MuiStack-root">
+        <Insertion>
+        <div className="MuiStack-r...">
+          <Typography>
+          <Typography>
+          <Paper variant="outlined" sx={{p:4}}>
+            <MuiPaper-root as="div" ownerState={{variant:"o...", ...}} className="MuiPaper-r..." ref={null} sx={{p:4}} ...>
+              <Insertion>
+              <div className="MuiPaper-r..." style={{}}>
+                <Grid direction="row" spacing={3} sx={{...}}>
+                  <MuiStack-root as="div" ownerState={{...}} ref={null} className="MuiStack-root" sx={{...}}>
+                    <Insertion>
+                    <div className="MuiStack-r...">
+                      <Avatar>
+                      <Box>
+                      <Typography>
+                        <MuiTypography-root as="p" ref={null} className="MuiTypogra..." ownerState={{...}} style={{}}>
+                          <Insertion>
+>                         <p className="MuiTypography-root MuiTypography-body1 css-rizt0-MuiTypography-root" style={{}}>
+                            <Chip color="success" label="Авторизаци...">
+                              <MuiChip-root as="div" onClick={function onClick} onKeyDown={function onKeyDown} ...>
+                                <Insertion>
+>                               <div
+>                                 onClick={function onClick}
+>                                 onKeyDown={function onKeyDown}
+>                                 onKeyUp={function onKeyUp}
+>                                 disabled={undefined}
+>                                 tabIndex={undefined}
+>                                 className="MuiChip-root MuiChip-filled MuiChip-sizeMedium MuiChip-colorSuccess css-1..."
+>                                 ref={function}
+>                               >
+                      ...
+          ...
+
+<p> cannot contain a nested <div>.
+See this log for the ancestor stack trace.
+
+ ✓ |@music-downloader/desktop| src/renderer/Diagnostics.test.tsx (1 test) 149ms
+ ✓ |@music-downloader/desktop| src/renderer/Account.test.tsx (2 tests) 167ms
+ ✓ |@music-downloader/desktop| src/renderer/Downloads.test.tsx (3 tests) 432ms
+ ✓ |@music-downloader/desktop| src/renderer/History.test.tsx (6 tests) 1366ms
+   ✓ REQ-051: поиск metadata и фильтр типа меняют список, legacy replay объяснён и выключен  596ms
+ ✓ |@music-downloader/desktop| src/renderer/Settings.test.tsx (4 tests) 1452ms
+   ✓ REQ-052: сохранённые settings загружаются, выбор путей передаёт только opaque refs и показывает restart hint  515ms
+   ✓ REQ-058: вкладки сохраняют переключатели файлов, автооткрытие и тему без изменения старых полей  537ms
+ ✓ |@music-downloader/desktop| src/renderer/App.test.tsx (19 tests) 5153ms
+   ✓ preview track показывает поля и не начинает загрузку до явного действия  451ms
+   ✓ действия меню используют ID, OUTCOME_UNKNOWN перечитывает без повтора  568ms
+   ✓ F-002/ADR-016: App сохраняет предупреждение replay VALIDATION_ERROR на History и перечитывает очередь без повтора  325ms
+   ✓ F-002/ADR-016: App сохраняет предупреждение replay OUTCOME_UNKNOWN на History и перечитывает очередь без повтора  309ms
+   ✓ REQ-058: черновик exact качества отменяется кнопкой, Escape и backdrop; Apply передаёт точный descriptor  1645ms
+
+ Test Files  9 passed (9)
+      Tests  46 passed (46)
+   Start at  21:50:21
+   Duration  6.96s (transform 525ms, setup 0ms, collect 8.18s, tests 8.91s, environment 2.02s, prepare 749ms)
+

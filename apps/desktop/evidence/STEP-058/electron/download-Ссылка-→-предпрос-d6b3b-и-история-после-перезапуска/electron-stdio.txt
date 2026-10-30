@@ -1,0 +1,63 @@
+[216:1029/214645.477579:ERROR:ui/gl/angle_platform_impl.cc:34] Display.cpp:1505 (initialize): ANGLE Display::initialize error 12289: Could not create a backing OpenGL context.
+ERR: Display.cpp:1505 (initialize): ANGLE Display::initialize error 12289: Could not create a backing OpenGL context.
+[216:1029/214645.477743:ERROR:ui/gl/egl_util.cc:92] EGL Driver message (Critical) eglInitialize: Could not create a backing OpenGL context.
+[216:1029/214645.477785:ERROR:ui/gl/gl_display.cc:613] eglInitialize OpenGL failed with error EGL_NOT_INITIALIZED, trying next display type
+[182:1029/214645.493261:ERROR:crypto/nss_util.cc:256] Error initializing NSS with a persistent database (sql:/home/user/.pki/nssdb): NSS error code: -8126
+
+(electron:182): dconf-CRITICAL **: 21:46:45.500: unable to create file '/run/user/1000/dconf/user': Read-only file system.  dconf will not work properly.
+[216:1029/214645.555147:ERROR:ui/gl/angle_platform_impl.cc:34] Display.cpp:1505 (initialize): ANGLE Display::initialize error 12289: Could not create a backing OpenGL context.
+ERR: Display.cpp:1505 (initialize): ANGLE Display::initialize error 12289: Could not create a backing OpenGL context.
+[216:1029/214645.555294:ERROR:ui/gl/egl_util.cc:92] EGL Driver message (Critical) eglInitialize: Could not create a backing OpenGL context.
+[216:1029/214645.555340:ERROR:ui/gl/gl_display.cc:613] eglInitialize OpenGLES failed with error EGL_NOT_INITIALIZED
+[216:1029/214645.555395:ERROR:ui/gl/gl_display.cc:648] Initialization of all (2) EGL display types failed.
+[216:1029/214645.555462:ERROR:ui/ozone/common/gl_ozone_egl.cc:26] GLDisplayEGL::Initialize failed.
+
+(electron:182): dconf-CRITICAL **: 21:46:45.556: unable to create file '/run/user/1000/dconf/user': Read-only file system.  dconf will not work properly.
+[216:1029/214645.671320:ERROR:ui/gl/angle_platform_impl.cc:34] Display.cpp:1505 (initialize): ANGLE Display::initialize error 12289: Could not create a backing OpenGL context.
+ERR: Display.cpp:1505 (initialize): ANGLE Display::initialize error 12289: Could not create a backing OpenGL context.
+[216:1029/214645.671441:ERROR:ui/gl/egl_util.cc:92] EGL Driver message (Critical) eglInitialize: Could not create a backing OpenGL context.
+[216:1029/214645.671479:ERROR:ui/gl/gl_display.cc:613] eglInitialize OpenGL failed with error EGL_NOT_INITIALIZED, trying next display type
+[216:1029/214645.730306:ERROR:ui/gl/angle_platform_impl.cc:34] Display.cpp:1505 (initialize): ANGLE Display::initialize error 12289: Could not create a backing OpenGL context.
+ERR: Display.cpp:1505 (initialize): ANGLE Display::initialize error 12289: Could not create a backing OpenGL context.
+[216:1029/214645.730404:ERROR:ui/gl/egl_util.cc:92] EGL Driver message (Critical) eglInitialize: Could not create a backing OpenGL context.
+[216:1029/214645.730438:ERROR:ui/gl/gl_display.cc:613] eglInitialize OpenGLES failed with error EGL_NOT_INITIALIZED
+[216:1029/214645.730471:ERROR:ui/gl/gl_display.cc:648] Initialization of all (2) EGL display types failed.
+[216:1029/214645.730526:ERROR:ui/ozone/common/gl_ozone_egl.cc:26] GLDisplayEGL::Initialize failed.
+[216:1029/214645.731795:ERROR:components/viz/service/main/viz_main_impl.cc:192] Exiting GPU process due to errors during initialization
+Debugger ending on ws://127.0.0.1:33609/06641181-fda5-4ed0-84ef-1ded7314bfa7
+For help, see: https://nodejs.org/learn/getting-started/debugging
+
+(electron:307): dconf-CRITICAL **: 21:46:54.788: unable to create file '/run/user/1000/dconf/user': Read-only file system.  dconf will not work properly.
+[342:1029/214654.795218:ERROR:ui/gl/angle_platform_impl.cc:34] Display.cpp:1505 (initialize): ANGLE Display::initialize error 12289: Could not create a backing OpenGL context.
+ERR: Display.cpp:1505 (initialize): ANGLE Display::initialize error 12289: Could not create a backing OpenGL context.
+[342:1029/214654.795348:ERROR:ui/gl/egl_util.cc:92] EGL Driver message (Critical) eglInitialize: Could not create a backing OpenGL context.
+[342:1029/214654.795388:ERROR:ui/gl/gl_display.cc:613] eglInitialize OpenGL failed with error EGL_NOT_INITIALIZED, trying next display type
+[342:1029/214654.852665:ERROR:ui/gl/angle_platform_impl.cc:34] Display.cpp:1505 (initialize): ANGLE Display::initialize error 12289: Could not create a backing OpenGL context.
+ERR: Display.cpp:1505 (initialize): ANGLE Display::initialize error 12289: Could not create a backing OpenGL context.
+[342:1029/214654.852743:ERROR:ui/gl/egl_util.cc:92] EGL Driver message (Critical) eglInitialize: Could not create a backing OpenGL context.
+[342:1029/214654.852777:ERROR:ui/gl/gl_display.cc:613] eglInitialize OpenGLES failed with error EGL_NOT_INITIALIZED
+[342:1029/214654.852811:ERROR:ui/gl/gl_display.cc:648] Initialization of all (2) EGL display types failed.
+[342:1029/214654.852852:ERROR:ui/ozone/common/gl_ozone_egl.cc:26] GLDisplayEGL::Initialize failed.
+
+(electron:307): dconf-CRITICAL **: 21:46:54.856: unable to create file '/run/user/1000/dconf/user': Read-only file system.  dconf will not work properly.
+
+(electron:307): dconf-CRITICAL **: 21:46:54.866: unable to create file '/run/user/1000/dconf/user': Read-only file system.  dconf will not work properly.
+
+(electron:307): dconf-CRITICAL **: 21:46:54.866: unable to create file '/run/user/1000/dconf/user': Read-only file system.  dconf will not work properly.
+
+(electron:307): dconf-CRITICAL **: 21:46:54.867: unable to create file '/run/user/1000/dconf/user': Read-only file system.  dconf will not work properly.
+
+(electron:307): dconf-CRITICAL **: 21:46:54.941: unable to create file '/run/user/1000/dconf/user': Read-only file system.  dconf will not work properly.
+[342:1029/214654.982558:ERROR:ui/gl/angle_platform_impl.cc:34] Display.cpp:1505 (initialize): ANGLE Display::initialize error 12289: Could not create a backing OpenGL context.
+ERR: Display.cpp:1505 (initialize): ANGLE Display::initialize error 12289: Could not create a backing OpenGL context.
+[342:1029/214654.982644:ERROR:ui/gl/egl_util.cc:92] EGL Driver message (Critical) eglInitialize: Could not create a backing OpenGL context.
+[342:1029/214654.982677:ERROR:ui/gl/gl_display.cc:613] eglInitialize OpenGL failed with error EGL_NOT_INITIALIZED, trying next display type
+[342:1029/214655.023435:ERROR:ui/gl/angle_platform_impl.cc:34] Display.cpp:1505 (initialize): ANGLE Display::initialize error 12289: Could not create a backing OpenGL context.
+ERR: Display.cpp:1505 (initialize): ANGLE Display::initialize error 12289: Could not create a backing OpenGL context.
+[342:1029/214655.023522:ERROR:ui/gl/egl_util.cc:92] EGL Driver message (Critical) eglInitialize: Could not create a backing OpenGL context.
+[342:1029/214655.023555:ERROR:ui/gl/gl_display.cc:613] eglInitialize OpenGLES failed with error EGL_NOT_INITIALIZED
+[342:1029/214655.023587:ERROR:ui/gl/gl_display.cc:648] Initialization of all (2) EGL display types failed.
+[342:1029/214655.023617:ERROR:ui/ozone/common/gl_ozone_egl.cc:26] GLDisplayEGL::Initialize failed.
+[342:1029/214655.024683:ERROR:components/viz/service/main/viz_main_impl.cc:192] Exiting GPU process due to errors during initialization
+Debugger ending on ws://127.0.0.1:33461/270e7d4f-8a7f-4a32-b881-dbfd0083399e
+For help, see: https://nodejs.org/learn/getting-started/debugging

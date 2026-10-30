@@ -13,6 +13,7 @@ requirements:
   - REQ-054
   - REQ-055
 steps:
+  - STEP-059
   - STEP-058
   - STEP-036
   - STEP-054

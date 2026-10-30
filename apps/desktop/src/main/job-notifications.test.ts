@@ -31,10 +31,11 @@ it('main уведомляет по snapshot и не выдаёт частичн�
   expect(show.mock.calls[0]?.[0]).toBe('Ошибка загрузки');
   status = 'cancelled';
   await notify(event);
-  expect(show).toHaveBeenCalledTimes(1);
+  expect(show).toHaveBeenCalledTimes(2);
+  expect(show.mock.calls[1]?.[0]).toBe('Загрузка отменена');
   status = 'completed';
   await notify(event);
-  expect(show.mock.calls[1]?.[0]).toBe('Загрузка завершена');
+  expect(show.mock.calls[2]?.[0]).toBe('Загрузка завершена');
 });
 
 // F-001: штатная ошибочная пауза не сопровождается job.completed.
@@ -97,3 +98,65 @@ it.each(['AUTH_REQUIRED', 'DISK_FULL'])(
     expect(show).toHaveBeenCalledTimes(2);
   },
 );
+
+it.each(['completed', 'completed_with_errors', 'failed', 'cancelled'] as const)(
+  'STEP-059: legacy true не открывает папку, уведомления сохранены: %s',
+  async (status) => {
+    const show = vi.fn();
+    let enabled = false;
+    const read = vi.fn(
+      async (): Promise<ApplicationResult<JobSnapshot | null>> => ({
+        schemaVersion: 1,
+        kind: 'result',
+        command: 'getJob',
+        data: {
+          jobId: 'original',
+          source: { provider: 'mock', kind: 'album', id: '1' },
+          status,
+          tracks: [],
+          ...{ openFolderOnComplete: enabled },
+        },
+      }),
+    );
+    const notify = jobNotifications(read, show);
+    notify.observeResult('listJobs', {
+      schemaVersion: 1,
+      kind: 'result',
+      command: 'listJobs',
+      data: [(await read()).data],
+    });
+    const event = {
+      schemaVersion: 1 as const,
+      event: 'job.completed' as const,
+      jobId: 'original',
+      seq: 1,
+      durationMs: 0,
+    };
+    await notify(event);
+    enabled = true;
+    await notify({ ...event, seq: 2 });
+    await notify({ ...event, seq: 2 });
+    expect(show).toHaveBeenCalledTimes(2);
+  },
+);
+
+it('REQ-058: подтверждённая отмена уведомляет из ответа, без job.completed и повторов от списка', () => {
+  const show = vi.fn();
+  const read = vi.fn();
+  const notify = jobNotifications(read, show);
+  const data = {
+    jobId: 'cancelled',
+    status: 'cancelled',
+    tracks: [],
+    source: { provider: 'mock', kind: 'track', id: '1' },
+  };
+  const result = { schemaVersion: 1, kind: 'result', command: 'cancel', data };
+  notify.observeResult('cancel', result);
+  notify.observeResult('cancel', result);
+  notify.observeResult('listJobs', { ...result, data: [data] });
+  expect(show).toHaveBeenCalledExactlyOnceWith(
+    'Загрузка отменена',
+    'Загрузка остановлена пользователем.',
+  );
+  expect(read).not.toHaveBeenCalled();
+});

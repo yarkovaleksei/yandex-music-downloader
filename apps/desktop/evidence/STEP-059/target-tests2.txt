@@ -1,0 +1,34 @@
+
+ RUN  v3.2.7 /home/user/github.com/yarkovaleksei/yandex-music-downloader
+
+ ✓ |@music-downloader/desktop| src/main/job-notifications.test.ts (8 tests) 8ms
+ ✓ |@music-downloader/desktop| src/contract/desktop-api.test.ts (45 tests) 30ms
+ ✓ |@music-downloader/desktop| src/main/job-folders.test.ts (1 test) 13ms
+ ✓ |@music-downloader/provider-yandex-music| src/account-profile.test.ts (5 tests) 18ms
+ ✓ |@music-downloader/persistence| src/desktop-state-store.test.ts (6 tests) 365ms
+ ✓ |@music-downloader/application| src/cache.integration.test.ts (10 tests) 120ms
+ ✓ |@music-downloader/desktop| src/renderer/Account.test.tsx (4 tests) 220ms
+{"level":"warn","time":"2026-10-29T20:17:30.597Z","message":"Команда application завершилась ошибкой.","context":{},"data":{"command":"createDownload","code":"DOWNLOAD_ERROR"}}
+ ✓ |@music-downloader/provider-yandex-music| src/yandex-music-auth.test.ts (26 tests) 2076ms
+   ✓ YandexMusicProviderAuth > проверяет account до успешной записи credentials  1015ms
+   ✓ YandexMusicProviderAuth > сохраняет прежнюю запись при ошибке native store  1002ms
+ ✓ |@music-downloader/desktop| src/renderer/History.test.tsx (8 tests) 1674ms
+   ✓ REQ-051: поиск metadata и фильтр типа меняют список, legacy replay объяснён и выключен  581ms
+   ✓ REQ-058: сортировка стабильна, неизвестные размеры в конце, календарь включает обе границы местного дня  311ms
+ ✓ |@music-downloader/desktop| src/renderer/Settings.test.tsx (5 tests) 1773ms
+   ✓ REQ-052: сохранённые settings загружаются, выбор путей передаёт только opaque refs и показывает restart hint  525ms
+   ✓ REQ-058: вкладки сохраняют переключатели файлов и тему без изменения старых полей  588ms
+ ✓ |@music-downloader/application| src/desktop-state.integration.test.ts (21 tests) 1886ms
+   ✓ REQ-051/052: restart применяет настройки; exact replay, legacy refusal и hide сохраняют аудио  724ms
+ ✓ |@music-downloader/desktop| src/renderer/App.test.tsx (21 tests) 6232ms
+   ✓ preview track показывает поля и не начинает загрузку до явного действия  464ms
+   ✓ действия меню используют ID, OUTCOME_UNKNOWN перечитывает без повтора  609ms
+   ✓ F-002/ADR-016: App сохраняет предупреждение replay VALIDATION_ERROR на History и перечитывает очередь без повтора  318ms
+   ✓ REQ-058: черновик exact качества отменяется кнопкой, Escape и backdrop; Apply передаёт точный descriptor  1649ms
+   ✓ F-001: открытая форма сохраняет подтверждённую тему sidebar вместе с черновиком и opaque refs  934ms
+
+ Test Files  12 passed (12)
+      Tests  160 passed (160)
+   Start at  23:17:28
+   Duration  8.04s (transform 2.14s, setup 0ms, collect 9.45s, tests 14.42s, environment 1.17s, prepare 1.17s)
+

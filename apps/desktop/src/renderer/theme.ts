@@ -26,18 +26,50 @@ export const theme = createTheme({
   spacing: 8,
   shape: { borderRadius: 12 },
   components: {
-    MuiButton: { styleOverrides: { root: { borderRadius: 8 } } },
+    MuiButton: {
+      styleOverrides: { root: { borderRadius: 8, boxShadow: 'none' } },
+    },
+    MuiTextField: { defaultProps: { size: 'small' } },
+    MuiAlert: {
+      styleOverrides: { root: { borderRadius: 8 }, message: { width: '100%' } },
+    },
+    MuiLinearProgress: {
+      styleOverrides: { root: { height: 5, borderRadius: 4 } },
+    },
     MuiPaper: { styleOverrides: { root: { borderRadius: 12 } } },
   },
 });
 
-/** Локальная тёмная палитра не сохраняется в Settings (STEP-031). */
-export const darkTheme = createTheme(theme, {
+/** REQ-058 и brandbook §19: palette собирается заново, чтобы dark не наследовал
+ * разрешённые светлые action/text цвета. Активная навигация сохраняет контраст текста.
+ */
+export const darkTheme = createTheme({
+  ...theme,
   palette: {
     mode: 'dark',
-    background: { default: '#0B1220', paper: '#111827' },
-    text: { primary: '#E5E7EB', secondary: '#94A3B8' },
-    divider: '#263244',
-    action: { hover: '#1E293B', selected: '#262D57' },
+    primary: {
+      main: '#818CF8',
+      dark: '#6366F1',
+      light: '#A5B4FC',
+      contrastText: '#0F172A',
+    },
+    secondary: { main: '#10B981' },
+    warning: { main: '#F59E0B' },
+    error: { main: '#EF4444' },
+    info: { main: '#3B82F6' },
+    background: { default: '#0B1120', paper: '#111827' },
+    text: {
+      primary: '#F8FAFC',
+      secondary: '#94A3B8',
+      disabled: 'rgba(255, 255, 255, 0.5)',
+    },
+    divider: '#263248',
+    action: {
+      active: '#F8FAFC',
+      hover: '#1E293B',
+      selected: '#222849',
+      disabled: 'rgba(255, 255, 255, 0.3)',
+      disabledBackground: 'rgba(255, 255, 255, 0.12)',
+    },
   },
 });

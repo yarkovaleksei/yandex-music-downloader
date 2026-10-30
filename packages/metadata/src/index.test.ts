@@ -204,3 +204,31 @@ function tags() {
 function hash(bytes: Uint8Array) {
   return createHash('sha256').update(bytes).digest('hex');
 }
+
+it.each([
+  ['sample.mp3', 'mp3' as const],
+  ['sample-aac.m4a', 'mp4' as const],
+])(
+  'REQ-058: выключенные текстовые теги не выключают встроенную обложку %s',
+  async (fixture, container) => {
+    const paths = await prepare(fixture);
+    const before = await parseBuffer(await readFile(paths.part));
+    await createMetadataWriter().write({
+      partPath: paths.part,
+      resultPath: paths.result,
+      container,
+      tags: { title: 'Не записывать' },
+      writeTags: false,
+      artwork: { bytes: cover, mimeType: 'image/png' },
+      sourceKind: 'album',
+      embedArtwork: true,
+      saveCoverFile: false,
+    });
+    const parsed = await parseBuffer(await readFile(paths.part));
+    expect(parsed.common.title).toBe(before.common.title);
+    expect(hash(parsed.common.picture![0]!.data)).toBe(hash(cover));
+    await expect(
+      readFile(path.join(path.dirname(paths.result), 'cover.jpg')),
+    ).rejects.toMatchObject({ code: 'ENOENT' });
+  },
+);

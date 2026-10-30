@@ -1,0 +1,10 @@
+
+ RUN  v3.2.7 /home/user/github.com/yarkovaleksei/yandex-music-downloader
+
+ ✓ |@music-downloader/provider-yandex-music| src/metadata/metadata.test.ts (22 tests) 57ms
+
+ Test Files  1 passed (1)
+      Tests  22 passed (22)
+   Start at  23:30:34
+   Duration  786ms (transform 304ms, setup 0ms, collect 439ms, tests 57ms, environment 0ms, prepare 70ms)
+

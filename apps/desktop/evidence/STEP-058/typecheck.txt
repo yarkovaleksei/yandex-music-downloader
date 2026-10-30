@@ -1,0 +1,4 @@
+
+> yandex-music-downloader@0.0.0 typecheck
+> tsc -b && tsc -p tsconfig.tests.json
+

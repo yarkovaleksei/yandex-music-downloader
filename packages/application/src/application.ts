@@ -18,7 +18,19 @@ import { command } from './results.js';
 
 /** Account provider-а приводится к публичному переносимому DTO. */
 function accountDto(account: Account): Account {
-  return { id: account.id, displayName: account.displayName };
+  return {
+    id: account.id,
+    displayName: account.displayName,
+    ...(account.email === undefined ? {} : { email: account.email }),
+    ...(account.region === undefined ? {} : { region: account.region }),
+    ...(account.subscription === undefined
+      ? {}
+      : { subscription: account.subscription }),
+    ...(account.subscriptionReason === undefined
+      ? {}
+      : { subscriptionReason: account.subscriptionReason }),
+    ...(account.formats === undefined ? {} : { formats: [...account.formats] }),
+  };
 }
 
 /** Reference не переносит случайные provider-поля за границу фасада. */
@@ -32,6 +44,7 @@ function referenceDto(reference: MediaReference): MediaReference {
 
 /** Transport-neutral facade не раскрывает provider, store или runtime adapters. */
 export class ApplicationFacade implements DesktopApplicationApi {
+  private avatarGeneration = 0;
   public constructor(
     private readonly deps: {
       provider: MusicProvider;
@@ -52,6 +65,7 @@ export class ApplicationFacade implements DesktopApplicationApi {
   ) {}
 
   public authenticate() {
+    this.avatarGeneration++;
     return command(
       'authenticate',
       this.deps.logger,
@@ -70,7 +84,42 @@ export class ApplicationFacade implements DesktopApplicationApi {
       this.deps.debug,
     );
   }
+  /** STEP-059 / ADR-016: необязательное фото не задерживает account, DTO содержит только bounded bytes. */
+  public accountAvatar() {
+    return command(
+      'accountAvatar',
+      this.deps.logger,
+      async () => {
+        const generation = this.avatarGeneration;
+        try {
+          const account = await this.deps.provider.getAccount();
+          if (!account || !this.deps.provider.fetchAccountAvatar) return null;
+          const image = await this.deps.provider.fetchAccountAvatar();
+          const current = await this.deps.provider.getAccount();
+          if (
+            generation !== this.avatarGeneration ||
+            current?.id !== account.id ||
+            !image ||
+            !['image/jpeg', 'image/png', 'image/webp'].includes(
+              image.mimeType,
+            ) ||
+            !image.bytes.length ||
+            image.bytes.length > 2 * 1024 * 1024
+          )
+            return null;
+          return {
+            mimeType: image.mimeType,
+            base64: Buffer.from(image.bytes).toString('base64'),
+          };
+        } catch {
+          return null;
+        }
+      },
+      this.deps.debug,
+    );
+  }
   public logout() {
+    this.avatarGeneration++;
     return command(
       'logout',
       this.deps.logger,
@@ -110,6 +159,10 @@ export class ApplicationFacade implements DesktopApplicationApi {
         const effective = {
           ...request,
           overwrite: request.overwrite ?? settings?.overwrite ?? false,
+          writeTags: settings?.writeTags ?? true,
+          saveCoverFile: settings?.saveCoverFile ?? true,
+          writeM3u8: settings?.writeM3u8 ?? true,
+
           naming: settings?.naming ?? ('collection' as const),
         };
         return this.deps.jobs.create(effective, effective);
@@ -224,6 +277,14 @@ export class ApplicationFacade implements DesktopApplicationApi {
       'history',
       this.deps.logger,
       () => this.deps.jobs.history(),
+      this.deps.debug,
+    );
+  }
+  public downloadArtwork(jobId: string) {
+    return command(
+      'downloadArtwork',
+      this.deps.logger,
+      () => this.deps.jobs.downloadArtwork(jobId),
       this.deps.debug,
     );
   }

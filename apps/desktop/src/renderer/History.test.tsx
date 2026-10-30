@@ -39,6 +39,9 @@ function fixture() {
   ];
   const api = {
     historyArtwork: vi.fn(async () => success('historyArtwork', null)),
+    jobFolderAvailability: vi.fn(async () =>
+      success('jobFolderAvailability', { available: true }),
+    ),
     history: vi.fn(async () => success('history', entries)),
     replay: vi.fn(async () => failure('replay', 'OUTCOME_UNKNOWN')),
     hideHistory: vi.fn(async ({ jobId }: { jobId: string }) => {
@@ -122,6 +125,9 @@ it('REQ-057: название открывает публичный источн
     artists: ['Первый', 'Второй', 'Третий'],
   };
   const api = {
+    jobFolderAvailability: vi.fn(async () =>
+      success('jobFolderAvailability', { available: true }),
+    ),
     history: async () => success('history', [value]),
     openExternal: vi.fn(async () => success('openExternal', null)),
   };
@@ -148,6 +154,9 @@ it('F-001 STEP-056: строки и действия доступны до об�
     complete = resolve;
   });
   const api = {
+    jobFolderAvailability: vi.fn(async () =>
+      success('jobFolderAvailability', { available: true }),
+    ),
     history: vi.fn(async () => success('history', entries)),
     historyArtwork: vi.fn(() => image),
     hideHistory: vi.fn(async () => {
@@ -187,6 +196,9 @@ it('F-001 STEP-056: независимая обложка дополняет в�
     complete = resolve;
   });
   const api = {
+    jobFolderAvailability: vi.fn(async () =>
+      success('jobFolderAvailability', { available: true }),
+    ),
     history: async () =>
       success('history', [
         entry('cover', 'album', 'Альбом с обложкой'),
@@ -211,4 +223,146 @@ it('F-001 STEP-056: независимая обложка дополняет в�
   });
   expect(view.container.querySelectorAll('img')).toHaveLength(1);
   expect(screen.getByText('Альбом без сети')).toBeTruthy();
+});
+
+it('REQ-058: сортировка стабильна, неизвестные размеры в конце, календарь включает обе границы местного дня', async () => {
+  const first = {
+    ...entry('a', 'track', 'Альфа'),
+    completedAt: new Date(2026, 9, 28, 0, 0).toISOString(),
+    bytes: 100,
+  };
+  const last = {
+    ...entry('b', 'album', 'Бета'),
+    completedAt: new Date(2026, 9, 28, 23, 59, 59, 999).toISOString(),
+    bytes: 200,
+  };
+  const unknown = {
+    ...entry('c', 'playlist', 'Гамма'),
+    completedAt: new Date(2026, 9, 29, 0, 0).toISOString(),
+  };
+  const api = {
+    jobFolderAvailability: vi.fn(async () =>
+      success('jobFolderAvailability', { available: true }),
+    ),
+    history: async () => success('history', [last, unknown, first]),
+    historyArtwork: async () => success('historyArtwork', null),
+  } as unknown as DesktopApi;
+  render(<History api={api} onReplay={() => {}} />);
+  await screen.findByText('Альфа');
+  const titles = () =>
+    screen
+      .getAllByRole('row')
+      .slice(1)
+      .map((row) => row.textContent);
+  fireEvent.click(
+    screen.getByText('Название', { selector: '.MuiTableSortLabel-root' }),
+  );
+  expect(titles()[0]).toContain('Альфа');
+  fireEvent.click(
+    screen.getByText('Название', { selector: '.MuiTableSortLabel-root' }),
+  );
+  expect(titles()[0]).toContain('Гамма');
+  fireEvent.click(
+    screen.getByText('Размер', { selector: '.MuiTableSortLabel-root' }),
+  );
+  expect(titles().at(-1)).toContain('Гамма');
+  fireEvent.click(
+    screen.getByText('Размер', { selector: '.MuiTableSortLabel-root' }),
+  );
+  expect(titles().at(-1)).toContain('Гамма');
+  fireEvent.change(screen.getByLabelText('Дата с'), {
+    target: { value: '2026-10-28' },
+  });
+  fireEvent.change(screen.getByLabelText('Дата по'), {
+    target: { value: '2026-10-28' },
+  });
+  expect(titles()).toHaveLength(2);
+  expect(screen.queryByText('Гамма')).toBeNull();
+  expect(screen.getByText(/00:00/)).toBeTruthy();
+  expect(screen.getByText(/23:59/)).toBeTruthy();
+  fireEvent.change(screen.getByLabelText('Дата с'), {
+    target: { value: '2026-10-29' },
+  });
+  expect(screen.getByText('Дата окончания раньше начала')).toBeTruthy();
+  expect(screen.getByText('Пока ничего не найдено')).toBeTruthy();
+});
+
+it('STEP-059 / H-001: deferred availability не блокирует фильтр, открытие локально и не перечитывает обложки', async () => {
+  const { api, mocks } = fixture();
+  let complete!: (
+    value: ReturnType<typeof success<{ available: boolean; reason?: string }>>,
+  ) => void;
+  const availability = new Promise<
+    ReturnType<typeof success<{ available: boolean; reason?: string }>>
+  >((resolve) => {
+    complete = resolve;
+  });
+  mocks.jobFolderAvailability.mockImplementationOnce(() => availability);
+  let finishOpen!: (value: ReturnType<typeof failure>) => void;
+  mocks.showItemInFolder.mockImplementationOnce(
+    () =>
+      new Promise((resolve) => {
+        finishOpen = resolve;
+      }),
+  );
+  render(<History api={api} onReplay={() => {}} />);
+  const row = (await screen.findByText('Новый альбом')).closest('tr')!;
+  expect(
+    (
+      within(row).getByRole('button', {
+        name: 'Открыть папку',
+      }) as HTMLButtonElement
+    ).disabled,
+  ).toBe(true);
+  fireEvent.change(screen.getByLabelText('Поиск в истории'), {
+    target: { value: 'Новый' },
+  });
+  expect(screen.queryByText('Старый плейлист')).toBeNull();
+  await act(async () =>
+    complete(success('jobFolderAvailability', { available: true })),
+  );
+  fireEvent.change(screen.getByLabelText('Поиск в истории'), {
+    target: { value: '' },
+  });
+  fireEvent.click(within(row).getByRole('button', { name: 'Открыть папку' }));
+  expect(
+    (
+      within(screen.getByText('Старый плейлист').closest('tr')!).getByRole(
+        'button',
+        { name: 'Открыть папку' },
+      ) as HTMLButtonElement
+    ).disabled,
+  ).toBe(false);
+  await act(async () =>
+    finishOpen(failure('showItemInFolder', 'PERMISSION_DENIED')),
+  );
+  expect(await screen.findByRole('alert')).toBeTruthy();
+  expect(mocks.history).toHaveBeenCalledTimes(1);
+  expect(mocks.historyArtwork).toHaveBeenCalledTimes(2);
+});
+
+it('STEP-059: missing folder disabled и имеет доступное объяснение', async () => {
+  const { api, mocks } = fixture();
+  mocks.jobFolderAvailability.mockResolvedValue(
+    success('jobFolderAvailability', {
+      available: false,
+      reason: 'Папка удалена.',
+    }),
+  );
+  render(<History api={api} onReplay={() => {}} />);
+  const row = (await screen.findByText('Новый альбом')).closest('tr')!;
+  await waitFor(() =>
+    expect(
+      within(row)
+        .getByRole('button', { name: 'Открыть папку' })
+        .parentElement?.getAttribute('title'),
+    ).toBe('Папка удалена.'),
+  );
+  expect(
+    (
+      within(row).getByRole('button', {
+        name: 'Открыть папку',
+      }) as HTMLButtonElement
+    ).disabled,
+  ).toBe(true);
 });

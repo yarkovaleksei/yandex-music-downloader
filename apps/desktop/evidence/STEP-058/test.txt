@@ -1,0 +1,210 @@
+
+> yandex-music-downloader@0.0.0 test
+> vitest run
+
+
+ RUN  v3.2.7 /home/user/github.com/yarkovaleksei/yandex-music-downloader
+
+ ✓ |@music-downloader/desktop| src/preload/preload.test.ts (1 test) 401ms
+   ✓ contextBridge публикует только desktopApi, subscribe снимает только свой listener  400ms
+ ✓ |@music-downloader/persistence| src/sqlite-migrations.test.ts (6 tests) 244ms
+ ✓ |@music-downloader/metadata| src/index.test.ts (9 tests) 455ms
+ ✓ |@music-downloader/persistence| src/file-manifest-store.test.ts (50 tests) 485ms
+ ✓ |@music-downloader/persistence| src/desktop-state-store.test.ts (6 tests) 790ms
+   ✓ ADR-014: stale соединение запрещает каждую desktop запись; будущая схема не изменяется  547ms
+ ✓ |tooling| consistency.test.ts (28 tests) 1136ms
+   ✓ ignores кеша Yarn и backup в ESLint и Prettier > основной проход игнорирует каталоги  1056ms
+ ✓ |@music-downloader/cli| src/cli.smoke.test.ts (3 tests) 1704ms
+   ✓ собранный bin > показывает help и распознаёт doctor  632ms
+   ✓ собранный bin > не пишет human help в stdout при --help --json  459ms
+   ✓ собранный bin > прерывает ожидающий auth сигналом без успешного результата  447ms
+ ✓ |@music-downloader/persistence| src/sqlite-manifest-store.test.ts (25 tests) 1018ms
+ ✓ |@music-downloader/core-filesystem| src/writer.test.ts (11 tests) 96ms
+ ✓ |@music-downloader/persistence| src/sqlite-file-import.test.ts (4 tests) 331ms
+ ✓ |@music-downloader/core-downloader| src/manager.test.ts (30 tests) 487ms
+ ✓ |@music-downloader/provider-yandex-music| src/metadata/metadata.test.ts (22 tests) 144ms
+ ✓ |@music-downloader/core-filesystem| src/property.test.ts (6 tests) 1607ms
+   ✓ properties on win32 > produces a safe segment for any input  408ms
+   ✓ properties on darwin > produces a safe segment for any input  453ms
+   ✓ properties on linux > produces a safe segment for any input  492ms
+ ✓ |tooling| quality.test.ts (9 tests) 960ms
+   ✓ необоснованный и обоснованный explicit any > необоснованный any падает в основном проходе  569ms
+ ✓ |@music-downloader/cli| src/job-observer.test.ts (2 tests) 56ms
+ ✓ |@music-downloader/provider-yandex-music| src/audio/audio.test.ts (23 tests) 136ms
+ ✓ |@music-downloader/desktop| src/contract/desktop-api.test.ts (42 tests) 53ms
+ ✓ |@music-downloader/core-filesystem| src/m3u8.test.ts (13 tests) 70ms
+ ✓ |@music-downloader/core-downloader| src/state/transitions.test.ts (228 tests) 31ms
+ ✓ |@music-downloader/persistence| src/platform-check.test.ts (2 tests) 2949ms
+   ✓ самодостаточный набор платформенной проверки > check.mjs проходит текущим Node.js и пишет отчёт только из разрешённых полей  946ms
+ ✓ |@music-downloader/core-validation| src/index.test.ts (11 tests) 86ms
+ ✓ |@music-downloader/core-filesystem| src/finalize.test.ts (17 tests) 37ms
+ ✓ |@music-downloader/persistence| src/atomic-json.test.ts (7 tests) 3083ms
+   ✓ writeAtomicJson > на Windows публикует целый snapshot после четырёх EPERM  768ms
+   ✓ writeAtomicJson > на Windows публикует целый snapshot после четырёх EBUSY  766ms
+   ✓ writeAtomicJson > на Windows сохраняет прежний snapshot и исходный EPERM после пяти попыток  768ms
+   ✓ writeAtomicJson > на Windows сохраняет прежний snapshot и исходный EBUSY после пяти попыток  760ms
+ ✓ |@music-downloader/core-queue| src/scheduler.test.ts (2 tests) 28ms
+{"level":"warn","time":"2026-10-29T19:17:09.074Z","message":"Команда application завершилась ошибкой.","context":{},"data":{"command":"account","code":"DOWNLOAD_ERROR"}}
+ ✓ |@music-downloader/core-filesystem| src/part-path.test.ts (17 tests) 45ms
+{"level":"warn","time":"2026-10-29T19:17:09.088Z","message":"Команда application завершилась ошибкой.","context":{},"data":{"command":"logout","code":"DOWNLOAD_ERROR"}}
+{"level":"warn","time":"2026-10-29T19:17:09.091Z","message":"Команда application завершилась ошибкой.","context":{},"data":{"command":"getJob","code":"DOWNLOAD_ERROR"}}
+{"level":"warn","time":"2026-10-29T19:17:09.092Z","message":"Команда application завершилась ошибкой.","context":{},"data":{"command":"getJob","code":"DOWNLOAD_ERROR"}}
+{"level":"warn","time":"2026-10-29T19:17:09.092Z","message":"Команда application завершилась ошибкой.","context":{},"data":{"command":"listJobs","code":"DOWNLOAD_ERROR"}}
+{"level":"warn","time":"2026-10-29T19:17:09.093Z","message":"Команда application завершилась ошибкой.","context":{},"data":{"command":"getJob","code":"DOWNLOAD_ERROR"}}
+{"level":"warn","time":"2026-10-29T19:17:09.093Z","message":"Команда application завершилась ошибкой.","context":{},"data":{"command":"listJobs","code":"DOWNLOAD_ERROR"}}
+ ✓ |@music-downloader/persistence| src/file-cache-store.test.ts (3 tests) 32ms
+{"level":"warn","time":"2026-10-29T19:17:09.159Z","message":"Команда application завершилась ошибкой.","context":{},"data":{"command":"resume","code":"VALIDATION_ERROR","reason":"LEASE_HELD_BY_OTHER_OWNER"}}
+{"level":"warn","time":"2026-10-29T19:17:09.161Z","message":"Команда application завершилась ошибкой.","context":{},"data":{"command":"resume","code":"VALIDATION_ERROR","reason":"JOB_NOT_FOUND"}}
+{"level":"warn","time":"2026-10-29T19:17:09.164Z","message":"Команда application завершилась ошибкой.","context":{},"data":{"command":"retry","code":"VALIDATION_ERROR","reason":"JOB_NOT_FOUND"}}
+{"level":"warn","time":"2026-10-29T19:17:09.165Z","message":"Команда application завершилась ошибкой.","context":{},"data":{"command":"cancel","code":"VALIDATION_ERROR","reason":"JOB_NOT_FOUND"}}
+{"level":"warn","time":"2026-10-29T19:17:09.165Z","message":"Команда application завершилась ошибкой.","context":{},"data":{"command":"pause","code":"VALIDATION_ERROR","reason":"JOB_NOT_FOUND"}}
+{"level":"warn","time":"2026-10-29T19:17:09.196Z","message":"Команда application завершилась ошибкой.","context":{},"data":{"command":"listJobs","code":"VALIDATION_ERROR","reason":"STATE_SCHEMA_UNSUPPORTED"}}
+{"level":"warn","time":"2026-10-29T19:17:09.196Z","message":"Команда application завершилась ошибкой.","context":{},"data":{"command":"getJob","code":"VALIDATION_ERROR","reason":"STATE_SCHEMA_UNSUPPORTED"}}
+{"level":"warn","time":"2026-10-29T19:17:09.196Z","message":"Команда application завершилась ошибкой.","context":{},"data":{"command":"resume","code":"VALIDATION_ERROR","reason":"STATE_SCHEMA_UNSUPPORTED"}}
+{"level":"warn","time":"2026-10-29T19:17:09.197Z","message":"Команда application завершилась ошибкой.","context":{},"data":{"command":"createDownload","code":"VALIDATION_ERROR","reason":"STATE_SCHEMA_UNSUPPORTED"}}
+ ✓ |tooling| desktop-ipc-rule.test.ts (1 test) 46ms
+ ✓ |@music-downloader/logging| src/file-sink.test.ts (8 tests) 230ms
+{"level":"warn","time":"2026-10-29T19:17:09.262Z","message":"Команда application завершилась ошибкой.","context":{},"data":{"command":"cancel","code":"DOWNLOAD_ERROR","reason":"OWNER_ACK_TIMEOUT"}}
+ ✓ |@music-downloader/application| src/desktop-profile.test.ts (1 test) 71ms
+ ✓ |@music-downloader/core-validation| src/baseline-no-subprocess.test.ts (1 test) 35ms
+ ✓ |@music-downloader/application| src/application.contract.test.ts (9 tests) 193ms
+ ✓ |@music-downloader/application| src/baseline-no-subprocess.integration.test.ts (2 tests) 195ms
+ ✓ |tooling| boundaries.test.ts (96 tests) 3105ms
+   ✓ матрица границ ADR-001: group x group > apps/cli (src): все цели, value и type-only  718ms
+ ✓ |@music-downloader/core-downloader| src/command-refusal.test.ts (13 tests) 26ms
+ ✓ |@music-downloader/application| src/cache.integration.test.ts (8 tests) 259ms
+ ✓ |@music-downloader/provider-yandex-music| src/yandex-music-auth.test.ts (22 tests) 2203ms
+   ✓ YandexMusicProviderAuth > проверяет account до успешной записи credentials  1034ms
+   ✓ YandexMusicProviderAuth > сохраняет прежнюю запись при ошибке native store  1003ms
+ ✓ |@music-downloader/application| src/preview.test.ts (7 tests) 17ms
+ ✓ |@music-downloader/provider-yandex-music| src/url/resolve-yandex-music-url.test.ts (32 tests) 38ms
+ ✓ |@music-downloader/application| src/doctor.integration.test.ts (15 tests) 79ms
+{"level":"warn","time":"2026-10-29T19:17:09.701Z","message":"Команда application завершилась ошибкой.","context":{},"data":{"command":"account","code":"DOWNLOAD_ERROR"}}
+ ✓ |@music-downloader/application| src/sqlite-store.integration.test.ts (3 tests) 635ms
+   ✓ STEP-029: SQLite default store application > сообщает STATE_SCHEMA_UNSUPPORTED для базы новее и не изменяет её  536ms
+ ✓ |@music-downloader/desktop| src/main/job-notifications.test.ts (8 tests) 15ms
+ ✓ |@music-downloader/persistence| src/process-identity.test.ts (1 test) 19ms
+ ✓ |@music-downloader/application| src/results.test.ts (6 tests) 19ms
+ ✓ |@music-downloader/core-filesystem| src/sanitize.test.ts (52 tests) 25ms
+ ✓ |@music-downloader/cli| src/configuration.test.ts (8 tests) 36ms
+ ✓ |@music-downloader/core-filesystem| src/layout.test.ts (20 tests) 25ms
+ ✓ |@music-downloader/persistence| src/file-manifest-store.integration.test.ts (6 tests) 3379ms
+   ✓ FileManifestStore child-process lease > отклоняет второго живого owner и выбирает ровно одного stale contender  416ms
+ ✓ |@music-downloader/application| src/playlist.integration.test.ts (5 tests) 825ms
+ ✓ |@music-downloader/application| src/manifest-recovery.integration.test.ts (7 tests) 3057ms
+   ✓ manifest recovery composition > после SIGKILL продолжает только незавершённый трек playlist через реальные exports  410ms
+   ✓ manifest recovery composition > F-009 восстанавливает checkpoint после rename и SIGKILL до completed snapshot  352ms
+ ✓ |@music-downloader/provider-yandex-music| src/auth-transport.test.ts (10 tests) 18ms
+ ✓ |@music-downloader/persistence| src/process-identity-failure.test.ts (2 tests) 32ms
+ ✓ |@music-downloader/shared| src/manifest.test.ts (6 tests) 19ms
+ ✓ |@music-downloader/persistence| src/control-inbox.test.ts (1 test) 14ms
+ ✓ |@music-downloader/desktop| src/main/host-supervisor.test.ts (1 test) 11ms
+ ✓ |@music-downloader/persistence| src/sqlite-manifest-store.integration.test.ts (5 tests) 3698ms
+   ✓ SqliteManifestStore: межпроцессная аренда и миграции > отклоняет второго живого владельца  425ms
+ ✓ |@music-downloader/desktop| src/transport/host-client.test.ts (1 test) 13ms
+ ✓ |@music-downloader/core-manifest| src/range.test.ts (3 tests) 15ms
+ ✓ |@music-downloader/application| src/logging.integration.test.ts (4 tests) 37ms
+{"level":"warn","time":"2026-10-29T19:17:10.365Z","message":"Команда application завершилась ошибкой.","context":{},"data":{"command":"getJob","code":"VALIDATION_ERROR"}}
+{"level":"warn","time":"2026-10-29T19:17:10.397Z","message":"Команда application завершилась ошибкой.","context":{},"data":{"command":"createDownload","code":"DOWNLOAD_ERROR"}}
+ ✓ |@music-downloader/application| src/diagnostics.test.ts (6 tests) 12ms
+ ✓ |@music-downloader/logging| src/serializers.test.ts (3 tests) 13ms
+ ✓ |@music-downloader/core-downloader| src/state/control.test.ts (14 tests) 10ms
+ ✓ |@music-downloader/cli| src/arguments.test.ts (27 tests) 8ms
+ ✓ |@music-downloader/testing| src/metadata-contract.test.ts (10 tests) 17ms
+ ✓ |@music-downloader/testing| src/mock-provider.test.ts (5 tests) 22ms
+ ✓ |@music-downloader/core-downloader| src/state/aggregate.test.ts (25 tests) 8ms
+ ✓ |@music-downloader/provider-yandex-music| src/metadata/artwork.test.ts (8 tests) 12ms
+ ✓ |@music-downloader/shared| src/errors.test.ts (28 tests) 12ms
+ ✓ |@music-downloader/shared| src/metadata-contract.test.ts (4 tests) 7ms
+ ✓ |@music-downloader/core-filesystem| src/file-errors.test.ts (12 tests) 5ms
+ ✓ |@music-downloader/provider-yandex-music| src/health.test.ts (4 tests) 7ms
+ ✓ |@music-downloader/core-manifest| src/finalization.test.ts (1 test) 7ms
+ ✓ |@music-downloader/core-manifest| src/recovery.test.ts (13 tests) 6ms
+ ✓ |@music-downloader/logging| src/logger.test.ts (5 tests) 11ms
+ ✓ |@music-downloader/shared| src/provider.test.ts (3 tests) 5ms
+ ✓ |@music-downloader/core-downloader| src/progress.test.ts (3 tests) 5ms
+ ✓ |@music-downloader/logging| src/redactor.test.ts (2 tests) 6ms
+ ✓ |@music-downloader/shared| src/events.test.ts (5 tests) 9ms
+ ✓ |@music-downloader/provider-yandex-music| src/url/public-url.test.ts (6 tests) 6ms
+ ✓ |@music-downloader/persistence| src/cli-credential-store.test.ts (4 tests) 6ms
+ ✓ |@music-downloader/shared| src/application.test.ts (3 tests) 4ms
+ ✓ |@music-downloader/core-planner| src/plan.test.ts (15 tests) 11ms
+ ✓ |@music-downloader/core-planner| src/quality.test.ts (21 tests) 11ms
+ ✓ |@music-downloader/cli| src/exit-code.test.ts (8 tests) 5ms
+ ✓ |@music-downloader/desktop| src/main/content-policy.test.ts (2 tests) 5ms
+ ✓ |@music-downloader/core-retry| src/decide.test.ts (7 tests) 6ms
+ ✓ |@music-downloader/core-retry| src/classify.test.ts (24 tests) 8ms
+ ✓ |@music-downloader/core-retry| src/backoff.test.ts (26 tests) 9ms
+ ✓ |@music-downloader/persistence| src/state-directory.test.ts (1 test) 4ms
+ ✓ |@music-downloader/desktop| src/renderer/quantity.test.ts (8 tests) 4ms
+ ✓ |@music-downloader/cli| src/signals.test.ts (1 test) 5ms
+ ✓ |@music-downloader/cli| src/output.test.ts (2 tests) 10ms
+ ✓ |@music-downloader/desktop| src/main/window-options.test.ts (1 test) 3ms
+ ✓ |@music-downloader/desktop| src/index.test.ts (1 test) 6ms
+ ✓ |@music-downloader/desktop| src/renderer/theme.test.ts (2 tests) 5ms
+ ✓ |@music-downloader/core-planner| src/index.test.ts (1 test) 3ms
+ ✓ |@music-downloader/core-manifest| src/index.test.ts (1 test) 3ms
+ ✓ |@music-downloader/cli| src/doctor.integration.test.ts (3 tests) 19ms
+{"level":"warn","time":"2026-10-29T19:17:11.441Z","message":"Команда application завершилась ошибкой.","context":{},"data":{"command":"listJobs","code":"VALIDATION_ERROR","reason":"STATE_SCHEMA_UNSUPPORTED"}}
+{"level":"warn","time":"2026-10-29T19:17:11.444Z","message":"Команда application завершилась ошибкой.","context":{},"data":{"command":"listJobs","code":"VALIDATION_ERROR","reason":"STATE_SCHEMA_UNSUPPORTED"}}
+ ✓ |@music-downloader/cli| src/runner.test.ts (21 tests) 21ms
+ ✓ |@music-downloader/core-downloader| src/index.test.ts (1 test) 3ms
+ ✓ |@music-downloader/testing| src/index.test.ts (1 test) 3ms
+ ✓ |@music-downloader/core-queue| src/index.test.ts (1 test) 4ms
+ ✓ |@music-downloader/provider-yandex-music| src/auth-browser.test.ts (2 tests) 5317ms
+   ✓ приватная browser-страница > слушает loopback, не кешируется и не раскрывается по неизвестному пути  5305ms
+ ✓ |@music-downloader/shared| src/index.test.ts (1 test) 3ms
+ ✓ |@music-downloader/logging| src/index.test.ts (1 test) 4ms
+ ✓ |@music-downloader/core-retry| src/index.test.ts (1 test) 6ms
+ ✓ |@music-downloader/core-filesystem| src/index.test.ts (1 test) 3ms
+ ✓ |@music-downloader/provider-yandex-music| src/index.test.ts (1 test) 3ms
+ ✓ |@music-downloader/application| src/application.integration.test.ts (19 tests) 2743ms
+   ✓ ApplicationApi: интеграция публичного фасада > сохраняет старый result, когда metadata портит part после initial baseline  333ms
+ ✓ |@music-downloader/persistence| src/index.test.ts (1 test) 3ms
+ ✓ |@music-downloader/cli| src/cli.integration.test.ts (5 tests) 573ms
+ ✓ |@music-downloader/cli| src/state-schema.integration.test.ts (1 test) 619ms
+   ✓ STEP-029: база состояния более новой версии > CLI сообщает несовместимость в обычном и --json выводе без изменения базы  617ms
+ ✓ |@music-downloader/application| src/index.test.ts (2 tests) 3ms
+ ✓ |@music-downloader/cli| src/index.test.ts (1 test) 2ms
+ ✓ |@music-downloader/application| src/desktop-state.integration.test.ts (21 tests) 3270ms
+   ✓ REQ-051/052: restart применяет настройки; exact replay, legacy refusal и hide сохраняют аудио  1290ms
+   ✓ REQ-058 H-001: реальные файлы, restart и replay сохраняют переключатели true  304ms
+ ✓ |tooling| strict.test.ts (41 tests) 6295ms
+   ✓ root solution и тестовая программа > tsconfig.tests.json включает все тестовые, конфигурационные и tooling-файлы TypeScript  2729ms
+   ✓ root solution и тестовая программа > typecheck действительно ловит ошибку типа в тесте (инъекция в памяти)  2661ms
+   ✓ packages/shared: изолированная production-программа > не видит Node/DOM I/O globals  549ms
+ ✓ |@music-downloader/application| src/headless.integration.test.ts (9 tests) 4255ms
+   ✓ STEP-026: offline headless scenarios > single track, album и playlist: track сохраняет валидный результат offline  482ms
+   ✓ STEP-026: offline headless scenarios > single track, album и playlist: album сохраняет валидный результат offline  528ms
+   ✓ STEP-026: offline headless scenarios > single track, album и playlist: playlist сохраняет валидный результат offline  497ms
+   ✓ STEP-026: offline headless scenarios > network interruption сохраняет prefix и продолжает Range без сети  1000ms
+   ✓ STEP-026: offline headless scenarios > retry повторяет transient open без сети  901ms
+   ✓ STEP-026: offline headless scenarios > partial failure сохраняет доступные позиции playlist  478ms
+ ✓ |@music-downloader/desktop| src/renderer/Diagnostics.test.tsx (1 test) 159ms
+ ✓ |@music-downloader/desktop| src/renderer/Updates.test.tsx (2 tests) 178ms
+ ✓ |@music-downloader/desktop| src/renderer/Account.test.tsx (2 tests) 168ms
+ ✓ |@music-downloader/desktop| src/renderer/Downloads.test.tsx (3 tests) 445ms
+ ✓ |@music-downloader/application| src/download-manager.integration.test.ts (4 tests) 7373ms
+   ✓ Download Manager: реальные файлы и два процесса > remote cancel применяется при частом progress и удаляет part  944ms
+   ✓ Download Manager: реальные файлы и два процесса > SIGINT сохраняет part и resume открывает только незавершённый трек с Range  1676ms
+   ✓ Download Manager: реальные файлы и два процесса > crash recovery после устаревания аренды не загружает completed повторно  1607ms
+   ✓ Download Manager: реальные файлы и два процесса > таймаут processing не заявляет освобождение аренды  844ms
+ ✓ |@music-downloader/desktop| src/renderer/History.test.tsx (6 tests) 1404ms
+   ✓ REQ-051: поиск metadata и фильтр типа меняют список, legacy replay объяснён и выключен  621ms
+ ✓ |@music-downloader/desktop| src/renderer/Settings.test.tsx (4 tests) 1572ms
+   ✓ REQ-052: сохранённые settings загружаются, выбор путей передаёт только opaque refs и показывает restart hint  553ms
+   ✓ REQ-058: вкладки сохраняют переключатели файлов, автооткрытие и тему без изменения старых полей  585ms
+ ✓ |@music-downloader/desktop| src/renderer/App.test.tsx (19 tests) 5537ms
+   ✓ preview track показывает поля и не начинает загрузку до явного действия  508ms
+   ✓ действия меню используют ID, OUTCOME_UNKNOWN перечитывает без повтора  569ms
+   ✓ F-002/ADR-016: App сохраняет предупреждение replay VALIDATION_ERROR на History и перечитывает очередь без повтора  325ms
+   ✓ F-002/ADR-016: App сохраняет предупреждение replay OUTCOME_UNKNOWN на History и перечитывает очередь без повтора  354ms
+   ✓ REQ-058: черновик exact качества отменяется кнопкой, Escape и backdrop; Apply передаёт точный descriptor  1711ms
+ ✓ |@music-downloader/cli| src/headless.integration.test.ts (1 test) 33010ms
+   ✓ STEP-026: CLI crash resume > CLI crash resume запускает новый process с реальным SQLite store  31257ms
+
+ Test Files  125 passed (125)
+      Tests  1429 passed (1429)
+   Start at  22:17:05
+   Duration  39.29s (transform 21.30s, setup 0ms, collect 108.06s, tests 108.15s, environment 3.21s, prepare 12.73s)
+

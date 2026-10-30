@@ -6,6 +6,9 @@ import { invokeBroker } from '../main/broker.js';
 import { DirectoryRegistry } from '../main/directory-registry.js';
 const source = { provider: 'mock', kind: 'track', id: '1' };
 const samples: Record<Method, unknown> = {
+  appInfo: undefined,
+  accountAvatar: undefined,
+  jobFolderAvailability: { jobId: '1' },
   checkUpdate: undefined,
   downloadUpdate: undefined,
   openUpdateFolder: undefined,
@@ -41,6 +44,7 @@ const samples: Record<Method, unknown> = {
   },
   history: undefined,
   historyArtwork: { jobId: '1' },
+  downloadArtwork: { jobId: '1' },
   hideHistory: { jobId: '1' },
   replay: { jobId: '1' },
   lastDiagnostics: undefined,
@@ -232,6 +236,10 @@ it('REQ-052/ADR-016: main разрешает settings refs из диалога, 
     await invokeBroker('saveSettings', input, true, dirs, actions, host),
   ).toMatchObject({ kind: 'result' });
   expect(host).toHaveBeenLastCalledWith('saveSettings', {
+    writeTags: true,
+    saveCoverFile: true,
+    writeM3u8: true,
+    theme: 'light',
     quality: 'high',
     concurrency: 2,
     naming: 'album',
@@ -389,4 +397,37 @@ it('REQ-057: общая папка и FFmpeg разрешаются из trusted
       host,
     ),
   ).toMatchObject({ kind: 'error' });
+});
+
+it('REQ-058: exact selector закрыт для provider key, пути и неизвестных flags', () => {
+  const request = {
+    source: { provider: 'mock', kind: 'track', id: '1' },
+    quality: 'best',
+    directoryRef: 'default-output',
+    variantSelection: {
+      codec: 'mp3',
+      container: 'mp3',
+      lossless: false,
+      bitrate: 192000,
+    },
+  };
+  expect(parseInput('createDownload', request)).toEqual(request);
+  expect(() =>
+    parseInput('createDownload', {
+      ...request,
+      variantSelection: { ...request.variantSelection, key: 'secret' },
+    }),
+  ).toThrow();
+  expect(() =>
+    parseInput('createDownload', {
+      ...request,
+      variantSelection: { ...request.variantSelection, bitrate: 0 },
+    }),
+  ).toThrow();
+  expect(() =>
+    parseInput('createDownload', {
+      ...request,
+      variantSelection: { ...request.variantSelection, codec: '/tmp/audio' },
+    }),
+  ).toThrow();
 });

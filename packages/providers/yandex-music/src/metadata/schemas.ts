@@ -3,7 +3,11 @@ import { z } from 'zod';
 const id = z.union([z.string().min(1), z.number().int().nonnegative()]);
 const title = z.string().min(1);
 const integer = z.number().int().nonnegative();
-const artist = z.object({ id, name: title });
+const artist = z.object({
+  id,
+  name: title,
+  cover: z.object({ uri: z.string().optional() }).optional(),
+});
 const albumReference = z.object({
   id,
   title,
@@ -40,6 +44,7 @@ export const rawTrackSchema = z
 export type RawTrack = z.infer<typeof rawTrackSchema>;
 
 export const rawAlbumSchema = z.object({
+  description: z.string().optional(),
   id,
   title,
   artists: z.array(artist),
@@ -63,6 +68,7 @@ const shortTrack = z
 export const rawPlaylistSchema = z
   .object({
     title,
+    description: z.string().optional(),
     owner: z
       .object({
         uid: id.optional(),
@@ -84,7 +90,11 @@ export const rawPlaylistSchema = z
   );
 export type RawPlaylist = z.infer<typeof rawPlaylistSchema>;
 
-const domainArtist = z.object({ id: title, name: title });
+const domainArtist = z.object({
+  id: title,
+  name: title,
+  artwork: z.object({ key: title }).optional(),
+});
 const artwork = z.object({ key: title });
 const metadata = {
   id: title,
@@ -116,6 +126,7 @@ export const trackProjectionSchema = z.discriminatedUnion('availability', [
   z.object({ ...metadata, availability: z.literal('unknown') }),
 ]);
 export const albumProjectionSchema = z.object({
+  description: z.string().optional(),
   id: title,
   title,
   artists: z.array(domainArtist),
@@ -125,6 +136,8 @@ export const albumProjectionSchema = z.object({
   tracks: z.array(trackProjectionSchema),
 });
 export const playlistProjectionSchema = z.object({
+  description: z.string().optional(),
+  authorArtwork: artwork.optional(),
   id: title,
   title,
   owner: title.optional(),

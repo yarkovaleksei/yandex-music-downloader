@@ -6,6 +6,7 @@ export type MediaKind = 'track' | 'album' | 'playlist';
 export interface Artist {
   readonly id: string;
   readonly name: string;
+  readonly artwork?: ArtworkRef;
 }
 
 /** Непрозрачная ссылка на artwork: клиент не получает CDN URL и параметры доступа. */
@@ -58,6 +59,7 @@ export interface UnknownTrack extends TrackMetadata {
 export type Track = AvailableTrack | UnavailableTrack | UnknownTrack;
 
 export interface Album {
+  readonly description?: string;
   readonly id: string;
   readonly title: string;
   readonly artists: readonly Artist[];
@@ -74,6 +76,8 @@ export interface PlaylistTrack {
 }
 
 export interface Playlist {
+  readonly description?: string;
+  readonly authorArtwork?: ArtworkRef;
   readonly id: string;
   readonly title: string;
   /** F-001: владелец из brief §8; @link ../../../planning/reviews/STEP-003/REVIEW-20261008T181759Z.md */
@@ -93,6 +97,14 @@ export interface AudioVariant {
   readonly lossless: boolean;
 }
 
+/** Точное переносимое описание варианта без provider key. @link ../../../planning/tasks/STEP-058.md */
+export interface VariantSelection {
+  readonly codec: string;
+  readonly container: string;
+  readonly lossless: boolean;
+  readonly bitrate?: number;
+}
+
 export type QualityPreference = 'best' | 'lossless' | 'high' | 'normal';
 
 export interface MediaReference {
@@ -105,6 +117,7 @@ export interface DownloadRequest {
   readonly source: MediaReference;
   readonly quality: QualityPreference;
   readonly destination: string;
+  readonly variantSelection?: VariantSelection;
   /** Явно заменяет существующий файл; по умолчанию core сохраняет skip policy. */
   readonly overwrite?: boolean;
 }

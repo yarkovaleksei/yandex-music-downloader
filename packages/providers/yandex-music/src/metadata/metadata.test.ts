@@ -189,6 +189,8 @@ describe('provider metadata', () => {
       await expect(provider.authenticate()).resolves.toEqual({
         id: '502',
         displayName: 'Аккаунт B',
+        subscriptionReason:
+          'Сервис не передал достаточно данных, чтобы определить подписку.',
       });
       await provider.getTrack('101');
     } finally {
@@ -524,4 +526,35 @@ describe('provider metadata', () => {
     expect(store.read).not.toHaveBeenCalled();
     expect(fetch).not.toHaveBeenCalled();
   });
+});
+
+it('REQ-058: описание и изображение автора проецируются из optional metadata без raw payload', async () => {
+  const { mapAlbum, mapPlaylist } = await import('./mappers.js');
+  const uri = 'avatars.yandex.net/get-music-content/1/fixture/%%';
+  const album = mapAlbum(
+    rawAlbumSchema.parse({
+      id: 1,
+      title: 'Альбом',
+      description: 'Описание',
+      artists: [{ id: 2, name: 'Автор', cover: { uri } }],
+      volumes: [],
+      token: 'secret',
+    }),
+  );
+  expect(album.description).toBe('Описание');
+  expect(album.artists[0]?.artwork).toMatchObject({
+    key: expect.stringMatching(/^yandex-artwork:/),
+  });
+  expect(JSON.stringify(album)).not.toContain('secret');
+  const playlist = mapPlaylist(
+    rawPlaylistSchema.parse({
+      title: 'Список',
+      description: 'Описание списка',
+      tracks: [],
+      owner: { name: 'Автор' },
+    }),
+    '1',
+  );
+  expect(playlist.description).toBe('Описание списка');
+  expect(playlist.authorArtwork).toBeUndefined();
 });

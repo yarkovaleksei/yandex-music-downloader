@@ -197,3 +197,51 @@ describe('no hard-coded subscription or bitrate rules (REQ-010)', () => {
     }
   });
 });
+
+it('REQ-058: exact selector имеет приоритет и не использует отсутствующий bitrate как wildcard', () => {
+  const variants = [
+    variant('high', 'mp3', 320000),
+    variant('low', 'mp3', 128000),
+    variant('unknown', 'mp3', undefined),
+  ];
+  const selection = {
+    codec: 'mp3',
+    container: 'mp3',
+    lossless: false,
+    bitrate: 128000,
+  };
+  expect(
+    chosen(
+      resolveVariant(variants, 'lossless', { variantSelection: selection }),
+    ),
+  ).toBe('low');
+  expect(
+    chosen(
+      resolveVariant(variants.slice(0, 1), 'best', {
+        variantSelection: selection,
+      }),
+    ),
+  ).toBe('unavailable');
+  expect(
+    chosen(
+      resolveVariant(variants, 'best', {
+        variantSelection: { ...selection, bitrate: undefined },
+      }),
+    ),
+  ).toBe('unknown');
+  expect(
+    chosen(
+      resolveVariant(variants.slice(0, 2), 'best', {
+        variantSelection: { ...selection, bitrate: undefined },
+      }),
+    ),
+  ).toBe('unavailable');
+  expect(
+    chosen(
+      resolveVariant(variants, 'best', {
+        variantSelection: selection,
+        supports: () => false,
+      }),
+    ),
+  ).toBe('unavailable');
+});

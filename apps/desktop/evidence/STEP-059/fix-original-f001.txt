@@ -1,0 +1,11 @@
+
+ RUN  v3.2.7 /home/user/github.com/yarkovaleksei/yandex-music-downloader
+
+ ✓ .harness/local/tmp/review059-lead/sidebar-avatar.test.tsx (1 test) 314ms
+   ✓ sidebar logout очищает уже показанный avatar открытого Account  313ms
+
+ Test Files  1 passed (1)
+      Tests  1 passed (1)
+   Start at  23:51:32
+   Duration  1.87s (transform 188ms, setup 0ms, collect 986ms, tests 314ms, environment 259ms, prepare 71ms)
+

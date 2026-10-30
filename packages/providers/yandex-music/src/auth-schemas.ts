@@ -32,15 +32,22 @@ export const oauthTokenSchema = z
 export const accountSchema = z.object({
   id: nonEmpty,
   displayName: nonEmpty,
+  email: z.string().email().optional(),
+  region: nonEmpty.optional(),
+  subscription: nonEmpty.optional(),
+  subscriptionReason: nonEmpty.optional(),
 });
 export const rawAccountStatusSchema = z
   .object({
     result: z.object({
+      defaultEmail: z.string().email().optional(),
       account: z
         .object({
           uid: z.union([z.string().min(1), z.number().finite()]),
           displayName: nonEmpty.optional(),
           login: nonEmpty.optional(),
+          region: z.number().int().nonnegative().optional(),
+          regionCode: nonEmpty.optional(),
         })
         .refine(
           (value) =>

@@ -51,7 +51,64 @@ test('Ссылка → предпросмотр → загрузка → пау�
   }
   try {
     await launch();
+    // STEP-059: версия локальная, клиентское окно Linux не имеет служебного меню.
+    const installed = await app.evaluate(({ app, BrowserWindow }) => ({
+      version: app.getVersion(),
+      dev: !app.isPackaged,
+      menuVisible: BrowserWindow.getAllWindows()[0].isMenuBarVisible(),
+    }));
+    expect(
+      await page.evaluate(() => globalThis.desktopApi.appInfo()),
+    ).toMatchObject({
+      kind: 'result',
+      data: { version: installed.version, dev: installed.dev },
+    });
+    if (process.platform !== 'darwin')
+      expect(installed.menuVisible).toBe(false);
     await expect.poll(async () => (await jobs(page)).length).toBe(0);
+    // REQ-058: реальный preload сохраняет настройки, вкладки только формируют команду.
+    await page.getByRole('button', { name: 'Настройки', exact: true }).click();
+    await expect(
+      page.getByLabel('Открывать папку после завершения загрузки'),
+    ).toHaveCount(0);
+    const concurrency = page.getByRole('spinbutton', {
+      name: 'Параллельных загрузок',
+    });
+    await concurrency.fill('8');
+    await page.getByRole('tab', { name: 'О программе', exact: true }).click();
+    await expect(
+      page.getByText(
+        `Версия: ${installed.version}${installed.dev ? ' (dev)' : ''}`,
+      ),
+    ).toBeVisible();
+    await page.getByRole('tab', { name: 'Файлы', exact: true }).click();
+    for (const label of [
+      'Скачивать обложки альбомов',
+      'Сохранять метаданные (ID3/FLAC tags)',
+      'Создавать плейлисты .m3u8',
+    ])
+      await page.getByLabel(label, { exact: true }).uncheck();
+    await page.getByRole('tab', { name: 'Внешний вид', exact: true }).click();
+    await page
+      .getByRole('main')
+      .getByLabel('Тёмная тема', { exact: true })
+      .check();
+    await page
+      .getByRole('button', { name: 'Сохранить настройки', exact: true })
+      .click();
+    await expect(page.getByText(/Настройки сохранены/)).toBeVisible();
+    const configured = await page.evaluate(() =>
+      globalThis.desktopApi.getSettings(),
+    );
+    expect(configured.kind).toBe('result');
+    expect(configured.data).toMatchObject({
+      writeTags: false,
+      saveCoverFile: false,
+      writeM3u8: false,
+      theme: 'dark',
+      concurrency: 8,
+    });
+    await page.getByRole('button', { name: 'Главная', exact: true }).click();
     await page.getByLabel('Ссылка на музыку').fill('mock://track/e2e-track');
     await page
       .getByRole('button', { name: 'Анализировать', exact: true })
@@ -61,6 +118,32 @@ test('Ссылка → предпросмотр → загрузка → пау�
     ).toBeVisible();
     // Предпросмотр не начинает загрузку; только явное действие создаёт job.
     expect(await jobs(page)).toEqual([]);
+    await page
+      .getByRole('button', { name: 'Качество: Лучшее доступное', exact: true })
+      .click();
+    await page
+      .getByLabel('MP3 / MP3 · 192 кбит/с · 1 / 1 трек', { exact: true })
+      .check();
+    await page.getByRole('button', { name: 'Отмена', exact: true }).click();
+    await expect(
+      page.getByRole('button', {
+        name: 'Качество: Лучшее доступное',
+        exact: true,
+      }),
+    ).toBeVisible();
+    await page
+      .getByRole('button', { name: 'Качество: Лучшее доступное', exact: true })
+      .click();
+    await page
+      .getByLabel('MP3 / MP3 · 192 кбит/с · 1 / 1 трек', { exact: true })
+      .check();
+    await page.getByRole('button', { name: 'Применить', exact: true }).click();
+    await expect(
+      page.getByRole('button', {
+        name: 'Качество: MP3 / MP3 · 192 кбит/с',
+        exact: true,
+      }),
+    ).toBeVisible();
     await page
       .getByRole('button', { name: 'Выбрать папку', exact: true })
       .click();
@@ -76,6 +159,7 @@ test('Ссылка → предпросмотр → загрузка → пау�
     await article
       .getByRole('button', { name: 'Приостановить', exact: true })
       .click();
+    await page.getByRole('tab', { name: 'Очередь (1)', exact: true }).click();
     await expect(
       article.getByText('Приостановлено', { exact: true }),
     ).toBeVisible();
@@ -86,6 +170,9 @@ test('Ссылка → предпросмотр → загрузка → пау�
     await expect
       .poll(async () => (await jobs(page))[0]?.status)
       .toBe('completed');
+    await page
+      .getByRole('tab', { name: 'Завершённые (1)', exact: true })
+      .click();
     await expect(
       article.getByText('Завершено', { exact: true }).first(),
     ).toBeVisible();
@@ -107,6 +194,12 @@ test('Ссылка → предпросмотр → загрузка → пау�
     await expect(
       page.getByText('Проверочный сигнал', { exact: true }),
     ).toBeVisible();
+    expect(
+      await page.evaluate(
+        (jobId) => globalThis.desktopApi.jobFolderAvailability({ jobId }),
+        jobId,
+      ),
+    ).toMatchObject({ kind: 'result', data: { available: true } });
     const entries = await history(page);
     expect(entries).toHaveLength(1);
     expect(entries[0]).toMatchObject({
@@ -122,6 +215,18 @@ test('Ссылка → предпросмотр → загрузка → пау�
     );
     expect(sqlite.subarray(0, 16).toString()).toBe('SQLite format 3\0');
     await launch();
+    const restoredSettings = await page.evaluate(() =>
+      globalThis.desktopApi.getSettings(),
+    );
+    expect(restoredSettings.kind).toBe('result');
+    expect(restoredSettings.data).toMatchObject({
+      writeTags: false,
+      saveCoverFile: false,
+      writeM3u8: false,
+      theme: 'dark',
+      concurrency: 8,
+    });
+    await expect(page.getByLabel('Тёмная тема', { exact: true })).toBeChecked();
     await page.getByRole('button', { name: 'История', exact: true }).click();
     await expect(
       page.getByText('Проверочный сигнал', { exact: true }),
@@ -129,6 +234,30 @@ test('Ссылка → предпросмотр → загрузка → пау�
     const restored = await history(page);
     expect(restored).toEqual(entries);
     expect((await jobs(page))[0]).toMatchObject({ jobId, status: 'completed' });
+    expect((await stat(output)).size).toBe(bytes);
+    // Смена текущих настроек не переписывает снимок истории; replay идёт через ту же команду UI.
+    await page.getByRole('button', { name: 'Настройки', exact: true }).click();
+    await page.getByRole('tab', { name: 'Файлы', exact: true }).click();
+    for (const label of [
+      'Скачивать обложки альбомов',
+      'Сохранять метаданные (ID3/FLAC tags)',
+      'Создавать плейлисты .m3u8',
+    ])
+      await page.getByLabel(label, { exact: true }).check();
+    await page
+      .getByRole('button', { name: 'Сохранить настройки', exact: true })
+      .click();
+    await expect(page.getByText(/Настройки сохранены/)).toBeVisible();
+    await page.getByRole('button', { name: 'История', exact: true }).click();
+    await page
+      .getByRole('button', { name: 'Скачать снова', exact: true })
+      .click();
+    await expect.poll(async () => (await jobs(page)).length).toBe(2);
+    await expect
+      .poll(async () =>
+        (await jobs(page)).every((job) => job.status === 'completed'),
+      )
+      .toBe(true);
     expect((await stat(output)).size).toBe(bytes);
     const resultPath = testInfo.outputPath('result.json');
     await writeFile(
@@ -144,6 +273,14 @@ test('Ссылка → предпросмотр → загрузка → пау�
           output: relative,
           bytes,
           historyAfterRestart: restored,
+          restoredSettings: restoredSettings.data,
+          exactVariant: {
+            codec: 'mp3',
+            container: 'mp3',
+            bitrate: 192,
+            lossless: false,
+          },
+          replayJobs: await jobs(page),
         },
         null,
         2,
@@ -165,7 +302,7 @@ test('Ссылка → предпросмотр → загрузка → пау�
       if (app) await app.close();
     } finally {
       await writeFile(
-        testInfo.outputPath('electron-stdio.log'),
+        testInfo.outputPath('electron-stdio.txt'),
         diagnostics.join(''),
       );
       if (process.env.MUSIC_FINAL_KIT !== '1')

@@ -403,7 +403,7 @@ async function buildKits() {
       electronArchive,
       path.join(project, 'node_modules/electron/dist'),
     );
-    const [platform, arch] = target.split('-');
+    const [platform] = target.split('-');
     const electronRelative =
       platform === 'win32'
         ? 'electron.exe'

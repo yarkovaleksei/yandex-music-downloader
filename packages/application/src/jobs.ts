@@ -65,6 +65,16 @@ async function snapshot(
   const status =
     lease === 'active' ? active : lease === 'inactive' ? inactive : active;
   return {
+    title: manifest.plan.title,
+    author:
+      manifest.plan.author ??
+      [
+        ...new Set(
+          manifest.plan.tracks.flatMap(
+            (item) => item.track.artists?.map((artist) => artist.name) ?? [],
+          ),
+        ),
+      ].join(', '),
     jobId: manifest.jobId,
     source: manifest.source,
     ...(provider.publicUrl?.(manifest.source)
@@ -145,7 +155,11 @@ export class Jobs {
         durationMs: 0,
       });
     }
-    await this.manager(manifest.jobId, request.overwrite).run(manifest.jobId);
+    await this.manager(
+      manifest.jobId,
+      request.overwrite,
+      request.variantSelection,
+    ).run(manifest.jobId);
     return this.get(manifest.jobId).then((value) => {
       if (value === null) throw new DownloadError(false);
       return value;
@@ -174,15 +188,17 @@ export class Jobs {
     const manifest = await this.store.read(jobId);
     return manifest === undefined
       ? null
-      : snapshot(this.store, manifest, this.provider);
+      : {
+          ...(await snapshot(this.store, manifest, this.provider)),
+        };
   }
 
   public async list(): Promise<readonly JobSnapshot[]> {
     const manifests = await this.store.list();
     return Promise.all(
-      manifests.map((manifest) =>
-        snapshot(this.store, manifest, this.provider),
-      ),
+      manifests.map(async (manifest) => ({
+        ...(await snapshot(this.store, manifest, this.provider)),
+      })),
     );
   }
 
@@ -261,14 +277,17 @@ export class Jobs {
     }
     return entries.sort((a, b) => b.completedAt.localeCompare(a.completedAt));
   }
+  public async downloadArtwork(jobId: string): Promise<ArtworkDto | null> {
+    return this.artwork(jobId);
+  }
   public async historyArtwork(jobId: string): Promise<ArtworkDto | null> {
+    if (this.desktopState?.hidden().includes(jobId)) return null;
+    const job = await this.get(jobId);
+    return job && terminal(job.status) ? this.artwork(jobId) : null;
+  }
+  private async artwork(jobId: string): Promise<ArtworkDto | null> {
     const manifest = await this.store.read(jobId);
-    if (
-      !manifest ||
-      this.desktopState?.hidden().includes(jobId) ||
-      !terminal((await snapshot(this.store, manifest, this.provider)).status)
-    )
-      return null;
+    if (!manifest) return null;
     const source = manifest.source;
     // F-001 STEP-056: необязательная сеть вынесена из локальной истории в отдельный запрос.
     // Источник читается из manifest; renderer получает только безопасные байты либо fallback.
@@ -330,7 +349,11 @@ export class Jobs {
     this.managers.clear();
   }
 
-  private manager(jobId: string, overwrite?: boolean) {
+  private manager(
+    jobId: string,
+    overwrite?: boolean,
+    selection?: DownloadRequest['variantSelection'],
+  ) {
     const current = this.managers.get(jobId);
     if (current !== undefined) return current;
     const effective = this.desktopState?.snapshot(jobId);
@@ -344,9 +367,13 @@ export class Jobs {
           publish: this.events.publish,
         },
       },
-      (effective?.overwrite ?? overwrite) === undefined
-        ? {}
-        : { overwrite: effective?.overwrite ?? overwrite },
+      {
+        overwrite: effective?.overwrite ?? overwrite,
+        variantSelection: effective?.variantSelection ?? selection,
+        writeTags: effective?.writeTags ?? true,
+        saveCoverFile: effective?.saveCoverFile ?? true,
+        writeM3u8: effective?.writeM3u8 ?? true,
+      },
     );
     this.managers.set(jobId, manager);
     return manager;

@@ -1,0 +1,50 @@
+[
+  {
+    "command": [
+      "npm",
+      "run",
+      "lint"
+    ],
+    "exitCode": 0,
+    "durationMs": 15265,
+    "output": "lint.txt"
+  },
+  {
+    "command": [
+      "npm",
+      "run",
+      "typecheck"
+    ],
+    "exitCode": 0,
+    "durationMs": 12969,
+    "output": "typecheck.txt"
+  },
+  {
+    "command": [
+      "npm",
+      "test"
+    ],
+    "exitCode": 0,
+    "durationMs": 39815,
+    "output": "test.txt"
+  },
+  {
+    "command": [
+      "npm",
+      "run",
+      "build"
+    ],
+    "exitCode": 0,
+    "durationMs": 719,
+    "output": "build.txt"
+  },
+  {
+    "command": [
+      "node",
+      "apps/desktop/e2e/run.mjs"
+    ],
+    "exitCode": 0,
+    "durationMs": 11714,
+    "output": "electron-final.txt"
+  }
+]

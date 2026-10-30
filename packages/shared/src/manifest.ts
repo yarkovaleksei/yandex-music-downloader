@@ -313,6 +313,8 @@ function decodePlan(value: unknown): DownloadPlan {
   return {
     source: decodeSource(item.source),
     title: string(item.title),
+    // REQ-058: автор коллекции сохраняется в immutable plan для карточки задания.
+    ...(item.author === undefined ? {} : { author: string(item.author) }),
     tracks,
   };
 }

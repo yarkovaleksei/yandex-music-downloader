@@ -5,6 +5,8 @@ import * as Logging from '@music-downloader/logging';
 import { afterEach, expect, it, vi } from 'vitest';
 import {
   defaultDesktopSettings,
+  ProviderError,
+  AuthenticationError,
   manifestFixture,
   type MusicProvider,
   type DesktopApplicationApi,
@@ -164,6 +166,9 @@ it('REQ-051/052: restart применяет настройки; exact replay, le
   const state = new SqliteDesktopStateStore({ stateDir });
   const original = state.snapshot(created.data.jobId)!;
   expect(original).toEqual({
+    writeTags: true,
+    saveCoverFile: true,
+    writeM3u8: true,
     source: { provider: 'mock', kind: 'album', id: 'collection' },
     quality: 'high',
     destination: output,
@@ -389,6 +394,9 @@ it('REQ-051: новое CLI задание сохраняет собственн
   await completed(cli, result.data.jobId);
   const stored = new SqliteDesktopStateStore({ stateDir });
   expect(stored.snapshot(result.data.jobId)).toEqual({
+    writeTags: true,
+    saveCoverFile: true,
+    writeM3u8: true,
     source: { provider: 'mock', kind: 'track', id: '1' },
     quality: 'high',
     destination: output,
@@ -547,8 +555,15 @@ it('F-001 STEP-056: локальная история и скрытие не ж�
   });
   expect(metadata).not.toHaveBeenCalled();
   const optional = api.historyArtwork(created.data.jobId);
+  const downloadImage = api.downloadArtwork(created.data.jobId);
   try {
-    await expect.poll(() => metadata.mock.calls.length).toBe(1);
+    await expect.poll(() => metadata.mock.calls.length).toBe(2);
+    expect(await api.listDownloads()).toMatchObject({
+      data: [{ jobId: created.data.jobId }],
+    });
+    expect(await api.getDownload(created.data.jobId)).toMatchObject({
+      data: { jobId: created.data.jobId },
+    });
     expect(await api.history()).toEqual(local);
     expect(await api.hideHistory(created.data.jobId)).toMatchObject({
       kind: 'result',
@@ -559,4 +574,233 @@ it('F-001 STEP-056: локальная история и скрытие не ж�
     rejectMetadata(new Error('Синтетическая сеть недоступна'));
   }
   expect(await optional).toMatchObject({ kind: 'result', data: null });
+  expect(await downloadImage).toMatchObject({ kind: 'result', data: null });
 });
+
+it.each([true, false])(
+  'REQ-058 H-001: реальные файлы, restart и replay сохраняют переключатели %s',
+  async (enabled) => {
+    const directory = await root();
+    const stateDir = path.join(directory, 'state');
+    const fixture = provider();
+    const cover = Buffer.from(
+      'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIHWP4z8DwHwAFgAI/ScL9LwAAAABJRU5ErkJggg==',
+      'base64',
+    );
+    const value: MusicProvider = {
+      ...fixture.value,
+      getPlaylist: async (id) => ({
+        ...(await fixture.value.getPlaylist(id)),
+        owner: 'Владелец',
+      }),
+      getTrack: async (id) => ({
+        ...(await fixture.value.getTrack(id)),
+        artwork: { key: 'synthetic-cover' },
+      }),
+      fetchArtwork: async () => ({ bytes: cover, mimeType: 'image/png' }),
+    };
+    const create = () =>
+      createApplication({
+        stateDir,
+        clientProfile: 'desktop',
+        providerOverride: value,
+        cache: { ttlMs: 0 },
+      });
+    const api = create();
+    apps.push(api);
+    await api.saveSettings({
+      ...defaultDesktopSettings,
+      outputDirectory: path.join(directory, 'music'),
+      overwrite: true,
+      writeTags: enabled,
+      saveCoverFile: enabled,
+      writeM3u8: enabled,
+      ...{ openFolderOnComplete: true },
+    });
+    const request = {
+      source: { provider: 'mock', kind: 'playlist' as const, id: 'collection' },
+      quality: 'best' as const,
+      destination: path.join(directory, 'music'),
+      variantSelection: {
+        codec: 'mp3',
+        container: 'mp3',
+        lossless: false,
+        bitrate: 320000,
+      },
+    };
+    const initial = await api.createDownload(request);
+    if (initial.kind !== 'result') throw new Error('Нет задания');
+    await completed(api, initial.data.jobId);
+    const check = async (target: DesktopApplicationApi, jobId: string) => {
+      const job = await target.getJob(jobId);
+      if (job.kind !== 'result' || !job.data) throw new Error('Нет снимка');
+      const file = job.data.tracks[0]!.resultPath!;
+      const { parseBuffer } = await import('music-metadata');
+      const metadata = await parseBuffer(await readFile(file));
+      expect(metadata.common.title).toBe(enabled ? 'Песня 1' : undefined);
+      expect(Buffer.from(metadata.common.picture![0]!.data)).toEqual(cover);
+      for (const name of ['cover.jpg', 'Плейлист.m3u8']) {
+        const read = readFile(path.join(path.dirname(file), name));
+        if (enabled) await expect(read).resolves.toBeDefined();
+        else await expect(read).rejects.toMatchObject({ code: 'ENOENT' });
+      }
+      expect(job.data).not.toHaveProperty('openFolderOnComplete');
+      expect(job.data.author).toBe('Владелец');
+      return file;
+    };
+    const file = await check(api, initial.data.jobId);
+    await api.shutdown();
+    const restarted = create();
+    apps.push(restarted);
+    await restarted.saveSettings({
+      ...defaultDesktopSettings,
+      writeTags: !enabled,
+      saveCoverFile: !enabled,
+      writeM3u8: !enabled,
+    });
+    // Аудио удаляется только в synthetic fixture, чтобы replay доказал обработку, а не skip.
+    await rm(file);
+    const replay = await restarted.replay(initial.data.jobId);
+    if (replay.kind !== 'result') throw new Error('Нет replay');
+    await completed(restarted, replay.data.jobId);
+    await check(restarted, replay.data.jobId);
+    const state = new SqliteDesktopStateStore({ stateDir });
+    expect(state.snapshot(replay.data.jobId)).toEqual(
+      state.snapshot(initial.data.jobId),
+    );
+    state.close();
+  },
+  15000,
+);
+
+it.each([
+  ['sample.mp3', 'mp3', 'mp3', false],
+  ['sample-aac.m4a', 'aac', 'm4a', false],
+  ['sample-flac.m4a', 'flac', 'm4a', true],
+] as const)(
+  'REQ-058 H-002: предлагаемый %s проходит существующий pipeline без перекодирования',
+  async (name, codec, container, lossless) => {
+    const directory = await root();
+    const fixture = provider();
+    const bytes = new Uint8Array(
+      await readFile(
+        new URL(`../../core/validation/src/fixtures/${name}`, import.meta.url),
+      ),
+    );
+    const variant = { key: 'synthetic', codec, container, lossless };
+    const value: MusicProvider = {
+      ...fixture.value,
+      getAudioVariants: async () => [variant],
+      openAudioStream: async () => ({
+        stream: new ReadableStream({
+          start(controller) {
+            controller.enqueue(bytes);
+            controller.close();
+          },
+        }),
+        contentLength: bytes.length,
+        container,
+        acceptsRanges: false,
+        startOffset: 0,
+      }),
+    };
+    const api = createApplication({
+      stateDir: path.join(directory, 'state'),
+      providerOverride: value,
+      cache: { ttlMs: 0 },
+    });
+    apps.push(api);
+    const source = { provider: 'mock', kind: 'track' as const, id: '1' };
+    const preview = await api.preview(source);
+    expect(preview).toMatchObject({
+      kind: 'result',
+      data: {
+        variants: [
+          { selection: { codec, container, lossless }, available: 1, total: 1 },
+        ],
+      },
+    });
+    const created = await api.createDownload({
+      source,
+      quality: 'best',
+      destination: path.join(directory, 'music'),
+      variantSelection: { codec, container, lossless },
+    });
+    if (created.kind !== 'result') throw new Error('Нет задания');
+    await completed(api, created.data.jobId);
+    const { parseBuffer } = await import('music-metadata');
+    const parsed = await parseBuffer(
+      await readFile(created.data.tracks[0]!.resultPath!),
+    );
+    expect(parsed.common.title).toBe('Песня 1');
+  },
+  15000,
+);
+
+it.each(['resume', 'retry'] as const)(
+  'REQ-058 H-001: %s после restart передаёт исходный snapshot до обработки',
+  async (action) => {
+    const directory = await root();
+    const stateDir = path.join(directory, 'state');
+    const fixture = provider();
+    let blocked = true;
+    const value: MusicProvider = {
+      ...fixture.value,
+      getAudioVariants: async (id) => {
+        if (blocked)
+          throw action === 'resume'
+            ? new AuthenticationError()
+            : new ProviderError('API_CHANGED', false);
+        return fixture.value.getAudioVariants(id);
+      },
+    };
+    const metadata = vi.fn(async () => undefined);
+    const create = () =>
+      createApplication({
+        stateDir,
+        clientProfile: 'desktop',
+        providerOverride: value,
+        processing: { metadata },
+        cache: { ttlMs: 0 },
+      });
+    const api = create();
+    apps.push(api);
+    await api.saveSettings({
+      ...defaultDesktopSettings,
+      writeTags: false,
+      saveCoverFile: false,
+      writeM3u8: false,
+    });
+    const created = await api.createDownload({
+      source: { provider: 'mock', kind: 'track', id: '1' },
+      quality: 'best',
+      destination: path.join(directory, 'music'),
+      variantSelection: {
+        codec: 'mp3',
+        container: 'mp3',
+        lossless: false,
+        bitrate: 320000,
+      },
+    });
+    if (created.kind !== 'result') throw new Error('Нет задания');
+    expect(created.data.status).toBe(action === 'resume' ? 'paused' : 'failed');
+    expect(metadata).not.toHaveBeenCalled();
+    await api.shutdown();
+    blocked = false;
+    const restarted = create();
+    apps.push(restarted);
+    await restarted.saveSettings(defaultDesktopSettings);
+    await restarted[action](created.data.jobId);
+    await completed(restarted, created.data.jobId);
+    expect(metadata).toHaveBeenCalledWith(
+      expect.any(String),
+      expect.objectContaining({ codec: 'mp3' }),
+      undefined,
+      expect.objectContaining({
+        writeTags: false,
+        saveCoverFile: false,
+        embedArtwork: true,
+      }),
+    );
+  },
+);

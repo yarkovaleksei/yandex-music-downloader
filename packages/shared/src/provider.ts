@@ -11,6 +11,11 @@ import type {
 export interface Account {
   readonly id: string;
   readonly displayName: string;
+  readonly email?: string;
+  readonly region?: string;
+  readonly subscription?: string;
+  readonly subscriptionReason?: string;
+  readonly formats?: readonly string[];
 }
 
 /** Временный минимальный порт авторизации до уточнения сценариев в STEP-006. */
@@ -62,5 +67,7 @@ export interface MusicProvider {
     variantKey: string,
     options: StreamOptions,
   ): Promise<AudioStream>;
+  /** Необязательный порт STEP-059: только bytes текущего аккаунта. */
+  fetchAccountAvatar?(): Promise<ArtworkData | null>;
   fetchArtwork(artwork: ArtworkRef, size: number): Promise<ArtworkData>;
 }

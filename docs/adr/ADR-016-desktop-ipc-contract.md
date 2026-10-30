@@ -11,6 +11,7 @@ requirements:
   - REQ-058
   - REQ-046
 steps:
+  - STEP-059
   - STEP-058
   - STEP-028
   - STEP-030

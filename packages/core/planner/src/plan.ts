@@ -43,13 +43,21 @@ function plan(
   source: MediaReference,
   title: string,
   tracks: readonly Track[],
+  author?: string,
 ): DownloadPlan {
   const planned: PlannedTrack[] = tracks.map((track, index) => ({
     position: index + 1,
     trackKey: String(index + 1),
     track,
   }));
-  return freezeDeep(cloneData({ source, title, tracks: planned }));
+  return freezeDeep(
+    cloneData({
+      source,
+      title,
+      tracks: planned,
+      ...(author === undefined ? {} : { author }),
+    }),
+  );
 }
 
 /** План одиночного трека: единственная позиция 1. */
@@ -80,5 +88,6 @@ export function buildPlaylistPlan(
     source,
     playlist.title,
     playlist.tracks.map((entry) => entry.track),
+    playlist.owner,
   );
 }

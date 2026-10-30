@@ -4,10 +4,19 @@ import type {
   DesktopSettings,
 } from '@music-downloader/shared';
 import { methods, parseInput } from '../contract/desktop-api.js';
-import type { Input, Method } from '../contract/desktop-api.js';
+import type {
+  JobFolderAvailability,
+  Input,
+  Method,
+} from '../contract/desktop-api.js';
 import { failure, safeResult, success } from '../contract/result.js';
 import type { DirectoryRegistry } from './directory-registry.js';
 export interface BrokerActions {
+  readonly appInfo?: () => { version: string; dev: boolean };
+  readonly jobFolderAvailability?: (
+    jobId: string,
+    trackKey?: string,
+  ) => Promise<JobFolderAvailability>;
   readonly updates?: {
     check(): Promise<UpdateView>;
     download(): Promise<UpdateView>;
@@ -63,6 +72,22 @@ export async function invokeBroker(
   if (!trusted) return failure(method, 'PERMISSION_DENIED');
   try {
     const input = parseInput(method, payload);
+    if (method === 'appInfo')
+      return actions.appInfo
+        ? success(method, actions.appInfo())
+        : failure(method);
+    if (method === 'jobFolderAvailability') {
+      const request = input as Input<'jobFolderAvailability'>;
+      return actions.jobFolderAvailability
+        ? success(
+            method,
+            await actions.jobFolderAvailability(
+              request.jobId,
+              request.trackKey,
+            ),
+          )
+        : failure(method);
+    }
     // ADR-019: ни URL, ни путь обновления не приходят из renderer.
     if (
       method === 'checkUpdate' ||
@@ -133,6 +158,11 @@ export async function invokeBroker(
           naming: request.naming,
           overwrite: request.overwrite,
           logging: request.logging,
+          writeTags: request.writeTags ?? previous.data.writeTags ?? true,
+          saveCoverFile:
+            request.saveCoverFile ?? previous.data.saveCoverFile ?? true,
+          writeM3u8: request.writeM3u8 ?? previous.data.writeM3u8 ?? true,
+          theme: request.theme ?? previous.data.theme ?? 'light',
           outputDirectory,
           ffmpegPath,
         }),
@@ -154,7 +184,15 @@ export async function invokeBroker(
       const request = input as { jobId: string; trackKey?: string };
       return (await actions.showItemInFolder(request.jobId, request.trackKey))
         ? success(method, null)
-        : failure(method, 'VALIDATION_ERROR');
+        : {
+            ...failure(method, 'PERMISSION_DENIED'),
+            error: {
+              code: 'PERMISSION_DENIED',
+              message:
+                'Файл или папка недоступны. Возможно, они перемещены или удалены.',
+              retryable: false,
+            },
+          };
     }
     if (method === 'openExternal') {
       const url = new URL((input as { url: string }).url);
@@ -189,6 +227,9 @@ export async function invokeBroker(
       const rest = {
         source: request.source,
         quality: request.quality,
+        ...(request.variantSelection === undefined
+          ? {}
+          : { variantSelection: request.variantSelection }),
         ...(request.overwrite === undefined
           ? {}
           : { overwrite: request.overwrite }),

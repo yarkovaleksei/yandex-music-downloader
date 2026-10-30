@@ -2,6 +2,7 @@ import type Database from 'better-sqlite3';
 import {
   defaultDesktopSettings,
   desktopSettings,
+  variantSelection,
   ValidationError,
   type DesktopSettings,
   type DesktopStateStore,
@@ -126,6 +127,9 @@ function effectiveDownload(value: EffectiveDownload): EffectiveDownload {
     quality: value.quality,
     overwrite: value.overwrite,
     naming: value.naming,
+    writeTags: value.writeTags,
+    saveCoverFile: value.saveCoverFile,
+    writeM3u8: value.writeM3u8,
   });
   // F-001: непрозрачный ID сохраняется буквально; символы /, . и % встречаются в ID плейлистов.
   // Грамматика provider не дублируется в persistence; URL с параметрами и управляющие символы не принимаются.
@@ -152,6 +156,13 @@ function effectiveDownload(value: EffectiveDownload): EffectiveDownload {
     quality: settings.quality,
     overwrite: settings.overwrite,
     naming: settings.naming,
+    writeTags: settings.writeTags,
+    saveCoverFile: settings.saveCoverFile,
+    writeM3u8: settings.writeM3u8,
+
+    ...(value.variantSelection === undefined
+      ? {}
+      : { variantSelection: variantSelection(value.variantSelection) }),
   };
 }
 

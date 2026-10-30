@@ -61,4 +61,5 @@
 | STEP-055 | Нижняя граница Node.js 22.14.0 | implementation | medium | completed | — | REQ-040 |
 | STEP-056 | Компактные загрузки, история и полезная desktop-диагностика | implementation | high | completed | STEP-031, STEP-032 | REQ-050, REQ-051, REQ-052, REQ-057 |
 | STEP-057 | Итоговое состояние CLI после crash/resume | bugfix | high | completed | STEP-026 | REQ-020, REQ-042 |
-| STEP-058 | Недостающие функции desktop UI и соответствие макетам | implementation | medium | planned | STEP-031, STEP-032, STEP-056 | REQ-010, REQ-025, REQ-026, REQ-028, REQ-048, REQ-049, REQ-050, REQ-051, REQ-052, REQ-057, REQ-058 |
+| STEP-058 | Недостающие функции desktop UI и соответствие макетам | implementation | medium | completed | STEP-031, STEP-032, STEP-056 | REQ-010, REQ-025, REQ-026, REQ-028, REQ-048, REQ-049, REQ-050, REQ-051, REQ-052, REQ-057, REQ-058 |
+| STEP-059 | Исправления истории, настроек и аккаунта после пользовательской проверки | bugfix | high | completed | STEP-058 | REQ-051, REQ-052, REQ-057, REQ-058 |

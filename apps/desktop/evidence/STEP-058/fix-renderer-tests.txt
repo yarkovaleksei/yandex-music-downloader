@@ -1,0 +1,20 @@
+
+ RUN  v3.2.7 /home/user/github.com/yarkovaleksei/yandex-music-downloader
+
+ ✓ |@music-downloader/desktop| src/renderer/Downloads.test.tsx (3 tests) 423ms
+ ✓ |@music-downloader/desktop| src/renderer/Settings.test.tsx (4 tests) 1499ms
+   ✓ REQ-052: сохранённые settings загружаются, выбор путей передаёт только opaque refs и показывает restart hint  521ms
+   ✓ REQ-058: вкладки сохраняют переключатели файлов, автооткрытие и тему без изменения старых полей  570ms
+ ✓ |@music-downloader/desktop| src/renderer/App.test.tsx (21 tests) 6287ms
+   ✓ preview track показывает поля и не начинает загрузку до явного действия  472ms
+   ✓ действия меню используют ID, OUTCOME_UNKNOWN перечитывает без повтора  540ms
+   ✓ F-002/ADR-016: App сохраняет предупреждение replay VALIDATION_ERROR на History и перечитывает очередь без повтора  312ms
+   ✓ F-002/ADR-016: App сохраняет предупреждение replay OUTCOME_UNKNOWN на History и перечитывает очередь без повтора  306ms
+   ✓ REQ-058: черновик exact качества отменяется кнопкой, Escape и backdrop; Apply передаёт точный descriptor  1670ms
+   ✓ F-001: открытая форма сохраняет подтверждённую тему sidebar вместе с черновиком и opaque refs  1047ms
+
+ Test Files  3 passed (3)
+      Tests  28 passed (28)
+   Start at  22:35:26
+   Duration  7.90s (transform 263ms, setup 0ms, collect 2.93s, tests 8.21s, environment 807ms, prepare 226ms)
+

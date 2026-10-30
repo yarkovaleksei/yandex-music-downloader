@@ -1,0 +1,27 @@
+{
+  "finding": {
+    "criterion": "Все перечисленные функции REQ-058 реализованы; для каждого макета 01–10 имеется screenshot и проверяемый checklist с объяснением допустимых отличий REQ-057.",
+    "expected": "Недоступная папка имеет недоступное действие с причиной, ошибки видны в viewport без полной перезагрузки истории; подпись кнопки выбора папки остаётся одной строкой.",
+    "given": "После завершённого STEP-058 пользователь открыл длинную историю с удалёнными локальными результатами и настройки с полем каталога.",
+    "invalidatedChecks": [
+      "На Linux со mock provider сверить макеты01–10 в light/dark и широком окне; сохранить screenshots/checklist в apps/desktop/evidence/STEP-058. Проверить вкладки/счётчики/menu, inclusive calendar range, sorting/date+time, draft Apply/Cancel, optional metadata/account fallback, notifications и auth regression. Settings/theme восстановить после restart; H-001: реальные tags/embedded cover/cover.jpg/m3u8 и replay/resume используют исходный snapshot; H-002: предлагаемые exact codec/container подтверждены существующим processing либо явно unavailable и preview/resolver согласованы. Сверить docs с code/Evidence и отсутствие реальных account данных/секретов. Native Windows/macOS и packaging не требуются; отчёты STEP-054 не доказывают новую UI-сборку."
+    ],
+    "observed": "Пользователь получил общий текст Данные не прошли проверку в Alert перед таблицей за пределами scroll; History.act всегда refresh перечитывает все записи и обложки, глобальный busy блокирует действия. showJobItem возвращает false при stat failure, broker маскирует это VALIDATION_ERROR; предварительного availability нет. На втором screenshot Выбрать папку перенесено на две строки.",
+    "reproducerEvidence": {
+      "path": "apps/desktop/evidence/STEP-059/broker-before-fix.txt",
+      "sha256": "sha256:452fac2186194eca5de8ce49b731cdc95e10ef2369be2d668ce383a943120be3"
+    },
+    "when": "В истории на прокрученной странице выбран Open folder для отсутствующего результата; в настройках показана кнопка Выбрать папку."
+  },
+  "kind": "late-defect",
+  "observedAt": "2026-10-29T20:31:25.151946+00:00",
+  "reuse": null,
+  "schemaVersion": 1,
+  "source": {
+    "evidenceSha256": "sha256:6ae4b24e8ba819041f9eef5008f8245ba30b52e62307e3de2d5266699e172d11",
+    "review": "planning/reviews/STEP-058/REVIEW-20261029T194134Z.md",
+    "reviewSha256": "sha256:a627f03357a4155404fcc2b84580f72142553b89cbbab62a9f1c921405aadb91",
+    "statusAtObservation": "completed"
+  },
+  "sourceStep": "STEP-058"
+}
