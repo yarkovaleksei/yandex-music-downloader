@@ -1,0 +1,9 @@
+{
+  "environment": {
+    "VITEST_MAX_FORKS": "4",
+    "VITEST_MIN_FORKS": "1",
+    "VITEST_MAX_THREADS": "4",
+    "VITEST_MIN_THREADS": "1"
+  },
+  "scope": "Полный набор тестов без сокращения; использованы ранее принятые environment limits; actual worker scheduling отдельно не измерялся."
+}

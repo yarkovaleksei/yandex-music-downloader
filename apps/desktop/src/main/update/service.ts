@@ -154,8 +154,15 @@ export class PortableUpdates {
         );
       const key = createPublicKey(this.trust.publicKey);
       if (key.asymmetricKeyType !== 'ed25519') throw new Error('UPDATE_KEY');
+      // GitHub хранит assets плоско; прежние HTTPS feeds сохраняют вложенный путь.
+      const feed = new URL(this.trust.feedBaseUrl);
+      const github =
+        feed.origin === 'https://github.com' &&
+        /^\/[^/]+\/[^/]+\/releases\/latest\/download\/?$/.test(feed.pathname);
       const endpoint = new URL(
-        `${this.trust.channel}/${this.options.target}/latest.json`,
+        github
+          ? `update-${this.trust.channel}-${this.options.target}.json`
+          : `${this.trust.channel}/${this.options.target}/latest.json`,
         this.trust.feedBaseUrl.endsWith('/')
           ? this.trust.feedBaseUrl
           : this.trust.feedBaseUrl + '/',
@@ -173,10 +180,24 @@ export class PortableUpdates {
       );
       if (
         descriptor.channel !== this.trust.channel ||
-        descriptor.target !== this.options.target
+        descriptor.target !== this.options.target ||
+        (this.trust.channel === 'stable' && descriptor.version.includes('-'))
       )
         throw new Error('UPDATE_TARGET');
-      allowedUrl(descriptor.url, this.trust);
+      const packageUrl = allowedUrl(descriptor.url, this.trust);
+      // Пакет привязан к подписанной версии, а latest выбирает только описание.
+      if (
+        github &&
+        (packageUrl.origin !== feed.origin ||
+          !packageUrl.pathname.startsWith(
+            feed.pathname.replace(
+              /latest\/download\/?$/,
+              `download/v${descriptor.version}/`,
+            ),
+          ) ||
+          packageUrl.search)
+      )
+        throw new Error('UPDATE_RELEASE');
       if (!newer(descriptor.version, this.options.currentVersion))
         return this.view('current', 'У вас актуальная версия приложения.');
       this.selected = Object.freeze(descriptor);
