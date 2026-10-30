@@ -1,0 +1,13 @@
+{
+  "command": [
+    "/Users/a11/work/test-yandex-app/x64-retry/music-downloader-final-darwin-x64-20261029T152446475Z-94fa63b4/runtime/node",
+    "/Users/a11/work/test-yandex-app/x64-retry/music-downloader-final-darwin-x64-20261029T152446475Z-94fa63b4/project/node_modules/@playwright/test/cli.js",
+    "test",
+    "--config",
+    "/Users/a11/work/test-yandex-app/x64-retry/music-downloader-final-darwin-x64-20261029T152446475Z-94fa63b4/project/apps/desktop/e2e/playwright.config.mjs"
+  ],
+  "exitCode": 1,
+  "signal": null,
+  "stdout": "\nRunning 1 test using 1 worker\n\n  ✘  1 apps/desktop/e2e/download.spec.mjs:19:1 › Ссылка → предпросмотр → загрузка → пауза → продолжение → файл и история после перезапуска (15.1s)\n\n\n  1) apps/desktop/e2e/download.spec.mjs:19:1 › Ссылка → предпросмотр → загрузка → пауза → продолжение → файл и история после перезапуска \n\n    TimeoutError: Timeout 15000ms exceeded.\n\n    Error Context: ../reports/e2e/download-Ссылка-→-предпрос-d6b3b-и-история-после-перезапуска/error-context.md\n\n  1 failed\n    apps/desktop/e2e/download.spec.mjs:19:1 › Ссылка → предпросмотр → загрузка → пауза → продолжение → файл и история после перезапуска \n",
+  "stderr": "  pw:browser <launching> /Users/a11/work/test-yandex-app/x64-retry/music-downloader-final-darwin-x64-20261029T152446475Z-94fa63b4/project/node_modules/electron/dist/Electron.app/Contents/MacOS/Electron --inspect=0 --remote-debugging-port=0 /var/folders/_y/mp5v7zvx0lzc495l1t7zcbqc0000gn/T/music-desktop-e2e-RI1V02/bootstrap.mjs +0ms\n  pw:browser <launched> pid=99395 +6ms\n  pw:browser [pid=99395] <kill> +15s\n  pw:browser [pid=99395] <will force kill> +1ms\n  pw:browser [pid=99395] <process did exit: exitCode=null, signal=SIGKILL> +21ms\n  pw:browser [pid=99395] starting temporary directories cleanup +0ms\n"
+}

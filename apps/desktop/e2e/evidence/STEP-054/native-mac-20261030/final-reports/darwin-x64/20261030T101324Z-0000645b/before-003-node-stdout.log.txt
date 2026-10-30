@@ -1,0 +1,14 @@
+
+Running 1 test using 1 worker
+
+  ✘  1 apps/desktop/e2e/download.spec.mjs:19:1 › Ссылка → предпросмотр → загрузка → пауза → продолжение → файл и история после перезапуска (4.8s)
+
+
+  1) apps/desktop/e2e/download.spec.mjs:19:1 › Ссылка → предпросмотр → загрузка → пауза → продолжение → файл и история после перезапуска 
+
+    Error: Process failed to launch!
+
+    Error Context: ../reports/20261030T101324Z-0000645b/e2e/download-Ссылка-→-предпрос-d6b3b-и-история-после-перезапуска/error-context.md
+
+  1 failed
+    apps/desktop/e2e/download.spec.mjs:19:1 › Ссылка → предпросмотр → загрузка → пауза → продолжение → файл и история после перезапуска 

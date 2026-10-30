@@ -1,0 +1,23 @@
+{
+  "status": "PASS",
+  "platform": "darwin",
+  "arch": "arm64",
+  "appVersion": "0.0.0",
+  "versions": {
+    "electron": "45.0.0",
+    "node": "24.22.0",
+    "napi": "10"
+  },
+  "isolation": {
+    "requireAbsent": true,
+    "processAbsent": true,
+    "ipcRendererAbsent": true,
+    "apiPresent": true
+  },
+  "uiReady": true,
+  "settings": {
+    "quality": "normal",
+    "logging": "debug",
+    "concurrency": 3
+  }
+}

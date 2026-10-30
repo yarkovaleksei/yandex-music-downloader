@@ -1,6 +1,6 @@
 # STEP-054 — готовые финальные наборы и локальные проверки
 
-Нативная приёмка Windows x64 — **PASS** по текущим отчётам и [решению о приёмке](native-win32-x64-20261029/acceptance.json), без повторного прогона. Новых отчётов macOS arm64 и macOS x64 нет. Исторический [macOS x64 FAIL](../native-20261029/darwin-x64/report.json) сохранён; диагностическая подготовка не объявлена его исправлением.
+Нативная функциональная приёмка Windows x64 и macOS arm64/x64 — **PASS** для точных проверенных артефактов: [Windows acceptance](native-win32-x64-20261029/acceptance.json), [Mac acceptance](native-mac-20261030/final-reports/acceptance.json). Mac build ID `20261030T081544687Z-5cb41f17`: arm64 shipping N/N+1 и x64 E2E/N+1 завершились успешно; прежние arm64 E2E и x64 shipping N явно `REUSED`. x64 проверен через Rosetta на M2, не на отдельном Intel Mac. Исторические FAIL сохранены. Это не приёмка новой UI-сборки, не настройка production feed/trust и не заявление о завершённом STEP до независимого review.
 
 ## Нативный Windows x64 прогон 2026-10-29
 
@@ -10,7 +10,20 @@ Raw отчёты: [before.json](native-win32-x64-20261029/before.json), [after.j
 - Ручная замена подтверждена: `manualReplacement=CONFIRMED_BY_USER`, `fileAndHistoryPreserved=true`; проверки integrity до и после — PASS.
 - Production PortableUpdates с отдельной подписанной fixture принял корректный пакет и отклонил неверные подпись, размер и SHA-256. SHA-256 скачанного N+1 `04403b2a578626154a061cb39e28e97967c56076c61c62eaf432a83df35083e5` совпал с финальным manifest.
 
-Нативная приёмка — **PASS**: [acceptance.json](native-win32-x64-20261029/acceptance.json) фиксирует решение владельца и SHA-256 исходных отчётов. Повторный Windows прогон не выполнялся. В исторических raw сохранены `nativeAcceptance=PENDING` из-за ошибочного прежнего критерия наличия системного Node.js и `cleanEnvironment=false`: в PATH найден `C:\Program Files\nodejs\node.exe`, FFmpeg не найден. Эти сведения справочные; все команды используют встроенные Node/Electron по абсолютным путям, отсутствие системных Node.js/FFmpeg не требуется. Новых macOS результатов нет, исторический x64 FAIL сохраняется; production trust/feed не настроены.
+Нативная приёмка — **PASS**: [acceptance.json](native-win32-x64-20261029/acceptance.json) фиксирует решение владельца и SHA-256 исходных отчётов. Повторный Windows прогон не выполнялся. В исторических raw сохранены `nativeAcceptance=PENDING` из-за ошибочного прежнего критерия наличия системного Node.js и `cleanEnvironment=false`: в PATH найден `C:\Program Files\nodejs\node.exe`, FFmpeg не найден. Эти сведения справочные; все команды используют встроенные Node/Electron по абсолютным путям, отсутствие системных Node.js/FFmpeg не требуется. Mac результаты от 2026-10-30 и финальная функциональная приёмка разобраны отдельно ниже; исторический x64 FAIL сохраняется. Production trust/feed не настроены.
+
+## Первые Mac отчёты 2026-10-30
+
+[Сводка и неизменённые raw](native-mac-20261030/README.md), [SHA-256 исходных архивов и выбранных файлов](native-mac-20261030/provenance.json). Набор `20261029T152446475Z-94fa63b4`, revision `94fa63b4dbbc9ae40b2e18c850c8e986df1d6d62`.
+
+- arm64 на Apple M2 Pro без Rosetta: ранний diagnostic E2E — PASS, MP3 50 785 байт, тот же job в истории после restart. Shipping N в последующем запуске завершился `SIGKILL`; причина native-отказа окончательно не установлена. Повторные проверки также обнаружили существующий `current` и непустую базу от предыдущего запуска.
+- x64 на том же Apple Silicon через Rosetta: shipping N открыл UI, изоляция и настройки — PASS в двух запусках. Automation E2E дважды не завершил старт за 15 секунд; это не подтверждение E2E PASS и не отдельная приёмка Intel Mac.
+- В первых архивах отчётов `after` и подтверждения ручного N → N+1 не было; они получены в [финальных отчётах](native-mac-20261030/final-reports/README.md).
+- На Linux подтверждено нарушение CodeDirectory старого arm64 Framework: страница 39362 содержит изменённые fuses и единственный неверный code-page hash. [Проверка копии после ad-hoc ремонта](native-mac-20261030/arm64-repair-proof.json) показывает отсутствие неверных страниц при неизменных fuses, entitlements и SHA-256 ASAR. Эта локальная проверка сама по себе подтверждала только code-page hashes. Последующие native PASS и сохранённые ранние отказы описаны в [финальных отчётах](native-mac-20261030/final-reports/README.md); причинная связь каждого прежнего `SIGKILL` с подписью не заявляется.
+
+## Повторные Mac-наборы
+
+По решению владельца подготовка повторных проверок вынесена в `apps/desktop/scripts/mac-retry-kit.mjs`: два Mac ZIP в `.cache/desktop-mac-retry/`, без Windows и без повторения arm64 diagnostic E2E/x64 shipping N UI. Ссылки на исходные PASS и их SHA-256 сохраняются как `REUSED`; новые arm64 shipping bytes не наследуют старый E2E PASS. Основной вход — `run-check.command`: один bash launcher сохраняет `terminal.log` с начала проверки и `launcher-summary.txt`, включая отказ встроенного runtime. Каждый запуск имеет отдельную базу/current и run ID, связывающий `before` с `after`. После загрузки N+1 runner распаковывает его через `ditto` в отдельный `replacement`; launcher открывает `replacement` и `current` в Finder и продолжает `after` только после ручного перетаскивания `.app` с заменой и нажатия Enter. Прежние `run-before.command`/`run-after.command` оставлены для запасного запуска/продолжения. Контрольные JSON, журнал фаз, отдельные stdout/stderr команд, Playwright/Electron logs и свежая crash/system диагностика при отказе сохраняются внутри `reports/<runId>/`; отдельно копировать Terminal не требуется. Финальные `after.json` обеих архитектур — **PASS**; [сводка](native-mac-20261030/final-reports/README.md) отделяет первые отказы от успешного продолжения и ограничивает выводы о подписи. [Состав и ограничения](native-mac-20261030/README.md#состав-повторной-проверки), [инструкция](../../../../../docs/development.md#повторные-mac-наборы-без-уже-пройденных-проверок).
 
 ## Проверки Linux
 
@@ -30,7 +43,7 @@ Raw отчёты: [before.json](native-win32-x64-20261029/before.json), [after.j
 
 Набор содержит отдельные stock Electron/Node, production closure и Linux-built E2E host; компилятора и приватного ключа нет. Raw environmental probe сохраняет поиск внешних Node.js/FFmpeg в PATH; `externalTools` и `cleanEnvironment` — справочные метаданные. Для Windows и macOS требуется запуск встроенных runtime по абсолютным путям без необходимости устанавливать системные Node.js/FFmpeg; уже установленные инструменты не блокируют приёмку. Production trust/feed не менялись и остаются не настроены. Offline fixture transport не доказывает реальную сеть или доверие Apple/Microsoft. Два launcher разделяют автоматические проверки и **реальную ручную замену** пользователем; первый этап остаётся `AWAITING_MANUAL_REPLACEMENT`, итоговый native PASS возможен только после N+1 shipping smoke и проверки общего SQLite/истории/аудиофайла.
 
-Инструкция: [подготовка и запуск финальных наборов](../../../../../docs/development.md#подготовка-и-запуск-финальных-наборов). Готовность релиза до новых native результатов macOS arm64/x64 не заявляется; Windows x64 принят по текущим отчётам.
+Инструкция: [подготовка и запуск финальных наборов](../../../../../docs/development.md#подготовка-и-запуск-финальных-наборов). Функциональная платформенная приёмка подтверждена Windows и финальными Mac отчётами для указанных hashes/build IDs. Production feed/trust остаются отключены; полный macOS resource seal, Developer ID и notarization не заявляются.
 
 ## Финальные архивы Linux
 

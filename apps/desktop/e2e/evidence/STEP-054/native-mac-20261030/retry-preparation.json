@@ -1,0 +1,110 @@
+{
+  "schema": 1,
+  "buildId": "20261030T081544687Z-5cb41f17",
+  "revision": "5cb41f172b69e7a02b9ec9af6a31917e31398b49",
+  "sourceBuildId": "20261029T152446475Z-94fa63b4",
+  "nativeAcceptance": "PENDING",
+  "builtOn": {
+    "platform": "linux",
+    "arch": "x64"
+  },
+  "targets": {
+    "darwin-arm64": {
+      "archive": "music-downloader-mac-retry-darwin-arm64-20261030T081544687Z-5cb41f17.zip",
+      "sha256": "09ec525ba8e9a6c06ccf3ba3dffd8f1d382cf6718d1750c806e54a2e1fdde15c",
+      "appArtifactHash": "dde70853130896df3e072da4406952153d126b8853aaa383080038e053eac127",
+      "nextArtifactHash": "d2420a4c3bf2ac37561aa664636969282807aa5b47975a525534cb6a97305c85",
+      "checkPlan": {
+        "shippingN": "EXECUTED",
+        "offlineE2E": "REUSED",
+        "update": "EXECUTED",
+        "shippingNPlus1": "EXECUTED"
+      }
+    },
+    "darwin-x64": {
+      "archive": "music-downloader-mac-retry-darwin-x64-20261030T081544687Z-5cb41f17.zip",
+      "sha256": "1100cab18669bec8cc708baf2b16c3c3da4482970845da13ddcbd252192834cf",
+      "appArtifactHash": "294a9a03c97b32ed378ea6555d8113a4b1746e3f1fe66149f696e08dc638e9ee",
+      "nextArtifactHash": "ac7875d84bdf694543fd1e2fee62b6af127e7968294696b1e13a0c06f3ef3766",
+      "checkPlan": {
+        "shippingN": "REUSED",
+        "offlineE2E": "EXECUTED",
+        "update": "EXECUTED",
+        "shippingNPlus1": "EXECUTED"
+      }
+    }
+  },
+  "localVerification": {
+    "runAt": "2026-10-30T08:19:31Z",
+    "commands": [
+      {
+        "kind": "command",
+        "command": "python3 .harness/tools/validate.py --mode manual",
+        "argv": [
+          "python3",
+          ".harness/tools/validate.py",
+          "--mode",
+          "manual"
+        ],
+        "durationMs": 6625,
+        "stdoutSha256": "ddb34c4e01b60a6f6edf39bf4b7c3aa54066b22a0085fb22de6fb999223ee730",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdoutBytes": 67,
+        "stderrBytes": 0,
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "kind": "command",
+        "command": "node apps/desktop/scripts/mac-signature.mjs --check",
+        "argv": [
+          "node",
+          "apps/desktop/scripts/mac-signature.mjs",
+          "--check"
+        ],
+        "durationMs": 64,
+        "stdoutSha256": "8b60ca8b9f99ae23c0cfc0ba050e17813570155d62d92031921825b9382fd81c",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdoutBytes": 132,
+        "stderrBytes": 0,
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "kind": "command",
+        "command": "node apps/desktop/scripts/mac-retry-kit.mjs --check",
+        "argv": [
+          "node",
+          "apps/desktop/scripts/mac-retry-kit.mjs",
+          "--check"
+        ],
+        "durationMs": 364,
+        "stdoutSha256": "c69ada84fe6c87cc656f90a693eb13815f7bfecbb281d4c88a2ab5f2651368f3",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdoutBytes": 408,
+        "stderrBytes": 0,
+        "status": "PASS",
+        "exitCode": 0
+      },
+      {
+        "kind": "command",
+        "command": "node apps/desktop/scripts/mac-retry-kit.mjs --verify",
+        "argv": [
+          "node",
+          "apps/desktop/scripts/mac-retry-kit.mjs",
+          "--verify"
+        ],
+        "durationMs": 46459,
+        "stdoutSha256": "ba182d40fd156634d5ea8bc78f51e3d8c067383c050b68e3cfb8cb0776dfd61e",
+        "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdoutBytes": 162,
+        "stderrBytes": 0,
+        "status": "PASS",
+        "exitCode": 0
+      }
+    ]
+  },
+  "scope": "Проверена Linux-подготовка двух Mac-архивов. Прежние PASS не исполняются повторно. Новый native запуск Mac и итоговый PASS не подтверждены.",
+  "entrypoint": "run-check.command",
+  "reportDirectory": "reports/<runId>"
+}

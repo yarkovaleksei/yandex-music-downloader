@@ -1,0 +1,627 @@
+{
+  "schema": 1,
+  "buildId": "20261030T081544687Z-5cb41f17",
+  "archives": [
+    {
+      "target": "darwin-arm64",
+      "archive": "arm64-reports (1).zip",
+      "sha256": "57ffa5bbb93144875bccd7818424e921f9dcff99a84de6aa13e70d61d870a7b0",
+      "files": {
+        "darwin-arm64/20261030T101530Z-00006634/before.json": {
+          "archiveEntry": "reports/20261030T101530Z-00006634/before.json",
+          "sha256": "62b789b82f9078ab621c8465fff006b6d0a0296da891a684e5bc47af0329f667",
+          "bytes": 52716
+        },
+        "darwin-arm64/20261030T101530Z-00006634/shipping-n/window-report.json": {
+          "archiveEntry": "reports/20261030T101530Z-00006634/shipping-n/window-report.json",
+          "sha256": "74cc28d21598350c73e4bbcd79da1ee8768f3516cb469f0d15d7399dc44b871b",
+          "bytes": 418
+        },
+        "darwin-arm64/20261030T101530Z-00006634/shipping-n/electron.log.txt": {
+          "archiveEntry": "reports/20261030T101530Z-00006634/shipping-n/electron.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "darwin-arm64/20261030T101530Z-00006634/shipping-n/window.png": {
+          "archiveEntry": "reports/20261030T101530Z-00006634/shipping-n/window.png",
+          "sha256": "2215e6170e4d3a033fff8fc6f373f4387e1aabb0a45330d12a2beb0f88e81d2d",
+          "bytes": 174710
+        },
+        "darwin-arm64/20261030T101530Z-00006634/shipping-n/stdio.json": {
+          "archiveEntry": "reports/20261030T101530Z-00006634/shipping-n/stdio.json",
+          "sha256": "2a54b2e5554f54a08ed72c60f12d999d4a6cf343a0c721001e9c12a54415abb1",
+          "bytes": 716
+        },
+        "darwin-arm64/20261030T101530Z-00006634/launcher-summary.txt": {
+          "archiveEntry": "reports/20261030T101530Z-00006634/launcher-summary.txt",
+          "sha256": "3d384f4d34fdc096b83e8d5dba9463f1e174f0b16a5270bdefdddfbf0263f3d1",
+          "bytes": 223
+        },
+        "darwin-arm64/20261030T101530Z-00006634/after-attempt-1-DS_Store/launcher-summary.txt": {
+          "archiveEntry": "reports/20261030T101530Z-00006634/after-attempt-1-DS_Store/launcher-summary.txt",
+          "sha256": "3d384f4d34fdc096b83e8d5dba9463f1e174f0b16a5270bdefdddfbf0263f3d1",
+          "bytes": 223
+        },
+        "darwin-arm64/20261030T101530Z-00006634/after-attempt-1-DS_Store/after-002-sysctl-stdout.log.txt": {
+          "archiveEntry": "reports/20261030T101530Z-00006634/after-attempt-1-DS_Store/after-002-sysctl-stdout.log",
+          "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+          "bytes": 2
+        },
+        "darwin-arm64/20261030T101530Z-00006634/after-attempt-1-DS_Store/after-003-log-stdout.log.txt": {
+          "archiveEntry": "reports/20261030T101530Z-00006634/after-attempt-1-DS_Store/after-003-log-stdout.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "darwin-arm64/20261030T101530Z-00006634/after-attempt-1-DS_Store/phases.jsonl": {
+          "archiveEntry": "reports/20261030T101530Z-00006634/after-attempt-1-DS_Store/phases.jsonl",
+          "sha256": "a69c5ca49d77ab899e748a95856c14c5a7b749a8226952fda10a5e5c3da54aaf",
+          "bytes": 11694
+        },
+        "darwin-arm64/20261030T101530Z-00006634/after-attempt-1-DS_Store/after.json": {
+          "archiveEntry": "reports/20261030T101530Z-00006634/after-attempt-1-DS_Store/after.json",
+          "sha256": "027aa1246d8f27eddf4638c81b43c4e5a1e07eded52b1d2237e39d8b90f1863f",
+          "bytes": 46232
+        },
+        "darwin-arm64/20261030T101530Z-00006634/after-attempt-1-DS_Store/after-001-sysctl-stdout.log.txt": {
+          "archiveEntry": "reports/20261030T101530Z-00006634/after-attempt-1-DS_Store/after-001-sysctl-stdout.log",
+          "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+          "bytes": 2
+        },
+        "darwin-arm64/20261030T101530Z-00006634/after-attempt-1-DS_Store/terminal.log.txt": {
+          "archiveEntry": "reports/20261030T101530Z-00006634/after-attempt-1-DS_Store/terminal.log",
+          "sha256": "a8654a6b868d3c7864e1e68800791265369aea321b6fb5cdd2bf46754f264818",
+          "bytes": 101082
+        },
+        "darwin-arm64/20261030T101530Z-00006634/after-attempt-1-DS_Store/after-002-sysctl-stderr.log.txt": {
+          "archiveEntry": "reports/20261030T101530Z-00006634/after-attempt-1-DS_Store/after-002-sysctl-stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "darwin-arm64/20261030T101530Z-00006634/after-attempt-1-DS_Store/after-003-log-stderr.log.txt": {
+          "archiveEntry": "reports/20261030T101530Z-00006634/after-attempt-1-DS_Store/after-003-log-stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "darwin-arm64/20261030T101530Z-00006634/after-attempt-1-DS_Store/after-001-sysctl-stderr.log.txt": {
+          "archiveEntry": "reports/20261030T101530Z-00006634/after-attempt-1-DS_Store/after-001-sysctl-stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "darwin-arm64/20261030T101530Z-00006634/after-002-sysctl-stdout.log.txt": {
+          "archiveEntry": "reports/20261030T101530Z-00006634/after-002-sysctl-stdout.log",
+          "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+          "bytes": 2
+        },
+        "darwin-arm64/20261030T101530Z-00006634/run-after-continuation.log.txt": {
+          "archiveEntry": "reports/20261030T101530Z-00006634/run-after-continuation.log",
+          "sha256": "c42f74cc780b8485c349e4b82b4b233a096ad90173ddd15a1e650c4dde1384d8",
+          "bytes": 45271
+        },
+        "darwin-arm64/20261030T101530Z-00006634/before-001-sysctl-stderr.log.txt": {
+          "archiveEntry": "reports/20261030T101530Z-00006634/before-001-sysctl-stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "darwin-arm64/20261030T101530Z-00006634/before-003-codesign-stderr.log.txt": {
+          "archiveEntry": "reports/20261030T101530Z-00006634/before-003-codesign-stderr.log",
+          "sha256": "fa2f711f9cbf13f05ca767c079d203a6b6f862f6033793eff700483a3059f4db",
+          "bytes": 316
+        },
+        "darwin-arm64/20261030T101530Z-00006634/after-003-log-stdout.log.txt": {
+          "archiveEntry": "reports/20261030T101530Z-00006634/after-003-log-stdout.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "darwin-arm64/20261030T101530Z-00006634/before-002-sysctl-stderr.log.txt": {
+          "archiveEntry": "reports/20261030T101530Z-00006634/before-002-sysctl-stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "darwin-arm64/20261030T101530Z-00006634/before-004-Yandex Music Downloader-stdout.log.txt": {
+          "archiveEntry": "reports/20261030T101530Z-00006634/before-004-Yandex Music Downloader-stdout.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "darwin-arm64/20261030T101530Z-00006634/phases.jsonl": {
+          "archiveEntry": "reports/20261030T101530Z-00006634/phases.jsonl",
+          "sha256": "51e8d2669005124b0b1d6b7bd5932de8e1e75fc1a776356c6c271df930d36ad3",
+          "bytes": 15406
+        },
+        "darwin-arm64/20261030T101530Z-00006634/before-005-ditto-stderr.log.txt": {
+          "archiveEntry": "reports/20261030T101530Z-00006634/before-005-ditto-stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "darwin-arm64/20261030T101530Z-00006634/after.json": {
+          "archiveEntry": "reports/20261030T101530Z-00006634/after.json",
+          "sha256": "14bbc0141ba0268f0b11810e7a2034cdc980115fed38fd45aac88746be10a7b2",
+          "bytes": 44815
+        },
+        "darwin-arm64/20261030T101530Z-00006634/after-001-sysctl-stdout.log.txt": {
+          "archiveEntry": "reports/20261030T101530Z-00006634/after-001-sysctl-stdout.log",
+          "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+          "bytes": 2
+        },
+        "darwin-arm64/20261030T101530Z-00006634/after-003-Yandex Music Downloader-stdout.log.txt": {
+          "archiveEntry": "reports/20261030T101530Z-00006634/after-003-Yandex Music Downloader-stdout.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "darwin-arm64/20261030T101530Z-00006634/terminal.log.txt": {
+          "archiveEntry": "reports/20261030T101530Z-00006634/terminal.log",
+          "sha256": "a8654a6b868d3c7864e1e68800791265369aea321b6fb5cdd2bf46754f264818",
+          "bytes": 101082
+        },
+        "darwin-arm64/20261030T101530Z-00006634/after-002-sysctl-stderr.log.txt": {
+          "archiveEntry": "reports/20261030T101530Z-00006634/after-002-sysctl-stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "darwin-arm64/20261030T101530Z-00006634/after-003-log-stderr.log.txt": {
+          "archiveEntry": "reports/20261030T101530Z-00006634/after-003-log-stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "darwin-arm64/20261030T101530Z-00006634/before-001-sysctl-stdout.log.txt": {
+          "archiveEntry": "reports/20261030T101530Z-00006634/before-001-sysctl-stdout.log",
+          "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+          "bytes": 2
+        },
+        "darwin-arm64/20261030T101530Z-00006634/before-003-codesign-stdout.log.txt": {
+          "archiveEntry": "reports/20261030T101530Z-00006634/before-003-codesign-stdout.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "darwin-arm64/20261030T101530Z-00006634/before-002-sysctl-stdout.log.txt": {
+          "archiveEntry": "reports/20261030T101530Z-00006634/before-002-sysctl-stdout.log",
+          "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+          "bytes": 2
+        },
+        "darwin-arm64/20261030T101530Z-00006634/before-005-ditto-stdout.log.txt": {
+          "archiveEntry": "reports/20261030T101530Z-00006634/before-005-ditto-stdout.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "darwin-arm64/20261030T101530Z-00006634/after-003-Yandex Music Downloader-stderr.log.txt": {
+          "archiveEntry": "reports/20261030T101530Z-00006634/after-003-Yandex Music Downloader-stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "darwin-arm64/20261030T101530Z-00006634/after-001-sysctl-stderr.log.txt": {
+          "archiveEntry": "reports/20261030T101530Z-00006634/after-001-sysctl-stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "darwin-arm64/20261030T101530Z-00006634/before-004-Yandex Music Downloader-stderr.log.txt": {
+          "archiveEntry": "reports/20261030T101530Z-00006634/before-004-Yandex Music Downloader-stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "darwin-arm64/20261030T101530Z-00006634/shipping-n-plus-1/window-report.json": {
+          "archiveEntry": "reports/20261030T101530Z-00006634/shipping-n-plus-1/window-report.json",
+          "sha256": "1739fcab1dafb0642536cff6c2e048e8844e8876640d482354d2b72e31b7c338",
+          "bytes": 418
+        },
+        "darwin-arm64/20261030T101530Z-00006634/shipping-n-plus-1/electron.log.txt": {
+          "archiveEntry": "reports/20261030T101530Z-00006634/shipping-n-plus-1/electron.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "darwin-arm64/20261030T101530Z-00006634/shipping-n-plus-1/window.png": {
+          "archiveEntry": "reports/20261030T101530Z-00006634/shipping-n-plus-1/window.png",
+          "sha256": "dd823a9e78baead081dac812ff99ebdb73200f278066039e2c6c1beb60940548",
+          "bytes": 150068
+        },
+        "darwin-arm64/20261030T101530Z-00006634/shipping-n-plus-1/stdio.json": {
+          "archiveEntry": "reports/20261030T101530Z-00006634/shipping-n-plus-1/stdio.json",
+          "sha256": "05cdc620c94ed3a229b3f8900ce33888857d3460c4ad13c5f8aa68c727b0973c",
+          "bytes": 714
+        },
+        "darwin-arm64/20261030T101206Z-00006311/before.json": {
+          "archiveEntry": "reports/20261030T101206Z-00006311/before.json",
+          "sha256": "8b6eb02a3c8b19f490282a4e0e626b2157b89c74cfbd725cbc12e480c8313364",
+          "bytes": 49354
+        },
+        "darwin-arm64/20261030T101206Z-00006311/shipping-n/window-report.json": {
+          "archiveEntry": "reports/20261030T101206Z-00006311/shipping-n/window-report.json",
+          "sha256": "74cc28d21598350c73e4bbcd79da1ee8768f3516cb469f0d15d7399dc44b871b",
+          "bytes": 418
+        },
+        "darwin-arm64/20261030T101206Z-00006311/shipping-n/electron.log.txt": {
+          "archiveEntry": "reports/20261030T101206Z-00006311/shipping-n/electron.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "darwin-arm64/20261030T101206Z-00006311/shipping-n/window.png": {
+          "archiveEntry": "reports/20261030T101206Z-00006311/shipping-n/window.png",
+          "sha256": "2215e6170e4d3a033fff8fc6f373f4387e1aabb0a45330d12a2beb0f88e81d2d",
+          "bytes": 174710
+        },
+        "darwin-arm64/20261030T101206Z-00006311/shipping-n/stdio.json": {
+          "archiveEntry": "reports/20261030T101206Z-00006311/shipping-n/stdio.json",
+          "sha256": "dfe9c76cb358b71e514204c96ce68f18aa5a6dbef85f69cd2076d0feca37e931",
+          "bytes": 716
+        },
+        "darwin-arm64/20261030T101206Z-00006311/launcher-summary.txt": {
+          "archiveEntry": "reports/20261030T101206Z-00006311/launcher-summary.txt",
+          "sha256": "b3c57423e91e983ce193c6505e112bf5651d62e76445be12e0601b9ab7254648",
+          "bytes": 223
+        },
+        "darwin-arm64/20261030T101206Z-00006311/before-001-sysctl-stderr.log.txt": {
+          "archiveEntry": "reports/20261030T101206Z-00006311/before-001-sysctl-stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "darwin-arm64/20261030T101206Z-00006311/before-003-codesign-stderr.log.txt": {
+          "archiveEntry": "reports/20261030T101206Z-00006311/before-003-codesign-stderr.log",
+          "sha256": "7cfd4f9459b96dd2010a13ce5c3ffc9db9d9aa199c0372ec57faf3023988ab9b",
+          "bytes": 316
+        },
+        "darwin-arm64/20261030T101206Z-00006311/before-005-log-stdout.log.txt": {
+          "archiveEntry": "reports/20261030T101206Z-00006311/before-005-log-stdout.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "darwin-arm64/20261030T101206Z-00006311/before-002-sysctl-stderr.log.txt": {
+          "archiveEntry": "reports/20261030T101206Z-00006311/before-002-sysctl-stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "darwin-arm64/20261030T101206Z-00006311/before-004-Yandex Music Downloader-stdout.log.txt": {
+          "archiveEntry": "reports/20261030T101206Z-00006311/before-004-Yandex Music Downloader-stdout.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "darwin-arm64/20261030T101206Z-00006311/phases.jsonl": {
+          "archiveEntry": "reports/20261030T101206Z-00006311/phases.jsonl",
+          "sha256": "d8202d23258564a6c368382b2a7a857397d9eaa668808d561404c3d752c1fe14",
+          "bytes": 9163
+        },
+        "darwin-arm64/20261030T101206Z-00006311/terminal.log.txt": {
+          "archiveEntry": "reports/20261030T101206Z-00006311/terminal.log",
+          "sha256": "c1d7878bb202b77a0467064eac978a02b7ebaa543d1ea61a63099683cd21f070",
+          "bytes": 50527
+        },
+        "darwin-arm64/20261030T101206Z-00006311/before-001-sysctl-stdout.log.txt": {
+          "archiveEntry": "reports/20261030T101206Z-00006311/before-001-sysctl-stdout.log",
+          "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+          "bytes": 2
+        },
+        "darwin-arm64/20261030T101206Z-00006311/before-005-log-stderr.log.txt": {
+          "archiveEntry": "reports/20261030T101206Z-00006311/before-005-log-stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "darwin-arm64/20261030T101206Z-00006311/before-003-codesign-stdout.log.txt": {
+          "archiveEntry": "reports/20261030T101206Z-00006311/before-003-codesign-stdout.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "darwin-arm64/20261030T101206Z-00006311/before-002-sysctl-stdout.log.txt": {
+          "archiveEntry": "reports/20261030T101206Z-00006311/before-002-sysctl-stdout.log",
+          "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+          "bytes": 2
+        },
+        "darwin-arm64/20261030T101206Z-00006311/before-004-Yandex Music Downloader-stderr.log.txt": {
+          "archiveEntry": "reports/20261030T101206Z-00006311/before-004-Yandex Music Downloader-stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        }
+      },
+      "excludedPayloads": {
+        "reports/20261030T101530Z-00006634/download/valid/music-downloader-0.0.1-darwin-arm64-d2420a4c3bf2.zip": {
+          "sha256": "d2420a4c3bf2ac37561aa664636969282807aa5b47975a525534cb6a97305c85",
+          "bytes": 147396614
+        }
+      }
+    },
+    {
+      "target": "darwin-x64",
+      "archive": "x64-reports (1).zip",
+      "sha256": "a91efb63168051313454596b06acc25d9c60b5171616b26599bf4efbe1e98ebf",
+      "files": {
+        "darwin-x64/20261030T101324Z-0000645b/before.json": {
+          "archiveEntry": "reports/20261030T101324Z-0000645b/before.json",
+          "sha256": "f6f6cfde32114896341aef693495a959fb754441476daf9644b04088fe4f8385",
+          "bytes": 48453
+        },
+        "darwin-x64/20261030T101324Z-0000645b/launcher-summary.txt": {
+          "archiveEntry": "reports/20261030T101324Z-0000645b/launcher-summary.txt",
+          "sha256": "2f7177f2ce363b7d24d5dac501f86c16a2fea4335d47364f3794db2c5d6f407c",
+          "bytes": 221
+        },
+        "darwin-x64/20261030T101324Z-0000645b/before-004-log-stdout.log.txt": {
+          "archiveEntry": "reports/20261030T101324Z-0000645b/before-004-log-stdout.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "darwin-x64/20261030T101324Z-0000645b/before-003-node-stdout.log.txt": {
+          "archiveEntry": "reports/20261030T101324Z-0000645b/before-003-node-stdout.log",
+          "sha256": "c4f16604b57f54d4112795958252e2d64429f23f409f2a9ddef6a67b982f6952",
+          "bytes": 932
+        },
+        "darwin-x64/20261030T101324Z-0000645b/before-001-sysctl-stderr.log.txt": {
+          "archiveEntry": "reports/20261030T101324Z-0000645b/before-001-sysctl-stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "darwin-x64/20261030T101324Z-0000645b/before-002-sysctl-stderr.log.txt": {
+          "archiveEntry": "reports/20261030T101324Z-0000645b/before-002-sysctl-stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "darwin-x64/20261030T101324Z-0000645b/phases.jsonl": {
+          "archiveEntry": "reports/20261030T101324Z-0000645b/phases.jsonl",
+          "sha256": "4028ad7ef01c136b4d134c37a07c81af75283e50ee943b507e94ee6c3f2ce22c",
+          "bytes": 6026
+        },
+        "darwin-x64/20261030T101324Z-0000645b/before-003-node-stderr.log.txt": {
+          "archiveEntry": "reports/20261030T101324Z-0000645b/before-003-node-stderr.log",
+          "sha256": "54cfd7bc2ae65bd7902b882f35a415db1aa97c1bf6658242c18464539b73720a",
+          "bytes": 758
+        },
+        "darwin-x64/20261030T101324Z-0000645b/before-004-log-stderr.log.txt": {
+          "archiveEntry": "reports/20261030T101324Z-0000645b/before-004-log-stderr.log",
+          "sha256": "1110e6f205528a69030630afcd3bd4adc1a9fefb5cd4eb90e4cd460ac5128f44",
+          "bytes": 76
+        },
+        "darwin-x64/20261030T101324Z-0000645b/terminal.log.txt": {
+          "archiveEntry": "reports/20261030T101324Z-0000645b/terminal.log",
+          "sha256": "20a880b84222d453020e8b822f7bcc33003f0374a2ac5399c24568cc3e2ad854",
+          "bytes": 49542
+        },
+        "darwin-x64/20261030T101324Z-0000645b/before-001-sysctl-stdout.log.txt": {
+          "archiveEntry": "reports/20261030T101324Z-0000645b/before-001-sysctl-stdout.log",
+          "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+          "bytes": 2
+        },
+        "darwin-x64/20261030T101324Z-0000645b/before-002-sysctl-stdout.log.txt": {
+          "archiveEntry": "reports/20261030T101324Z-0000645b/before-002-sysctl-stdout.log",
+          "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+          "bytes": 2
+        },
+        "darwin-x64/20261030T101324Z-0000645b/e2e/.last-run.json": {
+          "archiveEntry": "reports/20261030T101324Z-0000645b/e2e/.last-run.json",
+          "sha256": "e247bfa2f6a4b0c3da72a5f0d7b858a0833b2ee38544fe1fc2ac2892b63bb4b3",
+          "bytes": 96
+        },
+        "darwin-x64/20261030T101324Z-0000645b/e2e/download-╨í╤ü╤ï╨╗╨║╨░-ΓåÆ-╨┐╤Ç╨╡╨┤╨┐╤Ç╨╛╤ü-d6b3b-╨╕-╨╕╤ü╤é╨╛╤Ç╨╕╤Å-╨┐╨╛╤ü╨╗╨╡-╨┐╨╡╤Ç╨╡╨╖╨░╨┐╤â╤ü╨║╨░/electron-stdio.log.txt": {
+          "archiveEntry": "reports/20261030T101324Z-0000645b/e2e/download-╨í╤ü╤ï╨╗╨║╨░-ΓåÆ-╨┐╤Ç╨╡╨┤╨┐╤Ç╨╛╤ü-d6b3b-╨╕-╨╕╤ü╤é╨╛╤Ç╨╕╤Å-╨┐╨╛╤ü╨╗╨╡-╨┐╨╡╤Ç╨╡╨╖╨░╨┐╤â╤ü╨║╨░/electron-stdio.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "darwin-x64/20261030T101324Z-0000645b/e2e/download-╨í╤ü╤ï╨╗╨║╨░-ΓåÆ-╨┐╤Ç╨╡╨┤╨┐╤Ç╨╛╤ü-d6b3b-╨╕-╨╕╤ü╤é╨╛╤Ç╨╕╤Å-╨┐╨╛╤ü╨╗╨╡-╨┐╨╡╤Ç╨╡╨╖╨░╨┐╤â╤ü╨║╨░/error-context.md": {
+          "archiveEntry": "reports/20261030T101324Z-0000645b/e2e/download-╨í╤ü╤ï╨╗╨║╨░-ΓåÆ-╨┐╤Ç╨╡╨┤╨┐╤Ç╨╛╤ü-d6b3b-╨╕-╨╕╤ü╤é╨╛╤Ç╨╕╤Å-╨┐╨╛╤ü╨╗╨╡-╨┐╨╡╤Ç╨╡╨╖╨░╨┐╤â╤ü╨║╨░/error-context.md",
+          "sha256": "44539b8896396b7886357fb2f49c86937100b566b03ecc0bac32bdf48a03cbea",
+          "bytes": 492
+        },
+        "darwin-x64/20261030T101324Z-0000645b/e2e-stdio.json": {
+          "archiveEntry": "reports/20261030T101324Z-0000645b/e2e-stdio.json",
+          "sha256": "9ed673a592c85826e32119d861df503ad35d399534dba9de72586da6aec52cde",
+          "bytes": 2622
+        },
+        "darwin-x64/20261030T101708Z-000067a7/before.json": {
+          "archiveEntry": "reports/20261030T101708Z-000067a7/before.json",
+          "sha256": "d4fd45b1709482656b2d5995597ea00b8d8f2e3aea23560cb119789bd5affb82",
+          "bytes": 58401
+        },
+        "darwin-x64/20261030T101708Z-000067a7/launcher-summary.txt": {
+          "archiveEntry": "reports/20261030T101708Z-000067a7/launcher-summary.txt",
+          "sha256": "fd1690c1b74517796398e717f21b7773bf886c8ddc88f934012daf253d06a66f",
+          "bytes": 221
+        },
+        "darwin-x64/20261030T101708Z-000067a7/after-attempt-1-DS_Store/launcher-summary.txt": {
+          "archiveEntry": "reports/20261030T101708Z-000067a7/after-attempt-1-DS_Store/launcher-summary.txt",
+          "sha256": "fd1690c1b74517796398e717f21b7773bf886c8ddc88f934012daf253d06a66f",
+          "bytes": 221
+        },
+        "darwin-x64/20261030T101708Z-000067a7/after-attempt-1-DS_Store/after-002-sysctl-stdout.log.txt": {
+          "archiveEntry": "reports/20261030T101708Z-000067a7/after-attempt-1-DS_Store/after-002-sysctl-stdout.log",
+          "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+          "bytes": 2
+        },
+        "darwin-x64/20261030T101708Z-000067a7/after-attempt-1-DS_Store/after-003-log-stdout.log.txt": {
+          "archiveEntry": "reports/20261030T101708Z-000067a7/after-attempt-1-DS_Store/after-003-log-stdout.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "darwin-x64/20261030T101708Z-000067a7/after-attempt-1-DS_Store/phases.jsonl": {
+          "archiveEntry": "reports/20261030T101708Z-000067a7/after-attempt-1-DS_Store/phases.jsonl",
+          "sha256": "3f2fab351f9169bbec71385d1a1ac4a693f350bd819d9d4386c05708c2c1dbaa",
+          "bytes": 10499
+        },
+        "darwin-x64/20261030T101708Z-000067a7/after-attempt-1-DS_Store/after.json": {
+          "archiveEntry": "reports/20261030T101708Z-000067a7/after-attempt-1-DS_Store/after.json",
+          "sha256": "6e89e537d6bb65eee6290b253170b701527101b3c7f3724fc4a54882857454d0",
+          "bytes": 46254
+        },
+        "darwin-x64/20261030T101708Z-000067a7/after-attempt-1-DS_Store/after-001-sysctl-stdout.log.txt": {
+          "archiveEntry": "reports/20261030T101708Z-000067a7/after-attempt-1-DS_Store/after-001-sysctl-stdout.log",
+          "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+          "bytes": 2
+        },
+        "darwin-x64/20261030T101708Z-000067a7/after-attempt-1-DS_Store/terminal.log.txt": {
+          "archiveEntry": "reports/20261030T101708Z-000067a7/after-attempt-1-DS_Store/terminal.log",
+          "sha256": "122ea058789353b902bbc68b6de879f964260936c4158eb8cd9e243e1227bba2",
+          "bytes": 106703
+        },
+        "darwin-x64/20261030T101708Z-000067a7/after-attempt-1-DS_Store/after-002-sysctl-stderr.log.txt": {
+          "archiveEntry": "reports/20261030T101708Z-000067a7/after-attempt-1-DS_Store/after-002-sysctl-stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "darwin-x64/20261030T101708Z-000067a7/after-attempt-1-DS_Store/after-003-log-stderr.log.txt": {
+          "archiveEntry": "reports/20261030T101708Z-000067a7/after-attempt-1-DS_Store/after-003-log-stderr.log",
+          "sha256": "1110e6f205528a69030630afcd3bd4adc1a9fefb5cd4eb90e4cd460ac5128f44",
+          "bytes": 76
+        },
+        "darwin-x64/20261030T101708Z-000067a7/after-attempt-1-DS_Store/after-001-sysctl-stderr.log.txt": {
+          "archiveEntry": "reports/20261030T101708Z-000067a7/after-attempt-1-DS_Store/after-001-sysctl-stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "darwin-x64/20261030T101708Z-000067a7/before-003-node-stdout.log.txt": {
+          "archiveEntry": "reports/20261030T101708Z-000067a7/before-003-node-stdout.log",
+          "sha256": "368ffb83e79004a9f8871b703453572ea29d9994fa26444b0b53779c3925b5b4",
+          "bytes": 281
+        },
+        "darwin-x64/20261030T101708Z-000067a7/after-002-sysctl-stdout.log.txt": {
+          "archiveEntry": "reports/20261030T101708Z-000067a7/after-002-sysctl-stdout.log",
+          "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+          "bytes": 2
+        },
+        "darwin-x64/20261030T101708Z-000067a7/run-after-continuation.log.txt": {
+          "archiveEntry": "reports/20261030T101708Z-000067a7/run-after-continuation.log",
+          "sha256": "7f91b6fa1274d58b9bb303cc45eb223e3c3a14af92d19ec05172311f582e89e3",
+          "bytes": 46058
+        },
+        "darwin-x64/20261030T101708Z-000067a7/before-001-sysctl-stderr.log.txt": {
+          "archiveEntry": "reports/20261030T101708Z-000067a7/before-001-sysctl-stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "darwin-x64/20261030T101708Z-000067a7/after-003-log-stdout.log.txt": {
+          "archiveEntry": "reports/20261030T101708Z-000067a7/after-003-log-stdout.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "darwin-x64/20261030T101708Z-000067a7/before-004-ditto-stderr.log.txt": {
+          "archiveEntry": "reports/20261030T101708Z-000067a7/before-004-ditto-stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "darwin-x64/20261030T101708Z-000067a7/before-002-sysctl-stderr.log.txt": {
+          "archiveEntry": "reports/20261030T101708Z-000067a7/before-002-sysctl-stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "darwin-x64/20261030T101708Z-000067a7/phases.jsonl": {
+          "archiveEntry": "reports/20261030T101708Z-000067a7/phases.jsonl",
+          "sha256": "f41c1208cdf63ad3c36a084ca833dea51103f198470b987b5f03287a79030587",
+          "bytes": 14183
+        },
+        "darwin-x64/20261030T101708Z-000067a7/after.json": {
+          "archiveEntry": "reports/20261030T101708Z-000067a7/after.json",
+          "sha256": "575766ea7d522183761eb2174b7cff3ebb57ec6f6c59940787911fd9649d115b",
+          "bytes": 45602
+        },
+        "darwin-x64/20261030T101708Z-000067a7/after-001-sysctl-stdout.log.txt": {
+          "archiveEntry": "reports/20261030T101708Z-000067a7/after-001-sysctl-stdout.log",
+          "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+          "bytes": 2
+        },
+        "darwin-x64/20261030T101708Z-000067a7/after-003-Yandex Music Downloader-stdout.log.txt": {
+          "archiveEntry": "reports/20261030T101708Z-000067a7/after-003-Yandex Music Downloader-stdout.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "darwin-x64/20261030T101708Z-000067a7/before-003-node-stderr.log.txt": {
+          "archiveEntry": "reports/20261030T101708Z-000067a7/before-003-node-stderr.log",
+          "sha256": "4dbdffdc963135ba66e00b45192e50da2582e1c6b3963fae7e111778b127dc2e",
+          "bytes": 4298
+        },
+        "darwin-x64/20261030T101708Z-000067a7/terminal.log.txt": {
+          "archiveEntry": "reports/20261030T101708Z-000067a7/terminal.log",
+          "sha256": "122ea058789353b902bbc68b6de879f964260936c4158eb8cd9e243e1227bba2",
+          "bytes": 106703
+        },
+        "darwin-x64/20261030T101708Z-000067a7/after-002-sysctl-stderr.log.txt": {
+          "archiveEntry": "reports/20261030T101708Z-000067a7/after-002-sysctl-stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "darwin-x64/20261030T101708Z-000067a7/electron-e2e.log.txt": {
+          "archiveEntry": "reports/20261030T101708Z-000067a7/electron-e2e.log",
+          "sha256": "be12af115382acd63125a917e405a26f0ad2ddcda18707cf1ed31b6fa469361b",
+          "bytes": 109
+        },
+        "darwin-x64/20261030T101708Z-000067a7/electron-events.jsonl": {
+          "archiveEntry": "reports/20261030T101708Z-000067a7/electron-events.jsonl",
+          "sha256": "63d4e71fdb4b80a53465aee24b4a2a274709fa22d8e9a73f9f1187b8e90110e2",
+          "bytes": 2216
+        },
+        "darwin-x64/20261030T101708Z-000067a7/after-003-log-stderr.log.txt": {
+          "archiveEntry": "reports/20261030T101708Z-000067a7/after-003-log-stderr.log",
+          "sha256": "1110e6f205528a69030630afcd3bd4adc1a9fefb5cd4eb90e4cd460ac5128f44",
+          "bytes": 76
+        },
+        "darwin-x64/20261030T101708Z-000067a7/before-004-ditto-stdout.log.txt": {
+          "archiveEntry": "reports/20261030T101708Z-000067a7/before-004-ditto-stdout.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "darwin-x64/20261030T101708Z-000067a7/before-001-sysctl-stdout.log.txt": {
+          "archiveEntry": "reports/20261030T101708Z-000067a7/before-001-sysctl-stdout.log",
+          "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+          "bytes": 2
+        },
+        "darwin-x64/20261030T101708Z-000067a7/before-002-sysctl-stdout.log.txt": {
+          "archiveEntry": "reports/20261030T101708Z-000067a7/before-002-sysctl-stdout.log",
+          "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+          "bytes": 2
+        },
+        "darwin-x64/20261030T101708Z-000067a7/e2e/.last-run.json": {
+          "archiveEntry": "reports/20261030T101708Z-000067a7/e2e/.last-run.json",
+          "sha256": "91d1c43004802cd49950d78eb11c8fa7d05da8ffffe219a8b13b2f561bc00903",
+          "bytes": 45
+        },
+        "darwin-x64/20261030T101708Z-000067a7/e2e/download-╨í╤ü╤ï╨╗╨║╨░-ΓåÆ-╨┐╤Ç╨╡╨┤╨┐╤Ç╨╛╤ü-d6b3b-╨╕-╨╕╤ü╤é╨╛╤Ç╨╕╤Å-╨┐╨╛╤ü╨╗╨╡-╨┐╨╡╤Ç╨╡╨╖╨░╨┐╤â╤ü╨║╨░/result.json": {
+          "archiveEntry": "reports/20261030T101708Z-000067a7/e2e/download-╨í╤ü╤ï╨╗╨║╨░-ΓåÆ-╨┐╤Ç╨╡╨┤╨┐╤Ç╨╛╤ü-d6b3b-╨╕-╨╕╤ü╤é╨╛╤Ç╨╕╤Å-╨┐╨╛╤ü╨╗╨╡-╨┐╨╡╤Ç╨╡╨╖╨░╨┐╤â╤ü╨║╨░/result.json",
+          "sha256": "dbff73aee9db80862539df78d40ff0dc2dfb9b43c7a8ad28b9f6ff23bfe351b0",
+          "bytes": 1187
+        },
+        "darwin-x64/20261030T101708Z-000067a7/e2e/download-╨í╤ü╤ï╨╗╨║╨░-ΓåÆ-╨┐╤Ç╨╡╨┤╨┐╤Ç╨╛╤ü-d6b3b-╨╕-╨╕╤ü╤é╨╛╤Ç╨╕╤Å-╨┐╨╛╤ü╨╗╨╡-╨┐╨╡╤Ç╨╡╨╖╨░╨┐╤â╤ü╨║╨░/electron-stdio.log.txt": {
+          "archiveEntry": "reports/20261030T101708Z-000067a7/e2e/download-╨í╤ü╤ï╨╗╨║╨░-ΓåÆ-╨┐╤Ç╨╡╨┤╨┐╤Ç╨╛╤ü-d6b3b-╨╕-╨╕╤ü╤é╨╛╤Ç╨╕╤Å-╨┐╨╛╤ü╨╗╨╡-╨┐╨╡╤Ç╨╡╨╖╨░╨┐╤â╤ü╨║╨░/electron-stdio.log",
+          "sha256": "34a51a6dcf44a1f59f2c5f37e9ff8b9e89639ff9c00661d0fe669bdaaafbdd8e",
+          "bytes": 398
+        },
+        "darwin-x64/20261030T101708Z-000067a7/e2e/download-╨í╤ü╤ï╨╗╨║╨░-ΓåÆ-╨┐╤Ç╨╡╨┤╨┐╤Ç╨╛╤ü-d6b3b-╨╕-╨╕╤ü╤é╨╛╤Ç╨╕╤Å-╨┐╨╛╤ü╨╗╨╡-╨┐╨╡╤Ç╨╡╨╖╨░╨┐╤â╤ü╨║╨░/attachments/╤Ç╨╡╨╖╤â╨╗╤î╤é╨░╤é-╤ü╤å╨╡╨╜╨░╤Ç╨╕╤Å-82d4e615c977aeee321f01a2825e22c07e547734.json": {
+          "archiveEntry": "reports/20261030T101708Z-000067a7/e2e/download-╨í╤ü╤ï╨╗╨║╨░-ΓåÆ-╨┐╤Ç╨╡╨┤╨┐╤Ç╨╛╤ü-d6b3b-╨╕-╨╕╤ü╤é╨╛╤Ç╨╕╤Å-╨┐╨╛╤ü╨╗╨╡-╨┐╨╡╤Ç╨╡╨╖╨░╨┐╤â╤ü╨║╨░/attachments/╤Ç╨╡╨╖╤â╨╗╤î╤é╨░╤é-╤ü╤å╨╡╨╜╨░╤Ç╨╕╤Å-82d4e615c977aeee321f01a2825e22c07e547734.json",
+          "sha256": "dbff73aee9db80862539df78d40ff0dc2dfb9b43c7a8ad28b9f6ff23bfe351b0",
+          "bytes": 1187
+        },
+        "darwin-x64/20261030T101708Z-000067a7/after-003-Yandex Music Downloader-stderr.log.txt": {
+          "archiveEntry": "reports/20261030T101708Z-000067a7/after-003-Yandex Music Downloader-stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "darwin-x64/20261030T101708Z-000067a7/after-001-sysctl-stderr.log.txt": {
+          "archiveEntry": "reports/20261030T101708Z-000067a7/after-001-sysctl-stderr.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "darwin-x64/20261030T101708Z-000067a7/shipping-n-plus-1/window-report.json": {
+          "archiveEntry": "reports/20261030T101708Z-000067a7/shipping-n-plus-1/window-report.json",
+          "sha256": "1fc45464b0962445ade5faa479a655cfa8c850bcef42c3f3e28241256923598b",
+          "bytes": 413
+        },
+        "darwin-x64/20261030T101708Z-000067a7/shipping-n-plus-1/electron.log.txt": {
+          "archiveEntry": "reports/20261030T101708Z-000067a7/shipping-n-plus-1/electron.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "darwin-x64/20261030T101708Z-000067a7/shipping-n-plus-1/window.png": {
+          "archiveEntry": "reports/20261030T101708Z-000067a7/shipping-n-plus-1/window.png",
+          "sha256": "9a04d492dce8bbcc680faaecbe6fd650feeb0d11e9a62a36b0e2a75994419847",
+          "bytes": 13071
+        },
+        "darwin-x64/20261030T101708Z-000067a7/shipping-n-plus-1/stdio.json": {
+          "archiveEntry": "reports/20261030T101708Z-000067a7/shipping-n-plus-1/stdio.json",
+          "sha256": "48901f3a68bbdd975e77fa5575051577f5ada1c3ef3dee0ca973513467c32a9d",
+          "bytes": 708
+        },
+        "darwin-x64/20261030T101708Z-000067a7/e2e-stdio.json": {
+          "archiveEntry": "reports/20261030T101708Z-000067a7/e2e-stdio.json",
+          "sha256": "00449b6d9aee808db025bb3e985d247d241ecfe65460c035f315582f1d5570b0",
+          "bytes": 5535
+        }
+      },
+      "excludedPayloads": {
+        "reports/20261030T101708Z-000067a7/download/valid/music-downloader-0.0.1-darwin-x64-ac7875d84bdf.zip": {
+          "sha256": "ac7875d84bdf694543fd1e2fee62b6af127e7968294696b1e13a0c06f3ef3766",
+          "bytes": 144065237
+        }
+      }
+    }
+  ]
+}

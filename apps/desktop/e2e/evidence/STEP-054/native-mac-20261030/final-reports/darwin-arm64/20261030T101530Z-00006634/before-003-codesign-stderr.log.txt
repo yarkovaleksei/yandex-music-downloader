@@ -1,0 +1,1 @@
+/Users/a11/work/test-yandex-app/music-downloader-mac-retry-darwin-arm64-20261030T081544687Z-5cb41f17/.runs/20261030T101530Z-00006634/current/Yandex Music Downloader.app/Contents/Frameworks/Electron Framework.framework/Versions/A/Electron Framework: code has no resources but signature indicates they must be present

@@ -1,7 +1,7 @@
 ---
 schema: 1
 id: STEP-054
-status: in_progress
+status: completed
 type: implementation
 priority: medium
 phase: packaging
@@ -28,11 +28,11 @@ risk_flags:
   - release-critical
 plan:
   status: ready
-  revision: 1
-  context_basis: sha256:ad1bb3e39399df2d497cb64d694dbb9d5b8944d12e182b4ad0f08dd6d051b74c
-  content_hash: sha256:65eb6f3d9859590ff4e05b6b0b9426f304ecc33a928f60c0a9d479f6d0d9f41b
-  reviewed_report: planning/plan-reviews/STEP-054/PLAN-REVIEW-20261029T145024Z.md
-  planned_at: 2026-10-29T14:50:24+00:00
+  revision: 2
+  context_basis: sha256:e4254fbf62cfefcd9cb7bfeb4461ae0458bdba7f5bc036aca925387411575c7c
+  content_hash: sha256:a697b9b159f815d869d732e2c1aeae6228500a0fbb18b3c06d7835643291772b
+  reviewed_report: planning/plan-reviews/STEP-054/PLAN-REVIEW-20261030T075553Z.md
+  planned_at: 2026-10-30T07:55:53+00:00
   execution_groups:
   context_components:
     - "ADR@ADR-014=sha256:d21dd58fd7f4167a6b4820ba1f26624fcf440fb7a3f9fdc926e1ec517a969f39"
@@ -41,15 +41,15 @@ plan:
     - "PRN@PRN-001=sha256:3b3801f207fafc3f77272f0e93570258a6d006964839d93a276accd814d548af"
     - "PRN@PRN-002=sha256:f29ee3fbdb9cf65cf9739d0907768bbf192ad88b8e443110d4d82f81c6b79ecb"
     - "PRN@PRN-003=sha256:16516d7d302fecda5f7615f9d55e29e04b588d671f8660640e1f61d1619e4ef8"
-    - "REQ@REQ-041=sha256:9bf3b9b0e777a7ea641d1c30aa8ff4a4d136e153b36b16b04646f620bfac5e26"
-    - "REQ@REQ-045=sha256:bcce7a91d3ddbbe2d627053444661ea5d8e9b81a56e82bc782da6893b5cd2d14"
-    - "REQ@REQ-053=sha256:e414b6c6c3b5fc1dd9095197481b3bc06b830c09f0fbfbd027664dc9429020e2"
-    - "REQ@REQ-054=sha256:cac9146dfd5cb7bc77561948b30922e2d3889af95e407677b6a29b11db05c5e8"
-    - "REQ@REQ-055=sha256:6fcaaa85d4dadbe69925aee6e390a667230b85c7d929dd2fd45671480f989737"
+    - "REQ@REQ-041=sha256:14dc8e6885630aa5623924828edf73185be7e0d633f1e9fe9e4d10db294cff5c"
+    - "REQ@REQ-045=sha256:8c0daf83e3979fa9f33b19fa0c35d0304fa959dd09781ff523a4a0b303131fda"
+    - "REQ@REQ-053=sha256:15dbb9161575225f8cdb1fd2553e472f0794d8b92a09998125f48719bf869bd2"
+    - "REQ@REQ-054=sha256:002aac704fa57e3cb6eb205952c5e8a9d97c7c85c89cd9ac326e411a403c6016"
+    - "REQ@REQ-055=sha256:fabf61aba1d72b364c5b1c8b5fdfb0bc82c601df13568d37e7c372237dc31160"
     - "STEP@STEP-034=sha256:f98281769eb8b764301012e5e694c9e29aefef92a2ff8a66fb920a38b448b6c9"
     - "STEP@STEP-035=sha256:cadec965a839e71c9ae2deecd781e2399c37531dfc66abe017c88b2586ed6f05"
     - "STEP@STEP-036=sha256:9ce7a5f5a64a3109c8857f00d1c362f0af392516eafd394cc54af0c2093b8087"
-    - "STEP@STEP-054=sha256:62b1be7959d5b5f5544359cb1db007f03f136662c6dd8e2de1298d0fabb64659"
+    - "STEP@STEP-054=sha256:ffbbacafc8a00f018117800d89d551f8830f7072a2a5dac68a18e8bf2a6e58c1"
     - "STEP@STEP-055=sha256:1ba8f049c5d77437da5b80d5a8615a2678c23b53ad9dcc64e41afb6b0eaa7780"
     - "STEP@STEP-056=sha256:d980488ba2ce34154dfc84dd7835a427f62b0da0b1285364577efe3d9033571b"
 ---
@@ -68,7 +68,12 @@ plan:
 
 Исключение по решению владельца от 2026-10-29: STEP-058 реализует переносимые UI-функции и соответствие макетам и не является prerequisite STEP-054. STEP-054 может завершиться независимо от STEP-058; его нативные отчёты относятся к проверенным revision/build ID, а не автоматически к будущей UI-сборке. Повторные Windows/macOS прогоны не требуются для завершения STEP-058; новые платформенные интеграции в его scope запрещены.
 
+Решение владельца от 2026-10-30: исправить проверочный набор и выяснить SIGKILL arm64; подготовить только Mac-наборы для оставшихся проверок. Не повторять arm64 diagnostic E2E с подтверждёнными файлом 50 785 байт и историей после restart и x64 shipping N UI PASS через Rosetta. Reuse относится только к исходным revision/build ID/хешам и исходным входам, а не к новой UI-сборке. Harness и CI не менять.
+
 ## Scope
+
+- Повторяемые Mac-проверки с раздельными каталогами запусков: arm64 shipping N, диагностика подписи и обновление; x64 offline E2E и обновление. Уже подтверждённые части явно REUSED с исходными доказательствами.
+- Точечная коррекция упаковки arm64 при доказанной нарушенной Mach-O подписи после изменения fuses; Linux-only подготовка, без платных сертификатов и без ослабления fuses/ASAR integrity.
 
 - Единый набор готовых артефактов Windows x64, macOS arm64/x64, собранных только на Linux, с revision/build ID и хешами.
 - Распаковка portable-пакета на целевой ОС, запуск интерфейса и полный офлайновый Electron E2E без авторизации и гостевой сборки, без необходимости устанавливать системные Node.js/FFmpeg, с использованием встроенных runtime по абсолютным путям.
@@ -91,7 +96,7 @@ plan:
 ### Forbidden
 
 - Сборка приложения или E2E host на Windows/macOS.
-- Изменение CI workflows, требования CI-приёмки, секреты в отчётах/репозитории.
+- Изменение `.harness/**`, `.agents/**`, CI workflows, требования CI-приёмки, секреты в отчётах/репозитории.
 - Неподтверждённое hardening и unrelated функции.
 
 ## Out of scope
@@ -107,109 +112,157 @@ plan:
 - Evidence содержит revision/build ID, appArtifactHash, ОС, process.arch, CPU/Rosetta, команды, raw результаты и сведения о файле/истории. Старые FAIL не скрыты; Linux или прежние CI-логи не подменяют новый native PASS.
 - При отсутствии требуемой платформы финальная приёмка остаётся pending; промежуточные STEP из-за этого не блокируются, готовность релиза не заявляется.
 
+- Каждая проверка нового набора помечена EXECUTED или REUSED; REUSED содержит исходный raw report, его SHA-256 и точные входы. Пропуск проверки не выдаётся за свежий PASS. Windows повторно не проверяется.
+
 ## Verification
 
 - command: `python3 .harness/tools/validate.py --mode manual`
-- command: `node apps/desktop/scripts/final-kit.mjs --check`
-- command: `node apps/desktop/scripts/final-kit.mjs --verify`
-- manual: На Windows x64 и macOS arm64/x64 распаковать финальные Linux-built наборы: проверить хеши, запуск portable N, offline E2E с файлом/историей после restart без компиляции и без необходимости устанавливать системные Node.js/FFmpeg, с использованием встроенных runtime по абсолютным путям; проверить Ed25519 descriptor, скачать N+1, заменить приложение вручную и подтвердить UI/общий stateDir/историю/файл; сохранить raw отчёты revision/buildId/appArtifactHash/OS/process.arch/CPU/Rosetta и причинные журналы прежнего x64 пустого окна. Нет доступа или невыясненный отказ — PENDING, не PASS.
-- manual: Проверить соответствие docs/development.md и docs/architecture.md#deployment-runtime-assumptions фактическим наборам/отчётам; отсутствие новых native отчётов, production feed и исторический macOS x64 FAIL не скрыты.
+- command: `node apps/desktop/scripts/mac-signature.mjs --check`
+- command: `node apps/desktop/scripts/mac-retry-kit.mjs --check`
+- command: `node apps/desktop/scripts/mac-retry-kit.mjs --verify`
+- manual: На macOS arm64 выполнить только новый shipping N, подпись/update и ручной N+1 с сохранением baseline state/file; на macOS x64/Rosetta выполнить только automation E2E, подпись/update и ручной N+1. Получить raw OS/arch/Rosetta/buildId/hashes/signals/commands/phase diagnostics. REUSED PASS сверить с точными старым input hashes. Без native reports приёмка PENDING; Linux signature verify не доказывает причину исчезновения SIGKILL.
+- manual: Проверить docs/development.md, docs/architecture.md#deployment-runtime-assumptions и Evidence против manifest: Windows и прежние PASS не повторяются и не переименованы в свежие, исторические FAIL сохранены, production feed/trust и Harness/CI не менялись.
 
 ## Deliverables
 
-- Единый финальный проверочный набор и инструкция.
+- Два Mac-only набора оставшихся проверок и короткая инструкция; исходные PASS/FAIL и сырые отчёты сохраняются неизменными.
 - Реальные Windows/macOS отчёты portable-запуска, E2E, проверки подлинности и обновления.
 - `docs/architecture.md#deployment-runtime-assumptions` — подтверждённое состояние нативной приёмки; отсутствие отчёта не превращается в заявление готовности.
 
 ## Implementation plan
 
-### 1. Подготовить единый финальный набор на Linux
+### 1. Зафиксировать полученные Mac результаты и подтвердить дефект arm64 упаковки
 
-- Переиспользовать Linux packaging 0.0.0 и 0.0.1 для Windows x64/macOS arm64/x64; сверить актуальные inputs manifest, версии и hashes до упаковки. Готовить только local версии без публикации/тега.
-- Добавить final-kit.mjs: Linux-only builder включает готовые portable N/N+1, Node runtime целевой архитектуры, stock Electron для отдельного offline E2E, production closure и заранее собранный на Linux E2E host. Не включать compiler/esbuild или приватный ключ.
-- Создать manifest с revision/build ID/appArtifactHash, builtOn, guestBuildAllowed=false, хешами файлов и архивов; --verify проверяет готовые наборы и подтверждает H-001 на Linux в пределах статической проверки. Native выполнимость остаётся manual.
+- Сохранить выбранные исходные raw JSON/stdout/log/screenshot и SHA-256 архивов без browser cache; не исполнять содержимое вложений. Разделить подтверждённые PASS и FAIL, указать revision/buildId/target/Rosetta/точные artifact hashes.
+- Проверить CodeDirectory hashes старого arm64 Electron Framework, связать повреждённую страницу с изменёнными fuses. Не утверждать причину SIGKILL окончательно до нового native arm64 запуска.
+- Закрепить reuse arm64 diagnostic E2E только за неизменёнными automation Electron/runtime/host/closure; x64 shipping UI — только за прежним portable N. Не переносить PASS на новые bytes.
 
 **Files:**
-- apps/desktop/scripts/final-kit.mjs
-- apps/desktop/e2e/prepare.mjs
+- apps/desktop/e2e/evidence/STEP-054/README.md
+- apps/desktop/e2e/evidence/STEP-054/native-mac-20261030/
 
 **Tests:**
-- node apps/desktop/scripts/final-kit.mjs --check
-- node apps/desktop/scripts/final-kit.mjs --verify
+- Проверить исходные SHA-256, raw statuses и отсутствие after/update proof.
 
-### 2. Добавить запуск и причинную диагностику на целевых ОС
+### 2. Восстановить ad hoc целостность arm64 после fuses на Linux
 
-- Добавить bundled runtime launcher и final-check.mjs, который сверяет manifest до/после, записывает OS/process.arch/CPU/Rosetta, raw результаты и версии без гостевого build.
-- Переиспользовать полный UI offline сценарий download.spec с настоящими IPC/host/SQLite и проверкой файла/истории после restart. prepare динамически импортирует esbuild только в Linux developer flow, готовый guest flow копирует prebuilt host.
-- Сохранять Electron main/renderer/preload/load/crash журналы и screenshot при ошибке: сначала получить причину x64 пустого окна, затем отдельный PLAN для подтверждённого production дефекта. Не менять GPU/security flags/таймауты как предполагаемое исправление.
-- Отдельно проверять запуск настоящих shipping portable N/N+1: automation E2E bootstrap не выдавать за доказательство shipping entrypoint.
+- Добавить Linux-only helper с закреплёнными version/checksum rcodesign; без сертификата/Developer ID/notarization и без зависимости на guest. Проверить старые CodeDirectory до ремонта и после него.
+- В копиях старых portable arm64 N/N+1 восстановить ad hoc подписи после изменения fuses. Сохранить нужные entitlements, fuses, ASAR integrity и payload; новая identity/trust не вводятся. Исходные артефакты не перезаписывать.
+- Подключить helper в package.mjs после последней мутации fuses и до финального archive/manifest, чтобы дефект не повторялся. Изменение остаётся packaging-only; product rebuild ради retry не требуется.
 
 **Files:**
-- apps/desktop/e2e/final-check.mjs
-- apps/desktop/e2e/main.mjs
+- apps/desktop/scripts/mac-signature.mjs
+- apps/desktop/scripts/package.mjs
+
+**Tests:**
+- node apps/desktop/scripts/mac-signature.mjs --check
+
+**Risks:**
+- Корректная Linux подпись не заменяет нативный arm64 запуск; SIGKILL resolution остаётся PENDING до raw report.
+
+### 3. Сделать Mac runner повторяемым и выполнять только непройденные проверки
+
+- Добавить run-scoped current/home/reports с отдельным state и неизменяемыми предыдущими отчётами. Отдельные before/after одной попытки связывать run ID и baseline, не удалять чужие данные; повтор before не должен падать EEXIST или видеть job другого прогона.
+- arm64 выполнить только shipping N, fixture signature/update и shipping N+1 после ручной замены; старый automation E2E не запускать. Для доказательства сохранности state/file подготовить отдельный явно помеченный baseline без повторного E2E.
+- x64 пропустить shipping N smoke с точной ссылкой на прежний PASS; выполнить automation E2E с phase-specific bounded startup budget и журналами подключения main/renderer/host. Повторные startup timeout не скрывать увеличением числа retries и не выдавать за PASS.
+- Проверять update через прежний production service и отдельный fixture public key, ожидать ручную замену; не включать Windows и пройденные проверки как исполняемые шаги. Сохранить команды/exitCode/signals и macOS причинные сведения SIGKILL без личных данных/секретов.
+
+**Files:**
+- apps/desktop/e2e/mac-retry-check.mjs
 - apps/desktop/e2e/download.spec.mjs
 - apps/desktop/e2e/prepare.mjs
+- apps/desktop/e2e/final-check.mjs
 
-### 3. Проверить подписанный portable N → N+1 и сохранить инструкцию
+**Tests:**
+- node apps/desktop/scripts/mac-retry-kit.mjs --check
 
-- На Linux создать временный отдельный Ed25519 fixture ключ и подписанные точные descriptors по target/version/HTTPS URL/size/SHA-256; в набор включить только публичный ключ/подпись. Для offline native проверки использовать fixture transport production PortableUpdates, не менять production trust/feed.
-- Финальный native runner сохраняет raw проверку/скачивание N+1 через production service, отклонение повреждённой подписи/пакета и отсутствие автоматического запуска. Пользователь закрывает N и вручную заменяет portable файлы; runner фиксирует запуск N+1 и сохранность общего состояния. H-002 требует реальной native проверки.
-- Описать распаковку, однократные команды, manual replacement, возврат raw отчётов и ограничения в docs/development.md. При отсутствии целевой ОС подготовить наборы и оставить native приёмку PENDING, не запрашивая повторные прежние архивы.
-- Обновить только docs/architecture.md#deployment-runtime-assumptions по фактическому Evidence; сохранить historical FAIL и отсутствие production feed.
+### 4. Собрать два Mac retry набора с явным provenance и проверить их на Linux
+
+- Собрать только darwin-arm64 и darwin-x64 из immutable старых artifacts/runtime/closure, обновив только проверочный runner и arm64 подписи. Не требовать совпадения старых packaging inputs с новым UI HEAD и не пересобирать продукт молча.
+- Manifest фиксирует исходный и новый artifact hashes, old/native PASS references и их exact inputs, check plan EXECUTED/REUSED, Linux-built provenance, guestBuildAllowed=false. Fixture N+1 descriptor подписать над окончательными bytes; приватный ключ в набор не включать.
+- Self-check на воспроизведённых EEXIST/shared-state и пропусках PASS проверяет rerun isolation, phase gating, binding before/after и mismatch rejection. Static verify проверяет inventories/архивы/подписи/fuses/ASAR и отсутствие compiler/private keys; native работу не объявляет доказанной.
 
 **Files:**
-- apps/desktop/e2e/final-check.mjs
-- apps/desktop/scripts/final-kit.mjs
+- apps/desktop/scripts/mac-retry-kit.mjs
+- apps/desktop/e2e/mac-retry-check.mjs
+- apps/desktop/e2e/evidence/STEP-054/README.md
+
+**Tests:**
+- node apps/desktop/scripts/mac-retry-kit.mjs --check
+- node apps/desktop/scripts/mac-retry-kit.mjs --verify
+
+### 5. Описать оставшиеся команды Mac и фактические ограничения
+
+- Обновить инструкцию: распаковать новый target, выполнить before, ручную замену и after с run ID; перечислить точные raw reports для возврата. Явно показать уже REUSED PASS и какие тесты исключены.
+- После локальных проверок синхронизировать deployment-runtime-assumptions и Evidence: Windows PASS неизменён; x64 shipping UI PASS только Rosetta/old hash; arm E2E PASS old automation inputs; новые arm shipping/x64 E2E/update остаются PENDING до получения Mac reports. Исторические FAIL сохранить.
+
+**Files:**
 - docs/development.md
 - docs/architecture.md#deployment-runtime-assumptions
 - apps/desktop/e2e/evidence/STEP-054/README.md
 
+**Tests:**
+- python3 .harness/tools/validate.py --mode manual
+- Сопоставить инструкции и документацию с реальными manifest/check plan/статусами.
+
 ## Evidence
 
 
+
+
+
 <!-- VERIFICATION-EVIDENCE:START -->
-- Verification run: 2026-10-29T15:31:34Z
-- Status: MANUAL_REQUIRED
+- Verification run: 2026-10-30T10:48:00Z
+- Status: PASS
 - Automated resumed: false
 - Verification mode: full
-- Incremental executed checks: 3
+- Incremental executed checks: 4
 - Incremental reused checks: 0
 - Targeted feedback reused: 0
 - Incremental fallback reason: RISK_REQUIRES_FULL
-- Git head: 94fa63b4dbbc9ae40b2e18c850c8e986df1d6d62
-- Worktree hash: sha256:25250a94ffc2d0483ec707cc882c50426d6924eac64a294f5af9a01ce48660a7
-- Verification contract basis: sha256:bae9d3dfbedf842ace7bc22c5ce8f765bb2ac5d45cb676f5a3e78e44a4d5146b
-- Verification context basis: sha256:5955fe13466de3e4138b5a8928fff74bc60b9833dd64a512fa1ec8f862fcd4df
-- Subject git head: 94fa63b4dbbc9ae40b2e18c850c8e986df1d6d62
-- Subject worktree hash: sha256:0277a202bf0fbc6fd5d6305bf995da9953105db2d7a33e3712bcc66f718d3102
-- Subject content hash: sha256:7fcb4270fe3f2f2417b4f4c45c6139797fe0eaed3390ec81ebe5a0afedb856c9
+- Git head: 5cb41f172b69e7a02b9ec9af6a31917e31398b49
+- Worktree hash: sha256:fc386ee118f912804abebb25d12ca06fa7f94ad1b16500b3a0f7520e61756f5a
+- Verification contract basis: sha256:50fd1ede35d4803a02474e0b09f109da58c8e253fa43ddbc2566f2dc5c628a27
+- Verification context basis: sha256:b1f79f85cc2c8b9d153de6afc8fbcdbc007642e2fb5199b562b80699d40ff479
+- Subject git head: 5cb41f172b69e7a02b9ec9af6a31917e31398b49
+- Subject worktree hash: sha256:11437edec1bf34099a53d057c568268efcbc080034f508ca41af37fa9529396f
+- Subject content hash: sha256:c1329ccedca235fad3bf6b7f33023da1628080e54b77000dbf1579f46e55d0ae
 
 ### Automated verification
 - Command: python3 .harness/tools/validate.py --mode manual
   - Status: PASS
   - Exit code: 0
-  - Duration ms: 5673
-  - stdout sha256: 5294452764c063c13151482165591264350027fb0bacc09d730a433f53eaf52f
+  - Duration ms: 6474
+  - stdout sha256: ddb34c4e01b60a6f6edf39bf4b7c3aa54066b22a0085fb22de6fb999223ee730
   - stderr sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
   - stdout bytes: 67
   - stderr bytes: 0
   - Provenance: executed
-- Command: node apps/desktop/scripts/final-kit.mjs --check
+- Command: node apps/desktop/scripts/mac-signature.mjs --check
   - Status: PASS
   - Exit code: 0
-  - Duration ms: 164
-  - stdout sha256: 4feadbe4fcfa7ac41d3ea26b568aa20ebbcb7fae00ce705629727562a3507f7c
+  - Duration ms: 63
+  - stdout sha256: 8b60ca8b9f99ae23c0cfc0ba050e17813570155d62d92031921825b9382fd81c
   - stderr sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-  - stdout bytes: 130
+  - stdout bytes: 132
   - stderr bytes: 0
   - Provenance: executed
-- Command: node apps/desktop/scripts/final-kit.mjs --verify
+- Command: node apps/desktop/scripts/mac-retry-kit.mjs --check
   - Status: PASS
   - Exit code: 0
-  - Duration ms: 104748
-  - stdout sha256: 7d3254cd7c268452d44a30a3683cf4fbb797d9d0f1f2ddefa1e24c65905cf13a
+  - Duration ms: 3870
+  - stdout sha256: 59a9cfbf63cca6efe580b177518ef00e7594cd7818a8d89d0b2e8b55ce10512e
   - stderr sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-  - stdout bytes: 391
+  - stdout bytes: 408
+  - stderr bytes: 0
+  - Provenance: executed
+- Command: node apps/desktop/scripts/mac-retry-kit.mjs --verify
+  - Status: PASS
+  - Exit code: 0
+  - Duration ms: 93173
+  - stdout sha256: ba182d40fd156634d5ea8bc78f51e3d8c067383c050b68e3cfb8cb0776dfd61e
+  - stderr sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  - stdout bytes: 162
   - stderr bytes: 0
   - Provenance: executed
 
@@ -217,11 +270,12 @@ plan:
 - none
 
 ### Manual verification
-- Check: Проверить соответствие docs/development.md и docs/architecture.md#deployment-runtime-assumptions фактическим наборам/отчётам; отсутствие новых native отчётов, production feed и исторический macOS x64 FAIL не скрыты.
+- Check: На macOS arm64 выполнить только новый shipping N, подпись/update и ручной N+1 с сохранением baseline state/file; на macOS x64/Rosetta выполнить только automation E2E, подпись/update и ручной N+1. Получить raw OS/arch/Rosetta/buildId/hashes/signals/commands/phase diagnostics. REUSED PASS сверить с точными старым input hashes. Без native reports приёмка PENDING; Linux signature verify не доказывает причину исчезновения SIGKILL.
   - Status: PASS
-  - Observed: "Сверены docs/development.md, docs/architecture.md#deployment-runtime-assumptions и apps/desktop/e2e/evidence/STEP-054/README.md с manifest buildId 20261029T152446475Z-94fa63b4 и scripts. Описаны реальные N/N+1, prebuilt host, отдельный fixture trust, отсутствие production feed и новых native отчётов. Исторический macOS x64 FAIL сохранён."
-- Check: На Windows x64 и macOS arm64/x64 распаковать финальные Linux-built наборы: проверить хеши, запуск portable N, offline E2E с файлом/историей после restart без установленного Node.js/FFmpeg и компиляции; проверить Ed25519 descriptor, скачать N+1, заменить приложение вручную и подтвердить UI/общий stateDir/историю/файл; сохранить raw отчёты revision/buildId/appArtifactHash/OS/process.arch/CPU/Rosetta и причинные журналы прежнего x64 пустого окна. Нет доступа или невыясненный отказ — PENDING, не PASS.
-  - Status: PENDING
+  - Observed: "Получены новые raw Mac отчёты exact build 20261030T081544687Z-5cb41f17; final-reports/{provenance,acceptance}.json связывают два исходных ZIP,119 raw файлов и принятые app/N+1 hashes. ARM run20261030T101530Z-00006634: shipping N/N+1 UI PASS, update descriptor valid READY и signature/size/hash rejected, baseline file/history сохранены; old E2E REUSED со старым hash. X64 run20261030T101708Z-000067a7: E2E PASS50785 bytes/history restart, N+1 PASS и state/file preserved, old shippingN REUSED; M2 Rosetta, не Intel. before/after integrity PASS, final after nativeAcceptance PASS и continuation/phases подтверждают завершение. Старые FAIL сохранены. codesign native exit1 отдельно от code-page PASS: resource seal отсутствует, не требуется ADR019; codesign-analysis.json проверяет те же accepted bytes. Пройденные Mac сценарии не повторялись."
+- Check: Проверить docs/development.md, docs/architecture.md#deployment-runtime-assumptions и Evidence против manifest: Windows и прежние PASS не повторяются и не переименованы в свежие, исторические FAIL сохранены, production feed/trust и Harness/CI не менялись.
+  - Status: PASS
+  - Observed: "Сверены docs/development.md, deployment-runtime-assumptions и STEP054 Evidence с final acceptance, retry manifest и raw. Все данные относятся к точным проверочным hashes исходной production-версии, не к новой UI-сборке; Windows PASS сохранён без повтора. Ранние FAIL не исправлены задним числом; stale launcher-summary первой after попытки сохранён рядом с finalPASS after и continuation. Root .DS_Store теперь допускается только regular nonexec рядом с .app, payload/nested/symlink проверяются; локальная регрессия PASS. CodeDirectory PASS не назван полной системной подписью; native codesign FAIL, buggy rcodesign verify FAIL и resource seal ABSENT явно отражены. Production feed/trust и Harness/CI не менялись."
 <!-- VERIFICATION-EVIDENCE:END -->
 
 Generated verification block записывает deterministic runner. Дополнительные semantic observations можно хранить вне generated markers.
@@ -265,6 +319,9 @@ Production-код, параметры безопасности, GPU flags и т�
 Нативная приёмка Windows x64 — **PASS** по текущим отчётам, без повторного прогона: [acceptance.json](../../apps/desktop/e2e/evidence/STEP-054/native-win32-x64-20261029/acceptance.json) фиксирует решение владельца, SHA-256 источников и проверку встроенных runtime по абсолютным путям. В исходных raw сохранено `nativeAcceptance=PENDING` из-за ошибочного прежнего критерия наличия системного Node.js. В PATH найден `C:\Program Files\nodejs\node.exe`, FFmpeg не найден; `cleanEnvironment=false` и `externalTools` — справочные метаданные. Raw и generated Verification Evidence выше не изменены. Новых macOS arm64/x64 отчётов нет; исторический x64 FAIL сохраняется.
 
 
+
+
+
 ## Blocker / Failure reason
 
-Предшествующие STEP-034/035/036/055/056 завершены. Windows x64 принят с результатом PASS по текущим отчётам и решению владельца, без повторного прогона. Наличие системного Node.js не является blocker: команды используют встроенные runtime по абсолютным путям. Для macOS arm64/x64 нужны новые raw отчёты финальных наборов; их приёмка остаётся PENDING, исторический macOS x64 FAIL не объявляется исправленным. STEP остаётся открытым. Уточнение контракта владельцем требует обновления Ready plan/fingerprint при будущем resume; persisted plan и generated Verification Evidence здесь не пересматриваются.
+Блокеров нет. Windows x64 принят по прежним отчётам без повторного прогона; macOS arm64 и x64 через Rosetta приняты по финальным [отчётам 2026-10-30](../../apps/desktop/e2e/evidence/STEP-054/native-mac-20261030/final-reports/acceptance.json). Ранние FAIL сохранены, точные build ID и хеши связывают результаты с проверенными артефактами; отдельный Intel Mac и новая UI-сборка не заявлены. По пояснению оператора карантин снят и приложение заменено вручную через `ditto`; автоматического обхода системной политики нет. Отсутствие полного macOS resource seal отдельно от успешной проверки CodeDirectory и Ed25519 отражено в [диагностике](../../apps/desktop/e2e/evidence/STEP-054/native-mac-20261030/final-reports/codesign-analysis.json) и не является требованием ADR-019. STEP закрыт canonical writer после независимого [REVIEW PASS](../reviews/STEP-054/REVIEW-20261030T105415Z.md). Коммит не выполнялся.
