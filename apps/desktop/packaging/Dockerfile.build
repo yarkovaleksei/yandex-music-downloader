@@ -1,0 +1,5 @@
+FROM electronuserland/builder@sha256:f3a8d451994c881d0972e7b1846ee4d4fdc15eb41fc6b1f350b38cbf99ca90fe
+
+# NSIS создаёт uninstaller под Wine; ему нужен дисплей даже на headless Linux-сборщике.
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends xvfb xauth \
+    && rm -rf /var/lib/apt/lists/*

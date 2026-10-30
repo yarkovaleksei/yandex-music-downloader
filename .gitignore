@@ -1,0 +1,34 @@
+AGENTS.local.md
+CLAUDE.local.md
+.codex/local/
+.claude/local/
+.claude/settings.local.json
+
+# Secrets.
+.env
+.env.*
+!.env.example
+!.env.sample
+!.env.template
+
+# OS/editor noise.
+.DS_Store
+Thumbs.db
+
+# Common generated/local artifacts (adjust after INIT if project intentionally tracks one).
+*.log
+*.tmp
+*.swp
+__pycache__/
+*.py[cod]
+.venv/
+node_modules/
+dist/
+build/
+coverage/
+.cache/
+
+# Toolchain: Yarn 4, TypeScript, Vitest (generated/local; yarn.lock и .yarnrc.yml отслеживаются).
+.yarn/
+*.tsbuildinfo
+!.nvmrc

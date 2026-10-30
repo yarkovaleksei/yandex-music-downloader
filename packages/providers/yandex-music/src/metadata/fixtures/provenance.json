@@ -1,0 +1,9 @@
+{
+  "capturedAt": "2026-10-09T13:54:12.060Z",
+  "sdkVersion": "0.3.0",
+  "schemaVersion": "1.0.0",
+  "source": "runLiveMetadata: production facade, SDK and validated transport",
+  "operations": ["tracks", "albumsWithTracks", "usersPlaylists"],
+  "redaction": "Allowlisted raw schema fields; owner/title/uid/UUID pseudonymized; user cover and all unused fields omitted; no headers/credentials/URLs.",
+  "limitations": "Один собственный аккаунт; отрицательные/неполные cases в tests являются synthetic mutations, не live observations."
+}

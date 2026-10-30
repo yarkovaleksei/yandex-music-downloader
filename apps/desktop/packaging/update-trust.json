@@ -1,0 +1,9 @@
+{
+  "feedBaseUrl": "https://github.com/yarkovaleksei/yandex-music-downloader/releases/latest/download/",
+  "publicKey": "-----BEGIN PUBLIC KEY-----\nMCowBQYDK2VwAyEAseBhennQplpqR2leVoqnvvJOcSHV6/ngR169/cGEIiE=\n-----END PUBLIC KEY-----\n",
+  "origins": [
+    "https://github.com",
+    "https://release-assets.githubusercontent.com"
+  ],
+  "channel": "stable"
+}

@@ -1,0 +1,48 @@
+{
+  "name": "yandex-music-downloader",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "yarn@4.18.1+sha512.b2e1e7524f654f2749d32b4ebcb4622473cb5bcbc485df2007e12a154e50162a4d795526768bc5f5b8f81717bfd79deb2472813d86fb5ae2eb551fa9c872b08f",
+  "engines": {
+    "node": ">=22.14.0 <25"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "packages/core/*",
+    "packages/providers/*"
+  ],
+  "scripts": {
+    "lint": "eslint . --max-warnings 0 && eslint --no-inline-config -c eslint.boundaries.config.mjs . --max-warnings 0",
+    "typecheck": "tsc -b && tsc -p tsconfig.tests.json",
+    "format": "prettier --write --ignore-path .prettierignore apps packages eslint \"*.{json,mjs,ts,mts}\" .yarnrc.yml docs/development.md",
+    "format:check": "prettier --check --ignore-path .prettierignore apps packages eslint \"*.{json,mjs,ts,mts}\" .yarnrc.yml docs/development.md",
+    "test": "vitest run",
+    "test:provider": "node packages/providers/yandex-music/test-live/run.mjs",
+    "build": "tsc -b && node apps/desktop/scripts/build.mjs",
+    "desktop": "node apps/desktop/scripts/start.mjs",
+    "package:local": "node apps/desktop/scripts/package.mjs --local",
+    "package:verify": "node apps/desktop/scripts/verify-package.mjs",
+    "package:smoke": "node apps/desktop/scripts/package-smoke.mjs",
+    "package:update-smoke": "node apps/desktop/scripts/package-update-smoke.mjs",
+    "docs:req": "node scripts/docs/generate-req.mjs",
+    "docs:adr": "node scripts/docs/generate-adr.mjs",
+    "docs:generate": "node scripts/docs/generate-req.mjs && node scripts/docs/generate-adr.mjs && node scripts/docs/generate-oq.mjs",
+    "docs:oq": "node scripts/docs/generate-oq.mjs"
+  },
+  "devDependencies": {
+    "@electron/asar": "3.4.1",
+    "@electron/fuses": "1.8.0",
+    "@eslint-community/eslint-plugin-eslint-comments": "4.8.1",
+    "@eslint/js": "9.39.5",
+    "@types/node": "22.20.5",
+    "electron-builder": "26.18.1",
+    "eslint": "9.39.5",
+    "globals": "16.5.0",
+    "prettier": "3.9.9",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.71.1",
+    "vitest": "3.2.7"
+  }
+}

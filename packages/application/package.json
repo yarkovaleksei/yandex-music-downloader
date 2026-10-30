@@ -1,0 +1,30 @@
+{
+  "name": "@music-downloader/application",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "@music-downloader/source": "./src/index.ts",
+      "default": "./dist/index.js"
+    },
+    "./contracts": {
+      "@music-downloader/source": "./src/contracts.ts",
+      "default": "./dist/contracts.js"
+    }
+  },
+  "dependencies": {
+    "@music-downloader/core-downloader": "workspace:*",
+    "@music-downloader/core-filesystem": "workspace:*",
+    "@music-downloader/core-manifest": "workspace:*",
+    "@music-downloader/core-planner": "workspace:*",
+    "@music-downloader/core-queue": "workspace:*",
+    "@music-downloader/core-retry": "workspace:*",
+    "@music-downloader/core-validation": "workspace:*",
+    "@music-downloader/logging": "workspace:*",
+    "@music-downloader/metadata": "workspace:*",
+    "@music-downloader/persistence": "workspace:*",
+    "@music-downloader/provider-yandex-music": "workspace:*",
+    "@music-downloader/shared": "workspace:*"
+  }
+}

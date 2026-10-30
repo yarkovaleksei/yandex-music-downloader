@@ -1,0 +1,53 @@
+{
+  "files": [],
+  "references": [
+    {
+      "path": "packages/shared"
+    },
+    {
+      "path": "packages/core/downloader"
+    },
+    {
+      "path": "packages/core/planner"
+    },
+    {
+      "path": "packages/core/queue"
+    },
+    {
+      "path": "packages/core/retry"
+    },
+    {
+      "path": "packages/core/manifest"
+    },
+    {
+      "path": "packages/core/filesystem"
+    },
+    {
+      "path": "packages/core/validation"
+    },
+    {
+      "path": "packages/providers/yandex-music"
+    },
+    {
+      "path": "packages/metadata"
+    },
+    {
+      "path": "packages/persistence"
+    },
+    {
+      "path": "packages/logging"
+    },
+    {
+      "path": "packages/testing"
+    },
+    {
+      "path": "packages/application"
+    },
+    {
+      "path": "apps/cli"
+    },
+    {
+      "path": "apps/desktop"
+    }
+  ]
+}

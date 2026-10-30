@@ -1,0 +1,14 @@
+FROM ubuntu:24.04@sha256:fe81560990fae86dc4743202b2cb4d3df98d0bcf949173cecef15ce1127ef852
+
+# Чистый runtime: только системные библиотеки Electron и виртуальный дисплей, без Node.js/FFmpeg.
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+    libnss3 libatk-bridge2.0-0 libgtk-3-0 libgbm1 libasound2t64 libxss1 libxshmfence1 \
+    xvfb xauth fonts-dejavu-core dbus-x11 \
+    && rm -rf /var/lib/apt/lists/* \
+    && mkdir -p /home/app && chown 1000:1000 /home/app
+USER 1000:1000
+ENV HOME=/home/app XDG_STATE_HOME=/report/state XDG_CONFIG_HOME=/report/config XDG_RUNTIME_DIR=/tmp/runtime
+ENV MUSIC_DOWNLOADER_SMOKE_DIR=/report/window APPDIR=/app
+ENV ELECTRON_ENABLE_LOGGING=1
+# --no-sandbox требуется контейнерной ОС; это ограничение smoke, не изменение shipping fuses/preferences.
+CMD ["sh", "-c", "set -eu; if command -v node; then exit 10; fi; if command -v ffmpeg; then exit 11; fi; echo NODE_ABSENT; echo FFMPEG_ABSENT; mkdir -p \"$XDG_RUNTIME_DIR\"; chmod 700 \"$XDG_RUNTIME_DIR\"; xvfb-run -a /app/AppRun --no-sandbox"]

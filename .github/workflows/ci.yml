@@ -1,0 +1,98 @@
+# Продуктовые проверки выполняются на Linux; сборка и публикация релиза запускаются отдельно.
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+# CI только читает репозиторий и не публикует артефакты.
+permissions:
+  contents: read
+
+# Новые изменения отменяют устаревшую проверку PR, но не выполняющийся запуск main.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  quality:
+    name: Quality
+    # Сохраняем поддержку настроенного self-hosted runner и fallback на GitHub-hosted Linux.
+    runs-on: ${{ fromJSON(vars.CI_LINUX_RUNS_ON || '"ubuntu-24.04"') }}
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
+        with:
+          node-version: "24"
+
+      - name: Cache Yarn and Corepack
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: |
+            .yarn/cache
+            .cache/corepack
+          key: ${{ runner.os }}-node24-yarn-${{ hashFiles('yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node24-yarn-
+
+      - name: Install dependencies
+        run: node packages/testing/scripts/run-yarn.mjs install --immutable
+
+      - name: Lint
+        run: node packages/testing/scripts/run-yarn.mjs run lint
+
+      - name: Typecheck
+        run: node packages/testing/scripts/run-yarn.mjs run typecheck
+
+      - name: Check formatting
+        run: node packages/testing/scripts/run-yarn.mjs run format:check
+
+  test:
+    name: Unit tests (Linux, Node.js ${{ matrix.node }})
+    runs-on: ${{ fromJSON(vars.CI_LINUX_RUNS_ON || '"ubuntu-24.04"') }}
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        node:
+          - "22.14.0"
+          - "24"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Cache Yarn and Corepack
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: |
+            .yarn/cache
+            .cache/corepack
+          key: ${{ runner.os }}-node${{ matrix.node }}-yarn-${{ hashFiles('yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node${{ matrix.node }}-yarn-
+
+      - name: Install dependencies
+        run: node packages/testing/scripts/run-yarn.mjs install --immutable
+
+      # Интеграционные сценарии, Electron E2E и live provider проверяются отдельно.
+      - name: Test
+        run: node packages/testing/scripts/run-yarn.mjs test --exclude "**/*.integration.test.ts"

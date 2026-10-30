@@ -1,0 +1,34 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "composite": false,
+    "noEmit": true,
+    "types": ["node"],
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "jsx": "react-jsx"
+  },
+  "include": [
+    "packages/**/src/**/*.test.ts",
+    "packages/**/src/**/*.spec.ts",
+    "packages/**/src/**/test/**/*",
+    "packages/**/src/**/tests/**/*",
+    "packages/**/src/**/__tests__/**/*",
+    "packages/**/src/**/e2e/**/*",
+    "packages/**/src/**/fixtures/**/*",
+    "apps/**/src/**/*.test.ts",
+    "apps/**/src/**/*.spec.ts",
+    "apps/**/src/**/test/**/*",
+    "apps/**/src/**/tests/**/*",
+    "apps/**/src/**/__tests__/**/*",
+    "apps/**/src/**/e2e/**/*",
+    "apps/**/src/**/fixtures/**/*",
+    "eslint/**/*.ts",
+    "eslint/**/*.d.mts",
+    "*.d.mts",
+    "vitest.config.ts",
+    "apps/**/src/**/*.test.tsx",
+    "apps/**/src/**/*.spec.tsx",
+    "apps/desktop/src/**/*.tsx",
+    "apps/desktop/src/renderer/global.d.ts"
+  ]
+}
