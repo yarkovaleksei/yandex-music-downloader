@@ -1,0 +1,67 @@
+{
+  "schema": 1,
+  "scope": "Точные принятые arm64 bytes; архивы и приложения не изменены",
+  "nativeCodesign": {
+    "status": "FAIL",
+    "exitCode": 1,
+    "message": "code has no resources but signature indicates they must be present",
+    "raw": "darwin-arm64/20261030T101530Z-00006634/before-003-codesign-stderr.log.txt"
+  },
+  "signature": {
+    "cpu": 16777228,
+    "sha256": "6af12ccba083f34661f4f5487d8dd4ef461ddd21bf8b1513668f86d267948a89",
+    "directories": [
+      {
+        "identifier": "Electron Framework",
+        "flags": 2,
+        "resourceSealHash": null,
+        "hashType": 2,
+        "pageSize": 4096,
+        "pages": 50150,
+        "mismatchedPages": []
+      }
+    ],
+    "entitlements": null,
+    "fuses": "644c37704b47646e4e7a3739365062626a51574e4b6d4858425a61423974735801093030303031313031310003000000",
+    "fusePage": 39362,
+    "valid": true,
+    "codePages": "PASS",
+    "bundleResourceSeal": "ABSENT",
+    "verificationScope": "CODE_PAGES_ONLY",
+    "fullBundleSigningRequired": false
+  },
+  "binding": {
+    "archiveSha256": "09ec525ba8e9a6c06ccf3ba3dffd8f1d382cf6718d1750c806e54a2e1fdde15c",
+    "expected": {
+      "sha256": "6af12ccba083f34661f4f5487d8dd4ef461ddd21bf8b1513668f86d267948a89",
+      "bytes": 207023440,
+      "executable": true
+    }
+  },
+  "diagnosis": "Linux helper восстановил подпись отдельного Mach-O, а не resource seal Framework. CodeDirectory не содержит slot 3, _CodeSignature/CodeResources отсутствует. Строгая bundle-проверка codesign поэтому не равна проверке страниц Mach-O. Нативные N/N+1 и приложение прошли, полная системная подпись не заявляется.",
+  "policy": "ADR-019: платная системная подпись/Developer ID/notarization не требуются; обязательная подпись descriptor Ed25519 и целостность payload проверены отдельно.",
+  "sources": [
+    "https://developer.apple.com/library/archive/documentation/Security/Conceptual/CodeSigningGuide/AboutCS/AboutCS.html",
+    "https://raw.githubusercontent.com/apple-oss-distributions/Security/main/OSX/libsecurity_codesigning/lib/StaticCode.cpp",
+    "https://raw.githubusercontent.com/indygreg/apple-platform-rs/apple-codesign/0.29.0/apple-codesign/src/macho_signing.rs"
+  ],
+  "verification": {
+    "command": [
+      ".cache/desktop-packaging/tools/apple-codesign/0.29.0/rcodesign",
+      "verify",
+      ".harness/local/tmp/exec-5aa861d94496410d9814ba5218662e7d/codesign-analysis/Yandex Music Downloader.app/Contents/Frameworks/Electron Framework.framework/Versions/A/Electron Framework"
+    ],
+    "status": "FAIL",
+    "exitCode": 1,
+    "log": "rcodesign-code-pages.txt",
+    "authoritative": false,
+    "limitation": "rcodesign 0.29.0 сам предупреждает о некорректном verify и требует CMS; этот отказ не использован как проверка ad-hoc подписи."
+  },
+  "nativeRerun": false,
+  "codePageVerification": {
+    "status": "PASS",
+    "independentImplementation": "Python hashlib: все страницы CodeDirectory заново проверены, без вызова JS helper или rcodesign",
+    "pages": 50150,
+    "sha256": "6af12ccba083f34661f4f5487d8dd4ef461ddd21bf8b1513668f86d267948a89"
+  }
+}

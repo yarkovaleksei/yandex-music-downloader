@@ -1,0 +1,4 @@
+{"time":"2026-10-30T07:22:15.322Z","event":"did-finish-load","data":"music-downloader://app/index.html"}
+{"time":"2026-10-30T07:22:15.372Z","event":"console-message","data":{"level":"info","message":"STEP-054: журнал renderer подключён","lineNumber":1,"sourceId":""}}
+{"time":"2026-10-30T07:22:25.125Z","event":"did-finish-load","data":"music-downloader://app/index.html"}
+{"time":"2026-10-30T07:22:25.162Z","event":"console-message","data":{"level":"info","message":"STEP-054: журнал renderer подключён","lineNumber":1,"sourceId":""}}

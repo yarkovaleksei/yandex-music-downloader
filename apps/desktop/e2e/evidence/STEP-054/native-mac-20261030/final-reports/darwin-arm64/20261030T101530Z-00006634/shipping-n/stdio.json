@@ -1,0 +1,13 @@
+{
+  "command": [
+    "/Users/a11/work/test-yandex-app/music-downloader-mac-retry-darwin-arm64-20261030T081544687Z-5cb41f17/.runs/20261030T101530Z-00006634/current/Yandex Music Downloader.app/Contents/MacOS/Yandex Music Downloader"
+  ],
+  "exitCode": 0,
+  "signal": null,
+  "stdout": "",
+  "stderr": "",
+  "logs": {
+    "stdout": "/Users/a11/work/test-yandex-app/music-downloader-mac-retry-darwin-arm64-20261030T081544687Z-5cb41f17/reports/20261030T101530Z-00006634/before-004-Yandex Music Downloader-stdout.log",
+    "stderr": "/Users/a11/work/test-yandex-app/music-downloader-mac-retry-darwin-arm64-20261030T081544687Z-5cb41f17/reports/20261030T101530Z-00006634/before-004-Yandex Music Downloader-stderr.log"
+  }
+}

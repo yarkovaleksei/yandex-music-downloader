@@ -1,0 +1,131 @@
+{
+  "status": "FAIL",
+  "externalTools": {
+    "node": {
+      "command": [
+        "/bin/sh",
+        "-c",
+        "command -v node"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "stdout": "/Users/a11/.local/bin/node\n",
+      "stderr": ""
+    },
+    "ffmpeg": {
+      "command": [
+        "/bin/sh",
+        "-c",
+        "command -v ffmpeg"
+      ],
+      "exitCode": 0,
+      "signal": null,
+      "stdout": "/opt/homebrew/bin/ffmpeg\n",
+      "stderr": ""
+    }
+  },
+  "cleanEnvironment": false,
+  "executionRuntimes": "Только встроенные Node/Electron по абсолютным путям; externalTools — наблюдение PATH, чистая ОС требует manual подтверждения",
+  "nativeAcceptance": "PENDING",
+  "revision": "94fa63b4dbbc9ae40b2e18c850c8e986df1d6d62",
+  "buildId": "20261029T152446475Z-94fa63b4",
+  "appArtifactHash": "55deca5f0a01cafafa9a5007ee63203a267b29fb02bf3512bedb65f80a4a474b",
+  "nextArtifactHash": "4b1e2604070244104ea5bb0f004816702070fdef50a56622aa5dd582fd12fe4d",
+  "platform": "darwin",
+  "arch": "arm64",
+  "cpu": [
+    "Apple M2 Pro",
+    "Apple M2 Pro",
+    "Apple M2 Pro",
+    "Apple M2 Pro",
+    "Apple M2 Pro",
+    "Apple M2 Pro",
+    "Apple M2 Pro",
+    "Apple M2 Pro",
+    "Apple M2 Pro",
+    "Apple M2 Pro"
+  ],
+  "os": "24.6.0",
+  "rosetta": {
+    "command": [
+      "/usr/sbin/sysctl",
+      "-n",
+      "sysctl.proc_translated"
+    ],
+    "exitCode": 0,
+    "signal": null,
+    "stdout": "0\n",
+    "stderr": ""
+  },
+  "hostArm64": {
+    "command": [
+      "/usr/sbin/sysctl",
+      "-n",
+      "hw.optional.arm64"
+    ],
+    "exitCode": 0,
+    "signal": null,
+    "stdout": "1\n",
+    "stderr": ""
+  },
+  "runtime": {
+    "node": "24.21.0",
+    "acorn": "8.18.0",
+    "ada": "4.0.0",
+    "amaro": "1.1.11",
+    "ares": "1.34.8",
+    "brotli": "1.2.0",
+    "cldr": "48.0",
+    "icu": "78.3",
+    "llhttp": "9.4.3",
+    "merve": "1.2.2",
+    "modules": "137",
+    "napi": "10",
+    "nbytes": "0.1.4",
+    "ncrypto": "0.0.1",
+    "nghttp2": "1.70.0",
+    "nghttp3": "",
+    "ngtcp2": "",
+    "openssl": "3.5.8",
+    "simdjson": "4.6.7",
+    "simdutf": "6.4.0",
+    "sqlite": "3.53.4",
+    "tz": "2026c",
+    "undici": "7.29.1",
+    "unicode": "17.0",
+    "uv": "1.52.1",
+    "uvwasi": "0.0.23",
+    "v8": "13.6.233.17-node.53",
+    "zlib": "1.3.2.1-motley-8002e91",
+    "zstd": "1.5.7"
+  },
+  "guestBuildPerformed": false,
+  "commands": [
+    {
+      "command": [
+        "/Users/a11/work/test-yandex-app/music-downloader-final-darwin-arm64-20261029T152446475Z-94fa63b4/current/Yandex Music Downloader.app/Contents/MacOS/Yandex Music Downloader"
+      ],
+      "exitCode": null,
+      "signal": "SIGKILL",
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "manualReplacement": "PENDING",
+  "integrityBefore": "PASS",
+  "error": "AssertionError [ERR_ASSERTION]: Shipping process завершился с ошибкой\n\nnull !== 0\n\n    at main (file:///Users/a11/work/test-yandex-app/music-downloader-final-darwin-arm64-20261029T152446475Z-94fa63b4/project/apps/desktop/e2e/final-check.mjs:308:12)\n    at async file:///Users/a11/work/test-yandex-app/music-downloader-final-darwin-arm64-20261029T152446475Z-94fa63b4/project/apps/desktop/e2e/final-check.mjs:405:3",
+  "diagnosticE2E": {
+    "command": [
+      "/Users/a11/work/test-yandex-app/music-downloader-final-darwin-arm64-20261029T152446475Z-94fa63b4/runtime/node",
+      "/Users/a11/work/test-yandex-app/music-downloader-final-darwin-arm64-20261029T152446475Z-94fa63b4/project/node_modules/@playwright/test/cli.js",
+      "test",
+      "--config",
+      "/Users/a11/work/test-yandex-app/music-downloader-final-darwin-arm64-20261029T152446475Z-94fa63b4/project/apps/desktop/e2e/playwright.config.mjs"
+    ],
+    "exitCode": 1,
+    "signal": null,
+    "stdout": "\nRunning 1 test using 1 worker\n\n  ✘  1 apps/desktop/e2e/download.spec.mjs:19:1 › Ссылка → предпросмотр → загрузка → пауза → продолжение → файл и история после перезапуска (17.1s)\n\n\n  1) apps/desktop/e2e/download.spec.mjs:19:1 › Ссылка → предпросмотр → загрузка → пауза → продолжение → файл и история после перезапуска \n\n    Error: expect(received).toBe(expected) // Object.is equality\n\n    Expected: 0\n    Received: 1\n\n    Call Log:\n    - Timeout 15000ms exceeded while waiting on the predicate\n\n      52 |   try {\n      53 |     await launch();\n    > 54 |     await expect.poll(async () => (await jobs(page)).length).toBe(0);\n         |                                                              ^\n      55 |     await page.getByLabel('Ссылка на музыку').fill('mock://track/e2e-track');\n      56 |     await page\n      57 |       .getByRole('button', { name: 'Анализировать', exact: true })\n        at /Users/a11/work/test-yandex-app/music-downloader-final-darwin-arm64-20261029T152446475Z-94fa63b4/project/apps/desktop/e2e/download.spec.mjs:54:62\n\n    Error Context: ../reports/e2e-diagnostic/download-Ссылка-→-предпрос-d6b3b-и-история-после-перезапуска/error-context.md\n\n  1 failed\n    apps/desktop/e2e/download.spec.mjs:19:1 › Ссылка → предпросмотр → загрузка → пауза → продолжение → файл и история после перезапуска \n",
+    "stderr": "  pw:browser <launching> /Users/a11/work/test-yandex-app/music-downloader-final-darwin-arm64-20261029T152446475Z-94fa63b4/project/node_modules/electron/dist/Electron.app/Contents/MacOS/Electron --inspect=0 --remote-debugging-port=0 /var/folders/_y/mp5v7zvx0lzc495l1t7zcbqc0000gn/T/music-desktop-e2e-97ZaqI/bootstrap.mjs +0ms\n  pw:browser <launched> pid=97742 +4ms\n  pw:browser [pid=97742][err] Debugger listening on ws://127.0.0.1:58950/64e995a6-a292-4714-9a16-5e898b939d0b +339ms\n  pw:browser [pid=97742][err] For help, see: https://nodejs.org/learn/getting-started/debugging +0ms\n  pw:browser <ws connecting> ws://127.0.0.1:58950/64e995a6-a292-4714-9a16-5e898b939d0b +0ms\n  pw:browser [pid=97742][err] Debugger attached. +5ms\n  pw:browser <ws connected> ws://127.0.0.1:58950/64e995a6-a292-4714-9a16-5e898b939d0b +1ms\n  pw:browser [pid=97742][err]  +273ms\n  pw:browser [pid=97742][err] DevTools listening on ws://127.0.0.1:58952/devtools/browser/442267c3-dfd5-4c66-9867-8333550299d8 +0ms\n  pw:browser <ws connecting> ws://127.0.0.1:58952/devtools/browser/442267c3-dfd5-4c66-9867-8333550299d8 +0ms\n  pw:browser [pid=97742][err] (electron) 'console-message' arguments are deprecated and will be removed. Please use Event<WebContentsConsoleMessageEventParams> object instead. +220ms\n  pw:browser <ws connected> ws://127.0.0.1:58952/devtools/browser/442267c3-dfd5-4c66-9867-8333550299d8 +324ms\n  pw:browser <ws disconnecting> ws://127.0.0.1:58950/64e995a6-a292-4714-9a16-5e898b939d0b +15s\n  pw:browser [pid=97742][err] Debugger ending on ws://127.0.0.1:58950/64e995a6-a292-4714-9a16-5e898b939d0b +1ms\n  pw:browser [pid=97742][err] For help, see: https://nodejs.org/learn/getting-started/debugging +0ms\n  pw:browser <ws disconnected> ws://127.0.0.1:58950/64e995a6-a292-4714-9a16-5e898b939d0b code=1005 reason= +1ms\n  pw:browser <ws disconnected> ws://127.0.0.1:58952/devtools/browser/442267c3-dfd5-4c66-9867-8333550299d8 code=1006 reason= +715ms\n  pw:browser [pid=97742] <process did exit: exitCode=0, signal=null> +2ms\n  pw:browser [pid=97742] starting temporary directories cleanup +1ms\n  pw:browser [pid=97742] finished temporary directories cleanup +1ms\n"
+  },
+  "integrityAfter": "PASS"
+}

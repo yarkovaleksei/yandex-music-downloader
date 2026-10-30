@@ -1,4 +1,5 @@
 import path from 'node:path';
+import { repairArm64App } from './mac-signature.mjs';
 import { mkdir, readFile, rm, cp, mkdtemp } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { spawnSync } from 'node:child_process';
@@ -316,6 +317,31 @@ for (const target of targets) {
   if (tree.length !== 1)
     throw new Error(`Не найден единственный app.asar: ${target}`);
   const packaged = path.dirname(tree[0]);
+  let adHocRepair;
+  if (target === 'darwin-arm64') {
+    // @link planning/tasks/STEP-054.md Builder меняет fuses после afterPack.
+    // Подпись восстанавливается после build; итоговый ZIP и manifest получают только исправленные байты.
+    const app = path.resolve(packaged, '../..');
+    adHocRepair = await repairArm64App(app);
+    run('python3', [
+      '-c',
+      `import os,sys,zipfile
+root,out=sys.argv[1:]
+with zipfile.ZipFile(out,'w',zipfile.ZIP_DEFLATED,compresslevel=4) as z:
+ for parent,dirs,names in os.walk(root):
+  for name in sorted(dirs+names):
+   file=os.path.join(parent,name); rel=os.path.relpath(file,root)
+   if os.path.islink(file):
+    info=zipfile.ZipInfo(rel); info.create_system=3; info.external_attr=os.lstat(file).st_mode<<16
+    z.writestr(info,os.readlink(file))
+   elif os.path.isfile(file): z.write(file,rel)
+`,
+      path.dirname(app),
+      artifact,
+    ]);
+    // Portable updater проверяет собственный descriptor; старый builder blockmap уже не соответствует ZIP.
+    await rm(artifact + '.blockmap', { force: true });
+  }
   // Verifier получает путь к тем же unpacked файлам, из которых builder изготовил дистрибутив.
   manifest.targets[target] = {
     artifact: path.relative(buildRoot, artifact),
@@ -323,6 +349,7 @@ for (const target of targets) {
     bytes: (await readFile(artifact)).length,
     resources: path.relative(buildRoot, packaged),
     closure: staged.closure,
+    ...(adHocRepair ? { adHocRepair } : {}),
     electronArchiveSha256: checksum[name],
   };
   console.log(`ГОТОВО ${target}: ${artifact}`);

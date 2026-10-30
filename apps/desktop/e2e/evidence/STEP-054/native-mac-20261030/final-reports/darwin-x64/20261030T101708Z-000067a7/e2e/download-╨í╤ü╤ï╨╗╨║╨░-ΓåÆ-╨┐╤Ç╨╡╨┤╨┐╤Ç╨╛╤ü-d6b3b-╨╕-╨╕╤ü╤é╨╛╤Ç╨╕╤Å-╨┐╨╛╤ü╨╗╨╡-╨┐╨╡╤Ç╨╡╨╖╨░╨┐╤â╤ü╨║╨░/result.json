@@ -1,0 +1,29 @@
+{
+  "platform": "darwin",
+  "stateDir": "/Users/a11/work/test-yandex-app/music-downloader-mac-retry-darwin-x64-20261030T081544687Z-5cb41f17/.runs/20261030T101708Z-000067a7/home/Library/Application Support/music-downloader",
+  "outputPath": "/var/folders/_y/mp5v7zvx0lzc495l1t7zcbqc0000gn/T/music-desktop-e2e-e17mPa/output/Тестовый исполнитель - Проверочный сигнал.mp3",
+  "fixtureDirectory": "/var/folders/_y/mp5v7zvx0lzc495l1t7zcbqc0000gn/T/music-desktop-e2e-e17mPa",
+  "jobId": "8a789313-890e-4ff5-96c2-93cea89aebd4",
+  "status": "completed",
+  "output": "Тестовый исполнитель - Проверочный сигнал.mp3",
+  "bytes": 50785,
+  "historyAfterRestart": [
+    {
+      "jobId": "8a789313-890e-4ff5-96c2-93cea89aebd4",
+      "source": {
+        "provider": "e2e-offline",
+        "kind": "track",
+        "id": "e2e-track"
+      },
+      "title": "Проверочный сигнал",
+      "artists": [
+        "Тестовый исполнитель"
+      ],
+      "count": 1,
+      "bytes": 50785,
+      "completedAt": "2026-10-30T10:19:09.640Z",
+      "replayAvailable": true,
+      "replayReason": null
+    }
+  ]
+}

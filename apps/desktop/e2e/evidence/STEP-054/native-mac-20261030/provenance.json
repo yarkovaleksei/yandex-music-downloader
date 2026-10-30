@@ -1,0 +1,169 @@
+{
+  "archives": [
+    {
+      "archive": "arm64-reports-previous-runs-0820-0822.zip",
+      "sha256": "28b841f48a883aef9b5cb6966466da628d1b878c254a104b883b048c60be398e",
+      "files": {
+        "arm64-reports-previous-runs-0820-0822/reports/before.json": {
+          "archiveEntry": "reports/before.json",
+          "sha256": "146d2f8088e1d443647ea9e2bb7aab4992b1fabe9fe81ba0914e9854338a85d2"
+        },
+        "arm64-reports-previous-runs-0820-0822/reports/shipping-n/stdio.json": {
+          "archiveEntry": "reports/shipping-n/stdio.json",
+          "sha256": "92d51b405dac03e7117763b5f3d3b41fc73d64a456b485dedaba48e60325af20"
+        },
+        "arm64-reports-previous-runs-0820-0822/reports/e2e-diagnostic/.last-run.json": {
+          "archiveEntry": "reports/e2e-diagnostic/.last-run.json",
+          "sha256": "91d1c43004802cd49950d78eb11c8fa7d05da8ffffe219a8b13b2f561bc00903"
+        },
+        "arm64-reports-previous-runs-0820-0822/reports/e2e-diagnostic/download-Ссылка-→-предпрос-d6b3b-и-история-после-перезапуска/result.json": {
+          "archiveEntry": "reports/e2e-diagnostic/download-Ссылка-→-предпрос-d6b3b-и-история-после-перезапуска/result.json",
+          "sha256": "8386f227d982eae6dc73cef73fec96b708bf33a071c11eebdd4160bab18c2bb1"
+        },
+        "arm64-reports-previous-runs-0820-0822/reports/e2e-diagnostic/download-Ссылка-→-предпрос-d6b3b-и-история-после-перезапуска/electron-stdio.log.txt": {
+          "archiveEntry": "reports/e2e-diagnostic/download-Ссылка-→-предпрос-d6b3b-и-история-после-перезапуска/electron-stdio.log",
+          "sha256": "f7c3f11b222df58968018de82735b91af1fcffb7e2c2ef0f5fdab594e60b06da"
+        },
+        "arm64-reports-previous-runs-0820-0822/reports/diagnostic-e2e-stdio.json": {
+          "archiveEntry": "reports/diagnostic-e2e-stdio.json",
+          "sha256": "3f09a277892deecf9eb7163bc973cde3ac70034226d9fd99ca80fc8621d382d3"
+        },
+        "arm64-reports-previous-runs-0820-0822/reports/electron-e2e.log.txt": {
+          "archiveEntry": "reports/electron-e2e.log",
+          "sha256": "2fe1aed66e2420fb5711d0f9ed2c864fcadfcfe66c4a0983915aa82342f32178"
+        },
+        "arm64-reports-previous-runs-0820-0822/reports/electron-events.jsonl": {
+          "archiveEntry": "reports/electron-events.jsonl",
+          "sha256": "2b36489125321ad665f4d545075678113e375f90f87f80555dd1e6832dd8e985"
+        }
+      }
+    },
+    {
+      "archive": "arm64-reports.zip",
+      "sha256": "79137d3dd38f9b3c015a0d84c12b9239f30ebb8e0eee1b938ecbf327ae50d64d",
+      "files": {
+        "arm64-reports/reports/before.json": {
+          "archiveEntry": "reports/before.json",
+          "sha256": "a72b04db11a6d9949d737026e1e5bbb458baa144eb12fec6b7a531b84f0ec36a"
+        },
+        "arm64-reports/reports/shipping-n/stdio.json": {
+          "archiveEntry": "reports/shipping-n/stdio.json",
+          "sha256": "92d51b405dac03e7117763b5f3d3b41fc73d64a456b485dedaba48e60325af20"
+        },
+        "arm64-reports/reports/e2e-diagnostic/.last-run.json": {
+          "archiveEntry": "reports/e2e-diagnostic/.last-run.json",
+          "sha256": "e247bfa2f6a4b0c3da72a5f0d7b858a0833b2ee38544fe1fc2ac2892b63bb4b3"
+        },
+        "arm64-reports/reports/e2e-diagnostic/download-Ссылка-→-предпрос-d6b3b-и-история-после-перезапуска/electron-stdio.log.txt": {
+          "archiveEntry": "reports/e2e-diagnostic/download-Ссылка-→-предпрос-d6b3b-и-история-после-перезапуска/electron-stdio.log",
+          "sha256": "407df352474ba6ba8ddb6fc654bebd5ba056654d53355c7e54a82e79b9f5bc18"
+        },
+        "arm64-reports/reports/e2e-diagnostic/download-Ссылка-→-предпрос-d6b3b-и-история-после-перезапуска/error-context.md": {
+          "archiveEntry": "reports/e2e-diagnostic/download-Ссылка-→-предпрос-d6b3b-и-история-после-перезапуска/error-context.md",
+          "sha256": "e06397665c58ddfa21da49eda8b8a77f6decefd6af9559b0410a2a7fe698581d"
+        },
+        "arm64-reports/reports/diagnostic-e2e-stdio.json": {
+          "archiveEntry": "reports/diagnostic-e2e-stdio.json",
+          "sha256": "5ef92dd312c9afe5efbd40f442673c64b2c225420cb10b9f93e12770ade245df"
+        },
+        "arm64-reports/reports/electron-e2e.log.txt": {
+          "archiveEntry": "reports/electron-e2e.log",
+          "sha256": "63188a882ffbbcb12131b94b3c2bce991b0574548f822407706592acc26dad4b"
+        },
+        "arm64-reports/reports/electron-events.jsonl": {
+          "archiveEntry": "reports/electron-events.jsonl",
+          "sha256": "e93c3914843239408f67e3d8e07b085501622daf4a922f4ba97160e52b89ea44"
+        }
+      }
+    },
+    {
+      "archive": "x64-reports.zip",
+      "sha256": "7affd6a65be408fe62bc6373e35152db6f05985c04a1c1878511deecd99a131d",
+      "files": {
+        "x64-reports/reports/before.json": {
+          "archiveEntry": "reports/before.json",
+          "sha256": "3cbb767b1820c359b0ea7750167c35cbfbabcee405dbfd5917784732f4567b7f"
+        },
+        "x64-reports/reports/shipping-n/window-report.json": {
+          "archiveEntry": "reports/shipping-n/window-report.json",
+          "sha256": "c2112b1f9399f6989c0dbba80a09b9780f6b9b0177b54e51ae20442972651100"
+        },
+        "x64-reports/reports/shipping-n/electron.log.txt": {
+          "archiveEntry": "reports/shipping-n/electron.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "x64-reports/reports/shipping-n/window.png": {
+          "archiveEntry": "reports/shipping-n/window.png",
+          "sha256": "2215e6170e4d3a033fff8fc6f373f4387e1aabb0a45330d12a2beb0f88e81d2d"
+        },
+        "x64-reports/reports/shipping-n/stdio.json": {
+          "archiveEntry": "reports/shipping-n/stdio.json",
+          "sha256": "6465972da9740319eac7e297abad6f510a5e5ac1876d55f7a07d980a6f0cc1a6"
+        },
+        "x64-reports/reports/e2e/.last-run.json": {
+          "archiveEntry": "reports/e2e/.last-run.json",
+          "sha256": "e247bfa2f6a4b0c3da72a5f0d7b858a0833b2ee38544fe1fc2ac2892b63bb4b3"
+        },
+        "x64-reports/reports/e2e/download-Ссылка-→-предпрос-d6b3b-и-история-после-перезапуска/electron-stdio.log.txt": {
+          "archiveEntry": "reports/e2e/download-Ссылка-→-предпрос-d6b3b-и-история-после-перезапуска/electron-stdio.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "x64-reports/reports/e2e/download-Ссылка-→-предпрос-d6b3b-и-история-после-перезапуска/error-context.md": {
+          "archiveEntry": "reports/e2e/download-Ссылка-→-предпрос-d6b3b-и-история-после-перезапуска/error-context.md",
+          "sha256": "4ad3dda37e6b55f9775603494a4463c3c0d0802fbe1e78f18ac3d6db549789eb"
+        },
+        "x64-reports/reports/e2e-stdio.json": {
+          "archiveEntry": "reports/e2e-stdio.json",
+          "sha256": "2ef9a201901f10a71be82a49ba52d6a5c4174c380505caf3c74b4ef34affaef4"
+        }
+      }
+    },
+    {
+      "archive": "x64-retry-reports.zip",
+      "sha256": "b0a4d7bc380094ef0a60bf38d464a1b40d791c6ca010cc69a4ec7974b9429e08",
+      "files": {
+        "x64-retry-reports/reports/before.json": {
+          "archiveEntry": "reports/before.json",
+          "sha256": "bc9c5bba711ce9879b436d90d7140945a19bdb9c99292ff4819ce8794ec915b3"
+        },
+        "x64-retry-reports/reports/shipping-n/window-report.json": {
+          "archiveEntry": "reports/shipping-n/window-report.json",
+          "sha256": "c2112b1f9399f6989c0dbba80a09b9780f6b9b0177b54e51ae20442972651100"
+        },
+        "x64-retry-reports/reports/shipping-n/electron.log.txt": {
+          "archiveEntry": "reports/shipping-n/electron.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "x64-retry-reports/reports/shipping-n/window.png": {
+          "archiveEntry": "reports/shipping-n/window.png",
+          "sha256": "2215e6170e4d3a033fff8fc6f373f4387e1aabb0a45330d12a2beb0f88e81d2d"
+        },
+        "x64-retry-reports/reports/shipping-n/stdio.json": {
+          "archiveEntry": "reports/shipping-n/stdio.json",
+          "sha256": "8690e7f6856ead951d73b105ca128a7500b8149916349dd8571a6fd8d5d7fc9b"
+        },
+        "x64-retry-reports/reports/e2e/.last-run.json": {
+          "archiveEntry": "reports/e2e/.last-run.json",
+          "sha256": "e247bfa2f6a4b0c3da72a5f0d7b858a0833b2ee38544fe1fc2ac2892b63bb4b3"
+        },
+        "x64-retry-reports/reports/e2e/download-Ссылка-→-предпрос-d6b3b-и-история-после-перезапуска/electron-stdio.log.txt": {
+          "archiveEntry": "reports/e2e/download-Ссылка-→-предпрос-d6b3b-и-история-после-перезапуска/electron-stdio.log",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "x64-retry-reports/reports/e2e/download-Ссылка-→-предпрос-d6b3b-и-история-после-перезапуска/error-context.md": {
+          "archiveEntry": "reports/e2e/download-Ссылка-→-предпрос-d6b3b-и-история-после-перезапуска/error-context.md",
+          "sha256": "4ad3dda37e6b55f9775603494a4463c3c0d0802fbe1e78f18ac3d6db549789eb"
+        },
+        "x64-retry-reports/reports/e2e-stdio.json": {
+          "archiveEntry": "reports/e2e-stdio.json",
+          "sha256": "46a6cea3dda72878963dd2cc2a2510fae0cf28ecda770331750a0f710b34eafb"
+        }
+      }
+    }
+  ],
+  "standalone": {
+    "file": "arm64-run-before.stdout.txt",
+    "sha256": "a72b04db11a6d9949d737026e1e5bbb458baa144eb12fec6b7a531b84f0ec36a"
+  },
+  "excluded": "Служебные AppleDouble, browser cache и дубликаты attachments; выбранные raw байты сохранены без изменений."
+}

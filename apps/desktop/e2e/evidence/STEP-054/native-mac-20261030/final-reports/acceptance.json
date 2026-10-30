@@ -1,0 +1,54 @@
+{
+  "schema": 1,
+  "buildId": "20261030T081544687Z-5cb41f17",
+  "status": "PASS",
+  "scope": "Готовые проверочные артефакты исходной production-версии; новая UI-сборка и отдельный Intel Mac этим не проверены.",
+  "targets": {
+    "darwin-arm64": {
+      "status": "PASS",
+      "runId": "20261030T101530Z-00006634",
+      "before": "darwin-arm64/20261030T101530Z-00006634/before.json",
+      "after": "darwin-arm64/20261030T101530Z-00006634/after.json",
+      "appArtifactHash": "dde70853130896df3e072da4406952153d126b8853aaa383080038e053eac127",
+      "nextArtifactHash": "d2420a4c3bf2ac37561aa664636969282807aa5b47975a525534cb6a97305c85",
+      "rosetta": "0",
+      "shippingVersion": "0.0.1",
+      "fileAndHistoryPreserved": true,
+      "checkPlan": {
+        "shippingN": "EXECUTED",
+        "offlineE2E": "REUSED",
+        "update": "EXECUTED",
+        "shippingNPlus1": "EXECUTED"
+      },
+      "reused": {
+        "check": "offlineE2E",
+        "reportSha256": "3f09a277892deecf9eb7163bc973cde3ac70034226d9fd99ca80fc8621d382d3",
+        "sourceBuildId": "20261029T152446475Z-94fa63b4"
+      },
+      "signatureScope": "CodeDirectory и собственный Ed25519 descriptor; полный macOS resource seal/Developer ID/notarization не заявлены."
+    },
+    "darwin-x64": {
+      "status": "PASS",
+      "runId": "20261030T101708Z-000067a7",
+      "before": "darwin-x64/20261030T101708Z-000067a7/before.json",
+      "after": "darwin-x64/20261030T101708Z-000067a7/after.json",
+      "appArtifactHash": "294a9a03c97b32ed378ea6555d8113a4b1746e3f1fe66149f696e08dc638e9ee",
+      "nextArtifactHash": "ac7875d84bdf694543fd1e2fee62b6af127e7968294696b1e13a0c06f3ef3766",
+      "rosetta": "1",
+      "shippingVersion": "0.0.1",
+      "fileAndHistoryPreserved": true,
+      "checkPlan": {
+        "shippingN": "REUSED",
+        "offlineE2E": "EXECUTED",
+        "update": "EXECUTED",
+        "shippingNPlus1": "EXECUTED"
+      },
+      "reused": {
+        "check": "shippingN",
+        "reportSha256": "c2112b1f9399f6989c0dbba80a09b9780f6b9b0177b54e51ae20442972651100",
+        "sourceBuildId": "20261029T152446475Z-94fa63b4"
+      },
+      "signatureScope": "CodeDirectory и собственный Ed25519 descriptor; полный macOS resource seal/Developer ID/notarization не заявлены."
+    }
+  }
+}

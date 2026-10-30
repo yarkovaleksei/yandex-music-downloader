@@ -1,0 +1,2 @@
+info: STEP-054: журнал renderer подключёнDebugger ending on ws://127.0.0.1:58950/64e995a6-a292-4714-9a16-5e898b939d0b
+For help, see: https://nodejs.org/learn/getting-started/debugging

@@ -1,0 +1,17 @@
+{
+  "command": [
+    "/Users/a11/work/test-yandex-app/music-downloader-mac-retry-darwin-x64-20261030T081544687Z-5cb41f17/runtime/node",
+    "/Users/a11/work/test-yandex-app/music-downloader-mac-retry-darwin-x64-20261030T081544687Z-5cb41f17/project/node_modules/@playwright/test/cli.js",
+    "test",
+    "--config",
+    "/Users/a11/work/test-yandex-app/music-downloader-mac-retry-darwin-x64-20261030T081544687Z-5cb41f17/project/apps/desktop/e2e/playwright.config.mjs"
+  ],
+  "exitCode": 1,
+  "signal": null,
+  "stdout": "\nRunning 1 test using 1 worker\n\n  ✘  1 apps/desktop/e2e/download.spec.mjs:19:1 › Ссылка → предпросмотр → загрузка → пауза → продолжение → файл и история после перезапуска (4.8s)\n\n\n  1) apps/desktop/e2e/download.spec.mjs:19:1 › Ссылка → предпросмотр → загрузка → пауза → продолжение → файл и история после перезапуска \n\n    Error: Process failed to launch!\n\n    Error Context: ../reports/20261030T101324Z-0000645b/e2e/download-Ссылка-→-предпрос-d6b3b-и-история-после-перезапуска/error-context.md\n\n  1 failed\n    apps/desktop/e2e/download.spec.mjs:19:1 › Ссылка → предпросмотр → загрузка → пауза → продолжение → файл и история после перезапуска \n",
+  "stderr": "  pw:browser <launching> /Users/a11/work/test-yandex-app/music-downloader-mac-retry-darwin-x64-20261030T081544687Z-5cb41f17/project/node_modules/electron/dist/Electron.app/Contents/MacOS/Electron --inspect=0 --remote-debugging-port=0 /var/folders/_y/mp5v7zvx0lzc495l1t7zcbqc0000gn/T/music-desktop-e2e-W4NKE8/bootstrap.mjs +0ms\n  pw:browser <launched> pid=25815 +8ms\n  pw:browser [pid=25815] <kill> +5s\n  pw:browser [pid=25815] <will force kill> +0ms\n  pw:browser [pid=25815] exception while trying to kill process: Error: kill EPERM +1ms\n  pw:browser [pid=25815] <process did exit: exitCode=null, signal=SIGKILL> +17ms\n  pw:browser [pid=25815] starting temporary directories cleanup +0ms\n  pw:browser [pid=25815] finished temporary directories cleanup +19ms\n",
+  "logs": {
+    "stdout": "/Users/a11/work/test-yandex-app/music-downloader-mac-retry-darwin-x64-20261030T081544687Z-5cb41f17/reports/20261030T101324Z-0000645b/before-003-node-stdout.log",
+    "stderr": "/Users/a11/work/test-yandex-app/music-downloader-mac-retry-darwin-x64-20261030T081544687Z-5cb41f17/reports/20261030T101324Z-0000645b/before-003-node-stderr.log"
+  }
+}

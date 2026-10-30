@@ -1,0 +1,40 @@
+  pw:browser <launching> /Users/a11/work/test-yandex-app/music-downloader-mac-retry-darwin-x64-20261030T081544687Z-5cb41f17/project/node_modules/electron/dist/Electron.app/Contents/MacOS/Electron --inspect=0 --remote-debugging-port=0 /var/folders/_y/mp5v7zvx0lzc495l1t7zcbqc0000gn/T/music-desktop-e2e-e17mPa/bootstrap.mjs +0ms
+  pw:browser <launched> pid=26695 +8ms
+  pw:browser [pid=26695][err] Debugger listening on ws://127.0.0.1:60938/ca6264e4-6e98-4bb0-85ce-a6cade5c7f06 +38s
+  pw:browser [pid=26695][err] For help, see: https://nodejs.org/learn/getting-started/debugging +2ms
+  pw:browser <ws connecting> ws://127.0.0.1:60938/ca6264e4-6e98-4bb0-85ce-a6cade5c7f06 +10ms
+  pw:browser [pid=26695][err] Debugger attached. +16ms
+  pw:browser <ws connected> ws://127.0.0.1:60938/ca6264e4-6e98-4bb0-85ce-a6cade5c7f06 +5ms
+  pw:browser [pid=26695][err]  +2s
+  pw:browser [pid=26695][err] DevTools listening on ws://127.0.0.1:60947/devtools/browser/61a3108d-6304-45b4-add4-209131fbeee3 +1ms
+  pw:browser <ws connecting> ws://127.0.0.1:60947/devtools/browser/61a3108d-6304-45b4-add4-209131fbeee3 +1ms
+  pw:browser [pid=26695][err] (electron) 'console-message' arguments are deprecated and will be removed. Please use Event<WebContentsConsoleMessageEventParams> object instead. +2s
+  pw:browser <ws connected> ws://127.0.0.1:60947/devtools/browser/61a3108d-6304-45b4-add4-209131fbeee3 +592ms
+  pw:browser <ws disconnecting> ws://127.0.0.1:60938/ca6264e4-6e98-4bb0-85ce-a6cade5c7f06 +54s
+  pw:browser <ws disconnected> ws://127.0.0.1:60938/ca6264e4-6e98-4bb0-85ce-a6cade5c7f06 code=1005 reason= +4ms
+  pw:browser [pid=26695][err] Debugger ending on ws://127.0.0.1:60938/ca6264e4-6e98-4bb0-85ce-a6cade5c7f06 +1ms
+  pw:browser [pid=26695][err] For help, see: https://nodejs.org/learn/getting-started/debugging +0ms
+  pw:browser <ws disconnected> ws://127.0.0.1:60947/devtools/browser/61a3108d-6304-45b4-add4-209131fbeee3 code=1006 reason= +785ms
+  pw:browser [pid=26695] <process did exit: exitCode=0, signal=null> +3ms
+  pw:browser [pid=26695] starting temporary directories cleanup +1ms
+  pw:browser [pid=26695] finished temporary directories cleanup +2ms
+  pw:browser <launching> /Users/a11/work/test-yandex-app/music-downloader-mac-retry-darwin-x64-20261030T081544687Z-5cb41f17/project/node_modules/electron/dist/Electron.app/Contents/MacOS/Electron --inspect=0 --remote-debugging-port=0 /var/folders/_y/mp5v7zvx0lzc495l1t7zcbqc0000gn/T/music-desktop-e2e-e17mPa/bootstrap.mjs +1ms
+  pw:browser <launched> pid=27081 +4ms
+  pw:browser [pid=27081][err] Debugger listening on ws://127.0.0.1:60955/1ea927c9-0715-4055-a6ef-122dad2903c1 +216ms
+  pw:browser [pid=27081][err] For help, see: https://nodejs.org/learn/getting-started/debugging +0ms
+  pw:browser <ws connecting> ws://127.0.0.1:60955/1ea927c9-0715-4055-a6ef-122dad2903c1 +1ms
+  pw:browser [pid=27081][err] Debugger attached. +6ms
+  pw:browser <ws connected> ws://127.0.0.1:60955/1ea927c9-0715-4055-a6ef-122dad2903c1 +1ms
+  pw:browser [pid=27081][err]  +2s
+  pw:browser [pid=27081][err] DevTools listening on ws://127.0.0.1:60962/devtools/browser/5218a10f-3f22-4db8-a019-70b51dec89a9 +0ms
+  pw:browser <ws connecting> ws://127.0.0.1:60962/devtools/browser/5218a10f-3f22-4db8-a019-70b51dec89a9 +0ms
+  pw:browser [pid=27081][err] (electron) 'console-message' arguments are deprecated and will be removed. Please use Event<WebContentsConsoleMessageEventParams> object instead. +1s
+  pw:browser <ws connected> ws://127.0.0.1:60962/devtools/browser/5218a10f-3f22-4db8-a019-70b51dec89a9 +563ms
+  pw:browser <ws disconnecting> ws://127.0.0.1:60955/1ea927c9-0715-4055-a6ef-122dad2903c1 +25s
+  pw:browser <ws disconnected> ws://127.0.0.1:60955/1ea927c9-0715-4055-a6ef-122dad2903c1 code=1005 reason= +2ms
+  pw:browser [pid=27081][err] Debugger ending on ws://127.0.0.1:60955/1ea927c9-0715-4055-a6ef-122dad2903c1 +10ms
+  pw:browser [pid=27081][err] For help, see: https://nodejs.org/learn/getting-started/debugging +0ms
+  pw:browser <ws disconnected> ws://127.0.0.1:60962/devtools/browser/5218a10f-3f22-4db8-a019-70b51dec89a9 code=1006 reason= +1s
+  pw:browser [pid=27081] <process did exit: exitCode=0, signal=null> +3ms
+  pw:browser [pid=27081] starting temporary directories cleanup +0ms
+  pw:browser [pid=27081] finished temporary directories cleanup +1ms

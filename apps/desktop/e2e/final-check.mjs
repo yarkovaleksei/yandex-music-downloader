@@ -39,6 +39,29 @@ export async function inventory(directory, prefix = '') {
   }
   return result;
 }
+
+/** @link planning/tasks/STEP-054.md Finder добавляет .DS_Store рядом с .app при ручной замене.
+ * Исключаем только этот неисполняемый обычный файл в корне; payload, symlink и лишние файлы остаются под точной проверкой.
+ */
+export function assertReplacementInventory(actual, expected) {
+  const comparable = { ...actual };
+  const metadata = comparable['.DS_Store'];
+  const ignored = [];
+  if (
+    !Object.hasOwn(expected, '.DS_Store') &&
+    metadata?.executable === false &&
+    !metadata.link
+  ) {
+    delete comparable['.DS_Store'];
+    ignored.push('.DS_Store');
+  }
+  assert.deepEqual(
+    comparable,
+    expected,
+    'Замените current точными файлами N+1 из проверенного download',
+  );
+  return ignored;
+}
 export async function verifyKit(directory, manifest) {
   assert.equal(manifest.builtOn.platform, 'linux');
   assert.equal(manifest.guestBuildAllowed, false);
@@ -273,10 +296,9 @@ async function main() {
             return [name, value];
           }),
         );
-      assert.deepEqual(
+      report.ignoredFinderMetadata = assertReplacementInventory(
         comparable(current),
         comparable(manifest.nextShippingFiles),
-        'current должен совпадать с Linux-built N+1',
       );
       report.manualReplacement = 'CONFIRMED_BY_USER';
     } else {
