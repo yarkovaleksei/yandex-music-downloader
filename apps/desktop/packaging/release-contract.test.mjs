@@ -41,7 +41,7 @@ async function fixture(action) {
     targets: {},
   };
   for (const target of targets) {
-    const artifact = `${target}.${target === 'linux-x64' ? 'AppImage' : 'zip'}`;
+    const artifact = `${target}.${{ 'linux-x64': 'AppImage', 'win32-x64': 'exe' }[target] ?? 'zip'}`;
     const bytes = Buffer.from('окончательный пакет ' + target);
     await writeFile(path.join(directory, artifact), bytes);
     manifest.targets[target] = {

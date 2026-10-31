@@ -116,7 +116,7 @@ Metadata contract определяет [ADR-011](architecture-decisions/ADR-011-
 ## Deployment / runtime assumptions
 
 - Node.js `>=22.14.0 <25` (ADR-008, ADR-017), TypeScript `strict`, Yarn 4 workspaces с `nodeLinker: node-modules` (ADR-008). Команды сборки и проверки — в [руководстве разработчика](development.md).
-- CLI запускается локально; desktop — Electron для Windows x64, macOS arm64/x64 и Linux x64. Единый Linux-сборщик использует electron-builder: portable Windows ZIP, macOS `.app` ZIP и Linux AppImage ([ADR-019](architecture-decisions/ADR-019-portable-distribution-and-updates.md)). Платные сертификаты и notarization не требуются; предупреждения ОС о неизвестном издателе допустимы.
+- CLI запускается локально; desktop — Electron для Windows x64, macOS arm64/x64 и Linux x64. Единый Linux-сборщик использует electron-builder: portable Windows exe, macOS `.app` ZIP и Linux AppImage ([ADR-019](architecture-decisions/ADR-019-portable-distribution-and-updates.md)). Платные сертификаты и notarization не требуются; предупреждения ОС о неизвестном издателе допустимы.
 - Каталог состояния общий для CLI и desktop — `resolveStateDirectory()`. Electron `userData` не хранит доменное состояние (ADR-014).
 - Native-модули `better-sqlite3` и `@napi-rs/keyring` используют Node-API. Их совместимость с Node.js и Electron проверяется на целевых платформах; скрытая замена хранилища при несовместимости не допускается.
 - Упаковка сохраняет Electron fuses и не использует виртуализацию/sandbox, изолирующие общий `stateDir` или доступ к Secret Service/Keychain: MSIX AppData, Mac App Sandbox, Flatpak/Snap.

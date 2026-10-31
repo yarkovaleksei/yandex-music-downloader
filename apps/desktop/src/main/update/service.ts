@@ -215,7 +215,11 @@ export class PortableUpdates {
         return this.view('error', 'Сначала проверьте наличие обновлений.');
       await mkdir(this.options.directory, { recursive: true, mode: 0o700 });
       const extension =
-        descriptor.target === 'linux-x64' ? '.AppImage' : '.zip';
+        descriptor.target === 'linux-x64'
+          ? '.AppImage'
+          : descriptor.target === 'win32-x64'
+            ? '.exe'
+            : '.zip';
       const file = path.join(
         this.options.directory,
         `music-downloader-${descriptor.version}-${descriptor.target}-${descriptor.sha256.slice(0, 12)}${extension}`,

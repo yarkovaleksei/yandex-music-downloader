@@ -216,6 +216,8 @@ const manifest = {
 const electronVersion = (
   await json(path.join(root, 'node_modules/electron/package.json'))
 ).version;
+// Windows получает один самораспаковывающийся exe, как AppImage на Linux.
+const extensions = { linux: 'AppImage', win32: 'exe', darwin: 'zip' };
 const stagingRoot = await mkdtemp(path.join(tmpdir(), 'ymd-packaging-'));
 for (const target of targets) {
   const [platform, arch] = target.split('-');
@@ -266,7 +268,11 @@ for (const target of targets) {
         ? Platform.WINDOWS
         : Platform.LINUX
     ).createTarget(
-      platform === 'darwin' ? 'zip' : platform === 'win32' ? 'zip' : 'AppImage',
+      platform === 'darwin'
+        ? 'zip'
+        : platform === 'win32'
+          ? 'portable'
+          : 'AppImage',
       arch === 'x64' ? Arch.x64 : Arch.arm64,
     ),
     config: {
@@ -293,7 +299,7 @@ for (const target of targets) {
             : path.join(context.appOutDir, 'resources');
         await rm(path.join(resources, 'default_app.asar'), { force: true });
       },
-      artifactName: `music-downloader-${version}-${target}.${platform === 'linux' ? 'AppImage' : 'zip'}`,
+      artifactName: `music-downloader-${version}-${target}.${extensions[platform]}`,
       mac: {
         target: 'zip',
         identity: null,
@@ -301,7 +307,7 @@ for (const target of targets) {
         icon: path.join(resources, 'icon.png'),
       },
       win: {
-        target: 'zip',
+        target: 'portable',
         icon: path.join(resources, 'icon.png'),
         signAndEditExecutable: true,
         signExecutable: false,
@@ -314,7 +320,7 @@ for (const target of targets) {
       },
     },
   });
-  const extension = platform === 'linux' ? '.AppImage' : '.zip';
+  const extension = `.${extensions[platform]}`;
   const artifact = artifacts.find((file) => file.endsWith(extension));
   if (!artifact) throw new Error(`Не создан ${extension}: ${target}`);
   const tree = (await files(out)).filter(

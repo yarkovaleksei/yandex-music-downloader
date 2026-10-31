@@ -9,7 +9,9 @@ import {
   rm,
   writeFile,
 } from 'node:fs/promises';
-import { existsSync } from 'node:fs';
+import { existsSync, mkdtempSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { spawnSync } from 'node:child_process';
 
 export const root = path.resolve(import.meta.dirname, '../../..');
 export const output = path.join(root, '.cache/desktop-packaging/local-0.0.0');
@@ -22,6 +24,27 @@ export const save = async (file, value) => {
   await mkdir(path.dirname(file), { recursive: true });
   await writeFile(file, JSON.stringify(value, null, 2) + '\n');
 };
+
+/** Извлекает готовое приложение из Windows portable exe или macOS ZIP. */
+export function extractPortable(artifact, directory) {
+  const run = (command, args) => {
+    const result = spawnSync(command, args, { encoding: 'utf8' });
+    if (result.error || result.status !== 0)
+      throw result.error ?? new Error(`${command}: ${result.stderr}`);
+  };
+  // unzip сохраняет symlinks/frameworks и executable flags macOS ZIP.
+  if (!artifact.endsWith('.exe'))
+    return run('unzip', ['-q', artifact, '-d', directory]);
+  // Portable exe — NSIS-обёртка: приложение лежит во вложенном 7z-архиве.
+  const temporary = mkdtempSync(path.join(tmpdir(), 'ymd-portable-'));
+  try {
+    const inner = '$PLUGINSDIR/app-64.7z';
+    run('7z', ['x', '-y', `-o${temporary}`, artifact, inner]);
+    run('7z', ['x', '-y', `-o${directory}`, path.join(temporary, inner)]);
+  } finally {
+    rmSync(temporary, { recursive: true, force: true });
+  }
+}
 
 /** @link docs/architecture-decisions/ADR-018-linux-packaging-and-updates.md Локальная версия не выдаётся за Git-тег. */
 export function versionFromTag(tag) {

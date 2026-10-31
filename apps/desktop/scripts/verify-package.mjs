@@ -16,9 +16,10 @@ import {
   sha,
   files,
   binaryTarget,
+  extractPortable,
 } from '../packaging/lib.mjs';
 
-/**  Проверяем реальные installer/AppImage/ZIP, а не только staging. */
+/**  Проверяем реальные AppImage/exe/ZIP, а не только staging. */
 if (process.platform !== 'linux')
   throw new Error('Проверка состава выполняется только на Linux');
 const directory = process.argv[2] ? path.resolve(process.argv[2]) : output;
@@ -75,7 +76,7 @@ for (const target of Object.keys(manifest.targets)) {
     const offset = run(artifact, ['--appimage-offset']).trim();
     assert.match(offset, /^\d+$/);
     run('unsquashfs', ['-quiet', '-d', unpack, '-o', offset, artifact]);
-  } else run('unzip', ['-q', artifact, '-d', unpack]);
+  } else extractPortable(artifact, unpack);
   const all = await files(unpack);
   const archives = all.filter(
     (file) =>

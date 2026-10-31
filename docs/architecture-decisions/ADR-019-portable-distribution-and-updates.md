@@ -26,7 +26,7 @@ ADR-018 требует системной подписи и notarization, а в�
 
 ## Decision
 
-Это решение заменяет ADR-018 для будущей реализации и релизов. Linux-only сборщик electron-builder 26.18.1, production closure, target-native bindings, стабильные app/bundle ID, shipping fuses и ASAR integrity сохраняются. Новые форматы: Windows x64 ZIP с готовым приложением, macOS arm64/x64 .app ZIP, Linux x64 AppImage. NSIS не является требуемым portable-артефактом; для portable-обновлений он заменяется ZIP. Portable означает запуск без установщика; расположение SQLite, аудио и credentials остаётся прежним по ADR-014/015, данные не переносятся рядом с executable.
+Это решение заменяет ADR-018 для будущей реализации и релизов. Linux-only сборщик electron-builder 26.18.1, production closure, target-native bindings, стабильные app/bundle ID, shipping fuses и ASAR integrity сохраняются. Новые форматы: Windows x64 portable exe (самораспаковывающийся при каждом запуске, без установки), macOS arm64/x64 .app ZIP, Linux x64 AppImage. NSIS-установщик не используется. Portable означает запуск без установщика; расположение SQLite, аудио и credentials остаётся прежним по ADR-014/015, данные не переносятся рядом с executable.
 
 Платная системная code signing, Developer ID, notarization/stapling, сертификаты Windows и инструменты rcodesign/osslsigncode не требуются. Предупреждения ОС о неизвестном издателе и повторная авторизация при отказе доступа к Keychain допустимы; отсутствие предупреждений и стабильный доступ к Keychain без запросов не обещаются. Отказ credential store не приводит к plaintext fallback.
 
@@ -54,7 +54,7 @@ Main владеет проверкой и скачиванием; renderer по�
 
 ## Consequences
 
-Убраны расходы на сертификаты и обязательства notarization. Пользователь сам заменяет portable-пакет; доверие ОС к издателю и бесшовное системное автообновление отсутствуют. Реализация portable-обновлений включает ZIP Windows, проверку и скачивание обновления, собственную подпись release descriptor, Linux-доказательство N → N+1 и инструкцию. Финальная платформенная приёмка проверяет запуск portable Windows/macOS, offline E2E и тот же процесс обновления в конце проекта. Старые PASS/FAIL не переоцениваются.
+Убраны расходы на сертификаты и обязательства notarization. Пользователь сам заменяет portable-пакет; доверие ОС к издателю и бесшовное системное автообновление отсутствуют. Реализация portable-обновлений включает exe Windows, проверку и скачивание обновления, собственную подпись release descriptor, Linux-доказательство N → N+1 и инструкцию. Финальная платформенная приёмка проверяет запуск portable Windows/macOS, offline E2E и тот же процесс обновления в конце проекта. Старые PASS/FAIL не переоцениваются.
 
 ## Security implications
 
@@ -68,4 +68,4 @@ Ed25519 подтверждает соответствие пакета ключ�
 
 Все сборки/пакеты готовятся на Linux. Windows/macOS получают готовые приложения без компиляции и установленных Node.js/FFmpeg. Нативные проверки выполняются при финальной платформенной приёмке; неизвестный macOS x64/Rosetta FAIL не считается исправленным решением об упаковке. Доступность production feed и собственный ключ настраиваются отдельно; без них проверка обновлений сообщает понятную недоступность.
 
-Основания: [Electron autoUpdater: системная подпись обязательна для Squirrel.Mac](https://www.electronjs.org/docs/latest/api/auto-updater), [electron-builder v26: Windows ZIP](https://www.electron.build/v26/docs/win/), [Electron: ограничения Keychain без подписи](https://github.com/electron/electron/blob/main/docs/tutorial/code-signing.md). Это ограничения выбранных платформ, а не доказательство нативного запуска текущей сборки.
+Основания: [Electron autoUpdater: системная подпись обязательна для Squirrel.Mac](https://www.electronjs.org/docs/latest/api/auto-updater), [electron-builder v26: Windows portable](https://www.electron.build/v26/docs/win/), [Electron: ограничения Keychain без подписи](https://github.com/electron/electron/blob/main/docs/tutorial/code-signing.md). Это ограничения выбранных платформ, а не доказательство нативного запуска текущей сборки.

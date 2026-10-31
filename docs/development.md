@@ -116,7 +116,7 @@ node packages/testing/scripts/run-yarn.mjs run package:verify
 node packages/testing/scripts/run-yarn.mjs run package:smoke --check
 ```
 
-`package:local` использует electron-builder 26.18.1 и собирает сразу четыре дистрибутива с локальной версией `0.0.0`: AppImage Linux x64, portable ZIP Windows x64 и отдельные `.app.zip` macOS arm64/x64. Они сохраняются в `.cache/desktop-packaging/local-0.0.0/` в каталогах `linux-x64`, `win32-x64`, `darwin-arm64`, `darwin-x64`. Сборка не подписывает и не публикует артефакты; manifest содержит `signed: false`, `published: false`, `tag: null`.
+`package:local` использует electron-builder 26.18.1 и собирает сразу четыре дистрибутива с локальной версией `0.0.0`: AppImage Linux x64, portable exe Windows x64 и отдельные `.app.zip` macOS arm64/x64. Они сохраняются в `.cache/desktop-packaging/local-0.0.0/` в каталогах `linux-x64`, `win32-x64`, `darwin-arm64`, `darwin-x64`. Сборка не подписывает и не публикует артефакты; manifest содержит `signed: false`, `published: false`, `tag: null`.
 
 Отдельный режим `node apps/desktop/scripts/package.mjs --tag v1.2.3` берёт версию из существующего Git-тега, требует его соответствия `HEAD` и чистого рабочего дерева. Команда сама не создаёт тег, не подписывает и не публикует сборку. Локальный запуск `package:local` не требует релизного тега.
 
@@ -126,7 +126,7 @@ node packages/testing/scripts/run-yarn.mjs run package:smoke --check
 
 Ограничения: извлечённый запуск не проверяет FUSE и desktop integration; Docker smoke использует `--no-sandbox`. В контейнере нет Secret Service, поэтому вход в аккаунт в этом сценарии не проверяется. Успешная Linux-проверка не заменяет нативный запуск Windows/macOS.
 
-Для ручной проверки только Windows можно собрать отдельный локальный ZIP без Git-тега и публикации:
+Для ручной проверки только Windows можно собрать отдельный локальный exe без Git-тега и публикации:
 
 ```sh
 node apps/desktop/scripts/package.mjs --local-version 0.2.1 --windows-only
@@ -175,7 +175,7 @@ node apps/desktop/scripts/release-update.mjs sign /путь/к/latest.json
 После получения проверенного пакета:
 
 1. Нажмите «Открыть папку с обновлением» и полностью закройте приложение.
-2. На Windows распакуйте ZIP и замените каталог приложения целиком; на macOS распакуйте ZIP подходящей архитектуры и замените `.app`; на Linux замените AppImage и разрешите исполнение нового файла (`chmod +x /путь/к/приложению.AppImage`): скачанный файл создаётся с приватными правами `0600`.
+2. На Windows замените exe приложения скачанным файлом; на macOS распакуйте ZIP подходящей архитектуры и замените `.app`; на Linux замените AppImage и разрешите исполнение нового файла (`chmod +x /путь/к/приложению.AppImage`): скачанный файл создаётся с приватными правами `0600`.
 3. Запустите новую версию. Сохраняйте общий каталог состояния, папку аудио и системное хранилище credentials: portable означает отсутствие установщика, а не хранение SQLite или секретов рядом с executable.
 
 Автоматическая установка, замена или запуск скачанного пакета, фоновое скачивание, electron-updater/Squirrel отсутствуют. Платные сертификаты и Apple notarization не требуются постоянно, по ADR-019. Собственная Ed25519-подпись подтверждает соответствие ключу автора, но не доверие Apple/Microsoft к издателю. Предупреждения ОС допустимы; отказ доступа к macOS Keychain может потребовать повторной авторизации без plaintext fallback. После forward-only миграции SQLite старый клиент безопасно отказывает; ручная замена не является откатом базы.
@@ -334,13 +334,13 @@ node apps/desktop/e2e/run.mjs
 node apps/desktop/scripts/final-kit.mjs
 ```
 
-Она сверяет inputs и portable ZIP локальных версий `0.0.0` и `0.0.1`; отсутствующая или устаревшая версия пересобирается существующим Linux packaging. Результат находится в `.cache/desktop-final-check/`: три `music-downloader-final-<target>-<buildId>.zip` и общий `manifest.json` с SHA-256. `revision` относится к подготовке набора; `packagingGitHeads` сохраняет исходные revision переиспользованных portable-сборок, соответствие текущему коду проверяется по inputs. Команды `node apps/desktop/scripts/final-kit.mjs --check` и `--verify` проверяют fixture production PortableUpdates и готовые архивы соответственно. Они не подтверждают работу Windows/macOS.
+Она сверяет inputs и portable-пакеты локальных версий `0.0.0` и `0.0.1`; отсутствующая или устаревшая версия пересобирается существующим Linux packaging. Результат находится в `.cache/desktop-final-check/`: три `music-downloader-final-<target>-<buildId>.zip` и общий `manifest.json` с SHA-256. `revision` относится к подготовке набора; `packagingGitHeads` сохраняет исходные revision переиспользованных portable-сборок, соответствие текущему коду проверяется по inputs. Команды `node apps/desktop/scripts/final-kit.mjs --check` и `--verify` проверяют fixture production PortableUpdates и готовые архивы соответственно. Они не подтверждают работу Windows/macOS.
 
 Каждый ZIP содержит portable N/N+1, отдельный stock Electron и Node нужной архитектуры, production dependencies и Linux-built E2E host. TypeScript/Vite/esbuild на целевой ОС не запускаются и в набор не включаются. Подпись fixture создаётся временным отдельным Ed25519-ключом на Linux; в набор попадают только public key и подпись. Offline transport передаёт локальные байты production PortableUpdates с отдельным HTTPS origin `https://final-kit.invalid`. Это проверка service и подписи, а не production feed, доверие Apple/Microsoft или реальная сеть.
 
 1. Сверьте SHA-256 полученного ZIP с общим manifest, распакуйте на локальный диск в новую папку. Node.js/FFmpeg, компилятор, сеть и авторизация не требуются. При блокировке macOS неизвестного издателя явно разрешите запуск в настройках безопасности. Для x64 на Apple Silicon нужна Rosetta; отказ запуска встроенного Node сохраните из терминала.
 2. Запустите `run-before.cmd` на Windows или `run-before.command` на Mac. Скрипт отдельно запускает настоящее shipping N, затем полный offline UI E2E с настоящими IPC/host/SQLite, итоговым MP3 и History после restart. Проверяются production download и отказ повреждённых подписи/размера/хеша. Успешный первый этап заканчивается `AWAITING_MANUAL_REPLACEMENT`, native приёмка пока `PENDING`.
-3. Закройте приложение. **Вручную** удалите каталог `current`, создайте его заново и распакуйте в него ZIP из `reports/download/valid/`. Не удаляйте `isolated-home`, `reports` и временный E2E output: это общий stateDir и проверочный аудиофайл. Скрипт не заменяет и не запускает скачанный пакет автоматически.
+3. Закройте приложение. **Вручную** удалите каталог `current`, создайте его заново и распакуйте в него ZIP из `reports/download/valid/`. На Windows вместо распаковки exe скопируйте в `current` содержимое `shipping-n-plus-1`: это приложение из того же проверенного пакета. Не удаляйте `isolated-home`, `reports` и временный E2E output: это общий stateDir и проверочный аудиофайл. Скрипт не заменяет и не запускает скачанный пакет автоматически.
 4. Только после замены запустите `run-after.cmd` или `run-after.command`. Он сверяет `current` с эталонными N+1 байтами, запускает shipping N+1 и проверяет версию, UI, настройки, точные сохранённые строки jobs/history_hidden/job_settings и SHA-256 аудиофайла. Не запускайте старый клиент после forward-only миграции.
 5. Сохраните весь каталог `reports`, включая `before.json`, `after.json`, E2E result, Electron main/renderer/preload/load/crash журналы, stderr и screenshot. При ошибке сохраняется FAIL; если shipping N отказал до первого E2E, runner выполняет один отдельный diagnostic E2E и сохраняет его raw результат, не снимая исходный FAIL. Для повтора распакуйте ZIP в другую папку, сохранив старые результаты.
 

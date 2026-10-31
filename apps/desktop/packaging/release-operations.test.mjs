@@ -154,7 +154,7 @@ async function fixture(action) {
         targets: {},
       };
       for (const target of targets) {
-        const artifact = `${target}/music-downloader-${tag.slice(1)}-${target}.${target === 'linux-x64' ? 'AppImage' : 'zip'}`;
+        const artifact = `${target}/music-downloader-${tag.slice(1)}-${target}.${{ 'linux-x64': 'AppImage', 'win32-x64': 'exe' }[target] ?? 'zip'}`;
         const content = Buffer.from('Пакет ' + tag + ' ' + target);
         await mkdir(path.dirname(path.join(directory, artifact)), {
           recursive: true,

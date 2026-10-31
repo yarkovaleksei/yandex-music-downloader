@@ -52,7 +52,7 @@ body:
     attributes:
       label: Как запущено приложение
       options:
-        - Готовый пакет из GitHub Releases (ZIP / AppImage)
+        - Готовый пакет из GitHub Releases (exe / ZIP / AppImage)
         - Собственная сборка из исходников
         - Режим разработки (dev)
         - Командная строка (CLI)

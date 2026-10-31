@@ -26,6 +26,7 @@ import {
   stage,
   files,
   binaryTarget,
+  extractPortable,
 } from '../packaging/lib.mjs';
 import { inventory, verifyKit, updateProof } from '../e2e/final-check.mjs';
 
@@ -107,12 +108,11 @@ async function packaging(version) {
     );
   for (const target of targets) {
     const artifact = manifest.targets[target];
-    assert(artifact.artifact.endsWith('.zip'));
-    assert.equal(
-      sha(await readFile(path.join(directory, artifact.artifact))),
-      artifact.sha256,
-    );
-    run('unzip', ['-tq', path.join(directory, artifact.artifact)]);
+    const file = path.join(directory, artifact.artifact);
+    assert(file.endsWith(target.startsWith('win32') ? '.exe' : '.zip'));
+    assert.equal(sha(await readFile(file)), artifact.sha256);
+    if (file.endsWith('.zip')) run('unzip', ['-tq', file]);
+    else run('7z', ['t', file]);
   }
   return { directory, manifest };
 }
@@ -196,11 +196,11 @@ async function verify() {
       assert.equal(manifest.revision, index.revision);
       assert.equal(manifest.buildId, index.buildId);
       assert.equal(
-        sha(await readFile(path.join(extracted, 'portable/n.zip'))),
+        sha(await readFile(path.join(extracted, manifest.portable.n))),
         packages[0].manifest.targets[target].sha256,
       );
       assert.equal(
-        sha(await readFile(path.join(extracted, 'portable/n-plus-1.zip'))),
+        sha(await readFile(path.join(extracted, manifest.portable.next))),
         packages[1].manifest.targets[target].sha256,
       );
       await verifyKit(extracted, manifest);
@@ -447,13 +447,16 @@ open(out,'wb').write(data)
     );
     await chmod(path.join(directory, nodeExecutable), 0o755);
     await mkdir(path.join(directory, 'portable'));
+    const portable = {};
     for (const [i, name] of ['n', 'n-plus-1'].entries()) {
       const artifact = path.join(
         packages[i].directory,
         packages[i].manifest.targets[target].artifact,
       );
-      await cp(artifact, path.join(directory, 'portable', name + '.zip'));
-      extractZip(artifact, path.join(directory, 'shipping-' + name));
+      const relative = `portable/${name}${path.extname(artifact)}`;
+      portable[i ? 'next' : 'n'] = relative;
+      await cp(artifact, path.join(directory, relative));
+      extractPortable(artifact, path.join(directory, 'shipping-' + name));
     }
     const shippingExecutable =
       platform === 'win32'
@@ -462,7 +465,7 @@ open(out,'wb').write(data)
     const pair = generateKeyPairSync('ed25519');
     const updateFixture = fixture(
       target,
-      await readFile(path.join(directory, 'portable/n-plus-1.zip')),
+      await readFile(path.join(directory, portable.next)),
       pair,
     );
     const runner = 'project/apps/desktop/e2e/final-check.mjs';
@@ -487,7 +490,7 @@ open(out,'wb').write(data)
     }
     await writeFile(
       path.join(directory, 'README.txt'),
-      'Платформенная приёмка: распакуйте на локальный диск. Node.js/FFmpeg/сеть/компилятор не требуются.\n1. Запустите run-before. До AWAITING_MANUAL_REPLACEMENT проверка не закончена.\n2. Закройте приложение. Вручную удалите current и распакуйте в новую current проверенный reports/download/valid/*.zip. Не трогайте isolated-home/reports и временный E2E output.\n3. Запустите run-after только после ручной замены. Он подтверждает N+1, общий stateDir, сохранённый job/history и аудиофайл. Не запускайте старую версию после миграции.\n4. Верните весь reports с JSON, stderr, журналами, screenshot, включая FAIL.\nmacOS: при блокировке неизвестного издателя разрешите запуск явно в настройках безопасности. Для x64 на Apple Silicon нужна Rosetta; запуск runtime может отказать раньше отчёта — сохраните терминал. Системная подпись/notarization отсутствуют.\nПовтор: распакуйте набор заново в другую папку; не затирайте отчёты. Приватный ключ отсутствует, production feed не настроен.\n',
+      'Платформенная приёмка: распакуйте на локальный диск. Node.js/FFmpeg/сеть/компилятор не требуются.\n1. Запустите run-before. До AWAITING_MANUAL_REPLACEMENT проверка не закончена.\n2. Закройте приложение. Вручную удалите current и распакуйте в новую current проверенный reports/download/valid/*.zip; на Windows вместо распаковки exe скопируйте в новую current папку shipping-n-plus-1 — это содержимое того же проверенного пакета. Не трогайте isolated-home/reports и временный E2E output.\n3. Запустите run-after только после ручной замены. Он подтверждает N+1, общий stateDir, сохранённый job/history и аудиофайл. Не запускайте старую версию после миграции.\n4. Верните весь reports с JSON, stderr, журналами, screenshot, включая FAIL.\nmacOS: при блокировке неизвестного издателя разрешите запуск явно в настройках безопасности. Для x64 на Apple Silicon нужна Rosetta; запуск runtime может отказать раньше отчёта — сохраните терминал. Системная подпись/notarization отсутствуют.\nПовтор: распакуйте набор заново в другую папку; не затирайте отчёты. Приватный ключ отсутствует, production feed не настроен.\n',
     );
     const manifest = {
       schema: 1,
@@ -502,6 +505,7 @@ open(out,'wb').write(data)
       electronExecutable:
         'project/node_modules/electron/dist/' + electronRelative,
       shippingExecutable,
+      portable,
       runtimeArchives: {
         electron: {
           file: electronName,

@@ -302,7 +302,7 @@ async function main() {
       );
       report.manualReplacement = 'CONFIRMED_BY_USER';
     } else {
-      // Первый запуск помещает N в отдельный рабочий каталог, не трогая эталонные portable ZIP.
+      // Первый запуск помещает N в отдельный рабочий каталог, не трогая эталонные portable-пакеты.
       await cp(path.join(kit, 'shipping-n'), path.join(kit, 'current'), {
         recursive: true,
         errorOnExist: true,
@@ -371,7 +371,7 @@ async function main() {
       report.update = await updateProof({
         Service: PortableUpdates,
         fixture: manifest.updateFixture,
-        payload: await readFile(path.join(kit, 'portable/n-plus-1.zip')),
+        payload: await readFile(path.join(kit, manifest.portable.next)),
         target: manifest.target,
         directory: path.join(reports, 'download'),
       });
