@@ -14,7 +14,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/yarkovaleksei/yandex-music-downloader/releases">📦 Скачать приложение</a>
+  <a href="https://yarkovaleksei.github.io/yandex-music-downloader/">📦 Скачать приложение</a>
   &nbsp; · &nbsp;
   <a href="docs/README.md">📚 Документация</a>
   &nbsp; · &nbsp;
