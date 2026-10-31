@@ -51,7 +51,7 @@ function controlled() {
     canaryTrackId: '2224197',
     runtime: {
       outputDirectory: os.tmpdir(),
-      nodeVersion: '22.14.0',
+      nodeVersion: '24.0.0',
       filesystemProbe: async () => {},
       runFfmpeg: async () => {},
     },

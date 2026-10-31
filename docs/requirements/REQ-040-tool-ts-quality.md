@@ -5,14 +5,14 @@ priority: high
 adrs:
   - ADR-001
   - ADR-008
-  - ADR-017
+  - ADR-020
 ---
 
 # REQ-040 — [TOOLING] Строгий TypeScript и контроль качества кода
 
 ## Requirement
 
-Все пакеты используют TypeScript со `strict: true`; применяются ESLint и Prettier; `any` без явного технического обоснования запрещён; dependency boundaries проверяются автоматически. Менеджер пакетов — Yarn 4 workspaces; runtime — Node.js `>=22.14.0 <25` (ADR-017).
+Все пакеты используют TypeScript со `strict: true`; применяются ESLint и Prettier; `any` без явного технического обоснования запрещён; dependency boundaries проверяются автоматически. Менеджер пакетов — Yarn 4 workspaces; runtime — Node.js `>=24.0.0 <25` (ADR-020).
 
 ## Rationale
 

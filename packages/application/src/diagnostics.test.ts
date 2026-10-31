@@ -44,7 +44,7 @@ describe('doctor application', () => {
       canaryTrackId: '2224197',
       runtime: {
         outputDirectory: '/tmp',
-        nodeVersion: '22.14.0',
+        nodeVersion: '24.0.0',
         filesystemProbe: async () => {},
         runFfmpeg: async () => {},
       },
@@ -68,7 +68,7 @@ describe('doctor application', () => {
       canaryTrackId: '2224197',
       runtime: {
         outputDirectory: '/tmp',
-        nodeVersion: '22.14.0',
+        nodeVersion: '24.0.0',
         filesystemProbe: async () => {},
         runFfmpeg: async () => {
           throw new Error('not installed');
@@ -88,7 +88,7 @@ describe('doctor application', () => {
       canaryTrackId: '2224197',
       runtime: {
         outputDirectory: '/tmp',
-        nodeVersion: '22.14.0',
+        nodeVersion: '24.0.0',
         filesystemProbe: async () => {},
         runFfmpeg: async () => {},
       },
@@ -98,10 +98,11 @@ describe('doctor application', () => {
     expect(JSON.stringify(report)).toContain('QUALITY_UNAVAILABLE');
   });
 
-  //  Граница runtime в doctor по ADR-017.
+  //  Граница runtime в doctor по ADR-020.
   it.each([
-    ['22.13.1', 'failed'],
-    ['22.14.0', 'ok'],
+    ['22.14.0', 'failed'],
+    ['24.0.0', 'ok'],
+    ['25.0.0', 'failed'],
   ] as const)('runtime %s → %s', async (nodeVersion, status) => {
     const report = await collectDiagnostics({
       provider: provider(),
@@ -135,7 +136,7 @@ it('REQ-057: desktop не запускает FFmpeg, CLI сохраняет по
     canaryTrackId: '2224197',
     runtime: {
       outputDirectory: '/tmp',
-      nodeVersion: '22.14.0',
+      nodeVersion: '24.0.0',
       filesystemProbe: async () => {},
       runFfmpeg,
     },

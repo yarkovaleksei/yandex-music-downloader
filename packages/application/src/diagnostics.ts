@@ -154,12 +154,7 @@ export async function collectDiagnostics(input: {
 
 function supportedNode(version: string): boolean {
   const [major, minor] = version.split('.').map(Number);
-  return (
-    major !== undefined &&
-    minor !== undefined &&
-    (major > 22 || (major === 22 && minor >= 14)) &&
-    major < 25
-  );
+  return major !== undefined && minor !== undefined && major === 24;
 }
 async function isolated<T>(operation: () => Promise<T>): Promise<Outcome<T>> {
   try {

@@ -131,7 +131,7 @@ describe('workspace', () => {
 describe('Yarn и политика окружения', () => {
   it('Node, packageManager с sha512 и отсутствие npm-артефактов', () => {
     const root_ = json('package.json');
-    expect(nodeRange.min).toBe('22.14.0');
+    expect(nodeRange.min).toBe('24.0.0');
     expect(root_.engines.node).toBe(`>=${nodeRange.min} <25`);
     expect(root_.packageManager).toMatch(
       /^yarn@4\.18\.1\+sha512\.[0-9a-f]{128}$/,
@@ -387,9 +387,9 @@ describe('docs/development.md', () => {
   });
 });
 
-// @link docs/architecture-decisions/ADR-017-node-api-10-runtime-floor.md Нижняя граница Node.js 22.14.0
-// закреплена во всех местах; устаревшая 22.13 нигде не остаётся.
-describe('Диапазон Node.js по ADR-017', () => {
+// @link docs/architecture-decisions/ADR-020-node-24-only.md Только Node.js 24
+// закреплён во всех местах; прежние границы Node.js 22 нигде не остаются.
+describe('Диапазон Node.js по ADR-020', () => {
   const range = `>=${nodeRange.min} <25`;
   const places: ReadonlyArray<readonly [string, string]> = [
     ['docs/development.md', range],
@@ -397,17 +397,17 @@ describe('Диапазон Node.js по ADR-017', () => {
     ['docs/requirements/REQ-040-tool-ts-quality.md', range],
     ['packages/testing/scripts/run-yarn.mjs', range],
     ['packages/testing/scripts/verify-toolchain.mjs', range],
-    ['packages/testing/scripts/verify-workspace.mjs', nodeRange.min],
-    ['packages/testing/scripts/verify-workspace-manual.sh', nodeRange.min],
-    ['.github/workflows/ci.yml', `- "${nodeRange.min}"`],
+    ['packages/testing/scripts/verify-workspace.mjs', "['24']"],
+    ['packages/testing/scripts/verify-workspace-manual.sh', 'Node.js 24'],
+    ['.github/workflows/ci.yml', '- "24"'],
   ];
 
   it.each(places)(
-    '%s содержит новую границу и не содержит 22.13',
+    '%s содержит Node.js 24 и не содержит границ Node.js 22',
     (file, value) => {
       const text = read(file);
       expect(text).toContain(value);
-      expect(text).not.toContain('22.13');
+      expect(text).not.toMatch(/22\.1[34]/);
     },
   );
 
@@ -420,11 +420,11 @@ describe('Диапазон Node.js по ADR-017', () => {
     const runYarn = (await import(specifier)) as {
       assertNodeSupported(version: string): void;
     };
-    for (const version of ['22.14.0', '24.21.0'])
+    for (const version of ['24.0.0', '24.21.0'])
       expect(() => runYarn.assertNodeSupported(version)).not.toThrow();
-    for (const version of ['22.13.9', '25.0.0'])
+    for (const version of ['22.14.0', '25.0.0'])
       expect(() => runYarn.assertNodeSupported(version)).toThrow(
-        />=22\.14\.0 <25/,
+        />=24\.0\.0 <25/,
       );
   });
 });

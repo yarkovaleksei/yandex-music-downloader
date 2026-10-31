@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Обёртка для ручного запуска автоматической проверки toolchain
-# (packages/testing/scripts/verify-workspace.mjs). Версии Node.js 22.14.0 и 24
-# должны быть установлены заранее; nvm install здесь не выполняется.
+# (packages/testing/scripts/verify-workspace.mjs). Node.js 24
+# должен быть установлен заранее; nvm install здесь не выполняется.
 set -Eeuo pipefail
 
 project_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"

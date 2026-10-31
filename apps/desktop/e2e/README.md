@@ -10,7 +10,7 @@ node packages/testing/scripts/run-yarn.mjs run build
 node apps/desktop/e2e/run.mjs
 ```
 
-Playwright закреплён отдельными `package.json` и `package-lock.json`; runner не скачивает зависимости. Используется установленный workspace Electron, отдельный браузер Playwright устанавливать не нужно. Для воспроизводимого прогона используйте Node.js 22.14.0. В среде с read-only npm cache укажите доступный `--cache` при `npm ci`.
+Playwright закреплён отдельными `package.json` и `package-lock.json`; runner не скачивает зависимости. Используется установленный workspace Electron, отдельный браузер Playwright устанавливать не нужно. Для воспроизводимого прогона используйте Node.js 24. В среде с read-only npm cache укажите доступный `--cache` при `npm ci`.
 
 Linux требует доступного графического дисплея и системных библиотек Electron. Для локального headless Ubuntu 24.04:
 

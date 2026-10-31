@@ -50,8 +50,8 @@ export function verifyToolchain(root = repositoryRoot) {
     'Корневой package.json должен иметь type: module',
   );
   expect(
-    manifest.engines?.node === '>=22.14.0 <25',
-    'engines.node должен быть >=22.14.0 <25',
+    manifest.engines?.node === '>=24.0.0 <25',
+    'engines.node должен быть >=24.0.0 <25',
   );
   for (const script of ['lint', 'typecheck', 'format:check', 'test', 'build']) {
     expect(

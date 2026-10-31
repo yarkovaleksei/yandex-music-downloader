@@ -1,12 +1,13 @@
 ---
 schema: 1
 id: ADR-017
-status: accepted
+status: superseded
 date: 2026-10-16
 deciders:
   - yarkovaleksei (решение владельца продукта)
 supersedes: []
-superseded_by: []
+superseded_by:
+  - ADR-020
 requirements:
   - REQ-040
   - REQ-033

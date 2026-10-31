@@ -38,6 +38,7 @@ ADR фиксирует **устойчивое архитектурное реш�
 - [ADR-014](ADR-014-sqlite-persistence.md) — SQLite persistence, общий каталог состояния и миграции (accepted)
 - [ADR-015](ADR-015-electron-security-model.md) — Модель безопасности Electron, топология процессов и desktop secure storage (accepted)
 - [ADR-016](ADR-016-desktop-ipc-contract.md) — Typed IPC contract `DesktopApi` (accepted)
-- [ADR-017](ADR-017-node-api-10-runtime-floor.md) — Нижняя граница Node.js 22.14.0 (Node-API 10) (accepted)
+- [ADR-017](ADR-017-node-api-10-runtime-floor.md) — Нижняя граница Node.js 22.14.0 (Node-API 10) (superseded; заменён [ADR-020](ADR-020-node-24-only.md))
 - [ADR-018](ADR-018-linux-packaging-and-updates.md) — Упаковка на Linux, подписание и доверенные обновления (superseded; заменён [ADR-019](ADR-019-portable-distribution-and-updates.md))
 - [ADR-019](ADR-019-portable-distribution-and-updates.md) — Portable-дистрибутивы и проверенные обновления без платных сертификатов (accepted; заменяет [ADR-018](ADR-018-linux-packaging-and-updates.md))
+- [ADR-020](ADR-020-node-24-only.md) — Поддерживается только Node.js 24 (accepted; заменяет [ADR-017](ADR-017-node-api-10-runtime-floor.md))

@@ -16,7 +16,7 @@ CLI после сборки: `node apps/cli/dist/index.js --help`. Команд�
 
 ## Prerequisites
 
-- Node.js `>=22.14.0 <25` (поддерживаются Node.js 22 и 24 LTS; Node.js 25 и новее не поддерживаются, ADR-008; нижняя граница 22.14.0 нужна для Node-API 10 у `better-sqlite3`, ADR-017). Для разработки рекомендуется Node.js 24 (`.nvmrc`).
+- Node.js `>=24.0.0 <25`: поддерживается только Node.js 24 LTS (`.nvmrc`), ADR-020. CLI не выпускается отдельно и запускается из исходников; desktop использует Node.js, встроенный в Electron.
 - Corepack из состава Node.js и сетевой доступ к npm registry при первом скачивании Yarn.
 - Yarn фиксируется в корневом `package.json`: `packageManager` = `yarn@4.18.1+sha512.<hash>`. Менять версию вручную не нужно: используйте Corepack.
 
@@ -368,10 +368,10 @@ REQ-скрипт обновляет `docs/requirements/README.md` целиком
 
 - `run-yarn.mjs` — запуск `corepack yarn` с проверкой диапазона Node.js и Corepack-кешем в `.cache/corepack` рабочей копии;
 - `verify-toolchain.mjs` — Node, `packageManager` (sha512), `.yarnrc.yml`, отсутствие npm-артефактов, фактический Yarn;
-- `verify-workspace.mjs` — чистые копии для Node.js 22.14.0 и 24: `corepack enable --install-directory <tmp-bin>`, immutable install, lint/test/typecheck/format:check/build, негативные boundary-проверки, mismatch `yarn.lock` и недоступный workspace;
+- `verify-workspace.mjs` — чистая копия для Node.js 24: `corepack enable --install-directory <tmp-bin>`, immutable install, lint/test/typecheck/format:check/build, негативные boundary-проверки, mismatch `yarn.lock` и недоступный workspace;
 - `verify-workspace-manual.sh` — обёртка для ручного запуска.
 
-Требования и ограничения: нужны `nvm` с уже установленными Node.js 22.14.0 и 24 (`nvm install` скрипты не вызывают; при отсутствии версии результат FAIL с причиной) и доступ к npm registry.
+Требования и ограничения: нужен `nvm` с уже установленным Node.js 24 (`nvm install` скрипты не вызывают; при отсутствии версии результат FAIL с причиной) и доступ к npm registry.
 
 ## Environment / configuration
 
@@ -383,7 +383,7 @@ Application composition root по умолчанию создаёт `SqliteManif
 
 ## CI/CD
 
-CI приложения используется для дополнительных проверок только на Linux: lint, typecheck, format:check, unit tests на Node.js 22.14.0/24. Windows/macOS runners, интеграционные сценарии, Electron E2E и build в CI приложения не запускаются. Ожидание или отказ CI не блокирует локальную приёмку.
+CI приложения используется для дополнительных проверок только на Linux: lint, typecheck, format:check, unit tests на Node.js 24. Windows/macOS runners, интеграционные сценарии, Electron E2E и build в CI приложения не запускаются. Ожидание или отказ CI не блокирует локальную приёмку.
 
 Перед слиянием выполняются локально:
 
@@ -396,7 +396,7 @@ node packages/testing/scripts/run-yarn.mjs test
 node packages/testing/scripts/run-yarn.mjs run build
 ```
 
-Desktop дополнительно проходит Electron E2E по инструкции Testing. Сборка приложения и всех артефактов выполняется только на Linux. На Windows x64 и macOS arm64/x64 запускаются готовые собранные на Linux приложения и заранее собранный E2E host, без TypeScript/Vite/esbuild и пересборки. Платформенные проверки фиксируют revision, ОС, архитектуру, команды и результаты. Локальный Linux результат не заменяет Windows/macOS. Промежуточные проверки разработки выполняются на Linux. Поддерживаемые Node.js 22.14.0 и 24, Yarn и архитектурные границы сохраняются.
+Desktop дополнительно проходит Electron E2E по инструкции Testing. Сборка приложения и всех артефактов выполняется только на Linux. На Windows x64 и macOS arm64/x64 запускаются готовые собранные на Linux приложения и заранее собранный E2E host, без TypeScript/Vite/esbuild и пересборки. Платформенные проверки фиксируют revision, ОС, архитектуру, команды и результаты. Локальный Linux результат не заменяет Windows/macOS. Промежуточные проверки разработки выполняются на Linux. Поддерживаемый Node.js 24, Yarn и архитектурные границы сохраняются.
 
 Сборка portable-дистрибутивов и проверки собственной подписи descriptor/ручного обновления выполняются локально. Платная системная подпись и notarization не требуются по ADR-019; собственный приватный ключ остаётся в защищённом хранилище ОС Linux-сборщика. Live-тесты provider запускаются только вручную с явной настройкой, отдельно от offline suite; токены не попадают в репозиторий и Evidence.
 
