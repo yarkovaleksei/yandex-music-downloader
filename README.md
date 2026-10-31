@@ -30,7 +30,7 @@
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/images/album-preview-dark.png">
   <source media="(prefers-color-scheme: light)" srcset="docs/images/album-preview-light.png">
-  <img src="docs/images/album-preview-light.png" alt="Предпросмотр альбома в Yandex Music Downloader: обложка, список треков, выбор качества и папки загрузки">
+  <img src="docs/images/album-preview-light.png" alt="Предпросмотр альбома в Yandex Music Downloader: обложка, список треков с выбором, качество и папка загрузки">
 </picture>
 
 *Предпросмотр альбома в приложении: состав, длительность, качество и папка для сохранения — перед началом загрузки.*

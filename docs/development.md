@@ -383,7 +383,7 @@ Application composition root по умолчанию создаёт `SqliteManif
 
 ## CI/CD
 
-CI приложения используется для дополнительных проверок только на Linux: lint, typecheck, format:check, unit tests на Node.js 24. Windows/macOS runners, интеграционные сценарии, Electron E2E и build в CI приложения не запускаются. Ожидание или отказ CI не блокирует локальную приёмку.
+CI приложения используется для дополнительных проверок только на Linux: lint, typecheck, format:check, unit tests на Node.js 24. Windows/macOS runners, интеграционные сценарии, Electron E2E и build в CI приложения не запускаются. CI не запускается, если изменились только файлы вне проверок: документация в `docs` и корневые `.md`, изображения, лицензия и инструкции агентов; `docs/development.md`, `docs/architecture.md`, REQ-040 и `docs/brand/icon.png` читают тесты, поэтому их изменение запускает CI. Ожидание или отказ CI не блокирует локальную приёмку.
 
 Перед слиянием выполняются локально:
 

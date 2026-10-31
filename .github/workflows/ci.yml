@@ -1,13 +1,31 @@
 # Продуктовые проверки выполняются на Linux; сборка и публикация релиза запускаются отдельно.
 name: CI
 
+# Запуск только при изменении файлов, которые проверяют lint, typecheck, format и тесты.
 on:
   pull_request:
     branches:
       - main
+    paths: &checked-paths
+      - "**"
+      # Документация, изображения и инструкции не проверяются CI;
+      # README пакетов внутри apps и packages проверяет prettier.
+      - "!*.md"
+      - "!docs/**"
+      - "!LICENSE"
+      - "!.vscode/**"
+      - "!.claude/**"
+      - "!.agents/**"
+      - "!.github/ISSUE_TEMPLATE/**"
+      # Эти файлы читают тесты согласованности и provider.
+      - "docs/development.md"
+      - "docs/architecture.md"
+      - "docs/requirements/REQ-040-tool-ts-quality.md"
+      - "docs/brand/icon.png"
   push:
     branches:
       - main
+    paths: *checked-paths
 
 # CI только читает репозиторий и не публикует артефакты.
 permissions:
