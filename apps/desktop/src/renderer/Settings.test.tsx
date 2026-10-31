@@ -52,17 +52,21 @@ it('REQ-052: сохранённые settings загружаются, выбор 
       }),
     ),
     saveSettings: vi.fn(async () => success('saveSettings', settings)),
+    checkFfmpeg: vi.fn(async () => success('checkFfmpeg', { available: true })),
   };
   const onSaved = vi.fn();
   render(<Settings api={api as unknown as DesktopApi} onSaved={onSaved} />);
   expect(await screen.findByDisplayValue('/fixture/old')).toBeTruthy();
   fireEvent.click(screen.getByRole('button', { name: 'Выбрать папку' }));
   await screen.findByDisplayValue('/fixture/new');
-  fireEvent.click(screen.getByRole('tab', { name: 'Загрузка' }));
-  fireEvent.click(screen.getByRole('button', { name: 'Выбрать FFmpeg' }));
+  fireEvent.click(screen.getByRole('tab', { name: 'Дополнительно' }));
+  fireEvent.click(screen.getByRole('button', { name: 'Указать файл ffmpeg' }));
   await screen.findByDisplayValue('/fixture/new-ffmpeg');
   fireEvent.click(screen.getByRole('button', { name: 'Сохранить настройки' }));
   await screen.findByText(/Настройки сохранены/);
+  // Итог сохранения относится к форме и исчезает при смене вкладки.
+  fireEvent.click(screen.getByRole('tab', { name: 'Файлы' }));
+  expect(screen.queryByText(/Настройки сохранены/)).toBeNull();
   expect(api.saveSettings).toHaveBeenCalledWith({
     quality: 'best',
     concurrency: 4,
@@ -94,6 +98,7 @@ it('ADR-016: unknown сохранение перечитывает snapshot и �
       success('getSettings', defaultDesktopSettings),
     ),
     saveSettings: vi.fn(async () => failure('saveSettings', 'OUTCOME_UNKNOWN')),
+    checkFfmpeg: async () => success('checkFfmpeg', { available: true }),
   };
   render(
     <Settings api={api as unknown as DesktopApi} onSaved={() => undefined} />,
@@ -106,12 +111,17 @@ it('ADR-016: unknown сохранение перечитывает snapshot и �
   expect(api.saveSettings).toHaveBeenCalledOnce();
 });
 
-it('REQ-057: FFmpeg проверяется отдельно по выбранному ref, отсутствие не блокирует базовые загрузки', async () => {
+it('REQ-057: FFmpeg проверяется при открытии и смене пути; предупреждение только когда он не найден', async () => {
+  const available = { current: false };
   const api = {
     appInfo: vi.fn(async () =>
       success('appInfo', { version: '1.2.3', dev: true }),
     ),
-    getSettings: async () => success('getSettings', defaultDesktopSettings),
+    getSettings: async () =>
+      success('getSettings', {
+        ...defaultDesktopSettings,
+        ffmpegPath: '/fixture/saved-ffmpeg',
+      }),
     ffmpegHelp: async () =>
       success('ffmpegHelp', {
         platform: 'win32',
@@ -124,28 +134,92 @@ it('REQ-057: FFmpeg проверяется отдельно по выбранн�
         displayPath: '/fixture/ffmpeg',
       }),
     checkFfmpeg: vi.fn(async () =>
-      success('checkFfmpeg', { available: false }),
+      success('checkFfmpeg', { available: available.current }),
     ),
     openExternal: vi.fn(async () => success('openExternal', null)),
   };
   render(<Settings api={api as unknown as DesktopApi} onSaved={() => {}} />);
-  expect(await screen.findByText(/FFmpeg необязателен/)).toBeTruthy();
-  expect(api.checkFfmpeg).not.toHaveBeenCalled();
-  fireEvent.click(screen.getByRole('tab', { name: 'Загрузка' }));
-  fireEvent.click(screen.getByRole('button', { name: 'Выбрать FFmpeg' }));
-  await screen.findByDisplayValue('/fixture/ffmpeg');
-  fireEvent.click(screen.getByRole('button', { name: 'Проверить FFmpeg' }));
-  await screen.findByText(/Основные загрузки продолжат работать/);
-  expect(api.checkFfmpeg).toHaveBeenCalledExactlyOnceWith({
-    ffmpegRef: 'exe:00000000-0000-0000-0000-000000000001',
-  });
+  await waitFor(() => expect(api.checkFfmpeg).toHaveBeenCalledWith({}));
+  fireEvent.click(screen.getByRole('tab', { name: 'Дополнительно' }));
+  expect(await screen.findByText(/FFmpeg не найден/)).toBeTruthy();
+  expect(screen.getByText(/Он необязателен/)).toBeTruthy();
   fireEvent.click(screen.getByRole('button', { name: 'Скачать FFmpeg' }));
   expect(api.openExternal).toHaveBeenCalledWith({
     url: 'https://www.gyan.dev/ffmpeg/builds/',
   });
+  available.current = true;
+  fireEvent.click(screen.getByRole('button', { name: 'Указать файл ffmpeg' }));
+  await screen.findByDisplayValue('/fixture/ffmpeg');
+  expect(api.checkFfmpeg).toHaveBeenLastCalledWith({
+    ffmpegRef: 'exe:00000000-0000-0000-0000-000000000001',
+  });
+  // Найденный FFmpeg не требует внимания: ни сообщения, ни кнопок.
+  await waitFor(() =>
+    expect(screen.queryByText(/FFmpeg не найден/)).toBeNull(),
+  );
+  expect(screen.queryByRole('button', { name: 'Проверить снова' })).toBeNull();
+  expect(screen.queryByRole('button', { name: 'Скачать FFmpeg' })).toBeNull();
+  available.current = false;
+  fireEvent.click(screen.getByRole('button', { name: 'Искать в PATH' }));
+  expect(await screen.findByDisplayValue('Автоматически из PATH')).toBeTruthy();
+  expect(api.checkFfmpeg).toHaveBeenLastCalledWith({ ffmpegRef: null });
+  expect(
+    (
+      (await screen.findByRole('button', {
+        name: 'Искать в PATH',
+      })) as HTMLButtonElement
+    ).disabled,
+  ).toBe(true);
+  available.current = true;
+  fireEvent.click(
+    await screen.findByRole('button', { name: 'Проверить снова' }),
+  );
+  await waitFor(() =>
+    expect(screen.queryByText(/FFmpeg не найден/)).toBeNull(),
+  );
+  expect(api.checkFfmpeg).toHaveBeenLastCalledWith({ ffmpegRef: null });
 });
 
-it('REQ-058: вкладки сохраняют переключатели файлов и тему без изменения старых полей', async () => {
+it('потерянная связь при проверке FFmpeg показывает предупреждение, а не ломает экран', async () => {
+  const api = {
+    appInfo: async () => success('appInfo', { version: '1.2.3', dev: true }),
+    getSettings: async () => success('getSettings', defaultDesktopSettings),
+    ffmpegHelp: async () => success('ffmpegHelp', null),
+    checkFfmpeg: vi.fn(async () => {
+      throw new Error('IPC закрыт');
+    }),
+  };
+  render(<Settings api={api as unknown as DesktopApi} onSaved={() => {}} />);
+  fireEvent.click(await screen.findByRole('tab', { name: 'Дополнительно' }));
+  expect(await screen.findByText(/Не удалось проверить FFmpeg/)).toBeTruthy();
+});
+
+it('журнал: пояснение и кнопка открытия папки, отказ main показан пользователю', async () => {
+  const api = {
+    appInfo: async () => success('appInfo', { version: '1.2.3', dev: true }),
+    getSettings: async () => success('getSettings', defaultDesktopSettings),
+    ffmpegHelp: async () => success('ffmpegHelp', null),
+    checkFfmpeg: async () => success('checkFfmpeg', { available: true }),
+    openLogFolder: vi.fn(async () => success('openLogFolder', null)),
+  };
+  render(<Settings api={api as unknown as DesktopApi} onSaved={() => {}} />);
+  fireEvent.click(await screen.findByRole('tab', { name: 'Дополнительно' }));
+  expect(screen.getByText(/Пароли и токены в него не попадают/)).toBeTruthy();
+  expect(screen.getByLabelText('Подробность журнала')).toBeTruthy();
+  const open = screen.getByRole('button', { name: 'Открыть папку журнала' });
+  fireEvent.click(open);
+  await waitFor(() => expect(api.openLogFolder).toHaveBeenCalledOnce());
+  expect(screen.queryByText('Не удалось открыть папку журнала.')).toBeNull();
+  api.openLogFolder.mockResolvedValueOnce(
+    failure('openLogFolder', 'PERMISSION_DENIED') as never,
+  );
+  fireEvent.click(open);
+  expect(
+    await screen.findByText('Не удалось открыть папку журнала.'),
+  ).toBeTruthy();
+});
+
+it('REQ-058: вкладки сохраняют переключатели файлов, тема берётся из боковой панели', async () => {
   let settings = { ...defaultDesktopSettings };
   const api = {
     appInfo: vi.fn(async () =>
@@ -153,14 +227,21 @@ it('REQ-058: вкладки сохраняют переключатели фай
     ),
     getSettings: async () => success('getSettings', settings),
     ffmpegHelp: async () => success('ffmpegHelp', null),
+    checkFfmpeg: async () => success('checkFfmpeg', { available: true }),
     saveSettings: vi.fn(async (input) => {
       settings = { ...settings, ...input };
       return success('saveSettings', settings);
     }),
   };
+  // Тема переключается в боковой панели и приходит подтверждённой.
   const view = render(
-    <Settings api={api as unknown as DesktopApi} onSaved={() => {}} />,
+    <Settings
+      api={api as unknown as DesktopApi}
+      onSaved={() => {}}
+      confirmedTheme="dark"
+    />,
   );
+  expect(screen.queryByRole('tab', { name: 'Внешний вид' })).toBeNull();
   await screen.findByRole('button', { name: 'Сохранить настройки' });
   fireEvent.click(screen.getByRole('tab', { name: 'Файлы' }));
   for (const label of [
@@ -173,8 +254,6 @@ it('REQ-058: вкладки сохраняют переключатели фай
   expect(
     screen.queryByLabelText('Открывать папку после завершения загрузки'),
   ).toBeNull();
-  fireEvent.click(screen.getByRole('tab', { name: 'Внешний вид' }));
-  fireEvent.click(screen.getByLabelText('Тёмная тема'));
   fireEvent.click(screen.getByRole('button', { name: 'Сохранить настройки' }));
   await waitFor(() =>
     expect(api.saveSettings).toHaveBeenCalledWith(
@@ -190,10 +269,11 @@ it('REQ-058: вкладки сохраняют переключатели фай
   view.unmount();
   render(<Settings api={api as unknown as DesktopApi} onSaved={() => {}} />);
   await screen.findByRole('button', { name: 'Сохранить настройки' });
-  fireEvent.click(screen.getByRole('tab', { name: 'Внешний вид' }));
+  fireEvent.click(screen.getByRole('tab', { name: 'Файлы' }));
   expect(
-    (screen.getByLabelText('Тёмная тема') as HTMLInputElement).checked,
-  ).toBe(true);
+    (screen.getByLabelText('Создавать плейлисты .m3u8') as HTMLInputElement)
+      .checked,
+  ).toBe(false);
   fireEvent.click(screen.getByRole('tab', { name: 'О программе' }));
   expect(screen.getByText('Обновления приложения')).toBeTruthy();
   expect(
@@ -209,6 +289,7 @@ it('целое 1–8 без меню, invalid не сохраняется, About
     ),
     ffmpegHelp: async () => success('ffmpegHelp', null),
     checkUpdate: vi.fn(),
+    checkFfmpeg: async () => success('checkFfmpeg', { available: true }),
     saveSettings: vi.fn(async (input) =>
       success('saveSettings', { ...defaultDesktopSettings, ...input }),
     ),

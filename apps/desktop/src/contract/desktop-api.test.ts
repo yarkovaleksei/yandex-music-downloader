@@ -10,6 +10,7 @@ const samples: Record<Method, unknown> = {
   accountAvatar: undefined,
   jobFolderAvailability: { jobId: '1' },
   checkUpdate: undefined,
+  updateNotes: undefined,
   downloadUpdate: undefined,
   openUpdateFolder: undefined,
   authenticate: undefined,
@@ -30,6 +31,7 @@ const samples: Record<Method, unknown> = {
   clearDownloads: undefined,
   getDownload: { jobId: '1' },
   openDownloadsFolder: undefined,
+  openLogFolder: undefined,
   ffmpegHelp: undefined,
   checkFfmpeg: {},
   getJob: { jobId: '1' },
@@ -430,4 +432,94 @@ it('REQ-058: exact selector закрыт для provider key, пути и неи
       variantSelection: { ...request.variantSelection, codec: '/tmp/audio' },
     }),
   ).toThrow();
+});
+
+it('выбор треков: схема принимает уникальные положительные позиции, broker передаёт их host', async () => {
+  const request = { source, quality: 'best', directoryRef: 'default-output' };
+  expect(
+    parseInput('createDownload', { ...request, trackPositions: [3, 1] }),
+  ).toEqual({ ...request, trackPositions: [3, 1] });
+  for (const trackPositions of [[], [1, 1], [0], [1.5], ['1']])
+    expect(() =>
+      parseInput('createDownload', { ...request, trackPositions }),
+    ).toThrow();
+  const host = vi.fn(async (method: string, payload: unknown) =>
+    success(
+      method,
+      method === 'getSettings' ? { outputDirectory: '/persisted' } : payload,
+    ),
+  );
+  await invokeBroker(
+    'createDownload',
+    { ...request, trackPositions: [2, 4] },
+    true,
+    new DirectoryRegistry(),
+    {
+      selectDirectory: async () => undefined,
+      showItemInFolder: async () => false,
+      openExternal: async () => {},
+    },
+    host,
+  );
+  expect(host).toHaveBeenLastCalledWith('createDownload', {
+    source,
+    quality: 'best',
+    destination: '/persisted',
+    trackPositions: [2, 4],
+  });
+});
+
+it('main-методы журнала, описания версии и ссылки Плюса не обращаются к host', async () => {
+  const host = vi.fn(async (method: string) => success(method, null));
+  const actions = {
+    selectDirectory: async () => undefined,
+    showItemInFolder: async () => false,
+    openExternal: vi.fn(async () => {}),
+    openLogFolder: vi.fn(async () => true),
+    updates: {
+      check: vi.fn(),
+      download: vi.fn(),
+      reveal: vi.fn(),
+      notes: vi.fn(async () => '## Что нового'),
+    },
+  };
+  const call = (method: Method, input?: unknown) =>
+    invokeBroker(method, input, true, new DirectoryRegistry(), actions, host);
+  expect(await call('openLogFolder')).toMatchObject({ kind: 'result' });
+  actions.openLogFolder.mockResolvedValueOnce(false);
+  expect(await call('openLogFolder')).toMatchObject({
+    kind: 'error',
+    error: { code: 'PERMISSION_DENIED' },
+  });
+  expect(await call('updateNotes')).toMatchObject({
+    kind: 'result',
+    data: '## Что нового',
+  });
+  expect(
+    await call('openExternal', { url: 'https://plus.yandex.ru/my' }),
+  ).toMatchObject({ kind: 'result' });
+  expect(actions.openExternal).toHaveBeenCalledWith(
+    'https://plus.yandex.ru/my',
+  );
+  expect(
+    await call('openExternal', { url: 'https://plus.yandex.com/my' }),
+  ).toMatchObject({ kind: 'error' });
+  expect(host).not.toHaveBeenCalled();
+  // Без подключённых действий main отказывает, а не делает вид, что открыл.
+  const bare = {
+    selectDirectory: async () => undefined,
+    showItemInFolder: async () => false,
+    openExternal: async () => {},
+  };
+  for (const method of ['openLogFolder', 'updateNotes'] as const)
+    expect(
+      await invokeBroker(
+        method,
+        undefined,
+        true,
+        new DirectoryRegistry(),
+        bare,
+        host,
+      ),
+    ).toMatchObject({ kind: 'error' });
 });

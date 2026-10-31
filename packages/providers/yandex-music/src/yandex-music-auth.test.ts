@@ -946,6 +946,48 @@ it.each([
   },
 );
 
+it.each([
+  [{ plus: { hasPlus: true } }, true],
+  [{ plus: { hasPlus: false } }, false],
+  [
+    {
+      subscription: {
+        autoRenewable: [{ finished: false, product: { title: 'Другая' } }],
+      },
+    },
+    false,
+  ],
+])(
+  'Плюс %j отмечается и ведёт в русскоязычный кабинет только при hasPlus',
+  async (fields, premium) => {
+    const provider = new YandexMusicProviderAuth({
+      credentialStore: store(
+        JSON.stringify({
+          schemaVersion: 1,
+          accessToken: 'synthetic',
+          issuedAt: 0,
+          accountId: '1',
+        }),
+      ),
+      authInteraction: { notify() {} },
+      fetch: async () =>
+        response(200, {
+          result: { account: { uid: 1, displayName: 'Тест' }, ...fields },
+        }),
+    });
+    const account = await provider.getAccount();
+    if (premium)
+      expect(account).toMatchObject({
+        premium: true,
+        subscriptionUrl: 'https://plus.yandex.ru/my',
+      });
+    else {
+      expect(account).not.toHaveProperty('premium');
+      expect(account).not.toHaveProperty('subscriptionUrl');
+    }
+  },
+);
+
 it('поздний account-status A не меняет active credentials после logout и входа B', async () => {
   const credentials = store(
     JSON.stringify({

@@ -1145,6 +1145,7 @@ __metadata:
     electron: "npm:45.0.0"
     esbuild: "npm:0.28.2"
     jsdom: "npm:26.1.0"
+    markdown-to-jsx: "npm:9.10.3"
     react: "npm:19.3.1"
     react-dom: "npm:19.3.1"
     vite: "npm:8.3.5"
@@ -4412,6 +4413,26 @@ __metadata:
   dependencies:
     "@jridgewell/sourcemap-codec": "npm:^1.5.5"
   checksum: 10c0/299378e38f9a270069fc62358522ddfb44e94244baa0d6a8980ab2a9b2490a1d03b236b447eee309e17eb3bddfa482c61259d47960eb018a904f0ded52780c4a
+  languageName: node
+  linkType: hard
+
+"markdown-to-jsx@npm:9.10.3":
+  version: 9.10.3
+  resolution: "markdown-to-jsx@npm:9.10.3"
+  peerDependencies:
+    react: ">= 16.0.0"
+    solid-js: ">=1.0.0"
+    vue: ">=3.0.0"
+  peerDependenciesMeta:
+    react:
+      optional: true
+    react-native:
+      optional: true
+    solid-js:
+      optional: true
+    vue:
+      optional: true
+  checksum: 10c0/c1d9db8cca16a72b56751e041396f7d475bbd9faa35e9b0f427046c5bc4e123690290d097b48d86ae1361fc5ed123fee568b2053c806dfa5d6e4c09bb35e9474
   languageName: node
   linkType: hard
 

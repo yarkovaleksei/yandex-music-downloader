@@ -7,6 +7,7 @@ import {
   defaultDesktopSettings,
   ProviderError,
   AuthenticationError,
+  TrackUnavailableError,
   manifestFixture,
   type MusicProvider,
   type DesktopApplicationApi,
@@ -804,3 +805,144 @@ it.each(['resume', 'retry'] as const)(
     );
   },
 );
+
+it('выбор треков: загружаются только отмеченные позиции, повтор сохраняет выбор, неизвестная позиция отклоняется', async () => {
+  const directory = await root();
+  const stateDir = path.join(directory, 'state');
+  const output = path.join(directory, 'music');
+  const api = createApplication({
+    stateDir,
+    clientProfile: 'desktop',
+    providerOverride: provider().value,
+    processing: {},
+    cache: { ttlMs: 0 },
+  });
+  apps.push(api);
+  await api.saveSettings({
+    ...defaultDesktopSettings,
+    outputDirectory: output,
+  });
+  const source = { provider: 'mock', kind: 'album', id: 'collection' } as const;
+  const created = await api.createDownload({
+    source,
+    quality: 'high',
+    destination: output,
+    trackPositions: [2, 4],
+  });
+  if (created.kind !== 'result') throw new Error('Задание не создано');
+  await completed(api, created.data.jobId);
+  const jobs = new SqliteManifestStore({ stateDir });
+  const state = new SqliteDesktopStateStore({ stateDir });
+  try {
+    const manifest = (await jobs.read(created.data.jobId))!;
+    // План перенумерован подряд, но ссылается на исходные треки 2 и 4.
+    expect(
+      manifest.plan.tracks.map((item) => [
+        item.position,
+        item.trackKey,
+        item.track.id,
+      ]),
+    ).toEqual([
+      [1, '1', '2'],
+      [2, '2', '4'],
+    ]);
+    expect(manifest.tracks.map((track) => track.status)).toEqual([
+      'completed',
+      'completed',
+    ]);
+    expect(state.snapshot(created.data.jobId)).toMatchObject({
+      trackPositions: [2, 4],
+    });
+    const replay = await api.replay(created.data.jobId);
+    if (replay.kind !== 'result') throw new Error('Повтор не создан');
+    await completed(api, replay.data.jobId);
+    expect(
+      (await jobs.read(replay.data.jobId))!.plan.tracks.map(
+        (item) => item.track.id,
+      ),
+    ).toEqual(['2', '4']);
+    const count = (await jobs.list()).length;
+    expect(
+      await api.createDownload({
+        source,
+        quality: 'high',
+        destination: output,
+        trackPositions: [2, 9],
+      }),
+    ).toMatchObject({ kind: 'error', error: { code: 'VALIDATION_ERROR' } });
+    expect((await jobs.list()).length).toBe(count);
+  } finally {
+    state.close();
+    await jobs.close();
+  }
+});
+
+it('desktop журнал: файл получает создание, итог задания и упавший трек с кодом, без секретов и лишних этапов', async () => {
+  const directory = await root();
+  const stateDir = path.join(directory, 'state');
+  const output = path.join(directory, 'music');
+  const logFile = path.join(directory, 'desktop.log');
+  const fixture = provider();
+  const failing: MusicProvider = {
+    ...fixture.value,
+    openAudioStream: async (trackId, variantKey, options) => {
+      if (trackId === '3') throw new TrackUnavailableError();
+      return fixture.value.openAudioStream(trackId, variantKey, options);
+    },
+  };
+  const state = new SqliteDesktopStateStore({ stateDir });
+  state.saveSettings({
+    ...defaultDesktopSettings,
+    outputDirectory: output,
+    logging: 'info',
+  });
+  state.close();
+  const api = createApplication({
+    stateDir,
+    clientProfile: 'desktop',
+    providerOverride: failing,
+    processing: {},
+    cache: { ttlMs: 0 },
+    logFile,
+  });
+  apps.push(api);
+  const created = await api.createDownload({
+    source: { provider: 'mock', kind: 'album', id: 'collection' },
+    quality: 'high',
+    destination: output,
+  });
+  if (created.kind !== 'result') throw new Error('Задание не создано');
+  const jobId = created.data.jobId;
+  // Итог пишется после job.completed, поэтому ждём саму запись, а не статус.
+  await expect
+    .poll(async () => readFile(logFile, 'utf8'))
+    .toContain('Задание завершено.');
+  const records = (await readFile(logFile, 'utf8'))
+    .trim()
+    .split('\n')
+    .map(
+      (line) =>
+        JSON.parse(line) as {
+          level: string;
+          message: string;
+          context: { jobId?: string };
+          data?: Record<string, unknown>;
+        },
+    );
+  const job = records.filter((record) => record.context.jobId === jobId);
+  expect(job.map((record) => [record.level, record.message])).toEqual([
+    ['info', 'Задание создано.'],
+    ['error', 'Трек не загружен.'],
+    ['info', 'Задание завершено.'],
+  ]);
+  expect(job[1]?.data).toMatchObject({
+    trackKey: '3',
+    trackId: '3',
+    code: 'TRACK_UNAVAILABLE',
+  });
+  expect(job[2]?.data).toEqual({
+    source: 'album',
+    tracks: { completed: 3, failed: 1 },
+  });
+  expect(await readFile(logFile, 'utf8')).not.toContain('fixture-secret');
+});

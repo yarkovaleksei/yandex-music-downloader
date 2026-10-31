@@ -1,5 +1,5 @@
 import { Updates } from './Updates.js';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   Alert,
   Box,
@@ -14,6 +14,12 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import FileOpenRounded from '@mui/icons-material/FileOpenRounded';
+import FolderOpenRounded from '@mui/icons-material/FolderOpenRounded';
+import OpenInNewRounded from '@mui/icons-material/OpenInNewRounded';
+import RefreshRounded from '@mui/icons-material/RefreshRounded';
+import SaveRounded from '@mui/icons-material/SaveRounded';
+import SearchRounded from '@mui/icons-material/SearchRounded';
 import type { DesktopSettings } from '@music-downloader/shared';
 import type { DesktopApi, Input } from '../contract/desktop-api.js';
 
@@ -27,26 +33,33 @@ export function Settings({
   onSaved: () => void;
   confirmedTheme?: DesktopSettings['theme'];
 }) {
-  const [tab, setTab] = useState('general');
+  const [tab, setTab] = useState('download');
   const [value, setValue] = useState<DesktopSettings>();
   const [concurrency, setConcurrency] = useState('');
   const [appInfo, setAppInfo] = useState<{ version: string; dev: boolean }>();
   const validConcurrency = /^[1-8]$/.test(concurrency);
-  const [themeEdited, setThemeEdited] = useState(false);
   const [directoryRef, setDirectoryRef] = useState<string>();
   const [ffmpegRef, setFfmpegRef] = useState<string | null>();
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState<{
+    severity: 'success' | 'error';
+    text: string;
+  }>();
   const [busy, setBusy] = useState(false);
-  const [ffmpegMessage, setFfmpegMessage] = useState('');
+  const [ffmpegStatus, setFfmpegStatus] = useState<
+    'available' | 'missing' | 'error'
+  >();
   const [ffmpegBusy, setFfmpegBusy] = useState(false);
+  const ffmpegRequest = useRef(0);
   const [help, setHelp] = useState<{ url: string; instruction: string }>();
   useEffect(() => {
     void api.getSettings().then((result) => {
       if (result.kind === 'result') {
         setValue(result.data);
         setConcurrency(String(result.data.concurrency));
-      } else setMessage(result.error.message);
+      } else setMessage({ severity: 'error', text: result.error.message });
     });
+    // Проверка сохранённого FFmpeg при открытии; ничего не скачивает (ADR-013).
+    void checkFfmpeg(undefined);
     void api.appInfo().then((result) => {
       if (result.kind === 'result') setAppInfo(result.data);
     });
@@ -54,9 +67,8 @@ export function Settings({
       if (result.kind === 'result') setHelp(result.data);
     });
   }, [api]);
-  // F-001: подтверждённая тема sidebar обновляет только theme, сохраняя черновик и opaque refs.
+  // F-001: тема переключается в sidebar; черновик и opaque refs сохраняются.
   useEffect(() => {
-    setThemeEdited(false);
     if (confirmedTheme)
       setValue((previous) =>
         previous ? { ...previous, theme: confirmedTheme } : previous,
@@ -67,36 +79,54 @@ export function Settings({
     if (result.kind === 'result' && result.data && value) {
       setDirectoryRef(result.data.directoryRef);
       setValue({ ...value, outputDirectory: result.data.displayPath });
-    } else if (result.kind === 'error') setMessage(result.error.message);
+    } else if (result.kind === 'error')
+      setMessage({ severity: 'error', text: result.error.message });
   }
   async function chooseFfmpeg() {
     const result = await api.selectFfmpeg();
     if (result.kind === 'result' && result.data && value) {
       setFfmpegRef(result.data.executableRef);
       setValue({ ...value, ffmpegPath: result.data.displayPath });
-    } else if (result.kind === 'error') setMessage(result.error.message);
+      void checkFfmpeg(result.data.executableRef);
+    } else if (result.kind === 'error')
+      setMessage({ severity: 'error', text: result.error.message });
   }
-  async function checkFfmpeg() {
+  /** undefined — сохранённый путь, null — поиск в PATH, строка — выбранный файл. */
+  async function checkFfmpeg(ref: string | null | undefined) {
+    // Результат устаревшей проверки не перезаписывает проверку нового пути.
+    const revision = ++ffmpegRequest.current;
     setFfmpegBusy(true);
     try {
       const result = await api.checkFfmpeg(
-        ffmpegRef === undefined ? {} : { ffmpegRef },
+        ref === undefined ? {} : { ffmpegRef: ref },
       );
-      setFfmpegMessage(
-        result.kind === 'result'
-          ? result.data.available
-            ? 'FFmpeg найден и запускается.'
-            : 'FFmpeg не найден или не запускается. Основные загрузки продолжат работать. Установите его по инструкции ниже либо выберите исполняемый файл.'
-          : 'Не удалось проверить FFmpeg. Выберите исполняемый файл и повторите проверку; основные загрузки продолжат работать.',
+      if (revision !== ffmpegRequest.current) return;
+      setFfmpegStatus(
+        result.kind === 'error'
+          ? 'error'
+          : result.data.available
+            ? 'available'
+            : 'missing',
       );
+    } catch {
+      // Потерянная связь с приложением — тоже «не удалось проверить».
+      if (revision === ffmpegRequest.current) setFfmpegStatus('error');
     } finally {
-      setFfmpegBusy(false);
+      if (revision === ffmpegRequest.current) setFfmpegBusy(false);
     }
+  }
+  async function openLogFolder() {
+    const result = await api.openLogFolder().catch(() => undefined);
+    if (result?.kind !== 'result')
+      setMessage({
+        severity: 'error',
+        text: 'Не удалось открыть папку журнала.',
+      });
   }
   async function save() {
     if (!value || !validConcurrency) return;
     setBusy(true);
-    setMessage('');
+    setMessage(undefined);
     const input: Input<'saveSettings'> = {
       quality: value.quality,
       concurrency: Number(concurrency),
@@ -107,9 +137,7 @@ export function Settings({
       saveCoverFile: value.saveCoverFile ?? true,
       writeM3u8: value.writeM3u8 ?? true,
 
-      theme: themeEdited
-        ? (value.theme ?? 'light')
-        : (confirmedTheme ?? value.theme ?? 'light'),
+      theme: confirmedTheme ?? value.theme ?? 'light',
       ...(directoryRef === undefined ? {} : { directoryRef }),
       ...(ffmpegRef === undefined ? {} : { ffmpegRef }),
     };
@@ -118,24 +146,25 @@ export function Settings({
       if (result.kind === 'result') {
         setValue(result.data);
         setConcurrency(String(result.data.concurrency));
-        setThemeEdited(false);
         setDirectoryRef(undefined);
         setFfmpegRef(undefined);
-        setMessage(
-          'Настройки сохранены. Изменения параллельности и логирования применятся после перезапуска.',
-        );
+        setMessage({
+          severity: 'success',
+          text: 'Настройки сохранены. Новые загрузки используют их, текущие продолжат с прежними параметрами.',
+        });
         onSaved();
       } else {
-        setMessage(
-          result.error.code === 'OUTCOME_UNKNOWN'
-            ? 'Исход сохранения неизвестен. Загружены сохранённые настройки; проверьте значения.'
-            : result.error.message,
-        );
+        setMessage({
+          severity: 'error',
+          text:
+            result.error.code === 'OUTCOME_UNKNOWN'
+              ? 'Исход сохранения неизвестен. Загружены сохранённые настройки; проверьте значения.'
+              : result.error.message,
+        });
         const current = await api.getSettings();
         if (current.kind === 'result') {
           setValue(current.data);
           setConcurrency(String(current.data.concurrency));
-          setThemeEdited(false);
           onSaved();
         }
       }
@@ -151,15 +180,18 @@ export function Settings({
       </Typography>
       <Tabs
         value={tab}
-        onChange={(_, next: string) => setTab(next)}
+        onChange={(_, next: string) => {
+          // Итог сохранения относится к форме, а не к открытой вкладке.
+          setMessage(undefined);
+          setTab(next);
+        }}
         aria-label="Разделы настроек"
         sx={{ borderBottom: 1, borderColor: 'divider' }}
       >
         {[
-          ['general', 'Основные'],
           ['download', 'Загрузка'],
           ['files', 'Файлы'],
-          ['appearance', 'Внешний вид'],
+          ['advanced', 'Дополнительно'],
           ['about', 'О программе'],
         ].map(([key, label]) => (
           <Tab key={key} value={key} label={label} />
@@ -180,11 +212,11 @@ export function Settings({
           <Updates api={api} />
         </>
       )}
-      {message && <Alert severity="info">{message}</Alert>}
+      {message && <Alert severity={message.severity}>{message.text}</Alert>}
       {value && tab !== 'about' && (
         <Paper variant="outlined" sx={{ p: 3 }}>
           <Stack spacing={3}>
-            <Box hidden={tab !== 'general'}>
+            <Box hidden={tab !== 'download'}>
               <Stack spacing={3}>
                 <Stack direction="row" spacing={2}>
                   <TextField
@@ -194,43 +226,51 @@ export function Settings({
                     fullWidth
                   />
                   <Button
-                    sx={{ whiteSpace: 'nowrap', minWidth: 160 }}
+                    startIcon={<FolderOpenRounded />}
+                    sx={{ whiteSpace: 'nowrap', flexShrink: 0 }}
                     onClick={() => void chooseDirectory()}
                   >
                     Выбрать папку
                   </Button>
                 </Stack>
-                <TextField
-                  select
-                  label="Качество по умолчанию"
-                  value={value.quality}
-                  onChange={(e) =>
-                    setValue({
-                      ...value,
-                      quality: e.target.value as DesktopSettings['quality'],
-                    })
-                  }
+                <Stack
+                  direction="row"
+                  spacing={2}
+                  sx={{ alignItems: 'flex-start' }}
                 >
-                  <MenuItem value="best">Лучшее доступное</MenuItem>
-                  <MenuItem value="lossless">Без потерь</MenuItem>
-                  <MenuItem value="high">Высокое</MenuItem>
-                  <MenuItem value="normal">Обычное</MenuItem>
-                </TextField>
-                {/* отдельный черновик не сбрасывает выбранные пути и тему. */}
-                <TextField
-                  type="number"
-                  label="Параллельных загрузок"
-                  value={concurrency}
-                  onChange={(event) => setConcurrency(event.target.value)}
-                  error={!validConcurrency}
-                  helperText={
-                    !validConcurrency
-                      ? 'Введите целое число от 1 до 8.'
-                      : undefined
-                  }
-                  slotProps={{ htmlInput: { min: 1, max: 8, step: 1 } }}
-                  sx={{ width: 220 }}
-                />
+                  <TextField
+                    select
+                    fullWidth
+                    label="Качество по умолчанию"
+                    value={value.quality}
+                    onChange={(e) =>
+                      setValue({
+                        ...value,
+                        quality: e.target.value as DesktopSettings['quality'],
+                      })
+                    }
+                  >
+                    <MenuItem value="best">Лучшее доступное</MenuItem>
+                    <MenuItem value="lossless">Без потерь</MenuItem>
+                    <MenuItem value="high">Высокое</MenuItem>
+                    <MenuItem value="normal">Обычное</MenuItem>
+                  </TextField>
+                  {/* отдельный черновик не сбрасывает выбранные пути и тему. */}
+                  <TextField
+                    type="number"
+                    label="Параллельных загрузок"
+                    value={concurrency}
+                    onChange={(event) => setConcurrency(event.target.value)}
+                    error={!validConcurrency}
+                    helperText={
+                      !validConcurrency
+                        ? 'Введите целое число от 1 до 8.'
+                        : 'Применится после перезапуска приложения.'
+                    }
+                    slotProps={{ htmlInput: { min: 1, max: 8, step: 1 } }}
+                    sx={{ width: 220, flexShrink: 0 }}
+                  />
+                </Stack>
               </Stack>
             </Box>
             <Box hidden={tab !== 'files'}>
@@ -306,13 +346,9 @@ export function Settings({
                 ))}
               </Stack>
             </Box>
-            <Box hidden={tab !== 'download'}>
+            {/* Редко нужные настройки: журнал и необязательный FFmpeg. */}
+            <Box hidden={tab !== 'advanced'}>
               <Stack spacing={3}>
-                <Typography variant="h2">Диагностика и журнал</Typography>
-                <Typography color="text.secondary">
-                  Дополнительная проверка FFmpeg запускается только по вашей
-                  команде.
-                </Typography>
                 <Stack direction="row" spacing={2}>
                   <TextField
                     fullWidth
@@ -320,102 +356,119 @@ export function Settings({
                     value={value.ffmpegPath ?? 'Автоматически из PATH'}
                     slotProps={{ input: { readOnly: true } }}
                   />
-                  <Button onClick={() => void chooseFfmpeg()}>
-                    Выбрать FFmpeg
+                  <Button
+                    startIcon={<FileOpenRounded />}
+                    sx={{ whiteSpace: 'nowrap', flexShrink: 0 }}
+                    onClick={() => void chooseFfmpeg()}
+                  >
+                    Указать файл ffmpeg
                   </Button>
                   <Button
+                    startIcon={<SearchRounded />}
+                    sx={{ whiteSpace: 'nowrap', flexShrink: 0 }}
+                    disabled={value.ffmpegPath === null}
                     onClick={() => {
                       setFfmpegRef(null);
                       setValue({ ...value, ffmpegPath: null });
+                      void checkFfmpeg(null);
                     }}
                   >
-                    Автоматически
+                    Искать в PATH
                   </Button>
                 </Stack>
-                <Button
-                  disabled={ffmpegBusy}
-                  onClick={() => void checkFfmpeg()}
-                >
-                  {ffmpegBusy ? 'Проверяем FFmpeg…' : 'Проверить FFmpeg'}
-                </Button>
-                {ffmpegMessage && (
-                  <Alert severity="info">{ffmpegMessage}</Alert>
-                )}
-                <Alert severity="info">
-                  FFmpeg необязателен: базовые загрузки и запись тегов работают
-                  без него. Устанавливать его для обычного использования не
-                  нужно.
-                  {help && (
-                    <>
-                      {' '}
-                      {help.instruction}{' '}
+                {/* Сообщение появляется только при проблеме; найденный FFmpeg не требует внимания. */}
+                {(ffmpegStatus === 'missing' || ffmpegStatus === 'error') && (
+                  <Alert
+                    severity="warning"
+                    action={
                       <Button
                         size="small"
-                        onClick={() => void api.openExternal({ url: help.url })}
+                        startIcon={<RefreshRounded />}
+                        sx={{ whiteSpace: 'nowrap' }}
+                        disabled={ffmpegBusy}
+                        onClick={() => void checkFfmpeg(ffmpegRef)}
                       >
-                        Скачать FFmpeg
+                        {ffmpegBusy ? 'Проверяем…' : 'Проверить снова'}
                       </Button>
-                    </>
-                  )}
-                </Alert>
-                <TextField
-                  select
-                  label="Уровень журнала"
-                  value={value.logging}
-                  onChange={(e) =>
-                    setValue({
-                      ...value,
-                      logging: e.target.value as DesktopSettings['logging'],
-                    })
-                  }
+                    }
+                  >
+                    {ffmpegStatus === 'missing'
+                      ? 'FFmpeg не найден или не запускается.'
+                      : 'Не удалось проверить FFmpeg.'}{' '}
+                    Он необязателен: загрузки и запись тегов работают без него.
+                    {help && (
+                      <>
+                        {' '}
+                        {help.instruction}{' '}
+                        <Button
+                          size="small"
+                          endIcon={<OpenInNewRounded />}
+                          onClick={() =>
+                            void api.openExternal({ url: help.url })
+                          }
+                        >
+                          Скачать FFmpeg
+                        </Button>
+                      </>
+                    )}
+                  </Alert>
+                )}
+                <Typography color="text.secondary">
+                  Журнал записывает загрузки и ошибки: какие задания
+                  запускались, какие треки не скачались и почему. Пароли и
+                  токены в него не попадают. Если что-то пошло не так, приложите
+                  файл журнала к сообщению об ошибке.
+                </Typography>
+                <Stack
+                  direction="row"
+                  spacing={2}
+                  sx={{ alignItems: 'flex-start' }}
                 >
-                  {[
-                    ['error', 'Ошибки'],
-                    ['warn', 'Предупреждения'],
-                    ['info', 'Обычный'],
-                    ['debug', 'Подробный'],
-                    ['trace', 'Трассировка'],
-                  ].map(([key, label]) => (
-                    <MenuItem key={key} value={key}>
-                      {label}
-                    </MenuItem>
-                  ))}
-                </TextField>
+                  <TextField
+                    select
+                    fullWidth
+                    label="Подробность журнала"
+                    helperText="Применится после перезапуска приложения."
+                    value={value.logging}
+                    onChange={(e) =>
+                      setValue({
+                        ...value,
+                        logging: e.target.value as DesktopSettings['logging'],
+                      })
+                    }
+                  >
+                    {[
+                      ['error', 'Ошибки'],
+                      ['warn', 'Предупреждения'],
+                      ['info', 'Обычный'],
+                      ['debug', 'Подробный'],
+                      ['trace', 'Трассировка'],
+                    ].map(([key, label]) => (
+                      <MenuItem key={key} value={key}>
+                        {label}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                  <Button
+                    startIcon={<FolderOpenRounded />}
+                    sx={{ whiteSpace: 'nowrap', flexShrink: 0, mt: 1 }}
+                    onClick={() => void openLogFolder()}
+                  >
+                    Открыть папку журнала
+                  </Button>
+                </Stack>
               </Stack>
             </Box>
-            <Box hidden={tab !== 'appearance'}>
-              <FormControlLabel
-                label="Тёмная тема"
-                control={
-                  <Switch
-                    checked={value.theme === 'dark'}
-                    onChange={(_, checked) => {
-                      setThemeEdited(true);
-                      setValue({ ...value, theme: checked ? 'dark' : 'light' });
-                    }}
-                  />
-                }
-              />
-              <Typography color="text.secondary">
-                Тема сохранится после перезапуска приложения.
-              </Typography>
-            </Box>
-            {tab !== 'about' && (
-              <>
-                <Alert severity="info">
-                  Параллельность и уровень журнала применяются после
-                  перезапуска. Остальные настройки используются новыми
-                  заданиями; текущие загрузки сохраняют свои параметры.
-                </Alert>
-                <Button
-                  variant="contained"
-                  disabled={busy || !validConcurrency}
-                  onClick={() => void save()}
-                >
-                  Сохранить настройки
-                </Button>
-              </>
-            )}
+            <Stack direction="row" sx={{ justifyContent: 'flex-end' }}>
+              <Button
+                variant="contained"
+                startIcon={<SaveRounded />}
+                disabled={busy || !validConcurrency}
+                onClick={() => void save()}
+              >
+                Сохранить настройки
+              </Button>
+            </Stack>
           </Stack>
         </Paper>
       )}

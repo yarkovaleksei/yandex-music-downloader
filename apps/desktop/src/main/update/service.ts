@@ -201,11 +201,41 @@ export class PortableUpdates {
       if (!newer(descriptor.version, this.options.currentVersion))
         return this.view('current', 'У вас актуальная версия приложения.');
       this.selected = Object.freeze(descriptor);
-      return this.view(
-        'available',
-        'Доступна новая версия. Пакет будет скачан только по вашей команде.',
-      );
+      return this.view('available', 'Доступна новая версия.');
     });
+  }
+  /** Описание релиза только для показа: оно не подписано и не влияет на доверие пакету. */
+  public async notes(): Promise<string | null> {
+    const version = this.selected?.version;
+    const feed = this.trust.feedBaseUrl
+      ? new URL(this.trust.feedBaseUrl)
+      : undefined;
+    const repository =
+      feed?.origin === 'https://github.com'
+        ? /^\/([^/]+)\/([^/]+)\/releases\/latest\/download\/?$/.exec(
+            feed.pathname,
+          )
+        : null;
+    if (!version || !repository) return null;
+    try {
+      // Адрес строится из закреплённого feed и подписанной версии, а не из ответа сети.
+      const response = await (this.options.fetch ?? fetch)(
+        `https://api.github.com/repos/${repository[1]}/${repository[2]}/releases/tags/v${version}`,
+        {
+          redirect: 'error',
+          headers: { accept: 'application/vnd.github+json' },
+          signal: AbortSignal.timeout(15_000),
+        },
+      );
+      const release = JSON.parse(
+        (await bounded(response, 262_144)).toString('utf8'),
+      ) as { body?: unknown };
+      return typeof release.body === 'string' && release.body.trim()
+        ? release.body
+        : null;
+    } catch {
+      return null;
+    }
   }
   public download(): Promise<UpdateView> {
     return this.serial(async () => {
@@ -252,7 +282,7 @@ export class PortableUpdates {
         this.readyFile = file;
         return this.view(
           'ready',
-          'Пакет проверен. Откройте папку, закройте приложение и замените portable-файлы. Настройки и история сохранятся.',
+          'Обновление скачано и проверено. Откройте папку, закройте приложение и замените его скачанным файлом. Настройки и история сохранятся.',
         );
       } finally {
         await rm(temporary, { force: true });

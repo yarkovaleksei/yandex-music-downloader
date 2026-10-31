@@ -142,7 +142,8 @@ async function analyze() {
     target: { value: 'https://music.yandex.ru/album/1' },
   });
   fireEvent.click(screen.getByText('Анализировать'));
-  await screen.findByText('Синтетическая коллекция');
+  // Название есть и в шапке, и в закреплённой панели запуска.
+  await screen.findByRole('heading', { name: 'Синтетическая коллекция' });
 }
 it.each(['track', 'album', 'playlist'] as const)(
   'preview %s показывает поля и не начинает загрузку до явного действия',
@@ -153,6 +154,8 @@ it.each(['track', 'album', 'playlist'] as const)(
     expect(screen.getByText('Автор: Тестовый автор')).toBeTruthy();
     expect(screen.getByText('Объём не определён')).toBeTruthy();
     expect(screen.getByText('Исполнитель', { selector: 'td' })).toBeTruthy();
+    // Один трек выбирать незачем: чекбоксов нет.
+    expect(screen.queryByRole('checkbox')).toBeNull();
     expect(mocks.createDownload).not.toHaveBeenCalled();
     fireEvent.click(screen.getByText('Качество: Лучшее доступное'));
     const dialog = screen.getByRole('dialog');
@@ -780,8 +783,8 @@ it('F-001: открытая форма сохраняет подтверждён
     screen.getByLabelText('Сохранять метаданные (ID3/FLAC tags)'),
   );
   fireEvent.click(screen.getByLabelText('Заменять существующие файлы'));
-  fireEvent.click(screen.getByRole('tab', { name: 'Загрузка' }));
-  fireEvent.click(screen.getByRole('button', { name: 'Выбрать FFmpeg' }));
+  fireEvent.click(screen.getByRole('tab', { name: 'Дополнительно' }));
+  fireEvent.click(screen.getByRole('button', { name: 'Указать файл ffmpeg' }));
   await screen.findByDisplayValue('/synthetic/ffmpeg');
   fireEvent.click(
     within(document.querySelector('aside')!).getByLabelText('Тёмная тема'),
@@ -833,6 +836,12 @@ it.each([false, true])(
     await screen.findByRole('button', { name: 'Выйти из аккаунта' });
     if (!pending) await screen.findByAltText('Аватар аккаунта');
     fireEvent.click(screen.getByRole('button', { name: 'Выйти' }));
+    // Выход из боковой панели тоже требует подтверждения.
+    const confirm = await screen.findByRole('dialog', {
+      name: 'Выйти из аккаунта?',
+    });
+    expect(currentApi.logout).not.toHaveBeenCalled();
+    fireEvent.click(within(confirm).getByRole('button', { name: 'Выйти' }));
     await screen.findByText('Войдите, чтобы подключить музыку');
     await screen.findByText('Аккаунт не подключён');
     await act(async () => finish(result(photo)));
@@ -905,4 +914,78 @@ it('подтверждение очистки списка не переноси
   );
   fireEvent.click(screen.getByRole('button', { name: /^Загрузки/ }));
   expect(screen.queryByText(/Убрано из списка:/)).toBeNull();
+});
+
+it('выбор треков: недоступные не выбираются, частичный выбор передаёт позиции, пустой не запускается', async () => {
+  const mock = mockApi('album');
+  const track = (id: string, title: string, extra: object) => ({
+    id,
+    title,
+    artists: [{ name: 'Исполнитель' }],
+    availability: 'available',
+    ...extra,
+  });
+  (mock.preview as { tracks: PreviewDto['tracks'] }).tracks = [
+    track('1', 'Первая', { durationMs: 60_000 }),
+    track('2', 'Вторая', { durationMs: 120_000 }),
+    track('3', 'Третья', { availability: 'unavailable' }),
+  ];
+  render(<App api={mock.api} />);
+  await analyze();
+  const checkbox = (name: string) =>
+    screen.getByRole('checkbox', { name }) as HTMLInputElement;
+  // По умолчанию выбраны все доступные треки.
+  expect(checkbox('Первая').checked).toBe(true);
+  expect(checkbox('Вторая').checked).toBe(true);
+  expect(checkbox('Третья').disabled).toBe(true);
+  expect(checkbox('Третья').checked).toBe(false);
+  expect(screen.getByText(/Выбрано 2 из 3 · 0 ч 3 мин/)).toBeTruthy();
+  fireEvent.click(screen.getByText('Выбрать папку'));
+  await screen.findByText(/Папка:/);
+  // Клик по строке тоже переключает трек; по недоступной — нет.
+  fireEvent.click(screen.getByText('Первая'));
+  fireEvent.click(screen.getByText('Третья'));
+  expect(checkbox('Первая').checked).toBe(false);
+  expect(checkbox('Третья').checked).toBe(false);
+  expect(screen.getByText(/Выбрано 1 из 3 · 0 ч 2 мин/)).toBeTruthy();
+  fireEvent.click(checkbox('Вторая'));
+  const add = screen.getByRole('button', { name: 'Добавить 0 треков' });
+  expect((add as HTMLButtonElement).disabled).toBe(true);
+  expect(checkbox('Выбрать все треки').checked).toBe(false);
+  fireEvent.click(checkbox('Выбрать все треки'));
+  expect(checkbox('Первая').checked).toBe(true);
+  expect(checkbox('Вторая').checked).toBe(true);
+  expect(checkbox('Выбрать все треки').checked).toBe(true);
+  fireEvent.click(checkbox('Первая'));
+  expect(checkbox('Выбрать все треки').getAttribute('data-indeterminate')).toBe(
+    'true',
+  );
+  fireEvent.click(screen.getByRole('button', { name: 'Добавить 1 трек' }));
+  await waitFor(() =>
+    expect(mock.mocks.createDownload).toHaveBeenCalledWith(
+      expect.objectContaining({ trackPositions: [2] }),
+    ),
+  );
+});
+
+it('выбор всех треков отправляет запрос без позиций, как раньше', async () => {
+  const mock = mockApi('album');
+  (mock.preview as { tracks: PreviewDto['tracks'] }).tracks = ['1', '2'].map(
+    (id) => ({
+      id,
+      title: `Трек ${id}`,
+      artists: [{ name: 'Исполнитель' }],
+      availability: 'available',
+    }),
+  );
+  render(<App api={mock.api} />);
+  await analyze();
+  fireEvent.click(screen.getByText('Выбрать папку'));
+  await screen.findByText(/Папка:/);
+  fireEvent.click(screen.getByRole('button', { name: 'Добавить в загрузки' }));
+  await waitFor(() => expect(mock.mocks.createDownload).toHaveBeenCalledOnce());
+  const [request] = mock.mocks.createDownload.mock.calls[0] as unknown as [
+    object,
+  ];
+  expect(request).not.toHaveProperty('trackPositions');
 });

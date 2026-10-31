@@ -52,7 +52,9 @@ export function History({
     'title' | 'kind' | 'count' | 'bytes' | 'date'
   >('date');
   const [direction, setDirection] = useState<'asc' | 'desc'>('desc');
-  const invalidRange = !!from && !!to && from > to;
+  // Даты действуют только в режиме «Выбрать даты», чтобы два фильтра не спорили.
+  const custom = period === 'custom';
+  const invalidRange = custom && !!from && !!to && from > to;
   const [notice, setNotice] = useState('');
   const [folders, setFolders] = useState<Record<string, JobFolderAvailability>>(
     {},
@@ -195,14 +197,17 @@ export function History({
     .filter(
       (entry) =>
         !invalidRange &&
-        (!from ||
+        (!custom ||
+          !from ||
           Date.parse(entry.completedAt) >=
             new Date(`${from}T00:00:00`).getTime()) &&
-        (!to ||
+        (!custom ||
+          !to ||
           Date.parse(entry.completedAt) <=
             new Date(`${to}T23:59:59.999`).getTime()) &&
         (kind === 'all' || entry.source.kind === kind) &&
         (period === 'all' ||
+          custom ||
           Date.parse(entry.completedAt) >=
             Date.now() - Number(period) * 86400000) &&
         `${entry.title} ${entry.artists.join(' ')} ${entry.source.id}`
@@ -292,13 +297,13 @@ export function History({
           {notice}
         </Alert>
       </Snackbar>
-      <Stack direction="row" spacing={2}>
-        <TextField
-          label="Поиск в истории"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          fullWidth
-        />
+      <TextField
+        label="Поиск в истории"
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        fullWidth
+      />
+      <Stack direction="row" spacing={2} sx={{ alignItems: 'flex-start' }}>
         <TextField
           select
           label="Тип"
@@ -323,25 +328,32 @@ export function History({
           <MenuItem value="all">За всё время</MenuItem>
           <MenuItem value="7">Последние 7 дней</MenuItem>
           <MenuItem value="30">Последние 30 дней</MenuItem>
+          <MenuItem value="custom">Выбрать даты</MenuItem>
         </TextField>
-      </Stack>
-      <Stack direction="row" spacing={2}>
-        <TextField
-          type="date"
-          label="Дата с"
-          slotProps={{ inputLabel: { shrink: true } }}
-          value={from}
-          onChange={(event) => setFrom(event.target.value)}
-        />
-        <TextField
-          type="date"
-          label="Дата по"
-          slotProps={{ inputLabel: { shrink: true } }}
-          value={to}
-          onChange={(event) => setTo(event.target.value)}
-          error={invalidRange}
-          helperText={invalidRange ? 'Дата окончания раньше начала' : undefined}
-        />
+        {custom && (
+          <>
+            <TextField
+              type="date"
+              label="Дата с"
+              slotProps={{ inputLabel: { shrink: true } }}
+              value={from}
+              onChange={(event) => setFrom(event.target.value)}
+              sx={{ minWidth: 160 }}
+            />
+            <TextField
+              type="date"
+              label="Дата по"
+              slotProps={{ inputLabel: { shrink: true } }}
+              value={to}
+              onChange={(event) => setTo(event.target.value)}
+              error={invalidRange}
+              helperText={
+                invalidRange ? 'Дата окончания раньше начала' : undefined
+              }
+              sx={{ minWidth: 160 }}
+            />
+          </>
+        )}
       </Stack>
       <Typography color="text.secondary">Найдено: {filtered.length}</Typography>
       {filtered.length === 0 ? (

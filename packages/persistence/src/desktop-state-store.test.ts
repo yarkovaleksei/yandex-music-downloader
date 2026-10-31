@@ -339,3 +339,32 @@ it('REQ-058: новые параметры и точный selector пережи
   ).toEqual({ value: JSON.stringify(old) });
   unchanged.close();
 });
+
+it('снимок хранит выбор треков и отклоняет пустой, повторяющийся или нецелый выбор', async () => {
+  const stateDir = await root();
+  const state = new SqliteDesktopStateStore({ stateDir });
+  const jobs = new SqliteManifestStore({ stateDir });
+  for (const jobId of ['selected', 'all', 'invalid'])
+    await jobs.create(manifestFixture(jobId));
+  await jobs.close();
+  const snapshot = {
+    source: { provider: 'mock', kind: 'album' as const, id: '1' },
+    destination: path.join(stateDir, 'music'),
+    quality: 'high' as const,
+    overwrite: false,
+    naming: 'album' as const,
+  };
+  state.saveSnapshot('selected', { ...snapshot, trackPositions: [3, 1] });
+  state.saveSnapshot('all', snapshot);
+  for (const trackPositions of [[], [1, 1], [0], [1.5]])
+    expect(() =>
+      state.saveSnapshot('invalid', { ...snapshot, trackPositions }),
+    ).toThrow();
+  state.close();
+  const reopened = new SqliteDesktopStateStore({ stateDir });
+  // Порядок выбора сохраняется как есть: повтор отправит те же позиции.
+  expect(reopened.snapshot('selected')?.trackPositions).toEqual([3, 1]);
+  expect(reopened.snapshot('all')).not.toHaveProperty('trackPositions');
+  expect(reopened.snapshot('invalid')).toBeNull();
+  reopened.close();
+});

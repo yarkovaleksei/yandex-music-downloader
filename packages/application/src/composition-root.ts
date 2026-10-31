@@ -4,6 +4,7 @@ import { createArtworkCache } from './adapters/artwork-cache.js';
 import { createRecovery } from './adapters/recovery.js';
 import { ApplicationFacade } from './application.js';
 import { ApplicationEvents } from './events.js';
+import { logJobEvent } from './job-log.js';
 import { Jobs } from './jobs.js';
 import type { DesktopApplicationApi } from '@music-downloader/shared';
 import { ConcurrencyScheduler } from '@music-downloader/core-queue';
@@ -51,7 +52,12 @@ export function createApplication(
     adapters.logging ??
     (settings === undefined || adapters.logger !== undefined
       ? undefined
-      : { level: settings.logging });
+      : {
+          level: settings.logging,
+          ...(adapters.logFile === undefined
+            ? {}
+            : { filePath: adapters.logFile }),
+        });
   if (
     adapters.logger !== undefined &&
     (logging?.level !== undefined || logging?.filePath !== undefined)
@@ -98,6 +104,9 @@ export function createApplication(
     adapters.concurrency ?? settings?.concurrency,
   );
   const events = new ApplicationEvents(logger);
+  // Desktop пишет ход загрузок в файл журнала; CLI сохраняет прежний stderr.
+  if (settings !== undefined)
+    events.subscribe((event) => logJobEvent(logger, store, event));
   const files = createDownloadFiles(
     defaultStore === undefined && settings === undefined
       ? undefined

@@ -25,6 +25,7 @@ import {
 import { windowOptions } from './window-options.js';
 import { DirectoryRegistry } from './directory-registry.js';
 import { HostSupervisor } from './host-supervisor.js';
+import { logFiles } from './log-files.js';
 import { registerIpc } from '../transport/main-ipc.js';
 import type { Method } from '../contract/desktop-api.js';
 import { jobFolders } from './job-folders.js';
@@ -68,10 +69,16 @@ async function invokeHost(method: Method, input: unknown): Promise<unknown> {
   notify.observeResult(method, result);
   return result;
 }
-const host = new HostSupervisor((event) => {
-  sendEvent(window, event);
-  void notify(event);
-});
+// Журнал лежит рядом с прочими данными приложения; пользователь прикладывает его к issue.
+const logs = logFiles(path.join(app.getPath('userData'), 'logs'));
+const host = new HostSupervisor(
+  (event) => {
+    sendEvent(window, event);
+    void notify(event);
+  },
+  undefined,
+  logs.file,
+);
 
 void app.whenReady().then(async () => {
   const root = path.resolve(import.meta.dirname, '../renderer');
@@ -155,12 +162,15 @@ void app.whenReady().then(async () => {
       showItemInFolder: folders.open,
       openDirectory: async (directory) =>
         (await shell.openPath(directory)) === '',
+      openLogFolder: () => logs.open(shell),
       openExternal: async (url) => {
         await shell.openExternal(url);
       },
     },
     (method, input) => invokeHost(method, input),
   );
+  // Без каталога журнала приложение всё равно работает: host пишет только в stderr.
+  await logs.prepare().catch(() => undefined);
   host.start();
   await window.loadURL(appUrl);
   // Smoke сохраняет только окно/изоляцию; native proof запускается отдельно в host.

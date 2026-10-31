@@ -163,7 +163,25 @@ function effectiveDownload(value: EffectiveDownload): EffectiveDownload {
     ...(value.variantSelection === undefined
       ? {}
       : { variantSelection: variantSelection(value.variantSelection) }),
+    // Повтор из истории загружает тот же выбор треков, а не весь источник.
+    ...(value.trackPositions === undefined
+      ? {}
+      : { trackPositions: trackPositions(value.trackPositions) }),
   };
+}
+
+function trackPositions(value: unknown): readonly number[] {
+  const items: readonly unknown[] = Array.isArray(value) ? value : [];
+  const positions = items.filter(
+    (item): item is number => Number.isSafeInteger(item) && Number(item) >= 1,
+  );
+  if (
+    positions.length === 0 ||
+    positions.length !== items.length ||
+    new Set(positions).size !== positions.length
+  )
+    throw new ValidationError();
+  return positions;
 }
 
 /** Allowlist doctor исключает сообщения, account и raw provider данные до SQLite/WAL/backup. */

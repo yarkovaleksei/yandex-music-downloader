@@ -1,10 +1,12 @@
 import { tracksQuantity } from './quantity.js';
+import { LogoutDialog } from './LogoutDialog.js';
 import { useEffect, useRef, useState } from 'react';
 import {
   Alert,
   Avatar,
   Box,
   Button,
+  Checkbox,
   Chip,
   IconButton,
   InputAdornment,
@@ -35,6 +37,8 @@ import SettingsRounded from '@mui/icons-material/SettingsRounded';
 import PersonRounded from '@mui/icons-material/PersonRounded';
 import HealthAndSafetyRounded from '@mui/icons-material/HealthAndSafetyRounded';
 import FolderOpenRounded from '@mui/icons-material/FolderOpenRounded';
+import LoginRounded from '@mui/icons-material/LoginRounded';
+import LogoutRounded from '@mui/icons-material/LogoutRounded';
 import type {
   Account,
   DesktopSettings,
@@ -78,6 +82,14 @@ function metadata(item: JsonObject): JsonObject {
     ? (item.track as JsonObject)
     : item;
 }
+/** Трек можно выбрать, если provider не сообщил о его недоступности. */
+function downloadable(item: JsonObject) {
+  const availability = metadata(item).availability;
+  return availability === 'available' || availability === 'unknown';
+}
+function hoursMinutes(ms: number) {
+  return `${Math.floor(ms / 3600000)} ч ${Math.floor(ms / 60000) % 60} мин`;
+}
 function artists(track: JsonObject) {
   return Array.isArray(track.artists)
     ? track.artists
@@ -113,6 +125,9 @@ export function App({ api = window.desktopApi }: { api?: DesktopApi }) {
   const [settings, setSettings] = useState<DesktopSettings>();
   const [accountRevision, setAccountRevision] = useState(0);
   const [creating, setCreating] = useState(false);
+  const [logoutOpen, setLogoutOpen] = useState(false);
+  // Индексы preview.tracks; по умолчанию выбраны все доступные треки.
+  const [selected, setSelected] = useState<ReadonlySet<number>>(new Set());
   const request = useRef(0);
   const downloads = useDownloads(api);
   const { setNotice } = downloads;
@@ -186,6 +201,13 @@ export function App({ api = window.desktopApi }: { api?: DesktopApi }) {
       if (result.kind === 'error') setUrlError(result.error.message);
       else {
         setPreview(result.data);
+        setSelected(
+          new Set(
+            result.data.tracks.flatMap((item, index) =>
+              downloadable(item) ? [index] : [],
+            ),
+          ),
+        );
         setQuality(
           result.data.qualities?.find(
             (item) =>
@@ -243,8 +265,29 @@ export function App({ api = window.desktopApi }: { api?: DesktopApi }) {
       if (result.data) setDirectory(result.data);
     } else setNotice({ severity: 'error', message: result.error.message });
   }
+  const selectable = (preview?.tracks.length ?? 0) > 1;
+  const available =
+    preview?.tracks.flatMap((item, index) =>
+      downloadable(item) ? [index] : [],
+    ) ?? [];
+  // Частичный выбор передаётся явно; полный список загружается как раньше.
+  const partial = selectable && selected.size < (preview?.tracks.length ?? 0);
+  const durations = [...selected].map(
+    (index) => metadata(preview?.tracks[index] ?? {}).durationMs,
+  );
+  const selectedDuration = !selectable
+    ? preview?.durationMs
+    : durations.every((value) => typeof value === 'number')
+      ? durations.reduce<number>((sum, value) => sum + Number(value), 0)
+      : undefined;
+  function toggle(index: number) {
+    const next = new Set(selected);
+    if (!next.delete(index)) next.add(index);
+    setSelected(next);
+  }
   async function start() {
     if (!preview || !quality || !directory || creating) return;
+    if (selectable && selected.size === 0) return;
     setCreating(true);
     setPage('downloads');
     try {
@@ -252,6 +295,13 @@ export function App({ api = window.desktopApi }: { api?: DesktopApi }) {
         source: preview.source,
         quality,
         ...(variant ? { variantSelection: variant } : {}),
+        ...(partial
+          ? {
+              trackPositions: [...selected]
+                .sort((left, right) => left - right)
+                .map((index) => index + 1),
+            }
+          : {}),
         directoryRef: directory.directoryRef,
       });
       if (result.kind === 'error')
@@ -367,8 +417,11 @@ export function App({ api = window.desktopApi }: { api?: DesktopApi }) {
               : 'Войдите, чтобы подключить музыку'}
           </Typography>
           <Button
+            startIcon={account ? <LogoutRounded /> : <LoginRounded />}
             disabled={authBusy || !downloads.connected}
-            onClick={() => void authenticate()}
+            onClick={() =>
+              account ? setLogoutOpen(true) : void authenticate()
+            }
           >
             {authBusy
               ? 'Подождите…'
@@ -620,50 +673,129 @@ export function App({ api = window.desktopApi }: { api?: DesktopApi }) {
                             Продолжительность:{' '}
                             {preview.durationMs === undefined
                               ? 'не указана'
-                              : `${Math.floor(preview.durationMs / 3600000)} ч ${Math.floor(preview.durationMs / 60000) % 60} мин`}
+                              : hoursMinutes(preview.durationMs)}
                           </Typography>
                           <Typography color="text.secondary">
                             Объём не определён
                           </Typography>
                         </Box>
                       </Stack>
-                      <Box sx={{ maxHeight: 320, overflow: 'auto' }}>
-                        <Box
-                          component="table"
-                          sx={{
-                            width: '100%',
-                            borderCollapse: 'collapse',
-                            '& td, & th': {
-                              textAlign: 'left',
-                              py: 1.5,
-                              borderBottom: 1,
-                              borderColor: 'divider',
-                            },
-                          }}
-                        >
-                          <thead>
-                            <tr>
-                              <th>№</th>
-                              <th>Название</th>
-                              <th>Исполнитель</th>
-                              <th>Длительность</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {preview.tracks.map((item, index) => {
-                              const track = metadata(item);
-                              const duration =
-                                typeof track.durationMs === 'number'
-                                  ? Math.floor(track.durationMs / 1000)
-                                  : undefined;
-                              return (
-                                <tr key={index}>
+                      <Box
+                        component="table"
+                        sx={{
+                          width: '100%',
+                          // separate: у sticky-шапки сохраняется нижняя граница.
+                          borderCollapse: 'separate',
+                          borderSpacing: 0,
+                          '& td, & th': {
+                            textAlign: 'left',
+                            verticalAlign: 'middle',
+                            py: 1.5,
+                            pr: 2,
+                            borderBottom: 1,
+                            borderColor: 'divider',
+                          },
+                          '& th': {
+                            position: 'sticky',
+                            top: 0,
+                            zIndex: 1,
+                            bgcolor: 'background.paper',
+                          },
+                        }}
+                      >
+                        <thead>
+                          <tr>
+                            {selectable && (
+                              <Box component="th" sx={{ width: 0 }}>
+                                <Checkbox
+                                  checked={
+                                    available.length > 0 &&
+                                    selected.size === available.length
+                                  }
+                                  indeterminate={
+                                    selected.size > 0 &&
+                                    selected.size < available.length
+                                  }
+                                  disabled={available.length === 0}
+                                  onChange={() =>
+                                    setSelected(
+                                      new Set(
+                                        selected.size === available.length
+                                          ? []
+                                          : available,
+                                      ),
+                                    )
+                                  }
+                                  slotProps={{
+                                    input: {
+                                      'aria-label': 'Выбрать все треки',
+                                    },
+                                  }}
+                                />
+                              </Box>
+                            )}
+                            <Box component="th" sx={{ width: 0 }}>
+                              №
+                            </Box>
+                            <th>Название</th>
+                            <th>Исполнитель</th>
+                            <Box component="th" sx={{ width: 0 }}>
+                              Длительность
+                            </Box>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {preview.tracks.map((item, index) => {
+                            const track = metadata(item);
+                            const duration =
+                              typeof track.durationMs === 'number'
+                                ? Math.floor(track.durationMs / 1000)
+                                : undefined;
+                            const enabled = selectable && downloadable(item);
+                            const title = String(
+                              track.title ?? 'Название не указано',
+                            );
+                            return (
+                              <Box
+                                component="tr"
+                                key={index}
+                                onClick={
+                                  enabled ? () => toggle(index) : undefined
+                                }
+                                sx={{
+                                  cursor: enabled ? 'pointer' : undefined,
+                                  '&:hover': enabled
+                                    ? { bgcolor: 'action.hover' }
+                                    : undefined,
+                                }}
+                              >
+                                {selectable && (
                                   <td>
-                                    {typeof item.position === 'number'
-                                      ? item.position
-                                      : index + 1}
+                                    <Checkbox
+                                      checked={selected.has(index)}
+                                      disabled={!enabled}
+                                      onClick={(event) =>
+                                        event.stopPropagation()
+                                      }
+                                      onChange={() => toggle(index)}
+                                      slotProps={{
+                                        input: { 'aria-label': title },
+                                      }}
+                                    />
                                   </td>
-                                  <td>
+                                )}
+                                <td>
+                                  {typeof item.position === 'number'
+                                    ? item.position
+                                    : index + 1}
+                                </td>
+                                <td>
+                                  {/* Обложка отдельно от текста: перенос названия не уходит под неё. */}
+                                  <Stack
+                                    direction="row"
+                                    spacing={1}
+                                    sx={{ alignItems: 'center' }}
+                                  >
                                     <Avatar
                                       variant="rounded"
                                       src={artworkUrl(
@@ -672,95 +804,126 @@ export function App({ api = window.desktopApi }: { api?: DesktopApi }) {
                                           ArtworkDto | undefined,
                                       )}
                                       sx={{
-                                        display: 'inline-flex',
                                         width: 32,
                                         height: 32,
-                                        mr: 1,
-                                        verticalAlign: 'middle',
+                                        flexShrink: 0,
                                       }}
                                     >
                                       <MusicNoteRounded fontSize="small" />
                                     </Avatar>
-                                    {String(
-                                      track.title ?? 'Название не указано',
-                                    )}
-                                    {track.availability !== 'available' && (
-                                      <Typography
-                                        variant="caption"
-                                        sx={{ display: 'block' }}
-                                      >
-                                        {track.availability === 'unknown'
-                                          ? 'Доступность неизвестна'
-                                          : 'Недоступен'}
-                                      </Typography>
-                                    )}
-                                  </td>
-                                  <td>{artists(track) || 'Не указан'}</td>
-                                  <td>
-                                    {duration === undefined
-                                      ? '—'
-                                      : `${Math.floor(duration / 60)}:${String(duration % 60).padStart(2, '0')}`}
-                                  </td>
-                                </tr>
-                              );
-                            })}
-                          </tbody>
-                        </Box>
+                                    <Box>
+                                      {title}
+                                      {track.availability !== 'available' && (
+                                        <Typography
+                                          variant="caption"
+                                          sx={{ display: 'block' }}
+                                        >
+                                          {track.availability === 'unknown'
+                                            ? 'Доступность неизвестна'
+                                            : 'Недоступен'}
+                                        </Typography>
+                                      )}
+                                    </Box>
+                                  </Stack>
+                                </td>
+                                <td>{artists(track) || 'Не указан'}</td>
+                                <td>
+                                  {duration === undefined
+                                    ? '—'
+                                    : `${Math.floor(duration / 60)}:${String(duration % 60).padStart(2, '0')}`}
+                                </td>
+                              </Box>
+                            );
+                          })}
+                        </tbody>
                       </Box>
+                      {/* Панель запуска остаётся у нижнего края окна, пока виден список. */}
                       <Stack
-                        direction="row"
-                        spacing={2}
-                        sx={{ alignItems: 'center', flexWrap: 'wrap', gap: 1 }}
+                        spacing={1.5}
+                        sx={{
+                          position: 'sticky',
+                          bottom: 0,
+                          zIndex: 2,
+                          mx: -3,
+                          mb: -3,
+                          px: 3,
+                          py: 2,
+                          borderTop: 1,
+                          borderColor: 'divider',
+                          bgcolor: 'background.paper',
+                          borderBottomLeftRadius: 'inherit',
+                          borderBottomRightRadius: 'inherit',
+                        }}
                       >
-                        <Button
-                          variant="outlined"
-                          onClick={() => {
-                            setDraftQuality(quality);
-                            setDraftVariant(variant);
-                            setQualityOpen(true);
+                        <Typography noWrap sx={{ fontWeight: 600 }}>
+                          {preview.title || 'Название не указано'}
+                          {selectable &&
+                            ` · Выбрано ${selected.size} из ${preview.tracks.length}`}
+                          {selectedDuration !== undefined &&
+                            ` · ${hoursMinutes(selectedDuration)}`}
+                        </Typography>
+                        <Stack
+                          direction="row"
+                          spacing={2}
+                          sx={{
+                            alignItems: 'center',
+                            flexWrap: 'wrap',
+                            gap: 1,
                           }}
-                          disabled={
-                            !preview.qualities?.some(
-                              (item) => item.available > 0,
-                            )
-                          }
                         >
-                          Качество:{' '}
-                          {variant
-                            ? variantName(variant)
-                            : quality
-                              ? qualityNames[quality]
-                              : 'Нет доступного'}
-                        </Button>
-                        <Button
-                          variant="outlined"
-                          startIcon={<FolderOpenRounded />}
-                          onClick={() => void chooseDirectory()}
-                          disabled={!downloads.connected}
-                        >
-                          Выбрать папку
-                        </Button>
-                        <Button
-                          variant="contained"
-                          startIcon={<DownloadRounded />}
-                          disabled={
-                            !quality ||
-                            !directory ||
-                            creating ||
-                            !downloads.connected
-                          }
-                          onClick={() => void start()}
-                        >
-                          Добавить в загрузки
-                        </Button>
+                          <Button
+                            variant="outlined"
+                            onClick={() => {
+                              setDraftQuality(quality);
+                              setDraftVariant(variant);
+                              setQualityOpen(true);
+                            }}
+                            disabled={
+                              !preview.qualities?.some(
+                                (item) => item.available > 0,
+                              )
+                            }
+                          >
+                            Качество:{' '}
+                            {variant
+                              ? variantName(variant)
+                              : quality
+                                ? qualityNames[quality]
+                                : 'Нет доступного'}
+                          </Button>
+                          <Button
+                            variant="outlined"
+                            startIcon={<FolderOpenRounded />}
+                            onClick={() => void chooseDirectory()}
+                            disabled={!downloads.connected}
+                          >
+                            Выбрать папку
+                          </Button>
+                          <Button
+                            variant="contained"
+                            startIcon={<DownloadRounded />}
+                            disabled={
+                              !quality ||
+                              !directory ||
+                              creating ||
+                              !downloads.connected ||
+                              (selectable && selected.size === 0)
+                            }
+                            onClick={() => void start()}
+                          >
+                            {partial
+                              ? `Добавить ${tracksQuantity(selected.size)}`
+                              : 'Добавить в загрузки'}
+                          </Button>
+                        </Stack>
+                        <Typography variant="body2" color="text.secondary">
+                          {directory
+                            ? `Папка: ${directory.displayPath}`
+                            : 'Папка не выбрана'}
+                          {quality &&
+                            ` · Покрытие качества${partial ? ' по всему списку' : ''}: ${variant ? preview.variants?.find((item) => JSON.stringify(item.selection) === JSON.stringify(variant))?.available : preview.qualities?.find((item) => item.preference === quality)?.available} / ${preview.tracks.length}`}
+                        </Typography>
                       </Stack>
-                      <Typography variant="body2" color="text.secondary">
-                        {directory
-                          ? `Папка: ${directory.displayPath}`
-                          : 'Папка не выбрана'}
-                        {quality &&
-                          ` · Покрытие качества: ${variant ? preview.variants?.find((item) => JSON.stringify(item.selection) === JSON.stringify(variant))?.available : preview.qualities?.find((item) => item.preference === quality)?.available} / ${preview.tracks.length}`}
-                      </Typography>
                     </Stack>
                   </Paper>
                 )}
@@ -769,6 +932,14 @@ export function App({ api = window.desktopApi }: { api?: DesktopApi }) {
           </Stack>
         </Box>
       </Box>
+      <LogoutDialog
+        open={logoutOpen}
+        onCancel={() => setLogoutOpen(false)}
+        onConfirm={() => {
+          setLogoutOpen(false);
+          void authenticate();
+        }}
+      />
       <Dialog
         open={qualityOpen}
         onClose={() => setQualityOpen(false)}

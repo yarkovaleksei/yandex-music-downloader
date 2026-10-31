@@ -270,6 +270,12 @@ it('REQ-058: сортировка стабильна, неизвестные р�
     screen.getByText('Размер', { selector: '.MuiTableSortLabel-root' }),
   );
   expect(titles().at(-1)).toContain('Гамма');
+  // Даты — часть «Периода»: без «Выбрать даты» полей нет и два фильтра не спорят.
+  expect(screen.queryByLabelText('Дата с')).toBeNull();
+  fireEvent.mouseDown(screen.getByRole('combobox', { name: 'Период' }));
+  fireEvent.click(
+    within(screen.getByRole('listbox')).getByText('Выбрать даты'),
+  );
   fireEvent.change(screen.getByLabelText('Дата с'), {
     target: { value: '2026-10-28' },
   });
@@ -285,6 +291,12 @@ it('REQ-058: сортировка стабильна, неизвестные р�
   });
   expect(screen.getByText('Дата окончания раньше начала')).toBeTruthy();
   expect(screen.getByText('Пока ничего не найдено')).toBeTruthy();
+  fireEvent.mouseDown(screen.getByRole('combobox', { name: 'Период' }));
+  fireEvent.click(
+    within(screen.getByRole('listbox')).getByText('За всё время'),
+  );
+  expect(screen.queryByLabelText('Дата с')).toBeNull();
+  expect(titles()).toHaveLength(3);
 });
 
 it('deferred availability не блокирует фильтр, открытие локально и не перечитывает обложки', async () => {

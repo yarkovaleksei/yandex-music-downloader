@@ -23,6 +23,7 @@
     "@mui/icons-material": "9.5.0",
     "@mui/material": "9.5.0",
     "@music-downloader/application": "workspace:*",
+    "markdown-to-jsx": "9.10.3",
     "react": "19.3.1",
     "react-dom": "19.3.1",
     "zod": "4.6.7"

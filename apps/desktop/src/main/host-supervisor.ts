@@ -18,6 +18,7 @@ export class HostSupervisor {
       import.meta.dirname,
       '../host/index.js',
     ),
+    private readonly logFile?: string,
   ) {}
   public start(): void {
     const child = utilityProcess.fork(this.hostFile, [], {
@@ -36,7 +37,7 @@ export class HostSupervisor {
       if (!this.stopping && this.restarts++ < 2)
         this.restartTimer = setTimeout(() => this.start(), 500);
     });
-    child.postMessage({ v: 1 }, [port2]);
+    child.postMessage({ v: 1, logFile: this.logFile }, [port2]);
   }
   public invoke(method: Method, payload: unknown): Promise<unknown> {
     return (

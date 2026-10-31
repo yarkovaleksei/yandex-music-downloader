@@ -520,3 +520,36 @@ it('accountAvatar возвращает только bytes DTO и не задер
     await rm(stateDir, { recursive: true, force: true });
   }
 });
+
+it('account передаёт признак Плюса и ссылку на кабинет, но не случайные поля provider', async () => {
+  const api = createApplication({
+    providerOverride: {
+      ...provider(),
+      getAccount: async () => ({
+        id: 'account',
+        displayName: 'Пользователь',
+        subscription: 'Яндекс Плюс активен',
+        premium: true,
+        subscriptionUrl: 'https://plus.yandex.ru/my',
+        ...{ token: 'synthetic-secret' },
+      }),
+    },
+  });
+  try {
+    const result = await api.account();
+    expect(result).toEqual({
+      schemaVersion: 1,
+      kind: 'result',
+      command: 'account',
+      data: {
+        id: 'account',
+        displayName: 'Пользователь',
+        subscription: 'Яндекс Плюс активен',
+        premium: true,
+        subscriptionUrl: 'https://plus.yandex.ru/my',
+      },
+    });
+  } finally {
+    await api.shutdown();
+  }
+});

@@ -36,6 +36,8 @@ export const accountSchema = z.object({
   region: nonEmpty.optional(),
   subscription: nonEmpty.optional(),
   subscriptionReason: nonEmpty.optional(),
+  premium: z.boolean().optional(),
+  subscriptionUrl: z.string().url().optional(),
 });
 export const rawAccountStatusSchema = z
   .object({

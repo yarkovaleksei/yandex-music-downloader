@@ -316,3 +316,65 @@ for (const scenario of [
     assert.equal((await updates.download()).status, 'error');
   });
 }
+
+test('описание релиза: только для подписанной найденной версии, адрес строится из feed, ошибки дают null', async () => {
+  const base = 'https://github.com/owner/repo/releases/';
+  const value = {
+    ...descriptor(base),
+    version: '1.0.1',
+    url: base + 'download/v1.0.1/package.AppImage',
+  };
+  const bytes = Buffer.from(JSON.stringify(value));
+  const signature = sign(null, bytes, pair.privateKey);
+  const api = 'https://api.github.com/repos/owner/repo/releases/tags/v1.0.1';
+  let release = () =>
+    new Response(JSON.stringify({ body: '## Что нового\n\n- Исправления' }));
+  const requested = [];
+  const updates = new PortableUpdates({
+    trust: {
+      feedBaseUrl: base + 'latest/download/',
+      publicKey,
+      origins: ['https://github.com'],
+      channel: 'stable',
+    },
+    currentVersion: '1.0.0',
+    target: 'linux-x64',
+    directory: '/unused',
+    reveal: () => assert.fail(),
+    fetch: async (url) => {
+      requested.push(url);
+      if (url === api) return release();
+      return new Response(url.endsWith('.sig') ? signature : bytes);
+    },
+  });
+  // До проверки версия неизвестна: сеть не трогается.
+  assert.equal(await updates.notes(), null);
+  assert.deepEqual(requested, []);
+  assert.equal((await updates.check()).status, 'available');
+  assert.equal(await updates.notes(), '## Что нового\n\n- Исправления');
+  assert.equal(requested.at(-1), api);
+  for (const response of [
+    () => new Response('{}', { status: 404 }),
+    () => new Response(JSON.stringify({ body: '   ' })),
+    () => new Response('не JSON'),
+    () => new Response(JSON.stringify({ body: 'x'.repeat(300_000) })),
+  ]) {
+    release = response;
+    assert.equal(await updates.notes(), null);
+  }
+  // Чужой feed не превращается в запрос к GitHub API.
+  const other = new PortableUpdates({
+    trust: {
+      feedBaseUrl: 'https://updates.example/feed/',
+      publicKey,
+      origins: ['https://updates.example'],
+      channel: 'stable',
+    },
+    currentVersion: '1.0.0',
+    target: 'linux-x64',
+    directory: '/unused',
+    reveal: () => assert.fail(),
+    fetch: async () => assert.fail(),
+  });
+  assert.equal(await other.notes(), null);
+});

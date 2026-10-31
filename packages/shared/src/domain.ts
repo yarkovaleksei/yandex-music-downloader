@@ -118,6 +118,8 @@ export interface DownloadRequest {
   readonly quality: QualityPreference;
   readonly destination: string;
   readonly variantSelection?: VariantSelection;
+  /** Позиции preview (с 1, в порядке списка); без поля загружаются все треки. */
+  readonly trackPositions?: readonly number[];
   /** Явно заменяет существующий файл; по умолчанию core сохраняет skip policy. */
   readonly overwrite?: boolean;
 }

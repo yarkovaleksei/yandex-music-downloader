@@ -29,6 +29,10 @@ function accountDto(account: Account): Account {
     ...(account.subscriptionReason === undefined
       ? {}
       : { subscriptionReason: account.subscriptionReason }),
+    ...(account.premium === undefined ? {} : { premium: account.premium }),
+    ...(account.subscriptionUrl === undefined
+      ? {}
+      : { subscriptionUrl: account.subscriptionUrl }),
     ...(account.formats === undefined ? {} : { formats: [...account.formats] }),
   };
 }

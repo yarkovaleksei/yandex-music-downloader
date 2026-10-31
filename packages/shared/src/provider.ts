@@ -15,6 +15,10 @@ export interface Account {
   readonly region?: string;
   readonly subscription?: string;
   readonly subscriptionReason?: string;
+  /** Подтверждённая provider основная подписка (у Яндекс Музыки — Плюс). */
+  readonly premium?: boolean;
+  /** Публичная страница управления подпиской; задаётся только provider. */
+  readonly subscriptionUrl?: string;
   readonly formats?: readonly string[];
 }
 

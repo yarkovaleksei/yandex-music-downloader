@@ -1,12 +1,16 @@
 import { expect, it, vi } from 'vitest';
-const state = vi.hoisted(() => ({ exits: [] as (() => void)[], forks: 0 }));
+const state = vi.hoisted(() => ({
+  exits: [] as (() => void)[],
+  forks: 0,
+  messages: [] as unknown[],
+}));
 vi.mock('electron', () => ({
   utilityProcess: {
     fork: () => {
       state.forks++;
       return {
         on: (_name: string, listener: () => void) => state.exits.push(listener),
-        postMessage: vi.fn(),
+        postMessage: (message: unknown) => state.messages.push(message),
         kill: vi.fn(),
       };
     },
@@ -44,4 +48,17 @@ it('ADR-015 ограничивает restart host и не отправляет �
   } finally {
     vi.useRealTimers();
   }
+});
+
+it('host получает путь файла журнала в первом сообщении', () => {
+  const supervisor = new HostSupervisor(
+    vi.fn(),
+    '/host.js',
+    '/logs/desktop.log',
+  );
+  supervisor.start();
+  expect(state.messages.at(-1)).toEqual({
+    v: 1,
+    logFile: '/logs/desktop.log',
+  });
 });

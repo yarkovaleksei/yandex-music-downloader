@@ -13,6 +13,7 @@ import {
 import {
   DownloadError,
   CommandRefusalError,
+  type DownloadPlan,
   type DownloadRequest,
   type DesktopStateStore,
   type EffectiveDownload,
@@ -41,6 +42,27 @@ async function planFor(
   if (source.kind === 'album')
     return buildAlbumPlan(source, await provider.getAlbum(source.id));
   return buildPlaylistPlan(source, await provider.getPlaylist(source.id));
+}
+
+/** Оставляет выбранные позиции и нумерует их заново: manifest требует позиции 1..n. */
+function selectTracks(
+  plan: DownloadPlan,
+  positions: readonly number[] | undefined,
+): DownloadPlan {
+  if (positions === undefined) return plan;
+  const selected = new Set(positions);
+  const tracks = plan.tracks.filter((item) => selected.has(item.position));
+  // Источник мог измениться после preview: неизвестные позиции не пропускаются молча.
+  if (tracks.length === 0 || tracks.length !== selected.size)
+    throw new ValidationError();
+  return {
+    ...plan,
+    tracks: tracks.map((item, index) => ({
+      ...item,
+      position: index + 1,
+      trackKey: String(index + 1),
+    })),
+  };
 }
 
 async function snapshot(
@@ -116,7 +138,10 @@ export class Jobs {
     request: DownloadRequest,
     effective?: EffectiveDownload,
   ): Promise<JobSnapshot> {
-    const plan = await planFor(this.provider, request.source);
+    const plan = selectTracks(
+      await planFor(this.provider, request.source),
+      request.trackPositions,
+    );
     const now = new Date().toISOString();
     const manifest: JobManifestV1 = {
       version: 1,

@@ -21,6 +21,7 @@ export interface BrokerActions {
     check(): Promise<UpdateView>;
     download(): Promise<UpdateView>;
     reveal(): Promise<UpdateView>;
+    notes(): Promise<string | null>;
   };
   readonly selectFfmpeg?: () => Promise<string | undefined>;
   readonly selectDirectory: () => Promise<string | undefined>;
@@ -29,6 +30,8 @@ export interface BrokerActions {
     trackKey?: string,
   ) => Promise<boolean>;
   readonly openDirectory?: (directory: string) => Promise<boolean>;
+  /** Каталог журнала знает только main; renderer путь не получает. */
+  readonly openLogFolder?: () => Promise<boolean>;
   readonly openExternal: (url: string) => Promise<void>;
 }
 /** Помощь имеет фиксированные публичные цели; произвольные executable/URL не принимаются. */
@@ -59,7 +62,12 @@ const helpUrls = new Set([
   'https://ffmpeg.org/download.html#build-mac',
   'https://ffmpeg.org/download.html#build-linux',
 ]);
-export const externalHosts = new Set(['music.yandex.ru', 'yandex.ru']);
+// plus.yandex.ru — личный кабинет Плюса для управления подпиской.
+export const externalHosts = new Set([
+  'music.yandex.ru',
+  'yandex.ru',
+  'plus.yandex.ru',
+]);
 /** Проверка sender и schema идёт до любого system/host side effect (ADR-016). */
 export async function invokeBroker(
   method: Method,
@@ -89,6 +97,10 @@ export async function invokeBroker(
         : failure(method);
     }
     // ADR-019: ни URL, ни путь обновления не приходят из renderer.
+    if (method === 'updateNotes') {
+      if (!actions.updates) return failure(method, 'PERMISSION_DENIED');
+      return success(method, await actions.updates.notes());
+    }
     if (
       method === 'checkUpdate' ||
       method === 'downloadUpdate' ||
@@ -180,6 +192,10 @@ export async function invokeBroker(
         ? success(method, null)
         : failure(method, 'PERMISSION_DENIED');
     }
+    if (method === 'openLogFolder')
+      return (await actions.openLogFolder?.())
+        ? success(method, null)
+        : failure(method, 'PERMISSION_DENIED');
     if (method === 'showItemInFolder') {
       const request = input as { jobId: string; trackKey?: string };
       return (await actions.showItemInFolder(request.jobId, request.trackKey))
@@ -230,6 +246,9 @@ export async function invokeBroker(
         ...(request.variantSelection === undefined
           ? {}
           : { variantSelection: request.variantSelection }),
+        ...(request.trackPositions === undefined
+          ? {}
+          : { trackPositions: request.trackPositions }),
         ...(request.overwrite === undefined
           ? {}
           : { overwrite: request.overwrite }),

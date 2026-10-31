@@ -11,7 +11,12 @@ import {
   Typography,
 } from '@mui/material';
 import type { Account as AccountDto } from '@music-downloader/shared';
+import OpenInNewRounded from '@mui/icons-material/OpenInNewRounded';
+import LoginRounded from '@mui/icons-material/LoginRounded';
+import LogoutRounded from '@mui/icons-material/LogoutRounded';
 import type { DesktopApi } from '../contract/desktop-api.js';
+import { LogoutDialog } from './LogoutDialog.js';
+import { YandexPlusIcon } from './YandexPlusIcon.js';
 
 /** Показывает только подтверждённые provider поля; тариф и регион не выдумываются. */
 export function Account({
@@ -32,6 +37,7 @@ export function Account({
   const revision = useRef(0);
   const [message, setMessage] = useState('');
   const [busy, setBusy] = useState(false);
+  const [logoutOpen, setLogoutOpen] = useState(false);
   async function refresh() {
     const current = ++revision.current;
     setAvatar(undefined);
@@ -97,13 +103,23 @@ export function Account({
             {account?.displayName.slice(0, 1) ?? 'Я'}
           </Avatar>
           <Box sx={{ flex: 1 }}>
-            <Typography variant="h2">
-              {account === undefined ? (
-                <Skeleton width={220} />
-              ) : (
-                (account?.displayName ?? 'Аккаунт не подключён')
+            <Stack direction="row" spacing={1.5} sx={{ alignItems: 'center' }}>
+              <Typography variant="h2">
+                {account === undefined ? (
+                  <Skeleton width={220} />
+                ) : (
+                  (account?.displayName ?? 'Аккаунт не подключён')
+                )}
+              </Typography>
+              {account?.premium && (
+                <Chip
+                  size="small"
+                  variant="outlined"
+                  icon={<YandexPlusIcon />}
+                  label="Яндекс Плюс"
+                />
               )}
-            </Typography>
+            </Stack>
             <Typography color="text.secondary">
               {account === undefined ? (
                 <Skeleton width={180} />
@@ -112,19 +128,17 @@ export function Account({
               )}
             </Typography>
           </Box>
-          <Typography component="div">
-            {account === undefined ? (
-              'Загружаем аккаунт…'
-            ) : account ? (
-              <Chip color="success" label="Авторизация активна" />
-            ) : (
-              'Войдите через браузер, чтобы загружать доступную вам музыку'
-            )}
-          </Typography>
+          {/* Вошедший аккаунт виден по карточке; отдельный статус не нужен. */}
+          {account === null && (
+            <Typography>
+              Войдите через браузер, чтобы загружать доступную вам музыку
+            </Typography>
+          )}
           <Button
             variant="contained"
+            startIcon={account ? <LogoutRounded /> : <LoginRounded />}
             disabled={busy || account === undefined}
-            onClick={() => void action()}
+            onClick={() => (account ? setLogoutOpen(true) : void action())}
           >
             {account === undefined
               ? 'Загрузка…'
@@ -138,11 +152,28 @@ export function Account({
         <>
           <Typography variant="h2">Подписка</Typography>
           <Paper variant="outlined" sx={{ p: 3 }}>
-            <Typography>
-              {account.subscription ||
-                account.subscriptionReason ||
-                'Нет данных о подписке: сервис не передал достаточно сведений.'}
-            </Typography>
+            <Stack
+              direction="row"
+              spacing={2}
+              sx={{ alignItems: 'center', justifyContent: 'space-between' }}
+            >
+              <Typography>
+                {account.subscription ||
+                  account.subscriptionReason ||
+                  'Нет данных о подписке: сервис не передал достаточно сведений.'}
+              </Typography>
+              {account.subscriptionUrl && (
+                <Button
+                  endIcon={<OpenInNewRounded />}
+                  sx={{ whiteSpace: 'nowrap', flexShrink: 0 }}
+                  onClick={() =>
+                    void api.openExternal({ url: account.subscriptionUrl! })
+                  }
+                >
+                  Управлять подпиской
+                </Button>
+              )}
+            </Stack>
           </Paper>
           <Typography variant="h2">Информация</Typography>
           <Paper variant="outlined">
@@ -185,6 +216,14 @@ export function Account({
           </Paper>
         </>
       )}
+      <LogoutDialog
+        open={logoutOpen}
+        onCancel={() => setLogoutOpen(false)}
+        onConfirm={() => {
+          setLogoutOpen(false);
+          void action();
+        }}
+      />
       <Alert severity="info">
         Данные входа находятся в защищённом хранилище операционной системы.
         Выход удаляет сохранённый токен этого приложения.

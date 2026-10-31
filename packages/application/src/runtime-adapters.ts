@@ -31,6 +31,8 @@ export interface RuntimeAdapters {
   readonly providerOverride?: MusicProvider;
   readonly logger?: Logger;
   readonly logging?: RuntimeLoggingOptions;
+  /** Desktop: файл журнала с уровнем из сохранённых настроек; каталог готовит main. */
+  readonly logFile?: string;
   readonly concurrency?: number;
   readonly diagnostics?: () => Promise<DiagnosticsDto>;
   readonly diagnosticsRuntime?: Partial<DiagnosticRuntimeOptions>;

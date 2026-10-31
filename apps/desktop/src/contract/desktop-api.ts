@@ -44,6 +44,7 @@ export const methods = {
   },
   accountAvatar: { input: empty, executor: 'host' },
   checkUpdate: { input: empty, executor: 'main' },
+  updateNotes: { input: empty, executor: 'main' },
   downloadUpdate: { input: empty, executor: 'main' },
   openUpdateFolder: { input: empty, executor: 'main' },
   authenticate: { input: empty, executor: 'host' },
@@ -60,6 +61,12 @@ export const methods = {
       quality: z.enum(['best', 'lossless', 'high', 'normal']),
       directoryRef,
       variantSelection: variantSelectionSchema.optional(),
+      trackPositions: z
+        .array(z.number().int().positive())
+        .min(1)
+        .max(10_000)
+        .refine((items) => new Set(items).size === items.length)
+        .optional(),
       overwrite: z.boolean().optional(),
     }),
     executor: 'host',
@@ -99,6 +106,7 @@ export const methods = {
   lastDiagnostics: { input: empty, executor: 'host' },
   refreshDiagnostics: { input: empty, executor: 'host' },
   openDownloadsFolder: { input: empty, executor: 'main' },
+  openLogFolder: { input: empty, executor: 'main' },
   checkFfmpeg: {
     input: z.strictObject({ ffmpegRef: executableRef.nullable().optional() }),
     executor: 'host',
@@ -131,6 +139,8 @@ export interface Results {
   jobFolderAvailability: JobFolderAvailability;
   accountAvatar: ArtworkDto | null;
   checkUpdate: UpdateView;
+  /** Markdown описания найденного релиза; null — описание недоступно. */
+  updateNotes: string | null;
   downloadUpdate: UpdateView;
   openUpdateFolder: UpdateView;
   authenticate: Account;
@@ -168,6 +178,7 @@ export interface Results {
     readonly instruction: string;
   };
   openDownloadsFolder: null;
+  openLogFolder: null;
   selectDirectory: DirectorySelection | null;
   showItemInFolder: null;
   openExternal: null;

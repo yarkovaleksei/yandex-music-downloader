@@ -13,6 +13,11 @@ import type { DesktopApi } from '../contract/desktop-api.js';
 import { success } from '../contract/result.js';
 import { Account } from './Account.js';
 afterEach(cleanup);
+/** Выход идёт через подтверждение, чтобы случайный клик не удалил вход. */
+async function confirmLogout() {
+  fireEvent.click(screen.getByRole('button', { name: 'Выйти из аккаунта' }));
+  fireEvent.click(await screen.findByRole('button', { name: 'Выйти' }));
+}
 it('REQ-052: показывает подтверждённый account и после logout перечитывает состояние', async () => {
   let account: AccountDto | null = {
     id: 'fixture-id',
@@ -33,7 +38,16 @@ it('REQ-052: показывает подтверждённый account и пос
   expect(screen.getByText('Регион')).toBeTruthy();
   expect(screen.getAllByText('Нет данных')).toHaveLength(3);
   expect(screen.getByText(/Общего перечня нет/)).toBeTruthy();
+  expect(screen.queryByText('Авторизация активна')).toBeNull();
+  expect(screen.queryByText(/Войдите через браузер/)).toBeNull();
   fireEvent.click(screen.getByRole('button', { name: 'Выйти из аккаунта' }));
+  expect(await screen.findByText('Выйти из аккаунта?')).toBeTruthy();
+  fireEvent.click(screen.getByRole('button', { name: 'Отмена' }));
+  await waitFor(() =>
+    expect(screen.queryByText('Выйти из аккаунта?')).toBeNull(),
+  );
+  expect(api.logout).not.toHaveBeenCalled();
+  await confirmLogout();
   await screen.findByText('Аккаунт не подключён');
   expect(api.logout).toHaveBeenCalledOnce();
   await waitFor(() => expect(changed).toHaveBeenCalledOnce());
@@ -86,7 +100,7 @@ it('Plus без codec inference, account не ждёт avatar, logout отбра
   await screen.findByText('Первый');
   expect(screen.getAllByText('Яндекс Плюс активен')).toHaveLength(2);
   expect(screen.getByText(/сервис сообщает варианты/)).toBeTruthy();
-  fireEvent.click(screen.getByRole('button', { name: 'Выйти из аккаунта' }));
+  await confirmLogout();
   await screen.findByText('Аккаунт не подключён');
   complete(
     success('accountAvatar', { mimeType: 'image/png', base64: 'aW1hZ2U=' }),
@@ -127,12 +141,43 @@ it('до первого ответа показывает загрузку, а �
   expect(screen.queryByText('Аккаунт не подключён')).toBeNull();
   expect(screen.queryByText(/Войдите через браузер/)).toBeNull();
   expect(screen.queryByText('Email: нет данных')).toBeNull();
-  expect(screen.getByText('Загружаем аккаунт…')).toBeTruthy();
   expect(
     (screen.getByRole('button', { name: 'Загрузка…' }) as HTMLButtonElement)
       .disabled,
   ).toBe(true);
   await act(async () => finish(success('account', null)));
   expect(screen.getByText('Аккаунт не подключён')).toBeTruthy();
-  expect(screen.queryByText('Загружаем аккаунт…')).toBeNull();
+  expect(screen.getByText(/Войдите через браузер/)).toBeTruthy();
+  expect(
+    screen.getByRole('button', { name: 'Войти через браузер' }),
+  ).toBeTruthy();
+});
+
+it('Яндекс Плюс: значок и управление подпиской только для активного Плюса', async () => {
+  let account: AccountDto = {
+    id: 'plus',
+    displayName: 'Подписчик',
+    subscription: 'Яндекс Плюс активен',
+    premium: true,
+    subscriptionUrl: 'https://plus.yandex.ru/my',
+  };
+  const api = {
+    account: async () => success('account', account),
+    accountAvatar: async () => success('accountAvatar', null),
+    openExternal: vi.fn(async () => success('openExternal', null)),
+  };
+  render(<Account api={api as unknown as DesktopApi} onChanged={() => {}} />);
+  expect(await screen.findByText('Яндекс Плюс')).toBeTruthy();
+  fireEvent.click(screen.getByRole('button', { name: 'Управлять подпиской' }));
+  expect(api.openExternal).toHaveBeenCalledWith({
+    url: 'https://plus.yandex.ru/my',
+  });
+  cleanup();
+  account = { id: 'free', displayName: 'Без подписки' };
+  render(<Account api={api as unknown as DesktopApi} onChanged={() => {}} />);
+  await screen.findByText('Без подписки');
+  expect(screen.queryByText('Яндекс Плюс')).toBeNull();
+  expect(
+    screen.queryByRole('button', { name: 'Управлять подпиской' }),
+  ).toBeNull();
 });

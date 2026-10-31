@@ -599,6 +599,8 @@ function normalizeAuthError(error: unknown): Error {
   return new ProviderError('NETWORK_ERROR', true);
 }
 
+const plusAccountUrl = 'https://plus.yandex.ru/my';
+
 /** поддержанные SDK формы проверяются по своим признакам, без вывода codec из Plus. */
 function subscriptionProjection(
   hasPlus: boolean | undefined,
@@ -614,7 +616,10 @@ function subscriptionProjection(
       }
     | undefined,
   now: number,
-): Pick<Account, 'subscription' | 'subscriptionReason'> {
+): Pick<
+  Account,
+  'subscription' | 'subscriptionReason' | 'premium' | 'subscriptionUrl'
+> {
   const named = [
     ...(subscription?.autoRenewable ?? []),
     ...(subscription?.familyAutoRenewable ?? []),
@@ -623,6 +628,9 @@ function subscriptionProjection(
   if (hasPlus === true)
     return {
       subscription: named ? `Яндекс Плюс — ${named}` : 'Яндекс Плюс активен',
+      premium: true,
+      // По справке Яндекса подписка отменяется и приостанавливается только в этом кабинете.
+      subscriptionUrl: plusAccountUrl,
     };
   if (named) return { subscription: named };
   const operator = subscription?.operator?.find(
