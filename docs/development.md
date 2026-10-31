@@ -383,7 +383,9 @@ Application composition root по умолчанию создаёт `SqliteManif
 
 ## CI/CD
 
-CI приложения используется для дополнительных проверок только на Linux: lint, typecheck, format:check, unit tests на Node.js 24. Windows/macOS runners, интеграционные сценарии, Electron E2E и build в CI приложения не запускаются. CI не запускается, если изменились только файлы вне проверок: документация в `docs` и корневые `.md`, изображения, лицензия и инструкции агентов; `docs/development.md`, `docs/architecture.md`, REQ-040 и `docs/brand/icon.png` читают тесты, поэтому их изменение запускает CI. Ожидание или отказ CI не блокирует локальную приёмку.
+CI приложения используется для дополнительных проверок только на Linux: lint, typecheck, format:check, unit tests на Node.js 24. Windows/macOS runners, интеграционные сценарии, Electron E2E и build в CI приложения не запускаются. CI не запускается, если изменились только файлы вне проверок: документация в `docs` и корневые `.md`, изображения, лицензия, инструкции агентов и лендинг `www`; `docs/development.md`, `docs/architecture.md`, REQ-040 и `docs/brand/icon.png` читают тесты, поэтому их изменение запускает CI. Ожидание или отказ CI не блокирует локальную приёмку.
+
+Лендинг `www` — статическая страница без сборки. Workflow `Pages` публикует каталог как есть на GitHub Pages (`https://yarkovaleksei.github.io/yandex-music-downloader/`) при push в main с изменениями в `www`; его можно запустить и вручную. Номер версии страница не хранит: ссылки на пакеты, размер и дату выпуска она берёт из GitHub API последнего релиза, а без ответа API ведёт на страницу релизов.
 
 Перед слиянием выполняются локально:
 

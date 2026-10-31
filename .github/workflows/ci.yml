@@ -17,6 +17,9 @@ on:
       - "!.claude/**"
       - "!.agents/**"
       - "!.github/ISSUE_TEMPLATE/**"
+      # Лендинг публикует отдельный workflow Pages.
+      - "!www/**"
+      - "!.github/workflows/pages.yml"
       # Эти файлы читают тесты согласованности и provider.
       - "docs/development.md"
       - "docs/architecture.md"
